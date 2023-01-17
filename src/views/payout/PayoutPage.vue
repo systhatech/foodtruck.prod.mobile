@@ -1,0 +1,286 @@
+<template>
+     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
+        <Topnavbar :title="title" @back="handleBack"/>
+        <v-container class="mg56">
+            <div>
+                    <div class="custom-bs pa-6" v-if="amount && Object.keys(amount).length && (default_payment == 'default_company')">
+                        <div class="d-flex align-center justify-space-between">
+                            <h4 class="ma-0">Available Fund</h4>
+                            <span class="color f9-bold">{{ formatAmount(amount.outstanding)}}</span>
+                        </div>
+                        <div class="text-center mt-4" v-if="default_payment == 'default_company'">
+                            <v-btn :disabled="amount.outstanding < 10" color="primary" outlined rounded small @click="handleTransfer">Transfer</v-btn>
+                            <p class="min-amount" v-if="amount.outstanding < 10">Minimum payout amount must be 10$</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-relative">
+                        <v-btn color="primary" fab small v-if="renderFilter" class="filter" @click="handleOpenFilter">
+                            <v-icon>{{iconFilter}}</v-icon>
+                        </v-btn>
+                        <div v-if="orders && Object.keys(orders).length" >
+                            <div v-for="(dateWiseOrders, date) in orders" :key="date">
+                                <v-chip
+                                class="mb-2 mt-6"
+                                color="accent">
+                                {{ formatDateStandard(date) }}
+                                </v-chip>
+                                <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
+                                    <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
+                                        <div class="order_item custom-bs">
+                                            <p class="order_no"><span>Sales</span> <span class="amount"> {{formatAmount1(order.sub_total)}} </span></p>
+                                            <p class="order_no"><span>Tax</span> <span class="amount"> {{formatAmount1(order.tax)}} </span></p>
+                                             <v-divider class="mb-3 mt-2"></v-divider>
+                                            <p class="order_no color-accent"><span>Available Fund</span> <span class="amount"> {{formatAmount1(order.total_available)}} </span></p>
+                                             <v-divider class="mb-3 mt-2"></v-divider>
+                                            <p class="order_no"><span>Convenience fee</span> <span class="amount"> {{formatAmount1(order.conv_fee)}} </span></p>
+                                            <p class="order_no"><span>Service fee</span> <span class="amount"> {{formatAmount1(order.service_charge)}} </span></p>
+                                            <v-divider class="mb-3 mt-2"></v-divider>
+                                             <p class="order_no f9-bold"><span>Total Sales</span> <span class="amount"> {{formatAmount1(order.total)}} </span></p>
+                                            <v-divider class="mb-3 mt-2"></v-divider>
+                                            <p class="order_no"><span>Cash Sales</span> <span class="amount"> {{formatAmount1(order.cash_sales)}} </span></p>
+                                            <p class="order_no"><span>Card Sales</span> <span class="amount"> {{formatAmount1(order.card_sales)}} </span></p>
+                                            <v-divider class="mb-3 mt-2"></v-divider>
+                                            <p class="order_no"><span>Transferred Amount</span> <span class="amount"> {{formatAmount1(order.payout)}} </span></p>
+                                        </div>
+                                    </v-col>
+                                </v-row>
+                            </div>
+                        </div>
+                        <div v-else class="mt-10 unavailable">
+                        <p>{{ message }}</p>
+                        </div>
+                    </div>
+                <!-- </div> -->
+                    
+            </div>
+            <PayoutConfirm 
+                :modal-payout="modalPayout"
+                :bank="bank"
+                :amount="amount"
+                @close="handleClose"
+                @confirm="handlePayProceed"
+            />
+            <PayoutFilter 
+                :modalPayoutFilter="modalPayoutFilter"
+                @close="handleClose"
+                @search="handleFilterSearch"
+            />
+            <DialogProceed 
+            :dialogConfirm="modalAddBankDetail" 
+            @close="handleClose" 
+            :message="messageAddDetail"
+            @handleConfirm="handleAddBankDetail"/>
+        </v-container>
+         <Bottomnavbar/>
+    </v-container>
+</template>
+<script>
+import Topnavbar from '@/components/layout/TopnavbarBackCustom'
+import { ApiService } from '@/core/services/api.service'
+import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import { mdiFilter } from '@mdi/js'
+// import DateStart from '@/components/form-element/InputDateRange'
+// import DateEnd from '@/components/form-element/InputDateLastPicker'
+import PayoutFilter from './PayoutFilter'
+import PayoutConfirm from './PayoutConfirm'
+import DialogProceed from '@/components/layout/DialogProceed'
+import { mapGetters } from 'vuex'
+// import { ApiService } from '@/core/services/api.service'
+export default {
+    name:'payoutPage',
+    data() {
+        return {
+            title:'',
+            renderFilter:false,
+            iconFilter: mdiFilter,
+            modalAddBankDetail:false,
+            payouts:[],
+            message:'Loading...',
+            default_payment:null,
+            orders:[],
+            modalPayout:false,
+            bank:{},
+            amount:{},
+            date: new Date().toISOString().substr(0, 10), 
+            modalPayoutFilter:false,
+            start_date:'',
+            end_date:'',
+            messageAddDetail:'Add Bank Detail Before Transfer',
+        }
+    },
+    mounted() {
+        this.fetchProfile();
+        this.fetchOrders();
+    },
+    methods: {
+        handleOpenFilter(){
+            console.log("Test");
+            this.modalPayoutFilter = true;
+        },
+        handleBack() {
+            this.$router.back();
+        },
+        handleClose() {
+            this.modalPayoutFilter =false;
+            this.modalPayout = false;
+            this.modalAddBankDetail = false;
+        },
+        handleAddBankDetail() {
+            this.$router.push("/payment-bank-add");
+        },
+        handleFilterSearch(data) {
+            this.start_date = data.start_date;
+            this.end_date = data.end_date;
+            this.fetchOrders();
+        },
+        async handlePayProceed() {
+            this.loaderShow();
+            await ApiService.post('/payout/settlement/outstanding')
+            .then(() => {
+
+                this.fetchOrders();
+                this.handleClose();
+            })
+            .catch((error) => {
+                // console.log(error);
+                this.messageError(error.response.data.message);
+                this.loaderHide();
+            })
+        },
+        async handleTransfer(){
+            this.loaderShow();
+            await ApiService.post('/payout/find')
+            .then((resp) => {
+                this.bank = resp.data;
+                this.modalPayout = true;
+                this.loaderHide();
+            })
+            .catch((error) => {
+                // console.log(error);
+                this.messageAddDetail = error.response.data.message;
+                this.modalAddBankDetail = true;
+                this.loaderHide();
+            })
+        },
+        async fetchProfile() {
+            await ApiService.post("profile").then((response) => {
+                this.default_payment = response.data.owner.default_payment;
+                console.log(this.default_payment);
+            })
+            .catch(() => {
+                console.log("no fetch")
+            })
+        },
+
+        async fetchOrders() {
+            this.loaderShow();
+            await ApiService.post("/payout/order-payout-list",{
+                status:'completed',
+                start_date: this.start_date,
+                end_date: this.end_date,
+            })
+            .then((resp) => {
+                this.loaderHide();
+                this.handleClose();
+                this.orders = resp.data;
+                this.renderFilter = true;
+                if(!this.orders.length) {
+                    this.message="No orders";
+                }
+                this.amount = resp.amount;
+            })
+            .catch(() => {
+                this.loaderHide();
+                console.log("no fetch")
+            })
+        }
+    },
+    components: {
+        Topnavbar,
+        Bottomnavbar,
+        PayoutConfirm,
+        PayoutFilter,
+        DialogProceed,
+        // DateStart,
+        // DateEnd
+        // BankDetail,
+        // StripeDetail,
+    },
+    computed: {
+         ...mapGetters({
+            currentUser:'auth/user',
+        })
+    }
+}
+</script>
+<style lang="scss" scoped>
+.min-amount{
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+    color: #f40403;
+    margin-top: 12px;
+}
+.filter{
+    position: absolute;
+    right: 0;
+    top: 14px;
+}
+.form-container{
+    // .login-container{
+    background: #acfa95;
+    border-radius: 10px;
+    margin-top: 27px !important;
+    padding:20px;
+// }
+}
+   $color-primary: #000000;
+    $color-secondary: #01a6bc;
+    ul.order-types{
+        list-style: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #dadada;
+        padding-bottom: 10px;
+        li{
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 500;
+            span{
+                color: #9e9e9e;
+            }
+            span.active-type{
+                color: #000000;
+                border-bottom: 2px solid #000000;
+                padding-bottom: 12px;
+            }
+        }
+    }
+    .order_item{
+        border-radius:0;
+        padding:12px;
+        .order_no{
+            margin: 0;
+            font-size: 0.8rem;
+            // font-weight: 600;
+            // color: #01a6bc;
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:8px;
+            // flex-direction:column;
+            span.amount{
+                font-size: 0.8rem;
+            }
+        }
+        .order_person,
+        .order_contact,
+        .order_bill,
+        .order_date{
+            margin: 0;
+            font-size: 0.8rem;
+            text-transform: capitalize;
+        }
+    }
+</style>

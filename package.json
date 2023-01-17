@@ -1,0 +1,86 @@
+{
+  "name": "yummytruck",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "cordova-build-android": "cross-env CORDOVA_PLATFORM=android vue-cli-service cordova-build-android",
+    "cordova-build-browser": "cross-env CORDOVA_PLATFORM=browser vue-cli-service cordova-build-browser",
+    "cordova-build-electron": "cross-env CORDOVA_PLATFORM=electron vue-cli-service cordova-build-electron",
+    "cordova-build-ios": "cross-env CORDOVA_PLATFORM=ios vue-cli-service cordova-build-ios",
+    "cordova-build-only-www-android": "cross-env CORDOVA_PLATFORM=android vue-cli-service cordova-build-only-www-android",
+    "cordova-build-only-www-browser": "cross-env CORDOVA_PLATFORM=browser vue-cli-service cordova-build-only-www-browser",
+    "cordova-build-only-www-electron": "cross-env CORDOVA_PLATFORM=electron vue-cli-service cordova-build-only-www-electron",
+    "cordova-build-only-www-ios": "cross-env CORDOVA_PLATFORM=ios vue-cli-service cordova-build-only-www-ios",
+    "cordova-build-only-www-osx": "cross-env CORDOVA_PLATFORM=osx vue-cli-service cordova-build-only-www-osx",
+    "cordova-build-osx": "cross-env CORDOVA_PLATFORM=osx vue-cli-service cordova-build-osx",
+    "cordova-prepare": "vue-cli-service cordova-prepare",
+    "cordova-serve-android": "cross-env CORDOVA_PLATFORM=android vue-cli-service cordova-serve-android",
+    "cordova-serve-browser": "cross-env CORDOVA_PLATFORM=browser vue-cli-service cordova-serve-browser",
+    "cordova-serve-electron": "cross-env CORDOVA_PLATFORM=electron vue-cli-service cordova-serve-electron",
+    "cordova-serve-ios": "cross-env CORDOVA_PLATFORM=ios vue-cli-service cordova-serve-ios",
+    "cordova-serve-osx": "cross-env CORDOVA_PLATFORM=osx vue-cli-service cordova-serve-osx"
+  },
+  "dependencies": {
+    "@mdi/js": "^5.9.55",
+    "@vue-stripe/vue-stripe": "^4.2.5",
+    "axios": "^0.21.1",
+    "cordova-plugin-local-notification-fixed": "^0.11.0",
+    "core-js": "^3.6.5",
+    "crypto-js": "^4.1.1",
+    "google-maps-api-loader": "^1.1.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "socket.io": "^4.1.2",
+    "socket.io-client": "^4.1.2",
+    "v-calendar": "^2.3.0",
+    "v-mask": "^2.2.4",
+    "vue": "^2.6.11",
+    "vue-cordova": "^0.1.2",
+    "vue-event-calendar": "^1.5.2",
+    "vue-gallery-slideshow": "^1.5.2",
+    "vue-image-markup": "^3.2.0",
+    "vue-native-notification": "^1.1.1",
+    "vue-router": "^3.2.0",
+    "vue2-google-maps": "^0.10.7",
+    "vuetify": "^2.4.0",
+    "vuetify-google-autocomplete": "^2.0.4",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "^4.5.12",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.32.6",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-cordova": "~2.4.1",
+    "vue-cli-plugin-vuetify": "~2.4.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
