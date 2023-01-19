@@ -9,7 +9,12 @@ export default {
         parseGoogleResponse (components) {
             let newItem  = []; 
             components.map((item) => {
-                newItem[item['types'][0]] = item.short_name;
+                if(item['types'][0]=='country'){
+                    newItem['country'] = item.long_name;
+                    newItem['country_code'] = item.short_name;
+                }else{
+                    newItem[item['types'][0]] = item.short_name;
+                }
             });
             return newItem;
         },

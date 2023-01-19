@@ -84,15 +84,15 @@
                                     </tr>
                                     <tr v-if="cartAmount.convenience_fee && (payment_method=='card')">
                                         <td>Convenience fee ({{ cartAmount.convenience_fee}} %)</td>
-                                        <td class="f8 text-right">{{formatAmount(cartAmount.convenience_fee_amount)}}</td>
+                                        <td class="f8 text-right">{{formatAmount(cartAmount.convenience_fee)}}</td>
                                     </tr>
                                     <tr v-if ="payment_method=='card'">
                                         <td class="f9-bold">Total </td>
-                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.total)}}</td>
+                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.card_total + cartAmount.convenience_fee)}}</td>
                                     </tr>
                                     <tr v-if="payment_method=='cash'">
                                         <td class="f9-bold">Total </td>
-                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.total)}}</td>
+                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.cash_total)}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -143,9 +143,10 @@
                             ></v-radio>
                             </v-radio-group>
                         </div>
-                        <div v-if="total && total.total">
-                            <h3 class="color-secondary" v-if ="payment_method=='card'">{{formatAmount(total.total + total.convenience_fee_amount)}}</h3>
-                            <h3 class="color-secondary" v-if ="payment_method=='cash'">{{formatAmount(total.total)}}</h3>
+                        <div v-if="cartAmount && cartAmount.card_total">
+                            <!-- {{  formatAmount(parseFloat(cartAmount.card_total)) }} -->
+                            <h3 class="color-secondary" v-if ="payment_method=='card'">{{  formatAmount(parseFloat(cartAmount.card_total) + parseFloat(cartAmount.convenience_fee)) }}</h3>
+                            <h3 class="color-secondary" v-if ="payment_method=='cash'">{{formatAmount(cartAmount.cash_total)}}</h3>
                         </div>
                     </div>
                     <div>
@@ -245,7 +246,6 @@ export default {
         if(this.cart) {
             this.vendor = this.cart.vendor;
             this.tips = this.cart.tips;
-
         }
     },
    

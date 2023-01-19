@@ -44,6 +44,53 @@ const routes = [
 		name: 'signupTruck',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/auth/SignupTruck.vue'),
 	},
+	
+	// new routes starts
+	
+	{
+		path: '/client-orders',
+		name: 'clientOrdersPage',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/order/ClientOrdersPage.vue'),
+	},
+	{
+		path: '/client-order/:orderId',
+		name: 'clientOrderDetailPage',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/order/ClientOrderDetailPage.vue'),
+	},
+	{
+		path: '/client-profile',
+		name: 'clientProfilePage',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/profile/ClientProfilePage.vue'),
+	},
+	{
+		path: '/client-chat-list',
+		name: 'clientChatList',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/chat/ClientChatListPage.vue'),
+	},
+	{
+		path: '/client/conversation/:type/:id',
+		name: 'ClientChatConversationPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/chat/ClientChatConversationPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+
+
+	// new routes ends
+
+
+
+
+
+
 	{
 		path: '/profile',
 		name: 'profilepage',
@@ -54,7 +101,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -69,7 +116,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -84,7 +131,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -99,7 +146,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -114,7 +161,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -129,7 +176,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -145,7 +192,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -160,7 +207,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -175,7 +222,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -190,7 +237,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -204,7 +251,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -225,7 +272,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -240,7 +287,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -255,7 +302,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -270,7 +317,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -297,7 +344,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -312,7 +359,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -327,7 +374,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -342,7 +389,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -357,11 +404,12 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
 	},
+	
 	{
 		path: '/order/:orderId',
 		name: 'OrderDetailPage',
@@ -393,7 +441,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -414,7 +462,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -434,7 +482,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -455,7 +503,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -469,7 +517,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -484,7 +532,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		},
@@ -505,7 +553,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -520,7 +568,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -541,7 +589,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -556,7 +604,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -571,7 +619,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -586,7 +634,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}
@@ -601,7 +649,7 @@ const routes = [
 				next();
 			}else{
 				next({
-					name: 'home'
+					name: 'loginPage'
 				});
 			}
 		}

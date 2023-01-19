@@ -87,6 +87,10 @@ export default {
                 city:'',
                 state:'',
                 zip:'',
+                country:'',
+                country_code:'',
+                lat:'',
+                lng:'',
             },
             requiredRules: [
                 v => !!v || 'Required',
@@ -112,15 +116,26 @@ export default {
        this.fetchAddress();
     },
     methods: {
-        addressSelected(address) {
-            this.address = address.address;
-            this.address.zip = address.address.zip_code;
+        addressSelected(addr) {
+            // this.address = address.address;
+            // this.address.zip = address.address.zip_code;
+            this.address.add1 = addr.add1;
+            this.address.city = addr.city;
+            this.address.state = addr.state;
+            this.address.lat = addr.lat;
+            this.address.lng = addr.lng;
+            this.address.zip = addr.zip_code;
+            this.address.country = addr.country;
+            this.address.country_code = addr.country_code;
+            setTimeout(() => {
+                this.defaultValue = addr.add1;
+            },200);
         },
         fetchAddress(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             ApiService.post('/self/profile')
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.address.add1 = resp.address.add1;
                 this.address.add2 = resp.address.add2;
                 this.address.city = resp.address.city;
@@ -130,7 +145,7 @@ export default {
                 this.defaultValue = resp.address.add1;
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         },
@@ -143,37 +158,30 @@ export default {
         },
         async handleUpdate(){
 
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             this.address.add1 = this.address.locality ? this.address.locality : this.address.add1;
             await ApiService.post('/self/profile/address',this.address)
             .then(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageSuccess("Success");
                 this.$router.push('/profile');
             })  
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError('Failed to update address');
             })
         },
-        // addressSelected(addr) {
-        //     this.address = addr;
-        //     this.address.zip = addr.zip_code;
-        //     setTimeout(() => {
-        //         this.defaultValue = addr.locality;
-        //     },200);
-        // },
         async updateAddress() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             this.address.add1 = this.address.locality;
             await ApiService.post('/update-address',this.address)
             // await ApiService.post('/update-address',this.address)
             .then(( resp ) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageSuccess(resp.message);
             })  
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError('Failed to update address');
             })
         }

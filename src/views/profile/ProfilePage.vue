@@ -3,12 +3,78 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div v-if="currentUser">
+                <!-- <div class="custom-bs pa-4 pt-8">
+                    <div class="text-center">
+                        <v-avatar color="primary" size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
+                            <v-icon dark>
+                                {{ iconAccount}}
+                            </v-icon>
+                        </v-avatar>
+                        <v-avatar size="90" v-else>
+                            <img
+                            style="object-fit:cover"
+                            :src="base_url+'/avatar/'+currentUser.owner.profile_pic"
+                            alt="Profile Pic">
+                        </v-avatar>
+                        <div class="pt-2 mb-4 primary--text">
+                            {{ currentUser.owner }}
+                            <h4>{{currentUser.owner.fullName}}</h4>
+                        </div>
+                    </div>
+
+                    <div class="mt-1 ml-3 primary--text">
+                        <div class="d-flex align-center justify-space-between">
+                            <h4 class="mb-1">Contact</h4>
+                            <v-btn text small color="warning" to="/profile-update">
+                                edit
+                            </v-btn>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-phone</v-icon>
+                            </div>
+                            <div>
+                                <h5 class="mb-2">{{currentUser.phone_no? currentUser.phone_no:'n/a'}} </h5>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-email</v-icon>
+                            </div>
+                            <div>
+                                <h5 class="mb-2">{{currentUser.email ? currentUser.email:'n/a'}}</h5>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="d-flex align-center justify-space-between">
+                                <h4 class="mb-1">Address</h4>
+                                <v-btn text small color="warning" :to="'/address/'+currentUser.address.id">
+                                    edit
+                                </v-btn>
+                            </div>
+                            <div class="d-flex">
+                                <div style="width:30px">
+                                    <v-icon color="primary f9">mdi-map-marker</v-icon>
+                                </div>
+                                <div>
+                                    <h5 class="primary--text">
+                                        {{currentUser.address && currentUser.address.add1 && currentUser.address.add1 !='undefined'? currentUser.address.add1:''}} {{currentUser.address && currentUser.address.add2 && currentUser.address.add2!='undefined'? currentUser.address.add2:''}} <br>
+                                        {{currentUser.address && currentUser.address.city && currentUser.address.city !='undefined' ? currentUser.address.city:''}} {{currentUser.address && currentUser.address.state && currentUser.address.state!='undefined'? currentUser.address.state:''}} <br>
+                                        {{currentUser.address && currentUser.address.zip && currentUser.address.zip !='undefined' ? currentUser.address.zip:''}} {{currentUser.address && currentUser.address.country && currentUser.address.country!='undefined'? currentUser.address.country:''}} <br>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
                 <div class="d-flex aling-center custom-bs pa-4">
+                    <div>
+                        
+                    </div>
                     <v-avatar size="60">
-                    <img
+                        <img
                         :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
-                        alt="Profile Pic"
-                        >
+                        alt="Profile Pic">
                     </v-avatar>
                     <div class="mt-1 ml-3" v-if="currentUser.table=='vendors'">
                         <h3 class="text-capitalize">{{ currentUser.owner.name }}</h3>

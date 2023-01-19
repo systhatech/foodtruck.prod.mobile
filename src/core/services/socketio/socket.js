@@ -1,4 +1,5 @@
 // let io = require('socket.io-client');
+// import io from 'socket.io-client'
 import io from 'socket.io-client'
 let moment = require('moment')
 let $ = require('../dollor');

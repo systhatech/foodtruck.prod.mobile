@@ -47,7 +47,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Topnavbar from '@/components/layout/Topnavbar'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import TruckList from '@/views/dashboard/component/TruckList'
 import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'

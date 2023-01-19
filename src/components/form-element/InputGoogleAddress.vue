@@ -3,6 +3,7 @@
         <div class="autocomplete-wrapper">
             <GmapAutocomplete class="custom-autocomplete w-100" 
             :value="address.add1"
+            @blur="handleBlur"
             @place_changed="setPlace" />
         </div>
     </div>
@@ -13,9 +14,10 @@ export default {
         defaultValue:{}
     },
     watch:{
-        defaultValue (val) {
-            console.log({val});
-            this.address.add1 = val;
+        defaultValue(newval) {
+            if(newval){
+                this.address.add1 = newval;
+            }
         }
     },
     data() {
@@ -26,17 +28,20 @@ export default {
         }
     },
     methods: {
+        handleBlur(){
+           this.$emit('selectAddr',this.address);
+        },
         setPlace(param){
             let address = this.parseGoogleResponse(param.address_components);
             this.address.add1 = param.name;
-            this.address.city = address['administrative_area_level_1'] ? address['administrative_area_level_1'] :'';
-            this.address.state = address['administrative_area_level_2'] ? address['administrative_area_level_2'] :'';
-            this.address.country = address['country'] ? address['country'] :'';
-            this.address.locality = address['locality'] ? address['locality'] :'';
+            this.address.city = param.vicinity;
+            this.address.state = address['administrative_area_level_1'] ? address['administrative_area_level_1'] :'';
             this.address.zip_code = address['postal_code'] ? address['postal_code'] :'';
-            this.address.route = address['route'] ? address['route'] :'';
-            this.address.street_number = address['street_number'] ? address['street_number'] :'';
-            this.$emit('selectedAddr',{address : this.address});
+            this.address.country = address['country'] ? address['country'] :'';
+            this.address.country_code = address['country_code'] ? address['country_code'] :'';
+            this.address.lat = param.geometry.location.lat();
+            this.address.lng = param.geometry.location.lng();
+            this.$emit('selectedAddr',this.address);
         },
     }
 }
@@ -47,11 +52,11 @@ export default {
     display: flex;
     align-items: center;
     .pac-target-input{
-        border-bottom: 1px solid #949494 !important;
+        border-bottom: 1px solid #000 !important;
         padding-bottom: 5px !important;
         &:focus-visible{
             outline: none !important;
-            border-bottom: 2px solid #f56342 !important;
+            border-bottom: 2px solid #000 !important;
         }
     }
 }
