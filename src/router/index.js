@@ -51,21 +51,57 @@ const routes = [
 		path: '/client-orders',
 		name: 'clientOrdersPage',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/order/ClientOrdersPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
 	},
 	{
 		path: '/client-order/:orderId',
 		name: 'clientOrderDetailPage',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/order/ClientOrderDetailPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
 	},
 	{
 		path: '/client-profile',
 		name: 'clientProfilePage',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/profile/ClientProfilePage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
 	},
 	{
 		path: '/client-chat-list',
 		name: 'clientChatList',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/chat/ClientChatListPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
 	},
 	{
 		path: '/client/conversation/:type/:id',

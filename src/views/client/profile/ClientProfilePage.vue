@@ -89,11 +89,11 @@ export default {
         }),
          signOut() {
              this.loaderShow();
-            this.signOutAction().then(() => {
+                this.signOutAction().then(() => {
                 this.loaderHide();
                 socketHandler.disconnect();
                 this.$router.replace({
-                    name:'homePage',
+                    name:'home',
                 })
             });
         },
@@ -104,7 +104,9 @@ export default {
                 socketHandler.disconnect();
                 this.$store.commit(PURGE_AUTH);
                 this.$bus.$emit('HIDE_PAGE_LOADER');
-                this.$router.push('/');
+                this.$router.replace({
+                    name:'home',
+                })
                 // this.messageSuccess(resp.message);
             })
             .catch(() => {
@@ -135,7 +137,7 @@ export default {
         },
         navigatePage(route) {
             if(route == 'logout') {
-                this.signOutAction();
+                this.signOut();
             }else{
                 this.$router.push('/'+route).catch(()=>{});
             }
