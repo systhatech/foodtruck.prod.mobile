@@ -3,7 +3,7 @@
         <div v-if="truckProfile.menus && truckProfile.menus.length">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
-                    <h3 class="pb-3 mt-4 text-uppercase color-secondary">{{ index }}</h3>
+                    <h4 class="pb-2 mt-4 text-capitalize primary--text">{{ index }}</h4>
 
                     <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-4 mb-4" :key="i" @click="handleRoute(item)">
                         <div class="d-flex align-center"> 
@@ -17,16 +17,18 @@
                             ></v-img>
                             <div class="pl-3 d-flex align-center justify-space-between w-100">
                                 <div>
-                                    <p class="ma-0 f8-bold text-capitalize">{{item.name}}</p>
-                                    <p class="ma-0 f8 text-capitalize">{{item.description ? item.description:'No description'}}</p>
-                                </div>
-                                <div>
-                                    <h4 class="ma-0 color-secondary">
+                                    <p class="mb-2 text-capitalize">{{item.name}}</p>
+                                    <h4 class="ma-0 primary--text">
                                         {{ formatAmount(item.price)}}
                                     </h4>
+                                    <!-- <v-btn rounded color="primary" small> View item</v-btn> -->
+                                    <!-- <p class="ma-0 f8 text-capitalize">{{item.description ? item.description:'No description'}}</p> -->
+                                </div>
+                                <!-- <div>
+                                    
                                     <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
                                     <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -70,12 +72,8 @@ export default {
     },
     methods: {
         handleRoute(item){
-            // if(this.currentUser) {
-                this.item = item;
-                this.dialog = true;
-            // }else{
-            //     this.$router.replace({name:'loginPage'})
-            // }
+            this.item = item;
+            this.dialog = true;
         },
         handleEdit(id){
             this.$router.push("/menu-edit/"+id).catch(()=>{});

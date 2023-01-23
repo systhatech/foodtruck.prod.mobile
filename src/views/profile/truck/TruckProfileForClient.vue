@@ -17,7 +17,7 @@
                                     >
                                 </v-avatar>
                                 <div class="pa-4">
-                                    <p class="ma-0">{{ truck.type}}</p>
+                                    <!-- <p class="ma-0">{{ truck.type}}</p> -->
                                     <h3 class="text-capitalize ma-0">{{ truck.name}}</h3>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                         <div class="menu-list">
                             <ul>
                                 <li @click="changeItem(index)" 
-                                    :class="activeItem==index?'color-secondary':''" 
+                                    :class="activeItem==index?'primary--text':''" 
                                     v-for="(item,index) in menuitems" 
                                     :key="index">{{ item.name }}
                                 </li>

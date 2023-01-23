@@ -1,17 +1,18 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <div>
-            <div v-if="currentUser && currentUser.table=='vendors'">
-                <DashboardVendor/>
-            </div>
-            <div v-else>
-                <DashboardClient/>
-            </div>
-        </div>
+        <Topnavbar/>
+        <v-container class="mg56 pt-4">
+           <div>
+                <p>There are  {{ clientLocations.length }} clients near you.</p>
+           </div>
+        </v-container>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Topnavbar from '@/components/layout/Topnavbar'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
@@ -65,8 +66,8 @@ export default {
         }
     },
     components: {
-        DashboardVendor: ()=> import('@/views/vendor/dashboard/VendorDashboardPage'),
-        DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
+       Topnavbar,
+       Bottomnavbar,
     },
     mounted() {
         this.fetchTrucks({ 
@@ -95,12 +96,14 @@ export default {
             if(newval.length >3){
                 this.fetchData();
             }
-        }
+        },
     },
     methods: {
         ...mapActions({
             fetchTrucks:'truck/fetchTrucks'
         }),
+
+
        
         changeView(){
             this.mapView = !this.mapView;
@@ -327,7 +330,12 @@ export default {
         ...mapGetters({
             currentUser:'auth/user',
             locations:'truck/trucks'
-        })
+        }),
+
+        clientLocations(){
+            let clients = this.locations.filter((item)=>item.table_name =='clients');
+            return clients;
+        }
     }
 
 }

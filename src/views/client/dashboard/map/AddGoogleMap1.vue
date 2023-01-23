@@ -50,6 +50,7 @@
 			></gmap-marker> -->
 		</div>
 		<div v-else>
+			lekhraj
 			<gmap-marker
 			style="height:40px"
 			:icon="{url:  m.table_name == 'vendors'? base_url+'/icon/truck.png' : base_url+'/icon/client.png'}"

@@ -11,7 +11,20 @@ const routes = [
 		name: 'home',
 		component: () => import(/* webpackChunkName: "dashboardPage" */ '../views/dashboard/DashboardPage.vue'),
 		meta: { requiresAuth: false },
-	
+		// beforeEnter: (to, from, next) => {
+		// 	if (store.getters['auth/user']) {
+		// 		if(store.getters['auth/user'].table=='vendors'){
+		// 			next({
+		// 				name: 'VendorOrdersPage'
+		// 			});
+		// 		}else{
+		// 			next();
+		// 		}
+		// 	}else{
+		// 		next();
+		// 	}
+		// }
+		
 	},
 
 	{
@@ -122,16 +135,12 @@ const routes = [
 
 	// new routes ends
 
-
-
-
-
+	// vendor routes
 
 	{
-		path: '/profile',
-		name: 'profilepage',
-		component: () => import(/* webpackChunkName: "profilepage" */ '../views/profile/ProfilePage.vue'),
-		meta: { requiresAuth: true },
+		path: '/vendor-profile',
+		name: 'vendorProfilePage',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/profile/VendorProfilePage.vue'),
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {
 				next();
@@ -142,6 +151,45 @@ const routes = [
 			}
 		}
 	},
+	{
+		path: '/vendor-chat-list',
+		name: 'vendorChatList',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/chat/VendorChatListPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+
+
+
+
+
+	//vendor route ends
+
+
+
+
+	// {
+	// 	path: '/profile',
+	// 	name: 'profilepage',
+	// 	component: () => import(/* webpackChunkName: "profilepage" */ '../views/profile/ProfilePage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/change-password',
 		name: 'ChnagePassword',
@@ -430,10 +478,25 @@ const routes = [
 			}
 		}
 	},
+	// {
+	// 	path: '/orders',
+	// 	name: 'OrdersPage',
+	// 	component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/order/OrdersPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
-		path: '/orders',
-		name: 'OrdersPage',
-		component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/order/OrdersPage.vue'),
+		path: '/vendor-orders',
+		name: 'VendorOrdersPage',
+		component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/vendor/order/VendorOrdersPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {

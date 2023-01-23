@@ -1,19 +1,75 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <div>
-            <div v-if="currentUser && currentUser.table=='vendors'">
-                <DashboardVendor/>
+        <Topnavbar/>
+        <v-container v-if="mapView" class="ma-0 pa-0">
+            <div v-if="currentUser && currentUser.table == 'vendors'" class="test pl-3" :class=" available== 'available' ? 'bg-green' : 'bg-red'" id="rdg">
+                <v-radio-group
+                    v-model="available"
+                    color="primary"
+                    v-on:change="updateAvailability"
+                    row
+                    >
+                    <v-radio
+                        label="Available"
+                        value="available"
+                    ></v-radio>
+                    <v-radio
+                        label="Unavailable"
+                        value="unavailable"
+                    ></v-radio>
+                </v-radio-group>
             </div>
-            <div v-else>
-                <DashboardClient/>
+            <div class="pl-6 pr-6 pt-4">
+                <div class="d-flex align-center justify-space-between">
+                    <v-text-field label="Search" small></v-text-field>
+                    <v-btn class="ml-4" fab color="primary" small @click="modelFilter=true">
+                        <v-icon>{{iconFilter}}</v-icon>
+                    </v-btn>
+                    <v-btn class="ml-4" fab color="primary" small @click="changeView">
+                        <v-icon>{{iconMap}}</v-icon>
+                    </v-btn>
+                </div>
             </div>
-        </div>
+                <AddGoogleMap :locationMarkers="locations"/>
+           
+        </v-container>
+        <v-container v-else class="mg56 pt-4">
+           <div>
+               <div>
+                   <div class="d-flex align-center justify-space-between">
+                        <v-text-field label="Search" small v-model="search"></v-text-field>
+                        <v-btn class="ml-4" fab color="primary" small @click="modelFilter=true">
+                            <v-icon>{{iconFilter}}</v-icon>
+                        </v-btn>
+                        <v-btn class="ml-4" fab color="primary" small @click="changeView">
+                            <v-icon>{{iconMap}}</v-icon>
+                        </v-btn>
+                   </div>
+               </div>
+               <div v-if="locations && locations.length">
+                    <TruckList :trucks="locations"/>
+               </div>
+               <div v-else class="text-center">
+                   <p class="text-capitalize">no trucks found</p>
+               </div>
+           </div>
+           <TruckFilter 
+            :dialogFilter="modelFilter"
+            @filter="handleFilter"
+            @close="handleCloseFilter"/>
+        </v-container>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Topnavbar from '@/components/layout/Topnavbar'
+import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+import TruckList from '@/views/dashboard/component/TruckList'
+import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
+import AddGoogleMap from './map/AddGoogleMap'
 import {socketHandler} from '@/core/services/socketio/socket'
 export default {
     data() {
@@ -61,12 +117,18 @@ export default {
                 {id:2,name:"Porters Coffee House", address:'80 kane west hardford 1'}
             ],
             modelFilter:false,
-            mapView:false
+            mapView:false,
+            // locations:'',
         }
     },
     components: {
-        DashboardVendor: ()=> import('@/views/vendor/dashboard/VendorDashboardPage'),
-        DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
+       Topnavbar,
+        AddGoogleMap,
+        // DialogFilter,
+       Bottomnavbar,
+       TruckFilter,
+       TruckList
+        // DialogConfirm,
     },
     mounted() {
         this.fetchTrucks({ 

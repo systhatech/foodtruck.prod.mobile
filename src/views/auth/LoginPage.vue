@@ -40,9 +40,10 @@
             </div>
             <div class="text-center pa-6 ma-4">
                 <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">sign up ?</p>
-                <v-btn class="mb-4" link to="signup-customer" rounded color="primary" outlined>Customer</v-btn>
-                <br>
-                <v-btn link to="signup-truck" rounded color="primary" outlined>Truck</v-btn>
+                <div>
+                    <v-btn text to="signup-customer" color="primary">Customer</v-btn>| 
+                    <v-btn text to="signup-truck" color="primary">Truck</v-btn>
+                </div>
             </div>
         </v-container>
 
@@ -108,15 +109,15 @@ export default {
             this.signIn(this.login_info)
                 .then(() => {
                     this.loaderHide();
-                    if (this.currentUser.table == 'vendors') {
-                        this.$router.replace({
-                            name: 'OrdersPage',
-                        })
-                    } else {
+                    // if (this.currentUser.table == 'vendors') {
+                    //     this.$router.replace({
+                    //         name: 'VendorOrdersPage',
+                    //     })
+                    // } else {
                         this.$router.replace({
                             name: 'home',
                         })
-                    }
+                    // }
 
                 }).catch((error) => {
                     this.loaderHide();

@@ -130,9 +130,10 @@ export default {
             this.$router.push({name:'CartsPage'});
         },
         viewProfile() {
-            if(this.$router.currentRoute.name !=='profilepage'){
-                this.$router.push({ name: 'profilepage'});
-            }
+            // if(this.$router.currentRoute.name !=='profilepage'){
+            //     this.$router.push({ name: 'profilepage'});
+            // }
+            console.log(this.$router.currentRoute);
         },
         async profileData() {
             this.$bus.$emit('SHOW_PAGE_LOADER');

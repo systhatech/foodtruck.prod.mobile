@@ -187,13 +187,13 @@ export default {
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
         }),
-         signOut() {
+        signOut() {
              this.loaderShow();
-            this.signOutAction().then(() => {
+                this.signOutAction().then(() => {
                 this.loaderHide();
                 socketHandler.disconnect();
                 this.$router.replace({
-                    name:'loginPage',
+                    name:'home',
                 })
             });
         },
@@ -204,7 +204,9 @@ export default {
                 socketHandler.disconnect();
                 this.$store.commit(PURGE_AUTH);
                 this.$bus.$emit('HIDE_PAGE_LOADER');
-                this.$router.push('/');
+                this.$router.replace({
+                    name:'home',
+                })
                 // this.messageSuccess(resp.message);
             })
             .catch(() => {
