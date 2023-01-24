@@ -43,8 +43,6 @@ import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { mapGetters, mapActions } from 'vuex';
 import { base_url } from '@/core/services/config'
-// import {PURGE_AUTH} from '@/core/services/store/auth.module'
-// import  {ApiService} from '@/core/services/api.service';
 import { mdiChevronRight } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket';
 export default {
@@ -56,23 +54,14 @@ export default {
             iconNavigate: mdiChevronRight,
             indexValue:3,
             usericon:'',
-            menusClient: [
-                {name:'Support',icon:'mdi-headphones',route:'support'},
-                {name:'Update Profile',icon:'mdi-account-reactivate',route:'profile-update'},
-                {name:'Address',icon:'mdi-map-marker',route:'profile-address'},
-                {name:'Setting',icon:'mdi-cog',route:'change-password'},
-                {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
-                {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
-                {name:'Logout',icon:'mdi-logout',route:'logout'},
-             ],
             menusVendor: [
                 {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Truck Profile',icon:'mdi-truck-check',route:'profile-truck'},
-                {name:'User Profile',icon:'mdi-account',route:'profile-update'},
-                {name:'Address',icon:'mdi-map-marker',route:'profile-address'},
+                {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
+                {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
                 {name:'Pictures',icon:'mdi-camera-image',route:'profile-files'},
                 {name:'Schedules',icon:'mdi-map-marker',route:'profile-schedule'},
-                {name:'Menus',icon:'mdi-food-variant',route:'profile-menu'},
+                {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
                 {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
                 {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
                 {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},

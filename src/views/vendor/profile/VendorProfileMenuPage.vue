@@ -1,0 +1,119 @@
+<template>
+    <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
+        <Topnavbar :title="title" @back="handleBack"/>
+        <div class="section-sticky pa-4 d-flex align-center justify-space-between w-100">
+            <h4>Available Menus</h4>
+            <!-- <v-btn color="primary" to="/profile-menu-add" class="mb-2" rounded>Add New menu</v-btn> -->
+            <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" rounded>Add New menu</v-btn>
+        </div>
+        <v-container class="mg56 mt-16">
+            <div>
+                <TruckMenu :truckProfile="profile"/>
+            </div>
+        </v-container>
+        <DialogMenuAdd :dialog-menu-add="modal_menu_add" @close="handleClose"/>
+    </v-container>
+</template>
+<script>
+import Topnavbar from '@/components/layout/TopnavbarBackCustom'
+import { ApiService } from '@/core/services/api.service'
+// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import { base_url } from '@/core/services/config'
+import TruckMenu from '@/views/vendor/profile/components/VendorMenuList.vue'
+// import InputUpload from '@/components/form-element/InputUpload'
+import { mapGetters } from 'vuex'
+export default {
+    name:'vendorMenuList',
+    data() {
+        return {
+            title:'',
+            base_url,
+            modal_menu_add:false,
+            schedules:[],
+            profile:{},
+        }
+    },
+    mounted() {
+        this.profileData();
+    },
+    methods: {
+        handleMenuAdd(){
+            this.modal_menu_add = true;
+        },
+        handleClose(){
+            this.modal_menu_add = false;
+        },
+        handleBack(){
+            this.$router.back();
+        },
+        async profileData() {
+            this.$bus.$emit('SHOW_PAGE_LOADER');
+            await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
+                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.profile = resp;
+            })
+            .catch(() => {
+                this.$bus.$emit('HIDE_PAGE_LOADER');
+            })
+        },
+    },
+    components: {
+        TruckMenu,
+        Topnavbar,
+        DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
+        // Bottomnavbar,
+        // InputUpload
+    },
+    computed: {
+        ...mapGetters({
+            currentUser:'auth/user',
+        })
+    }
+}
+</script>
+<style lang="scss" scoped>
+.section-sticky{
+    position: fixed;
+    top: 54px;
+    background-color: rgb(255 255 255);
+    z-index: 1;
+    -webkit-box-shadow: 0px 0px 34px 1px #dedede5e !important;
+    -moz-box-shadow: 0px 0px 34px 1px #dedede5e !important;
+    box-shadow: 0px 0px 34px 1px #dedede5e !important;
+    background:#fff;
+}
+.schedule {
+    text-align: center;
+    padding: 10px;
+    color: #b5b5b5;
+    background: #fff;
+    height: 180px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+}
+.schedule-wrapper{
+    background: #ffffff;
+    border-radius:10px;
+    padding:10px;
+    margin-bottom: 70px;
+}
+.schedulte-item-wrapper{
+    padding:10px;
+    // border:1px solid #dadada;
+    margin-bottom: 14px;
+    border-radius:10px;
+    -webkit-box-shadow: 3px 5px 28px -7px rgba(184,184,184,0.52);
+    -moz-box-shadow: 3px 5px 28px -7px rgba(184,184,184,0.52);
+    box-shadow: 3px 5px 28px -7px rgba(184,184,184,0.52);
+}
+.form-container{
+    // .login-container{
+    // background: #acfa95;
+    border-radius: 10px;
+    // margin-top: 27px !important;
+    padding:20px;
+// }
+}
+</style>

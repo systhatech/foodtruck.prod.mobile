@@ -155,7 +155,6 @@ export default {
             .then(() => {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.messageSuccess("Success");
-                this.$router.push({name:'profilepage'});
             })
             .catch(() => {
                 this.$bus.$emit('HIDE_PAGE_LOADER');

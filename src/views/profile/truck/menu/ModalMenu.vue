@@ -18,7 +18,7 @@
                     </v-btn>
                 </v-toolbar-items>
             </v-toolbar>
-            <div class="pa-4 pb-16 p-relative background-image" v-if="item && Object.keys(item).length">
+            <div class="pa-4 pb82 p-relative background-image" v-if="item && Object.keys(item).length">
                 <v-img
                     :src="base_url+'/image-show/'+item.profile_pic"
                     lazy-src="https://picsum.photos/id/11/10/6"

@@ -102,8 +102,7 @@
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
-// import InputUpload from '@/components/form-element/InputUpload'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
@@ -204,7 +203,7 @@ export default {
             })
         },
         handleBack(){
-            this.$router.push({name:'profilepage'});
+            this.$router.push({name:'vendorProfilePage'});
         },
         changeImage(file){
             this.$bus.$emit('SHOW_PAGE_LOADER');

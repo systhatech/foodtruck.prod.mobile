@@ -36,7 +36,7 @@ export default {
 
         },
         handleBack(){
-            this.$router.push({name:'profilepage'});
+            this.$router.back();
         },
         async profileData() {
             this.$bus.$emit('SHOW_PAGE_LOADER');

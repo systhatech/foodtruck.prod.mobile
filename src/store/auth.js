@@ -67,6 +67,18 @@ export default {
                 commit('SET_TOKEN', null);
             }
         },
+        async fetchProfile({ commit }) {
+            try{
+                let response = await ApiService.post('/profile')
+                commit('SET_USER', response.data);
+                commit('SET_PROFILE', response.profile);
+            }catch(e){
+                console.log(e);
+                commit('SET_USER', null);
+                commit('SET_PROFILE', null);
+                commit('SET_TOKEN', null);
+            }
+        },
         signOut({commit}) {
             return ApiService.post('/logout')
             .then(() => {

@@ -1,7 +1,7 @@
 <template>
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
-        <div class="mg56">
+        <div class="mb80">
             <div v-if="render">
                 <div v-if="items&&items.length">
                     <Carousel :items="items"/>
@@ -17,7 +17,6 @@
                                     >
                                 </v-avatar>
                                 <div class="pa-4">
-                                    <!-- <p class="ma-0">{{ truck.type}}</p> -->
                                     <h3 class="text-capitalize ma-0">{{ truck.name}}</h3>
                                 </div>
                             </div>
@@ -59,7 +58,6 @@
                             </ul>
                         </div>
                         <div>
-                            <!-- <h4 class="mt-4" v-if="orderDate">Order Date : {{ formatDateToDay(orderDate) }}</h4> -->
                             <component 
                             v-if="truckProfile && Object.keys(truckProfile).length"
                             :is="activeComponent" 
@@ -77,14 +75,14 @@
                 <h3>Loading...</h3>
             </div>
         </div>
-         <Bottomnavbar value="0"/>
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
 import Banner from '@/components/layout/ComponentBanner'
 import TruckAbout from './TruckAbout';

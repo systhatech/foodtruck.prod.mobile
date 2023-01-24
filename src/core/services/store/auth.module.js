@@ -23,12 +23,12 @@ const state = {
 };
 
 const getters = {
-  currentUser(state) {
-    return state.user;
-  },
-  isAuthenticated(state) {
-    return state.isAuthenticated;
-  },
+	currentUser(state) {
+		return state.user;
+	},
+	isAuthenticated(state) {
+		return state.isAuthenticated;
+	},
 	locationSpotBooked: state => {
 		return state.location_booked;
 	},
@@ -48,12 +48,9 @@ const actions = {
 				user.token = resp.token;
 			}
 			context.commit(SET_AUTH, {});
-			resolve({});
+				resolve({});
 			})
 			.catch(() => {
-				// this.$bus.$emit('HIDE_PAGE_LOADER');
-				// this.messageError('error',"Failed to login");
-			// console.log(response.data.message);
 			});
 		});
 	},

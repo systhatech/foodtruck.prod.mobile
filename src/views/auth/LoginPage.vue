@@ -109,15 +109,11 @@ export default {
             this.signIn(this.login_info)
                 .then(() => {
                     this.loaderHide();
-                    // if (this.currentUser.table == 'vendors') {
-                    //     this.$router.replace({
-                    //         name: 'VendorOrdersPage',
-                    //     })
-                    // } else {
+    
                         this.$router.replace({
                             name: 'home',
                         })
-                    // }
+
 
                 }).catch((error) => {
                     this.loaderHide();

@@ -2,9 +2,37 @@
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <Topnavbar/>
         <v-container class="mg56 pt-4">
-           <div>
-                <p>There are  {{ clientLocations.length }} clients near you.</p>
-           </div>
+           <v-row>
+            <v-col cols="12" md="6">
+                <div class="custom-bs pa-4">
+                    <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <div class="custom-bs pa-4">
+                    <div class="pb-2">
+                        <h4>Clients Nearby You</h4>
+                    </div>
+                    <!-- <v-divider></v-divider> -->
+                    <div class="pt-2">
+                        <div>
+                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(10)">10km</v-btn>
+                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(20)">20km</v-btn>
+                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(40)">40km</v-btn>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <p>There are  {{ clientLocations }} clients near you.</p>
+                    </div>
+                </div>
+            </v-col>
+            <v-col cols="12" md="6">
+                <!-- <div class="custom-bs pa-4"> -->
+                   <v-btn rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
+                <!-- </div> -->
+            </v-col>
+            </v-row>
+            <DialogConfirm :dialog-confirm="modal_confirm" :message="message" @close="handleClose" @handleConfirm="handleConfirm"/>
         </v-container>
         <Bottomnavbar/>
     </v-container>
@@ -13,6 +41,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
+import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
@@ -36,10 +65,10 @@ export default {
             // locations:[],
             locationsList:[],
             filter:false,
-            distance:10,
-            available:"available",
+            available:1,
+            active:1,
             bgColor:'#dadada',
-            modalConfirm:false,
+            modal_confirm:false,
             message:'Please upgrade to Pro',
             dataInterval : null,
             location:{
@@ -62,22 +91,29 @@ export default {
                 {id:2,name:"Porters Coffee House", address:'80 kane west hardford 1'}
             ],
             modelFilter:false,
-            mapView:false
+            mapView:false,
+            locations:[],
+            clients:[],
+            distance:10,
         }
     },
     components: {
        Topnavbar,
        Bottomnavbar,
+       DialogConfirm,
     },
     mounted() {
         this.fetchTrucks({ 
             available: 1,
             name: this.search,
+            distance: this.distance,
             guest: localStorage.getItem('g_token'),
         });
+        // this.handleAvailable();
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
         if(!this.currentUser) return;
+    
         try{
             socketHandler.onlineStatus({
                 id : this.currentUser.table_id,
@@ -100,71 +136,25 @@ export default {
     },
     methods: {
         ...mapActions({
-            fetchTrucks:'truck/fetchTrucks'
+            fetchTrucks:'truck/fetchTrucks',
+            fetchProfile:'auth/fetchProfile',
         }),
-
-
-       
-        changeView(){
-            this.mapView = !this.mapView;
-            this.fetchData();
-        },
-        handleFilter(params) {
-            this.loaderShow();
-            params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
-            params.available =  1;
-             ApiService.post('/location/search/km',params)
-            .then((resp) => {
-                this.loaderHide();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.locations = this.trucks;
-                this.handleCloseFilter();
-                this.zoomLevel = 12;
-                this.loaderHide();
-            })
-            .catch((error) => {
-                this.loaderHide();
-                if(error.response && error.response.data && error.response.data.message){
-                    this.messageError(error.response.data.message);
-                }
-                this.messageError(error.response.data.message);
-                this.loaderHide();
+        handleFechClient(radius){
+            this.distance = radius;
+            this.fetchTrucks({ 
+                available: 1,
+                distance: this.distance,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
             });
-        },
-        handleCloseFilter(){
-            this.modelFilter = false;
-        },
-        checkPremium() {
-            if((this.utype == 'vendors')){
-                this.fetchProfile();
-            }
-        },
-        async fetchProfile() {
-            await ApiService.post("profile").then((response) => {
-                if(response.data.owner.subscription === null){
-                    this.available = "unavailable";
-                    this.modalConfirm = true;
-                    this.subscribed = false;
-                }else{
-                    this.subscribed = true;
-                }
-			})
-			.catch(() => {
-                console.log("no fetch")
-			})
+            // console.log(radius);
         },
         updateAvailability() {
-            if(this.subscribed){
+            if(this.currentUser.owner.subscription){
                 this.updateAvaiability();
             }else{
-             
-                this.available = "unavailable";
-                this.modalConfirm = true;
+                this.available = 0;
+                this.modal_confirm = true;
             }
         },
         saveDeviceToken(token){
@@ -179,162 +169,228 @@ export default {
         },
         async updateAvaiability(){
             this.loaderShow();
-            await ApiService.post('/self/availability',{ is_active : this.available == "available" ? 1 : 0})
+        
+            await ApiService.post('/self/availability',{ is_active : this.currentUser.owner.is_active ? 0 : 1})
             .then(() => {
-                this.handleAvailable();
+                this.loaderHide();
+                this.fetchProfile();
+                this.fetchTrucks({ 
+                    available: 1,
+                    distance: this.distance,
+                    name: this.search,
+                    guest: localStorage.getItem('g_token'),
+                });
             })
             .catch(() => {
                 this.loaderHide();
             });
         },
-        handleConfirm(){
-            this.$router.push({name :'SubscriptionPage'});
-        },
-        handleCloseConfirm(){
-            this.available = "unavailable";
-            this.modalConfirm = false;
-        },
         handleClose() {
-            this.filter = false;
+            this.available = 0;
+            this.modal_confirm = false;
         },
+        handleConfirm(){
+            this.$router.push({
+                name:'SubscriptionPage'
+            });
+        }
+        // handleFilter(params) {
+        //     this.loaderShow();
+        //     params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
+        //     params.available =  1;
+        //      ApiService.post('/location/search/km',params)
+        //     .then((resp) => {
+        //         this.loaderHide();
+        //         this.trucks = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //         this.locations = this.trucks;
+        //         this.handleCloseFilter();
+        //         this.zoomLevel = 12;
+        //         this.loaderHide();
+        //     })
+        //     .catch((error) => {
+        //         this.loaderHide();
+        //         if(error.response && error.response.data && error.response.data.message){
+        //             this.messageError(error.response.data.message);
+        //         }
+        //         this.messageError(error.response.data.message);
+        //         this.loaderHide();
+        //     });
+        // },
+        // handleCloseFilter(){
+        //     this.modelFilter = false;
+        // },
+        // checkPremium() {
+        //     if((this.utype == 'vendors')){
+        //         this.fetchProfile();
+        //     }
+        // },
+        // async fetchProfile() {
+        //     await ApiService.post("profile").then((response) => {
+        //         if(response.data.owner.subscription === null){
+        //             this.available = "unavailable";
+        //             this.modal_confirm = true;
+        //             this.subscribed = false;
+        //         }else{
+        //             this.subscribed = true;
+        //         }
+		// 	})
+		// 	.catch(() => {
+        //         console.log("no fetch")
+		// 	})
+        // },
+       
+        // handleConfirm(){
+        //     this.$router.push({name :'SubscriptionPage'});
+        // },
+        // handleCloseConfirm(){
+        //     this.available = "unavailable";
+        //     this.modal_confirm = false;
+        // },
+      
         // handleFilter() {
         //     this.filter = true;
         //     this.fetchCurrentCityTrucks();
         // },
-        handleAvailable(){
-            this.loaderShow();
-            let availability = this.available == "available" ? 1 : 0;
-             ApiService.post('/location/all',{ 
-                available: availability,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.loaderHide();
-                this.locations = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.zoomLevel = 12;
-                this.trucks = this.locations;
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        fetchDataInterval() {
-            this.dataInterval = setInterval(() => {
-                if(!this.filter){
-                    this.fetchData(false)
-                }
-            }, 500);
-        },
+        // handleAvailable(){
+        //     this.loaderShow();
+        //     let availability = this.available;
+        //      ApiService.post('/location/all',{ 
+        //         available: availability,
+        //         guest: localStorage.getItem('g_token'),
+        //     })
+        //     .then((resp) => {
+        //         this.loaderHide();
+        //         this.locations = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //         this.zoomLevel = 12;
+        //         this.trucks = this.locations;
+        //         this.clients = resp.filter((item)=>item.table_name =='clients');
+        //     })
+        //     .catch(() => {
+        //         this.loaderHide();
+        //     });
+        // },
+        // fetchDataInterval() {
+        //     this.dataInterval = setInterval(() => {
+        //         if(!this.filter){
+        //             this.fetchData(false)
+        //         }
+        //     }, 500);
+        // },
         // fetchData(showLoader = true){
-        fetchData(){
-        // console.log(showLoader)
-            // console.log("test");
-            // if(showLoader){
-            //     this.loaderShow();
-            // }
-            // let avai = (this.available == "available") ? 1 : 0;
-            // if(this.utype === 'clients') {
-             let   avai = 1;
-            // }
-            this.loaderShow();
-            ApiService.post('/location/all',{ 
-                available: avai,
-                name: this.search,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.locations = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.loaderHide();
+        // fetchData(){
+        // // console.log(showLoader)
+        //     // console.log("test");
+        //     // if(showLoader){
+        //     //     this.loaderShow();
+        //     // }
+        //     // let avai = (this.available == "available") ? 1 : 0;
+        //     // if(this.utype === 'clients') {
+        //      let   avai = 1;
+        //     // }
+        //     this.loaderShow();
+        //     ApiService.post('/location/all',{ 
+        //         available: avai,
+        //         name: this.search,
+        //         guest: localStorage.getItem('g_token'),
+        //     })
+        //     .then((resp) => {
+        //         this.locations = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //         this.loaderHide();
            
-                // this.checkPremium();
-                this.zoomLevel = 12;
-            })
-            .catch(() => {
-                this.loaderHide();
-                this.checkPremium();
-            });
-        },
+        //         // this.checkPremium();
+        //         this.zoomLevel = 12;
+        //     })
+        //     .catch(() => {
+        //         this.loaderHide();
+        //         this.checkPremium();
+        //     });
+        // },
 
-        fetchCurrentCityTrucks(){
-            this.loaderShow();
-            ApiService.post('/location/trucks',{ guest: localStorage.getItem('g_token') , available:1})
-            .then((resp) => {
-                this.loaderHide();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                console.log(this.trucks);
-                this.zoomLevel = 12;
-            })
-            .catch((error) => {
-                this.loaderHide();
-                console.log(error);
-            });
-        },
-        filterZipCode(zip){
-            this.loaderShow();
-            ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
-            .then((resp) => {
-                // this.loaderHide();
-                // this.handleClose();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                 this.locations = this.trucks;
-                this.zoomLevel = 12;
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        fetchFilterData(dist){
-            this.loaderShow();
-            ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
-            .then((resp) => {
-                // this.loaderHide();
-                // this.handleClose();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                 this.locations = this.trucks;
-                this.zoomLevel = 12;
-            })
-            .catch((error) => {
-                this.loaderHide();
-                this.messageError(error.response.data.message);
-                // console.log(error);
-            });
-        },
+        // fetchCurrentCityTrucks(){
+        //     this.loaderShow();
+        //     ApiService.post('/location/trucks',{ guest: localStorage.getItem('g_token') , available:1})
+        //     .then((resp) => {
+        //         this.loaderHide();
+        //         this.trucks = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //         console.log(this.trucks);
+        //         this.zoomLevel = 12;
+        //     })
+        //     .catch((error) => {
+        //         this.loaderHide();
+        //         console.log(error);
+        //     });
+        // },
+        // filterZipCode(zip){
+        //     this.loaderShow();
+        //     ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
+        //     .then((resp) => {
+        //         // this.loaderHide();
+        //         // this.handleClose();
+        //         this.trucks = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //          this.locations = this.trucks;
+        //         this.zoomLevel = 12;
+        //     })
+        //     .catch(() => {
+        //         this.loaderHide();
+        //     });
+        // },
+        // fetchFilterData(dist){
+        //     this.loaderShow();
+        //     ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
+        //     .then((resp) => {
+        //         // this.loaderHide();
+        //         // this.handleClose();
+        //         this.trucks = resp.map((location) => ({
+        //             ...location, position: {
+        //                 lat: Number(location.lat),
+        //                 lng: Number(location.lng)
+        //             }
+        //         }));
+        //          this.locations = this.trucks;
+        //         this.zoomLevel = 12;
+        //     })
+        //     .catch((error) => {
+        //         this.loaderHide();
+        //         this.messageError(error.response.data.message);
+        //         // console.log(error);
+        //     });
+        // },
           
     },
     computed: {
         ...mapGetters({
             currentUser:'auth/user',
-            locations:'truck/trucks'
+            availableLocations:'truck/trucks'
         }),
 
         clientLocations(){
-            let clients = this.locations.filter((item)=>item.table_name =='clients');
-            return clients;
+            let clients = this.availableLocations.filter((item)=>item.table_name =='clients');
+            return clients.length;
         }
     }
 

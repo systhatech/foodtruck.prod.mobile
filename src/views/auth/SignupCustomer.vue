@@ -13,93 +13,34 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center mb-2">
-                            <img :src="logo" width="90"/>
+                            <img :src="base_url+'/default-company/logo'" width="90" />
                         </div>
                     </v-col>
                 </v-row>
             </div>
-            <div class="pa-4 login-container background-white bg-primary-light">
-                <div v-if="this.step <= this.questions.length" class="mb-10 mt-5">
-                    <v-progress-linear  
-                        v-model="progressValue"
-                        :active="show"
-                        color="primary"
-                        height="6"
-                        :indeterminate="query"
-                        :query="true">
-                    </v-progress-linear>
+            <div class="custom-bs pa-4 bg-primary-light">
+                <v-form ref="formSignupCustomer">
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.fname" label="First Name"></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.lname" label="Last Name"></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field class="text-center" :rules="emailRules" v-model="customer_info.email" label="Email"></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-text-field class="text-center" :rules="rulesRequired" type="password" v-model="customer_info.password" label="Password"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-form>
+                <div class="text-center">
+                    <v-btn color="primary" rounded @click="handleSubmit()">Submit</v-btn>
                 </div>
-                <v-row>
-                    <v-col v-if="this.step <= this.questions.length" cols="12" md="12" lg="12">
-                        <div>
-                            <v-form>
-                                <v-row>
-                                    <v-col cols="12">
-                                        <div class="question-style text-center">
-                                            <h3 class="color-primary">  {{  this.questions[this.activeQuestionIndex].question }} </h3>
-                                        </div>
-                                        <div v-if="activeQuestion.type =='text'">
-                                            <v-text-field class="text-center" :rules="rulesRequired" v-model="answer"></v-text-field>
-                                        </div>
-                                        <div v-if="activeQuestion.type =='phone'">
-                                            <v-text-field v-mask="'### ###-####'" :rules="rulesRequired" v-model="answer"></v-text-field>
-                                        </div>
-                                        <div v-if="activeQuestion.type =='email'">
-                                            <v-text-field v-model="answer" :rules="rulesEmail"></v-text-field>
-                                        </div>
-                                        <div v-if="activeQuestion.type =='password'">
-                                            <v-text-field autocomplete="false" v-model="answer" :rules="rulesRequired" type="password"></v-text-field>
-                                        </div>
-                                        <div v-if="activeQuestion.type =='radio_row'">
-                                            <v-radio-group
-                                                v-model="answer"
-                                                row>
-                                                <v-radio
-                                                    v-for="(item,x) in activeQuestion.options" :key="x"
-                                                    :label="item.text"
-                                                    :value="item.value"
-                                                ></v-radio>
-                                            </v-radio-group>
-                                            <!-- <InputAutocomplete @selected="selectedAnswers" :items="activeQuestion.options"/> -->
-                                        </div>
-                                        <div v-if="activeQuestion.type =='radio_with_text'" class="d-flex align-center">
-                                            <v-text-field class="mt-3 mr-4" label="Value" v-model="radio_text"></v-text-field>
-                                            <InputAutocomplete @selected="selectedAnswers" :items="activeQuestion.options"/>
-                                        </div>
-                                        <div>
-                                            <p class="color-secondary" v-if="showError">{{errorMessage}}</p>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12">
-                                        <div class="d-flex justify-space-around" :class="step==1 ? '' : 'justify-space-between'">
-                                            <v-btn rounded class="" v-if="step>0" @click="handleBack">Back</v-btn>
-                                            <v-btn color="primary" rounded @click="handleNext">{{ questions.length > (activeQuestionIndex+1) ?'Next':'Submit'}}</v-btn>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                            </v-form>
-                        </div>
-                    </v-col>
-                    <v-col v-else cols="12">
-                        <div>
-                            <h3 class="color-primary">Review</h3>
-                            <div class="custom-bs pa-3">
-                                <div v-for="(question,index) in questions" :key="index">
-                                    <!-- <h4 class="text-capitalize color-secondary">{{ question.question}}</h4>
-                                    <p class="f8-bold text-capitalize">{{ answers[index]}}</p> -->
-                                    <p class="f8 text-capitalize ma-0">{{ question.question}}</p>
-                                    <h4 class="text-capitalize mb-3">{{ answers[index] }}</h4>
-                                </div>
-                                <div class="d-flex justify-space-between">
-                                    <v-btn @click="handleBack" rounded>Back</v-btn>
-                                    <v-btn color="primary" @click="handleSubmit" rounded>{{ questions.length > step ?'Next':'Submit'}}</v-btn>
-                                </div>
-                            </div>
-                        </div>
-                    </v-col>
-                </v-row>
             </div>
         </v-container>
         <!-- <Bottomnavbar/> -->
@@ -148,12 +89,11 @@ export default {
         valid: true,
         activateAccount: false,
         accountActivated: false,
-        rulesEmail: [
-             v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        emailRules: [
+            (v) => !!v || "E-mail is required",
+            (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
         ],
-        rulesRequired: [
-            //  v => !v || 'Required'
-        ],
+        rulesRequired: [(v) => !!v || "Required"],
         showError:false,
         errorMessage:'Required',
         items: [
@@ -162,6 +102,13 @@ export default {
             {id:3, name:'',route:'contact', icon:'mdi-notebook-check'},
             {id:4, name:'',route:'login', icon:'mdi-login'},
         ],
+        customer_info:{
+            fname:'',
+            lname:'',
+            email:'',
+            phone_no:'',
+            password:'',
+        },
         questions:[
             {question:'Your Name',field:'name',type:'text',options:[]},
             {question:'Your Phone',field:'phone',type:'phone',options:[]},
@@ -223,6 +170,27 @@ export default {
          ...mapActions({
 			registerClient:'auth/signUpClient'
 		}),
+        async handleSubmit(){
+            if(!this.$refs.formSignupCustomer.validate()) return;
+            this.loaderShow();
+            await ApiService.post('/register/client', this.customer_info)
+            .then((resp) => {
+                this.messageSuccess("Registered Successfully");
+                JwtService.saveToken(resp.token);
+                JwtService.saveUtype(resp.user.table);
+                this.fetchAddress();
+                
+            })
+            .catch((error) => {
+                this.loaderHide();
+                if(error.response.data){
+                    this.messageError(error.response.data.message);
+                }else{
+                    this.messageError(error.response.statusText);
+                }
+            })
+        },
+
         async submit() {
             this.loaderShow();
             this.registerClient({
@@ -279,7 +247,7 @@ export default {
                         return;
                     }
                     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.answer)){
-                        this.$bus.$emit('SHOW_PAGE_LOADER');
+                        this.loaderShow();
                         ApiService.post('/check/email',{email: this.answer})
                         .then(() => {
                             this.answers[this.activeQuestionIndex] = this.answer;
@@ -287,7 +255,7 @@ export default {
                             this.updateStep();
                         })  
                         .catch((error) => {
-                            this.$bus.$emit('HIDE_PAGE_LOADER');
+                            this.loaderHide();
                             this.showError = true;
                             this.errorMessage = error.response.data.message;
                         })       
@@ -322,7 +290,7 @@ export default {
             }
         },
         updateStep(){
-            this.$bus.$emit('HIDE_PAGE_LOADER');
+            this.loaderHide();
             this.showError = false;
             this.step +=1;
             this.activeQuestionIndex += 1;
@@ -340,16 +308,16 @@ export default {
             .then((resp) => {
                 this.logo = this.base_url+"/image-show/"+resp.logo;
                 this.name = resp.name;
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             })
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError('Sorry, Something goes wrong');
             });
         },
 
         async submitt() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.post('/register/client', {
                 name: this.answers[0],
                 phone_no: this.answers[1],
@@ -364,7 +332,7 @@ export default {
                 
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 if(error.response.data){
                     this.messageError(error.response.data.message);
                 }else{
@@ -373,7 +341,7 @@ export default {
             })
         },
          async fetchAddress() {
-            // this.$bus.$emit('SHOW_PAGE_LOADER');  
+            // this.loaderShow();  
             ApiService.get('/getapikeys')
             .then( async (apiKeys) =>  {
                 let googleApiKey = apiKeys.google;
@@ -398,15 +366,15 @@ export default {
             })
         },
         async updateLocation() {
-             this.$bus.$emit('SHOW_PAGE_LOADER');
+             this.loaderShow();
              await ApiService.post('/location/save-current', this.location)
             .then(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.$router.replace({ name:'home'});
             })
             .catch((error) => {
                 console.log(error);
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.$router.replace({ name:'home'});
             })
         }

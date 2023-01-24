@@ -3,32 +3,36 @@
         <div v-if="truckProfile.menus && truckProfile.menus.length">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
-                    <h4 class="pb-2 mt-4 text-capitalize primary--text">{{ index }}</h4>
+                    <h3 class="pb-2 mt-8 text-capitalize text-center">{{ index }}</h3>
 
-                    <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-4 mb-4" :key="i" @click="handleRoute(item)">
-                        <div class="d-flex align-center"> 
-                            <v-img
-                            lazy-src="https://picsum.photos/id/11/10/6"
-                            max-width="100"
-                            width="100"
-                            aspect-ratio="1.7"
-                            contain
-                            :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
-                            ></v-img>
-                            <div class="pl-3 d-flex align-center justify-space-between w-100">
-                                <div>
-                                    <p class="mb-2 text-capitalize">{{item.name}}</p>
-                                    <h4 class="ma-0 primary--text">
-                                        {{ formatAmount(item.price)}}
-                                    </h4>
-                                    <!-- <v-btn rounded color="primary" small> View item</v-btn> -->
-                                    <!-- <p class="ma-0 f8 text-capitalize">{{item.description ? item.description:'No description'}}</p> -->
+                    <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
+                        <div class="d-flex align-center justify-space-between">
+                            <div class="d-flex align-center"> 
+                                <v-img
+                                lazy-src="https://picsum.photos/id/11/10/6"
+                                max-width="100"
+                                width="100"
+                                aspect-ratio="1.7"
+                                contain
+                                :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
+                                ></v-img>
+                                <div class="pl-3 d-flex align-center justify-space-between w-100">
+                                    <div>
+                                        <p class="mb-2 text-capitalize">{{item.name}}</p>
+                                        <h4 class="ma-0 primary--text">
+                                            {{ formatAmount(item.price)}}
+                                        </h4>
+                                  
+                                    </div>
+                                    <!-- <div>
+                                        
+                                        <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
+                                        <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
+                                    </div> -->
                                 </div>
-                                <!-- <div>
-                                    
-                                    <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
-                                    <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
-                                </div> -->
+                            </div>
+                            <div>
+                                <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn>
                             </div>
                         </div>
                     </div>
@@ -43,6 +47,7 @@
 </template>
 <script>
 import { base_url } from '@/core/services/config'
+import { mdiChevronRight } from '@mdi/js';
 import ModalMenu from './menu/ModalMenu'
 export default {
     props:{
@@ -51,6 +56,7 @@ export default {
     data() {
         return {
             base_url,
+            icon_right: mdiChevronRight,
             message:'Loading...',
             item:{},
             dialog:false,

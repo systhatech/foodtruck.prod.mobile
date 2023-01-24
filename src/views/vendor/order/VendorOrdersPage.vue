@@ -22,11 +22,24 @@
                     <p class="mt-4 mb-2">{{ formatDateStandard(date) }}</p>
                     <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                         <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
-                            <div class="order_item custom-bs" >
+                            <div class="custom-bs pa-4 d-flex align-center justify-space-between">
+                                <div>
+                                    <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
+                                    <p class="mb-0">{{ order.customer_name }}</p>
+                                    <p class="mb-0" style="font-size:13px">{{ order.phone }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
+                                    <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
+                                </div>
+                                <div>
+                                    <v-btn fab small color="primary" @click="handleView(order)"><v-icon>{{icon_right}}</v-icon></v-btn>
+                                </div>
+                            </div>
+                            <!-- <div class="order_item custom-bs" >
                                 <p class="order_no"><span>{{order.order_no}}</span> <span class="amount"> {{formatAmount(order.total_amount)}} </span></p>
                                 <div class="d-flex justify-space-between">
                                     <div>
-                                        <!-- <p class="order_person">Pickup Date : {{formatDateToDay(order.pickup_date)}} {{formatTimeOnly(order.pickup_time)}}</p> -->
                                         <p class="order_person">{{order.customer_name}}</p>
                                         <p class="order_contact mb-2">{{formatPhoneNumber(order.phone)}}</p>
                                         <v-chip class="accent text-capitalize" small>{{order.status}}</v-chip>
@@ -40,7 +53,7 @@
                                 <div class="pt-4">
                                     <v-btn block rounded color="primary" @click="handleView(order)">view</v-btn>
                                 </div>
-                            </div>
+                            </div> -->
                         </v-col>
                     </v-row>
                 </div>
@@ -57,8 +70,8 @@
 import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { ApiService } from '@/core/services/api.service'
-import OrderDetail from './OrderDetail'
-import { mdiChat } from '@mdi/js'
+import OrderDetail from '@/views/vendor/order/VendorOrderDetail'
+import { mdiChat, mdiChevronRight } from '@mdi/js'
 // import InputUpload from '@/components/form-element/InputUpload'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -75,6 +88,7 @@ export default {
             dialogOrderDetail:false,
             status:'new',
             iconChat:mdiChat,
+            icon_right:mdiChevronRight,
             orderItem:{},
             // vendor_id:3,
             activeItem:0,

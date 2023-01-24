@@ -103,6 +103,36 @@ const routes = [
 		}
 	},
 	{
+		path: '/client-profile-update',
+		name: 'clientProfileUpdatePage',
+		component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/client/profile/ClientProfileUpdatePage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/client-profile-address',
+		name: 'clientProfileAddressPage',
+		component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/client/profile/ClientProfileAddressPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
 		path: '/client-chat-list',
 		name: 'clientChatList',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/client/chat/ClientChatListPage.vue'),
@@ -141,6 +171,66 @@ const routes = [
 		path: '/vendor-profile',
 		name: 'vendorProfilePage',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/profile/VendorProfilePage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-profile-update',
+		name: 'vendorProfileUpdatePage',
+		component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/vendor/profile/VendorProfileUpdatePage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-profile-address',
+		name: 'vendorProfileAddressPage',
+		component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/vendor/profile/VendorProfileAddressPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-profile-menu',
+		name: 'vendorProfileMehuPage',
+		component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/vendor/profile/VendorProfileMenuPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-menu/:menuId',
+		name: 'vendorMenuDetail',
+		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/vendor/profile/VendorMenuView.vue'),
+		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {
 				next();
@@ -220,21 +310,21 @@ const routes = [
 			}
 		}
 	},
-	{
-		path: '/profile-update',
-		name: 'ProfileUpdatePage',
-		component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/profile/ProfileUpdatePage.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/profile-update',
+	// 	name: 'ProfileUpdatePage',
+	// 	component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/profile/ProfileUpdatePage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/profile-truck',
 		name: 'ProfileTruckPage',
@@ -296,21 +386,21 @@ const routes = [
 			}
 		}
 	},
-	{
-		path: '/truck-menu/:menuId',
-		name: 'truckmenuDetail',
-		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/profile/truck/TruckMenuView.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/truck-menu/:menuId',
+	// 	name: 'truckmenuDetail',
+	// 	component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/profile/truck/TruckMenuView.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/menu-edit/:menuId',
 		name: 'TruckMenuEditPage',
@@ -361,21 +451,21 @@ const routes = [
 			}
 		}
 	},
-	{
-		path: '/profile-address',
-		name: 'ProfileAddressPage',
-		component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/profile/ProfileAddressPage.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/profile-address',
+	// 	name: 'ProfileAddressPage',
+	// 	component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/profile/ProfileAddressPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/profile-schedule',
 		name: 'profileSchedulePage',
