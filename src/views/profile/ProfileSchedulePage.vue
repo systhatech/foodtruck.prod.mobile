@@ -2,7 +2,7 @@
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
-            <v-btn color="primary" @click="handleRoute()" class="mb-4" rounded outlined block>Add New Schedule</v-btn>
+            <v-btn color="primary" to="/vendor-location-add" class="mb-4" rounded outlined block>Add New Schedule</v-btn>
             <div>
                 <Location :truckProfile="profile"/>
             </div>
@@ -31,11 +31,7 @@ export default {
         console.log(this.profile);
     },
     methods: {
-        handleRoute(){
-            this.$router.replace({
-                name: 'truckLocationPage',
-            })
-        },
+ 
         handleBack(){
             this.$router.replace({name:'profilepage'});
         },

@@ -132,10 +132,6 @@ export default {
             if(!this.$refs.formMenu.validate()) return;
             
             this.menu.is_active = this.is_active?1:0;
-            // console.log({
-            //     ...this.menu,
-            //     vendor_id: this.currentUser.table_id,
-            // });
             this.loaderShow();
             ApiService.post("/menu/create", {
                 ...this.menu,

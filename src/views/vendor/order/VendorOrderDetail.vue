@@ -4,9 +4,9 @@
             <v-dialog v-model="dialogOrderDetail" persistent scrollable fullscreen>
                 <v-card class="background-image" style="padding-top: 56px !important;">
                     <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
-                        <v-btn icon @click="handleClose">
+                        <!-- <v-btn icon @click="handleClose">
                             <v-icon>mdi-close</v-icon>
-                        </v-btn>
+                        </v-btn> -->
                         <v-toolbar-title>{{ orderDetail.order_no }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
@@ -149,7 +149,7 @@
                             </div>
                         </template>
                     </div>
-                    <div class="pa-4 custom-bs" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">
+                    <div class="pa-4 custom-bs" style="position: fixed;bottom: 0;width: 100%;z-index: 1;" v-if="order.status!='completed'">
                         <div class="d-flex align-center justify-space-between">
                             <div v-if="order && order.status == 'new'"
                                 class="d-flex align-center justify-space-between w-100">

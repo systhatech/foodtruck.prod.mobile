@@ -71,7 +71,8 @@ export default {
     methods: {
         handleView(){
             this.modal_menu_action = false;
-            this.modal_menu_detail = true;
+            // this.modal_menu_detail = true;
+            this.$router.push("/vendor-profile-menu/"+this.menu.id);
         },
         handleEdit(){
             this.modal_menu_action = false;

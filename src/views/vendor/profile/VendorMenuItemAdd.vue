@@ -223,28 +223,23 @@ export default {
                 items:[{ name :'' , value :'' }]
             });
             this.panel = 0;
-            console.log(this.menu);
         },
         selectedAnswers(data) {
-            console.log({data});
             this.menu.category_id = data.selected_data;
         },
         selectedType(data) {
-            // console.log(data);
             this.menu.unit_type = data.selected_data;
         },
         fetchCategory(){
             this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.get('lookup/food-menu-item-category')
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.categories = resp.food_category;
                 this.unit_type = resp.unit_type;
-                console.log(this.categories);
-                console.log(this.unit_type);
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         },
@@ -261,12 +256,12 @@ export default {
             formData.append("file",file.file);
             ApiService.post('/store-image', formData)
             .then((resp) => {
-                 this.$bus.$emit('HIDE_PAGE_LOADER');
+                 this.loaderHide();
                  this.menu.profile_pic = resp.file_name;
             })
             .catch(() => {
                 this.messageError("Failed ! choose image less than size 2mb");
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             });
         },
        
@@ -276,18 +271,15 @@ export default {
                 this.messageError('Flease fillup form fields');
                 return;
             }
-        console.log("Test");
            this.loaderShow();
-        
             this.menu.vendor_id = this.currentUser.table_id;
             ApiService.post('menuitem/create/only',this.menu)
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageSuccess(resp.message);
-                this.$router.push('/profile-menu');
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         }

@@ -106,7 +106,7 @@ export default {
         this.fetchTrucks({ 
             available: 1,
             name: this.search,
-            distance: this.distance,
+            // distance: this.distance,
             guest: localStorage.getItem('g_token'),
         });
         // this.handleAvailable();
@@ -143,7 +143,7 @@ export default {
             this.distance = radius;
             this.fetchTrucks({ 
                 available: 1,
-                distance: this.distance,
+                // distance: this.distance,
                 name: this.search,
                 guest: localStorage.getItem('g_token'),
             });
@@ -176,7 +176,7 @@ export default {
                 this.fetchProfile();
                 this.fetchTrucks({ 
                     available: 1,
-                    distance: this.distance,
+                    // distance: this.distance,
                     name: this.search,
                     guest: localStorage.getItem('g_token'),
                 });

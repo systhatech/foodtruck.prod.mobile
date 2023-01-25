@@ -4,27 +4,30 @@
             <ul class="location-list mt-6">
                 <li class="" v-for="(location, index) in truckProfile.locations" :key="index">
                     <div class="pa-4 custom-bs p-relative">
-                        <div class="d-flex">
-                            <div class="d-flex">
-                                <v-icon color="primary" class="mr-2">{{ iconTime }}</v-icon>
-                                <p class="ma-0"> {{ formatTimeOnly(location.start_time)}} - {{ formatTimeOnly(location.end_time)}}</p>
-                            </div>
-                            <v-btn link @click="handleRoute(location.id)" small tile text color="warning" class="btn-edit"><v-icon>mdi-pencil</v-icon></v-btn>
+                        <div>
+                            <h5 class="text-uppercase primary--text">date</h5>
+                            <p class="mb-1"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>
+                            <p class="mb-4"> {{ formatTimeOnly(location.start_time)}} - {{ formatTimeOnly(location.end_time)}}</p>
                         </div>
-                        <div class="d-flex">
-                            <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon>
+                        <div>
+                            <!-- <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon> -->
+                            <h5 class="text-uppercase primary--text">Location</h5>
                             <div>
                                 <p class="ma-0">
                                     {{location.add1 ? location.add1:''}}
-                                    {{location.city?location.city:''}}
+                                    {{location.city?location.city:''}}<br>
                                     {{location.state?location.state:''}}
                                     {{location.zip?location.zip:''}}
+                                    {{location.country_code?location.country_code:''}}
                                 </p>
                             </div>
                         </div>
-                        <div class="d-flex align-center"> 
+                        <!-- <div class="d-flex align-center"> 
                              <v-icon color="primary" class="mr-2">{{ iconAccount }}</v-icon> 
                              Nearby Client - {{ location.clients_count }}
+                        </div> -->
+                        <div class="pt-4">
+                            <v-btn block rounded color="warning" @click="handleRoute(location.id)">update</v-btn>
                         </div>
                     </div>
                 </li>
@@ -79,11 +82,9 @@ export default {
 .location-list{
         list-style: none;
         padding: 0;
-        margin-bottom:60px;
         li{
             text-transform: capitalize;
             position: relative;
-            font-size:0.8rem;
             margin-bottom:20px;
             .btn-edit{
                 position: absolute;

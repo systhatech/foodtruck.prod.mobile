@@ -88,6 +88,15 @@ export default {
 		}
 	},
 	watch: {
+		dialogVarientAdd(){
+			this.name = "";
+			this.varient = {
+				name: '',
+				items: [
+					{ name: '', value: '' },
+				],
+			};
+		},
 		dialogConfirm: function () {
 			this.loading = false;
 		},

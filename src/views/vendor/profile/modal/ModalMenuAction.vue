@@ -12,7 +12,7 @@
                     <div>
                         <div class="pa-4 custom-bs">
                             <div>
-                                <v-btn block class="mb-6" color="primary" rounded @click="handleView()">view menu</v-btn>
+                                <v-btn block class="mb-6" color="primary" rounded @click="handleView()">add / remove menu item</v-btn>
                             </div>
                            <div>
                                <v-btn block class="mb-6" color="warning" rounded @click="handleEdit()">edit menu</v-btn>

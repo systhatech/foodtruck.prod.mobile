@@ -22,9 +22,9 @@
                 <div class="setting-list custom-bs  pa-4 mt-4">
                     <ul>
                         <li v-for="(menu, index) in menusVendor" class="" :key="index" @click="navigatePage(menu.route)">
-                            <div>
+                            <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">{{menu.icon}}</v-icon>
-                                <span class="f8-bold">{{ menu.name }}</span>
+                                <h5 class="text-uppercase" style="font-weight:400">{{ menu.name }}</h5>
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
@@ -56,11 +56,11 @@ export default {
             usericon:'',
             menusVendor: [
                 {name:'Support',icon:'mdi-headphones',route:'support'},
-                {name:'Truck Profile',icon:'mdi-truck-check',route:'profile-truck'},
+                {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
                 {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
                 {name:'Pictures',icon:'mdi-camera-image',route:'profile-files'},
-                {name:'Schedules',icon:'mdi-map-marker',route:'profile-schedule'},
+                {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
                 {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
                 {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
                 {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
