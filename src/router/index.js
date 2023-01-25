@@ -227,9 +227,54 @@ const routes = [
 		}
 	},
 	{
-		path: '/vendor-menu/:menuId',
+		path: '/vendor-menu-item/:menuId',
 		name: 'vendorMenuDetail',
-		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/vendor/profile/VendorMenuView.vue'),
+		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/vendor/profile/VendorMenuItemView.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-menu-item-add',
+		name: 'vendorMenuItemAdd',
+		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/vendor/profile/VendorMenuItemAdd.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	// {
+	// 	path: '/menu-edit/:menuId',
+	// 	name: 'TruckMenuEditPage',
+	// 	component: () => import(/* webpackChunkName: "TruckMenuEditPage" */ '../views/profile/truck/TruckMenuEdit.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
+	{
+		path: '/vendor-menu-item-edit/:menuId',
+		name: 'vendorMenuItemEdit',
+		component: () => import(/* webpackChunkName: "truckmenuDetail" */ '../views/vendor/profile/VendorMenuItemEdit.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {
@@ -245,6 +290,21 @@ const routes = [
 		path: '/vendor-chat-list',
 		name: 'vendorChatList',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/chat/VendorChatListPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor/conversation/:type/:id',
+		name: 'vendorChatConversationPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/vendor/chat/VendorChatConversationPage.vue'),
+		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {
 				next();
@@ -401,21 +461,21 @@ const routes = [
 	// 		}
 	// 	}
 	// },
-	{
-		path: '/menu-edit/:menuId',
-		name: 'TruckMenuEditPage',
-		component: () => import(/* webpackChunkName: "TruckMenuEditPage" */ '../views/profile/truck/TruckMenuEdit.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/menu-edit/:menuId',
+	// 	name: 'TruckMenuEditPage',
+	// 	component: () => import(/* webpackChunkName: "TruckMenuEditPage" */ '../views/profile/truck/TruckMenuEdit.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/truck-profile-location/:locationId',
 		name: 'truckLocationEdit',

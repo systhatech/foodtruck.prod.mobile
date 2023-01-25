@@ -1,103 +1,103 @@
 <template>
-  <v-container class="ma-0 pa-0 background-image h-100">
-    <Topnavbar :title="title" @back="handleBack" />
-    <v-container class="mg56">
-      <div class="custom-bs pa-4 mb-16">
-        <v-form v-model="valid" ref="formLocation">
-          <v-row>
-            <v-col cols="12" class="pb-0 pt-4" md="12">
-              <div style="height: 100px; width: 120px; margin: 0 auto">
-                <InputUpload
-                  :src="base_url + '/image-show/' + menu.profile_pic"
-                  type="menu_image"
-                  :max-height="maxHeight"
-                  label="Change"
-                  @changeImage="changeImage"
-                />
-              </div>
-            </v-col>
-            <v-col cols="12" class="pb-0 pt-0" md="12">
-              <v-text-field
-                v-model="menu.name"
-                :rules="requiredRules"
-                label="Name"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" class="pb-0 pt-0" md="6">
-              <v-text-field
-                v-model="menu.price"
-                type="number"
-                :rules="requiredRules"
-                label="Price"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="6" class="pb-0 pt-0" md="6">
-              <InputAutocomplete
-                @selected="selectedAnswers"
-                :defaultValue="defaultValue"
-                label="Category"
-                :items="categories"
-              />
-            </v-col>
-            <v-col cols="6" class="pb-0 pt-0" md="6">
-              <!-- <v-text-field
-                                v-model="menu.unit_type"
-                                :rules="requiredRules"
-                                label="Unit Type"
-                                required
-                            ></v-text-field> -->
-              <InputAutocomplete
-                @selected="selectedType"
-                :defaultValue="defaultValueUnitType"
-                label="Unit Type"
-                :items="unit_type"
-              />
-            </v-col>
-            <v-col cols="6" class="pb-0 pt-0" md="6">
-              <v-text-field
-                v-model="menu.unit"
-                :rules="requiredRules"
-                label="Unit"
-                type="number"
-                v-mask="'####'"
-                required
-              ></v-text-field>
-            </v-col>
+	<v-container class="ma-0 pa-0 background-image h-100">
+		<Topnavbar :title="title" @back="handleBack" />
+		<v-container class="mg56">
+		<div class="custom-bs pa-4 mb-16">
+			<v-form v-model="valid" ref="formLocation">
+			<v-row>
+				<v-col cols="12" class="pb-0 pt-4" md="12">
+				<div style="height: 100px; width: 120px; margin: 0 auto">
+					<InputUpload
+					:src="base_url + '/image-show/' + menu.profile_pic"
+					type="menu_image"
+					:max-height="maxHeight"
+					label="Change"
+					@changeImage="changeImage"
+					/>
+				</div>
+				</v-col>
+				<v-col cols="12" class="pb-0 pt-0" md="12">
+				<v-text-field
+					v-model="menu.name"
+					:rules="requiredRules"
+					label="Name"
+					required
+				></v-text-field>
+				</v-col>
+				<v-col cols="6" class="pb-0 pt-0" md="6">
+				<v-text-field
+					v-model="menu.price"
+					type="number"
+					:rules="requiredRules"
+					label="Price"
+					required
+				></v-text-field>
+				</v-col>
+				<v-col cols="6" class="pb-0 pt-0" md="6">
+				<InputAutocomplete
+					@selected="selectedAnswers"
+					:defaultValue="defaultValue"
+					label="Category"
+					:items="categories"
+				/>
+				</v-col>
+				<v-col cols="6" class="pb-0 pt-0" md="6">
+				<!-- <v-text-field
+									v-model="menu.unit_type"
+									:rules="requiredRules"
+									label="Unit Type"
+									required
+								></v-text-field> -->
+				<InputAutocomplete
+					@selected="selectedType"
+					:defaultValue="defaultValueUnitType"
+					label="Unit Type"
+					:items="unit_type"
+				/>
+				</v-col>
+				<v-col cols="6" class="pb-0 pt-0" md="6">
+				<v-text-field
+					v-model="menu.unit"
+					:rules="requiredRules"
+					label="Unit"
+					type="number"
+					v-mask="'####'"
+					required
+				></v-text-field>
+				</v-col>
 
-            <v-col cols="12" class="pb-0 pt-0" md="12">
-              <v-textarea
-                v-model="menu.description"
-                :rules="requiredRules"
-                label="Description"
-                required
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12">
-              <v-btn
-                color="primary"
-                block
-                class="mb-6"
-                rounded
-                @click="handleSubmit"
-                >Update</v-btn
-              >
-              <v-btn rounded block outlined color="error" @click="confirmDelete"
-                >Delete</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-form>
-      </div>
-      <DialogConfirm
-        :dialogConfirm="dialogConfirm"
-        @handleConfirm="handleDelete"
-        @close="handleClose"
-      />
-    </v-container>
-    <!-- <Bottomnavbar value="0" /> -->
-  </v-container>
+				<v-col cols="12" class="pb-0 pt-0" md="12">
+				<v-textarea
+					v-model="menu.description"
+					:rules="requiredRules"
+					label="Description"
+					required
+				></v-textarea>
+				</v-col>
+				<v-col cols="12">
+				<v-btn
+					color="primary"
+					block
+					class="mb-6"
+					rounded
+					@click="handleSubmit"
+					>Update</v-btn
+				>
+				<v-btn rounded block outlined color="error" @click="confirmDelete"
+					>Delete</v-btn
+				>
+				</v-col>
+			</v-row>
+			</v-form>
+		</div>
+		<DialogConfirm
+			:dialogConfirm="dialogConfirm"
+			@handleConfirm="handleDelete"
+			@close="handleClose"
+		/>
+		</v-container>
+		<!-- <Bottomnavbar value="0" /> -->
+	</v-container>
 </template>
 <script>
 import Topnavbar from "@/components/layout/TopnavbarBackCustom";

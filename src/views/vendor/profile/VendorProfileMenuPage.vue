@@ -3,15 +3,19 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <div class="section-sticky pa-4 d-flex align-center justify-space-between w-100">
             <h4>Available Menus</h4>
-            <!-- <v-btn color="primary" to="/profile-menu-add" class="mb-2" rounded>Add New menu</v-btn> -->
             <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" rounded>Add New menu</v-btn>
         </div>
         <v-container class="mg56 mt-16">
             <div>
-                <TruckMenu :truckProfile="profile"/>
+                <VendorMenuList :truckProfile="profile" @fetch="profileData"/>
             </div>
         </v-container>
-        <DialogMenuAdd :dialog-menu-add="modal_menu_add" @close="handleClose"/>
+        <DialogMenuAdd 
+            :dialog-menu-add="modal_menu_add" 
+            :cuisine_types="cuisine_types" 
+            :menuData="menu_data"
+            :is-edit="is_edit"
+            @close="handleClose"/>
     </v-container>
 </template>
 <script>
@@ -19,7 +23,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 // import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_url } from '@/core/services/config'
-import TruckMenu from '@/views/vendor/profile/components/VendorMenuList.vue'
+import VendorMenuList from '@/views/vendor/profile/components/VendorMenuList.vue'
 // import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
 export default {
@@ -29,36 +33,49 @@ export default {
             title:'',
             base_url,
             modal_menu_add:false,
+            is_edit:false,
             schedules:[],
             profile:{},
+            cuisine_types:[],
+            menu_data:{},
         }
     },
     mounted() {
+        // VENDOR_MENU_EDIT
+        this.$bus.$on("VENDOR_MENU_EDIT", (menu) => {
+            this.menu_data = menu;
+            this.cuisine_types = this.profile.cuisine_types;
+            this.is_edit = true;
+            this.modal_menu_add = true;
+        });
         this.profileData();
     },
     methods: {
         handleMenuAdd(){
+            this.cuisine_types = this.profile.cuisine_types;
+            this.is_edit = false;
             this.modal_menu_add = true;
         },
         handleClose(){
             this.modal_menu_add = false;
+            this.profileData();
         },
         handleBack(){
             this.$router.back();
         },
         async profileData() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.profile = resp;
             })
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             })
         },
     },
     components: {
-        TruckMenu,
+        VendorMenuList,
         Topnavbar,
         DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
         // Bottomnavbar,

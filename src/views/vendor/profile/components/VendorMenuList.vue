@@ -3,7 +3,7 @@
        <div v-if="truckProfile.menus && truckProfile.menus.length">
             <v-row>       
                 <v-col cols="6" md="4" v-for="(menu,index) in truckProfile.menus" :key="index">
-                    <div class="custom-bs pa-4 text-center" @click="handleViewMenu(menu)">
+                    <div class="custom-bs pa-4 text-center" @click="handleMenuAction(menu)">
                         <div class="w-100 d-flex align-center justify-space-around">
                             <v-img 
                             height="100"
@@ -16,7 +16,21 @@
                     </div> 
                 </v-col>
             </v-row>
-            <ModalMenuDetail :dialog-menu-detail="modal_menu_detail" @close="handleClose()" :menu="menu"/>
+            <ModalMenuDetail 
+            @close="handleCloseDetail()" 
+            :dialog-menu-detail="modal_menu_detail" 
+            :menu="menu"/>
+
+            <ModalMenuAction 
+            :dialogMenuAction="modal_menu_action" 
+            @view="handleView"
+            @edit="handleEdit"
+            @delete="handleDelete"
+            @close="handleClose()" :menu="menu"/>
+            
+            <ModalDelete :dialogConfirm="modal_confirm" 
+            @handleConfirm="handleDeleteConfirm"
+            @close="handleCloseDelete"/>
         </div>
         <div v-else class="pa-4 unavailable">
             <p>
@@ -27,6 +41,7 @@
 </template>
 <script>
 import { base_url } from '@/core/services/config'
+import { ApiService } from '@/core/services/api.service'
 export default {
     props:{
         truckProfile:{},
@@ -41,21 +56,59 @@ export default {
     data() {
         return {
             base_url,
+            modal_confirm:false,
             message: 'Loading...',
+            modal_menu_action:false,
             modal_menu_detail:false,
             menu:{}
         }
     },
     components:{
-        ModalMenuDetail: () => import('@/views/vendor/profile/modal/ModalVendorMenuItemDetail')
+        ModalMenuAction: () => import('@/views/vendor/profile/modal/ModalMenuAction'),
+        ModalMenuDetail: () => import('@/views/vendor/profile/modal/ModalVendorMenuDetail.vue'),
+        ModalDelete: () => import('@/components/layout/DialogConfirm')
     },
     methods: {
-        handleViewMenu(menu){
-            this.menu = menu;
+        handleView(){
+            this.modal_menu_action = false;
             this.modal_menu_detail = true;
         },
-        handleClose(){
+        handleEdit(){
+            this.modal_menu_action = false;
+            this.$bus.$emit('VENDOR_MENU_EDIT', this.menu);
+        },
+        handleDelete(){
+            this.modal_menu_action = false;
+            this.modal_confirm = true;
+        },
+        handleDeleteConfirm(){
+            this.loaderShow();
+            ApiService.post("/menu/delete",{
+                id: this.menu.id
+            })
+            .then((resp) =>{
+                this.loaderHide();
+                this.messageSuccess(resp.message);
+                this.handleCloseDelete();
+                this.$emit('fetch');
+            })
+            .catch((error)=>{
+                this.loaderHide();
+                console.log(error);
+            })
+        },
+        handleMenuAction(menu){
+            this.menu = menu;
+            this.modal_menu_action = true;
+        },
+        handleCloseDetail(){
             this.modal_menu_detail = false;
+        },
+        handleCloseDelete(){
+            this.modal_confirm = false;
+        },
+        handleClose(){
+            this.modal_menu_action = false;
         },
         viewMenu(id){
             this.$router.push("/vendor-menu/"+id).catch(()=>{});

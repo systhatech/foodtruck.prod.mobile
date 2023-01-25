@@ -15,10 +15,16 @@
                                     </v-icon>
                                 </v-avatar>
                                 <div class="pl-4">
-                                    <h4 class="text-capitalize" :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? '' : 'font-weight-light'">
-                                        {{ member.name }}
-                                        <i class="color-secondary font-weight-light badge" v-if="member.unread_messages_count">{{ member.unread_messages_count }} New Message</i>
-                                    </h4>
+                                    <div v-if="member.unread_messages_count">
+                                        <v-badge
+                                            color="error"
+                                            :content="member.unread_messages_count">
+                                            {{ member.name }}
+                                        </v-badge>
+                                    </div>
+                                    <div v-else>
+                                        <p class="mb-0">{{ member.name }}</p>
+                                    </div>
                                     <div
                                         class="last_msg"
                                         :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''"
@@ -39,7 +45,6 @@
                             <v-btn
                                 fab
                                 small
-                                outlined
                                 color="primary"
                                 class="mr-3"
                                 @click="handleRoute(member.id)"
@@ -50,7 +55,6 @@
                             <v-btn
                                 fab
                                 small
-                                outlined
                                 color="primary"
                                 link
                                 :href="
@@ -64,7 +68,6 @@
                             <v-btn
                                 fab
                                 small
-                                outlined
                                 color="error"
                                 @click="handleOpenArkive(member.contact)"
                             >
@@ -187,7 +190,8 @@ export default {
             this.$router.back();
         },
         handleRoute(id) {
-            this.$router.push("/conversation/clients/" + id);
+            // this.$router.push("/conversation/clients/" + id);
+            this.$router.push("/vendor/conversation/clients/" + id);
         },
         fetchTrucks() {
             this.$bus.$emit("SHOW_PAGE_LOADER");

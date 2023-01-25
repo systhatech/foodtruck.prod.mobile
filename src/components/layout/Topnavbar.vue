@@ -18,7 +18,7 @@
                     <v-icon color="white">{{ iconCart }}</v-icon>
                     <span style="color:#fff;">{{ cartItems.length }}</span>
             </div>
-            <v-menu offset-y v-if="currentUser">
+            <!-- <v-menu offset-y v-if="currentUser">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                     text
@@ -39,7 +39,7 @@
                     <v-list-item-title><v-icon>{{ item.icon }}</v-icon> &nbsp; {{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
-            </v-menu>
+            </v-menu> -->
         </v-toolbar>
 </template>
 <script>

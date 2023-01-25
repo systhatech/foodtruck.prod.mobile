@@ -105,11 +105,12 @@ export default {
             signIn: 'auth/signIn'
         }),
         async submit() {
+            if(!this.$refs.formLogin.validate()) return;
             this.loaderShow();
             this.signIn(this.login_info)
                 .then(() => {
                     this.loaderHide();
-    
+                        this.fetchAddress();
                         this.$router.replace({
                             name: 'home',
                         })
@@ -174,6 +175,7 @@ export default {
         },
         async updateLocation() {
             this.loaderShow();
+            console.log("location",this.location);
             await ApiService.post('/location/save-current', this.location)
                 .then(() => {
                     this.loaderHide();

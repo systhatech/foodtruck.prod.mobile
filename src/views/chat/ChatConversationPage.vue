@@ -19,7 +19,7 @@
 
                 </div>
             </main>
-            <div class="chat-box" ref="chatbox">
+            <div class="chat-box d-flex align-center justify-space-between" ref="chatbox">
                 <v-textarea
                     id="messagetosend"
                     v-model='message'

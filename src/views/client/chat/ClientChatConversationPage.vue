@@ -19,7 +19,7 @@
 
                 </div>
             </main>
-            <div class="chat-box" ref="chatbox">
+            <div class="chat-box d-flex justify-space-between" ref="chatbox">
                 <v-textarea
                     id="messagetosend"
                     v-model='message'
@@ -29,8 +29,8 @@
                     class="ma-0 pa-0"
                     color="primary"
                 ></v-textarea>
-                <div class="text-center">
-                    <v-btn color="primary" block rounded id="sendbutton">send</v-btn>
+                <div class="pl-3 pt-2">
+                    <v-btn color="primary" fab small id="sendbutton"><v-icon>mdi-send</v-icon></v-btn>
                 </div>
             </div>
         </v-container>
@@ -239,7 +239,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 140px);
+    height: calc(100vh - 32px);
 }
 :root {
     //   --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -249,7 +249,7 @@ export default {
     //   --right-msg-bg: #579ffb;
 }
 .msg-text{
-    font-size:0.8rem !important;
+    // font-size:0.8rem !important;
 }
 
 .chat-box {
@@ -332,7 +332,8 @@ export default {
     max-width: 450px;
     padding: 15px;
     border-radius: 15px;
-    background: #ececec;
+    background: #3ab597;
+    // color: #fff;
 }
 
 .msg-info {
@@ -355,6 +356,7 @@ export default {
 
 .left-msg .msg-bubble {
     border-bottom-left-radius: 0;
+    color:#fff;
 }
 
 .right-msg {
@@ -362,7 +364,7 @@ export default {
 }
 
 .right-msg .msg-bubble {
-    background: #ffdada;
+    background: #f4f4f4;
     // color: #fff;
     border-bottom-right-radius: 0;
 }

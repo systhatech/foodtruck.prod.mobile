@@ -7,10 +7,15 @@
             item-value="value"
             hide-selected
             class="text-capitalize"
-            :label="label"
             clearable
             @change="handleSelected"
             >
+            <template v-slot:label>
+                <span class="text-capitalize" :class="error?'error--text':''">{{ label }}</span>
+            </template>
+            <template v-slot:selection="data">
+                <span class="text-capitalize">{{ data.item.text }}</span>
+            </template>
             <template v-slot:item="data">
                 <template>
                 <v-list-item-content>
@@ -28,6 +33,9 @@ export default {
         items:{},
         model:{},
         label:{},
+        error:{
+            type: Boolean,
+        },
         defaultValue:{},
         defaultClear:{}
     },

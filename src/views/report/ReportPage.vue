@@ -78,7 +78,7 @@ export default {
     },
     methods: {
         handleBack(){
-            this.$router.push({name:'profilepage'});
+            this.$router.back();
         },
         handleNewReport(){
             this.dialogReportNew = true;

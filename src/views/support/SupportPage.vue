@@ -108,7 +108,6 @@ export default {
             .then((resp) => {
                 this.loaderHide();
                 this.enqs = resp.data;
-                console.log({resp});
             })
             .catch(() => {
                 this.loaderHide();

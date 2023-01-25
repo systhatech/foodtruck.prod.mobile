@@ -11,7 +11,7 @@
                     </v-avatar>
                
                     <div class="mt-1 ml-3">
-                        <h3>{{ currentUser.fname }}</h3>
+                        <h3>{{ currentUser.owner.fullName }}</h3>
                         <p class="f8-bold"> {{currentUser.email}}</p>
                     </div>
                 </div>

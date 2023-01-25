@@ -4,9 +4,6 @@
             <v-dialog v-model="dialogMenuDetail" persistent scrollable fullscreen>
                 <v-card class="background-image" style="padding-top: 56px !important;">
                     <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
-                        <!-- <v-btn icon @click="handleClose">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn> -->
                         <v-toolbar-title class="pl-0 text-capitalize">{{ menu.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
@@ -17,26 +14,8 @@
                     </v-toolbar>
                     <div class="p-relative background-image">
                         <div class="pa-4 text-center pt-6">
-                            <v-btn color="primary" rounded outlined block>add new menu item</v-btn>
+                            <v-btn color="primary" rounded outlined block to="/vendor-menu-item-add">add new menu item</v-btn>
                         </div>
-                        <!-- <div class="d-flex pa-4"> 
-                            <div>
-                                <v-img 
-                                height="100"
-                                width="100"
-                                contain
-                                :src="base_url+'/image-show/'+menu.profile_pic"></v-img>
-                            </div>
-                            <div class="pl-4">
-                                <h5 class="text-uppercase">{{ menu.name }}</h5>
-                                <p class="text-uppercase f8 mb-0">({{ menu.cusine }})</p>
-                                <div v-html="menu.description"></div>
-                            </div>
-                        </div>
-                        <div style="position:absolute; top:15px; right:15px;">
-                            <v-btn fab small color="primary"><v-icon>{{  icon_edit }}</v-icon></v-btn>
-                        </div>
-                        <v-divider></v-divider> -->
                         <div class="pa-4">
                             <v-row>
                                 <v-col cols="12" sm="6" md="6" v-for="(m, i) in menu.itemsGroup" :key="i">
@@ -70,11 +49,6 @@
                             </v-row>
                         </div>
                     </div>
-                    <!-- <div class="pa-4 custom-bs" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">
-                        <div class="d-flex align-center justify-space-between">
-                           <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptate, impedit?</p>
-                        </div>
-                    </div> -->
                 </v-card>
             </v-dialog>
         </v-row>
@@ -139,7 +113,7 @@ export default {
     },
     methods: {
         viewMenu(id){
-            this.$router.push("/vendor-menu/"+id).catch(()=>{});
+            this.$router.push("/vendor-menu-item/"+id).catch(()=>{});
         },
 
         handleClose() {

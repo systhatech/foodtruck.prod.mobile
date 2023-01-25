@@ -3,20 +3,34 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div>
-                <v-chip v-for="(item, index) in orderTypes" class="mr-2" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
+                <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
                     {{ item.name }}
                 </v-chip>
             </div>
             <div v-if="orders && Object.keys(orders).length">
                 <div v-for="(dateWiseOrders, date) in orders" :key="date">
                     <div>
-                        <p class="mt-6 mb-2">{{ formatDateStandard(date) }}</p>
+                        <h5 class="mt-6 pl-1 mb-1 text-uppercase">{{ formatDateStandard(date) }}</h5>
                     </div>
                     <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                         <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
-                            <div class="order_item custom-bs" >
+                            <div class="custom-bs pa-4 d-flex align-center justify-space-between">
+                                <div>
+                                    <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
+                                    <p class="mb-0 text-capitalize">{{ order.customer_name }}</p>
+                                    <p class="mb-0" style="font-size:13px">{{ order.phone }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
+                                    <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
+                                </div>
+                                <div>
+                                    <v-btn fab small color="primary" @click="viewDetailPage(order)"><v-icon>{{icon_right}}</v-icon></v-btn>
+                                </div>
+                            </div>
+                            <!-- <div class="order_item custom-bs" >
                                 <h4>{{order.order_no}}</h4>
-                                <!-- <span class="amount"> {{formatAmount(order.total_amount)}} </span> -->
+                           
                                 <div class="d-flex justify-space-between">
                                     <div @click="viewDetailPage(order)">
                                         <p class="mb-2">{{formatDateToDay(order.pickup_date)}} {{formatTimeOnly(order.pickup_time)}}</p>
@@ -32,7 +46,7 @@
                                 </div>
                              
                                
-                            </div>
+                            </div> -->
                         </v-col>
                     </v-row>
                 </div>
@@ -49,7 +63,7 @@ import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import { ApiService } from '@/core/services/api.service'
 
-import { mdiChat } from '@mdi/js'
+import { mdiChat, mdiChevronRight } from '@mdi/js'
 // import InputUpload from '@/components/form-element/InputUpload'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -59,6 +73,7 @@ export default {
         return {
             title:'',
             indexValue:1,
+            icon_right:mdiChevronRight,
             moment,
             valid:true,
             content:'no content',

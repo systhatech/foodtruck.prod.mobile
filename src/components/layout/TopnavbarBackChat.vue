@@ -5,7 +5,7 @@
             <!-- </v-btn>  -->
             <v-toolbar-title class="text-capitalize" style="font-size: 0.9rem;font-weight: 500; margin-left:10px; color:#fff;">{{ receiver.name }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-menu offset-y>
+            <!-- <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                     text
@@ -26,7 +26,7 @@
                     <v-list-item-title><v-icon>{{ item.icon }}</v-icon> &nbsp; {{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
-            </v-menu>
+            </v-menu> -->
         </v-toolbar>
 </template>
 <script>

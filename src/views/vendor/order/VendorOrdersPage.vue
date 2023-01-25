@@ -3,29 +3,20 @@
         <Topnavbar/>
      
         <v-container class="mg56">
-             <!-- <v-row class="sticky-top">
-                <v-col cols="12">
-                    <ul class="order-types">
-                        <li v-for="(item, index) in orderTypes" :key="index" @click="handleActive(item, index)">
-                            <span :class=" activeType == index ? 'active-type' :'' ">{{ item.name }}</span>
-                        </li>
-                    </ul>
-                </v-col>
-            </v-row> -->
             <div>
-                <v-chip v-for="(item, index) in orderTypes" class="mr-2" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
+                <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
                     {{ item.name }}
                 </v-chip>
             </div>
             <div v-if="orders && Object.keys(orders).length" class="mt-3">
                 <div v-for="(dateWiseOrders, date) in orders" :key="date">
-                    <p class="mt-4 mb-2">{{ formatDateStandard(date) }}</p>
+                    <h5 class="mt-6 pl-1 mb-1 text-uppercase">{{ formatDateStandard(date) }}</h5>
                     <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                         <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
                             <div class="custom-bs pa-4 d-flex align-center justify-space-between">
                                 <div>
                                     <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
-                                    <p class="mb-0">{{ order.customer_name }}</p>
+                                    <p class="mb-0 text-capitalize">{{ order.customer_name }}</p>
                                     <p class="mb-0" style="font-size:13px">{{ order.phone }}</p>
                                 </div>
                                 <div>

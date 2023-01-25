@@ -1,6 +1,6 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
-        <Topnavbar/>
+        <Topnavbar />
         <v-container class="mg56">
             <div v-if="currentUser && members && members.length">
                 <ul class="chat-lists custom-bs pa-4">
@@ -8,69 +8,46 @@
                         <div class="d-flex align-center justify-space-between">
                             <div class="d-flex">
                                 <v-avatar color="indigo">
-                                    <v-img alt="avatar" :src="base_url +'/image-show/'+ member.profile_pic" v-if="member.profile_pic"></v-img>
-                                    <v-img alt="avatar" :src="base_url +'/image-show/'+ member.contact.profile_pic" v-else-if="member.contact && member.contact.profile_pic"></v-img>
+                                    <v-img alt="avatar" :src="base_url + '/image-show/' + member.profile_pic"
+                                        v-if="member.profile_pic"></v-img>
+                                    <v-img alt="avatar" :src="base_url + '/image-show/' + member.contact.profile_pic"
+                                        v-else-if="member.contact && member.contact.profile_pic"></v-img>
                                     <v-icon dark v-else>
-                                        {{iconAccount}}
+                                        {{ iconAccount }}
                                     </v-icon>
                                 </v-avatar>
                                 <div class="pl-4">
-                                    <h4 class="text-capitalize" :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? '' : 'font-weight-light'">
-                                        {{ member.name }}
-                                        <i class="color-secondary font-weight-light badge" v-if="member.unread_messages_count">{{ member.unread_messages_count }} New Message</i>
-                                    </h4>
-                                    <div
-                                        class="last_msg"
-                                        :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''"
-                                        >
-                                        <div v-html="messageText(member.last_message)">
-                                        <!-- {{ }} -->
-                                        </div>
+                                    <div v-if="member.unread_messages_count">
+                                        <v-badge
+                                            color="error"
+                                            :content="member.unread_messages_count">
+                                            {{ member.name }}
+                                        </v-badge>
                                     </div>
-                                    <p class="last_msg_date">
-                                        {{
-                                            formatChatListTime(member.last_message.created_at, tz)
-                                        }}
+                                    <div v-else>
+                                        <p class="mb-0">{{ member.name }}</p>
+                                    </div>
+                                    <div class="last_msg"
+                                        :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
+                                        <div v-html="messageText(member.last_message)"></div>
+                                    </div>
+                                    <p class="last_msg_date">{{formatChatListTime(member.last_message.created_at, tz)}}
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div class="text-right pt-3">
-                            <v-btn
-                                fab
-                                small
-                                outlined
-                                color="primary"
-                                class="mr-3"
-                                @click="handleRoute(member.id)"
-                            >
-                                <v-icon>{{iconChat}}</v-icon>
-                            </v-btn
-                            >
-                            <v-btn
-                                fab
-                                small
-                                outlined
-                                color="primary"
-                                link
-                                :href="
-									`tel:${member.contact.phone_no ? member.contact.phone_no.replace(/[^\d]/g, '') : member.contact.mobile_no.replace(/[^\d]/g, '')}`
-								"
-                                class="mr-3"
-                            >
-                                <v-icon>{{iconPhone}}</v-icon>
-                            </v-btn
-                            >
-                            <v-btn
-                                fab
-                                small
-                                outlined
-                                color="error"
-                                @click="handleOpenArkive(member.contact)"
-                            >
-                                <v-icon>{{iconArchive}}</v-icon>
-                            </v-btn
-                            >
+                            <v-btn fab small color="primary" class="mr-3" @click="handleRoute(member.id)">
+                                <v-icon>{{ iconChat }}</v-icon>
+                            </v-btn>
+                            <v-btn fab small color="primary" link :href="
+                                `tel:${member.contact.phone_no ? member.contact.phone_no.replace(/[^\d]/g, '') : member.contact.mobile_no.replace(/[^\d]/g, '')}`
+                            " class="mr-3">
+                                <v-icon>{{ iconPhone }}</v-icon>
+                            </v-btn>
+                            <v-btn fab small color="error" @click="handleOpenArkive(member.contact)">
+                                <v-icon>{{ iconArchive }}</v-icon>
+                            </v-btn>
                         </div>
                     </li>
                 </ul>
@@ -80,24 +57,20 @@
                     <p>No chat history</p>
                 </div>
             </div>
-            <DialogConfirm
-                :dialogConfirm="dialogConfirm"
-                :message="message"
-                @handleConfirm="handleArchive"
-                @close="handleClose"
-            />
+            <DialogConfirm :dialogConfirm="dialogConfirm" :message="message" @handleConfirm="handleArchive"
+                @close="handleClose" />
         </v-container>
-        <Bottomnavbar/>
+        <Bottomnavbar />
     </v-container>
 </template>
 <script>
-import {base_url} from '@/core/services/config';
+import { base_url } from '@/core/services/config';
 import Topnavbar from '@/components/layout/Topnavbar'
-import {ApiService} from "@/core/services/api.service";
+import { ApiService } from "@/core/services/api.service";
 import Bottomnavbar from "@/components/layout/NavbarBottomClient";
 import DialogConfirm from "@/components/layout/DialogConfirm";
-import {mapGetters} from "vuex";
-import { mdiPhone, mdiArchiveOutline, mdiChat, mdiAccountCircle} from '@mdi/js';
+import { mapGetters } from "vuex";
+import { mdiPhone, mdiArchiveOutline, mdiChat, mdiAccountCircle } from '@mdi/js';
 
 export default {
     name: "ChatList",
@@ -190,7 +163,7 @@ export default {
             // if (this.currentUser.table == "vendors") {
             //     this.$router.push("/conversation/clients/" + id);
             // } else {
-                this.$router.push("/client/conversation/vendors/" + id);
+            this.$router.push("/client/conversation/vendors/" + id);
             // }
         },
         fetchTrucks() {
@@ -213,7 +186,7 @@ export default {
         // InputUpload
     },
     computed: {
-        ...mapGetters({currentUser:'auth/user'}),
+        ...mapGetters({ currentUser: 'auth/user' }),
     },
 };
 </script>
@@ -221,10 +194,12 @@ export default {
 .badge {
     font-size: 90%;
 }
+
 .chat-lists {
     list-style: none;
     padding: 0;
     margin: 0px;
+
     li {
         // padding-bottom: 20px;
 
