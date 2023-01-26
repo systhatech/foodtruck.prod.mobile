@@ -3,22 +3,63 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div v-if="currentUser">
-                <div class="d-flex aling-center custom-bs pa-4">
-                    <div>
+                <div class="custom-bs pa-4 pt-8">
+                    <div class="text-center">
+                        <v-avatar color="primary" size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
+                            <v-icon dark>
+                                {{ icon_account}}
+                            </v-icon>
+                        </v-avatar>
+                        <v-avatar size="90" v-else>
+                            <img
+                            style="object-fit:cover"
+                            :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                            alt="Profile Pic">
+                        </v-avatar>
+                        <div class="pt-2 mb-4">
+                            <h4 class="text-capitalize">{{currentUser.fname}} {{ currentUser.lname}}</h4>
+                        </div>
                     </div>
-                    <v-avatar size="60">
-                        <img
-                        :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
-                        alt="Profile Pic">
-                    </v-avatar>
                     <div class="mt-1 ml-3">
-                        <h3 class="text-capitalize">{{ currentUser.owner.name }}</h3>
-                        <p class="f8-bold">{{ currentUser.fname}} {{currentUser.lname}}</p>
+                        <div class="d-flex align-center justify-space-between">
+                            <h5 class="mb-1 text-uppercase primary--text">Contact</h5>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-phone</v-icon>
+                            </div>
+                            <div>
+                                <p class="mb-2">{{currentUser.phone_no? currentUser.phone_no:'n/a'}} </p>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-email</v-icon>
+                            </div>
+                            <div>
+                                <p class="mb-2">{{currentUser.email ? currentUser.email:'n/a'}}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="d-flex align-center justify-space-between">
+                                <h5 class="mb-1 text-uppercase primary--text">Address</h5>
+                            </div>
+                            <div class="d-flex">
+                                <div style="width:30px">
+                                    <v-icon color="primary f9">mdi-map-marker</v-icon>
+                                </div>
+                                <div>
+                                    <p v-if="currentUser.owner.address">
+                                        {{currentUser.owner.address && currentUser.owner.address.add1 && currentUser.owner.address.add1 !='undefined'? currentUser.owner.address.add1:''}} {{currentUser.owner.address && currentUser.owner.address.add2 && currentUser.owner.address.add2!='undefined'? currentUser.owner.address.add2:''}} <br>
+                                        {{currentUser.owner.address && currentUser.owner.address.city && currentUser.owner.address.city !='undefined' ? currentUser.owner.address.city:''}} {{currentUser.owner.address && currentUser.owner.address.state && currentUser.owner.address.state!='undefined'? currentUser.owner.address.state:''}} <br>
+                                        {{currentUser.owner.address && currentUser.owner.address.zip && currentUser.owner.address.zip !='undefined' ? currentUser.owner.address.zip:''}} {{currentUser.owner.address && currentUser.owner.address.country && currentUser.owner.address.country!='undefined'? currentUser.owner.address.country:''}} <br>
+                                    </p>
+                                    <p v-else>n/a</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {{currentUser.owner.truck_type}}
-                  
                 </div>
-             
                 <div class="setting-list custom-bs  pa-4 mt-4">
                     <ul>
                         <li v-for="(menu, index) in menusVendor" class="" :key="index" @click="navigatePage(menu.route)">
@@ -43,7 +84,7 @@ import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { mapGetters, mapActions } from 'vuex';
 import { base_url } from '@/core/services/config'
-import { mdiChevronRight } from '@mdi/js'
+import { mdiAccount, mdiChevronRight } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket';
 export default {
     name:'ProfilePage',
@@ -52,6 +93,7 @@ export default {
             title:'',
             base_url,
             iconNavigate: mdiChevronRight,
+            icon_account: mdiAccount,
             indexValue:3,
             usericon:'',
             menusVendor: [

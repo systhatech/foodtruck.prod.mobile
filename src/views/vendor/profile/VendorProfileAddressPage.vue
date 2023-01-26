@@ -93,6 +93,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import GoogleAddress from '@/components/form-element/InputGoogleAddress'
+import { mapGetters, mapActions } from 'vuex'
 // import  JwtService from '@/core/services/jwt.service';
 export default {
     name:'ProfileAddressPage',
@@ -110,7 +111,7 @@ export default {
                 country:'',
                 country_code:'',
                 lat:'',
-                lng:'',
+                lon:'',
             },
             requiredRules: [
                 v => !!v || 'Required',
@@ -133,17 +134,33 @@ export default {
         }
     },
     mounted() {
-       this.fetchAddress();
+        if(this.currentUser && this.currentUser.owner && this.currentUser.owner.address){
+            this.address.id = this.currentUser.owner.address.id;
+            this.address.add1 = this.currentUser.owner.address.add1;
+            this.address.add2 = this.currentUser.owner.address.add2 ? this.currentUser.owner.address.add2 :'';
+            this.address.city = this.currentUser.owner.address.city;
+            this.address.state = this.currentUser.owner.address.state;
+            this.address.zip = this.currentUser.owner.address.zip;
+            this.address.country = this.currentUser.owner.address.country;
+            this.address.country_code = this.currentUser.owner.address.country_code;
+            this.defaultValue = this.currentUser.owner.address.add1;
+        }
     },
+    computed:{
+        ...mapGetters({
+            currentUser:'auth/user'
+        })
+    },  
     methods: {
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
         addressSelected(addr) {
-            // this.address = address.address;
-            // this.address.zip = address.address.zip_code;
             this.address.add1 = addr.add1;
             this.address.city = addr.city;
             this.address.state = addr.state;
             this.address.lat = addr.lat;
-            this.address.lng = addr.lng;
+            this.address.lon = addr.lng;
             this.address.zip = addr.zip_code;
             this.address.country = addr.country;
             this.address.country_code = addr.country_code;
@@ -151,59 +168,23 @@ export default {
                 this.defaultValue = addr.add1;
             },200);
         },
-        fetchAddress(){
-            this.loaderShow();
-            ApiService.post('/self/profile')
-            .then((resp) => {
-                this.loaderHide();
-                this.address.add1 = resp.address.add1;
-                this.address.add2 = resp.address.add2;
-                this.address.city = resp.address.city;
-                this.address.state = resp.address.state;
-                this.address.zip = resp.address.zip;
-                this.address.is_default = resp.address.is_default;
-                this.defaultValue = resp.address.add1;
-            })
-            .catch((error) => {
-                this.loaderHide();
-                console.log(error);
-            })
-        },
         handleBack() {
             this.$router.back();
         },
-        async loadAddress() {
-            // await ApiService.get('/csrf-cookie');
-            // await ApiService.get()
-        },
         async handleUpdate(){
-
             this.loaderShow();
             this.address.add1 = this.address.locality ? this.address.locality : this.address.add1;
             await ApiService.post('/self/profile/address',this.address)
             .then(() => {
                 this.loaderHide();
                 this.messageSuccess("Success");
+                this.fetchProfile();
             })  
             .catch(() => {
                 this.loaderHide();
                 this.messageError('Failed to update address');
             })
         },
-        async updateAddress() {
-            this.loaderShow();
-            this.address.add1 = this.address.locality;
-            await ApiService.post('/update-address',this.address)
-            // await ApiService.post('/update-address',this.address)
-            .then(( resp ) => {
-                this.loaderHide();
-                this.messageSuccess(resp.message);
-            })  
-            .catch(() => {
-                this.loaderHide();
-                this.messageError('Failed to update address');
-            })
-        }
     },
     components: {
         Topnavbar,

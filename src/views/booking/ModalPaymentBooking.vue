@@ -3,12 +3,13 @@
         <v-dialog
         v-model="modalBookingPayment"
         persistent
+        width="400"
         scrollable
         >
         <v-card scrollable>
             <v-card-title>
                 <div class="w-100 justify-space-between d-flex">
-                    <h3>Book Now</h3>
+                    <h4 class="primary--text">SPOT {{ spot ? spot.spot:'n/a' }}</h4>
                     <div @click="handleClose"> <v-icon> {{ iconClose }} </v-icon></div>
                 </div>
             </v-card-title>
@@ -16,21 +17,22 @@
               <div>
                   <div class="mb-6">
                         <table class="w-100">
-                                <tr>
-                                    <td>Price</td>
-                                    <td class="text-right">{{ formatAmount(spot.rate) }}</td>
-                                </tr>
-                                <tr v-if="convenienceFee">
-                                    <td>Convenience Fee ({{ convenienceFee }} % )</td>
-                                    <td class="text-right">{{ formatAmount(spot.rate * (convenienceFee/100))}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="f9-bold">Total </td>
-                                    <td class="text-right f9-bold">{{ formatAmount(spot.rate + (spot.rate * (convenienceFee/100)))}}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="f8">* note: non-refundable </td>
-                                </tr>
+                                <div class="d-flex align-center justify-space-between">
+                                    <p class="mb-2">Price</p>
+                                    <p class="text-right mb-2">{{ formatAmount(spot.rate) }}</p>
+                                </div>
+                                <div v-if="convenienceFee" class="d-flex align-center justify-space-between pb-2">
+                                    <p class="mb-2">Convenience Fee ({{ convenienceFee }} % )</p>
+                                    <p class="text-right mb-2">{{ formatAmount(spot.rate * (convenienceFee/100))}}</p>
+                                </div>
+                                <v-divider></v-divider>
+                                <div class="d-flex align-center justify-space-between primary--text pt-4">
+                                    <p class="mb-2  primary--text">Total </p>
+                                    <p class="text-right mb-2 primary--text">{{ formatAmount(spot.rate + (spot.rate * (convenienceFee/100)))}}</p>
+                                </div>
+                                <div>
+                                    <p class="f8 error--text">*Note: Non-refundable </p>
+                                </div>
                         </table>
                     <v-divider class="mt-4"></v-divider>
                     </div>
@@ -44,9 +46,8 @@
 <script>
 import { mdiPlus, mdiMinus, mdiClose, mdiMapMarker } from '@mdi/js'
 import  moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-// import CardStripe from '../cart/CardStripeElements'
 import CardStripe from '../cart/CardStripe'
 export default {
     props:{
@@ -63,14 +64,8 @@ export default {
             iconAddress: mdiMapMarker,
             iconClose: mdiClose,
             quantity:1,
-            // pulishableKey :'pk_test_HWXJvemu3UMjLToQMuQXdVHf00hbtPgsPF',
             status:null,
             total:0,
-        }
-    },
-    watch:{
-        apikey(newval) {
-            console.log({newval});
         }
     },
     mounted(){
@@ -80,6 +75,9 @@ export default {
         CardStripe,
     },
     methods: {
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
         handleProceedCard(param) {
             this.stripeToken = param.stripeToken;
         },
@@ -89,23 +87,17 @@ export default {
         handleNext(){
         },
         handleBookSpot(param){
-            // console.log({
-            //     spot_id : this.spot.id, 
-            //     stripeToken: param.stripeToken,
-            //     vendor_id: this.currentUser.vendor.id,
-            //     amount: this.spot.rate,
-            // });
-            // return;
             ApiService.post('/location-bookings/book-spot',{
                 spot_id : this.spot.id, 
                 stripeToken: param.stripeToken,
-                vendor_id: this.currentUser.vendor.id,
+                vendor_id: this.currentUser.table_id,
                 amount: this.spot.rate + (this.spot.rate * (this.convenienceFee/100)),
             })
             .then((resp) => {
                 console.log(resp);
                 this.$bus.$emit('MODAL_LOCATION_BOOKING_SPOT_BOOKING');
                 this.messageSuccess('Spot booked successfully');
+                this.fetchProfile();
                 this.$router.replace({name:'bookings'});
                 this.$emit('handleClose');
             })
@@ -125,4 +117,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+p{
+    font-size: 16px;
+    color:#000;
+}
 </style>

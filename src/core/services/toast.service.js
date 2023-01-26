@@ -76,9 +76,9 @@ export default {
         },
         formatTimeOnly1(date){
             if(moment(date).isValid()) {
-                // return moment(date).format('ll');
-                return date ? moment(date,'HH:mm:ss').format('h:mm a'):'n/a';
-                // return moment(date).format('MMM');
+                // return moment(date).format('hh:mm:ss');
+                // return date ? moment(date,'hh:mm:ss').format('hh:mm a'):'n/a';
+                return moment(date).format('hh:mm a');
             }else{
                 return "-";
             }

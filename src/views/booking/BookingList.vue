@@ -5,18 +5,18 @@
                     <div
                         class="custom-bs h-100 pa-4">
                         <div class="d-flex align-center justify-space-between mb-2" >
-                            <h4 class="text-capitalize">{{ booking && booking.location.name ? booking.location.name : 'No name' }}</h4>
-                            <span class="f9-bold color-primary">Spot - {{ booking.spot }}</span>
+                            <h5 class="text-uppercase primary--text">{{ booking && booking.location.name ? booking.location.name : 'No name' }}</h5>
+                            <span class="f9-bold color-primary">SPOT - {{ booking.spot }}</span>
                         </div>
                         <div class="address-wrapper">
-                            <v-chip class="text-capitalize mb-2" :color="booking.status == 'booked' ? 'accent' :(booking.status == 'cancelled' ?'error':'warning')" small>{{ booking.status }}</v-chip>
+                            <v-chip class="text-capitalize mb-4" :color="booking.status == 'booked' ? 'accent' :(booking.status == 'cancelled' ?'error':'warning')">{{ booking.status }}</v-chip>
                             <div class="d-flex">
                                 <div class="mr-2">
                                     <v-icon color="primary">{{ iconDate }}</v-icon>
                                 </div>
                                 <div>
-                                    <p class="f8-bold">{{ moment(booking.start_date).format('MMM DD, YYYY') }} - {{ moment(booking.end_date).format('MMM DD, YYYY')}}</p>
-                                    <p class="f8-bold">{{ formatTimeOnly(booking.start_date) }} - {{ formatTimeOnly(booking.end_date)}}</p>
+                                    <p class="">{{ moment(booking.start_date).format('MMM DD, YYYY') }} - {{ moment(booking.end_date).format('MMM DD, YYYY')}}</p>
+                                    <p class="">{{ formatTimeOnly1(booking.start_date) }} - {{ formatTimeOnly1(booking.end_date)}}</p>
                                 </div>
                             </div>
                             <div class="d-flex align-start">
@@ -24,14 +24,13 @@
                                     <v-icon color="primary">{{ iconAddress }}</v-icon>
                                 </div>
                                 <div class="">
-                                    <p class="f8">{{ booking ? booking.location.add1 :''}}</p>
-                                    <p class="f8">{{ booking ? booking.location.city :''}}</p>
-                                    <p class="f8">{{ booking && booking.location.state ? booking.location.state :''}}, {{booking.location &&  booking.location.zip ? booking.location.zip :''}}</p>
+                                    <p>{{ booking ? booking.location.add1 :''}}</p>
+                                    <p>{{ booking ? booking.location.city :''}}</p>
+                                    <p>{{ booking && booking.location.state ? booking.location.state :''}}, {{booking.location &&  booking.location.zip ? booking.location.zip :''}}</p>
                                 </div>
                             </div>
                             <div class="pt-4">
-                                <v-btn small rounded v-if="booking.status !=='cancelled'" block outlined color="primary" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
-                                <!-- <v-btn small rounded v-else block outlined color="primary">Cancellation Requested</v-btn> -->
+                                <v-btn rounded v-if="booking.status !=='cancelled'" block color="primary" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
                             </div>
                         </div>
                     </div>
@@ -164,7 +163,8 @@ export default {
     p{
         padding: 0;
         margin: 0;
-        font-weight: 500;
+        // font-size: 14px;
+        // font-weight: 500;
     }
 }
 </style>

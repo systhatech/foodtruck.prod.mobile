@@ -93,6 +93,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import GoogleAddress from '@/components/form-element/InputGoogleAddress'
+import { mapActions } from 'vuex'
 // import  JwtService from '@/core/services/jwt.service';
 export default {
     name:'ProfileAddressPage',
@@ -136,9 +137,10 @@ export default {
        this.fetchAddress();
     },
     methods: {
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
         addressSelected(addr) {
-            // this.address = address.address;
-            // this.address.zip = address.address.zip_code;
             this.address.add1 = addr.add1;
             this.address.city = addr.city;
             this.address.state = addr.state;
@@ -174,10 +176,6 @@ export default {
         handleBack() {
             this.$router.back();
         },
-        async loadAddress() {
-            // await ApiService.get('/csrf-cookie');
-            // await ApiService.get()
-        },
         async handleUpdate(){
 
             this.loaderShow();
@@ -186,6 +184,7 @@ export default {
             .then(() => {
                 this.loaderHide();
                 this.messageSuccess("Success");
+                this.fetchProfile();
             })  
             .catch(() => {
                 this.loaderHide();
@@ -196,7 +195,6 @@ export default {
             this.loaderShow();
             this.address.add1 = this.address.locality;
             await ApiService.post('/update-address',this.address)
-            // await ApiService.post('/update-address',this.address)
             .then(( resp ) => {
                 this.loaderHide();
                 this.messageSuccess(resp.message);

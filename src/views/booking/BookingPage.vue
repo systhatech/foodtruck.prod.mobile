@@ -44,17 +44,17 @@ import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 export default {
     data: () => ({
         selection: 1,
-        activeComponent:'booking-available',
+        activeComponent:'booking-list',
         title:'',
         tab: null,
         tabItems:[
             {
-                name:'Spot Available',
-                component:'booking-available'
-            },
-            {
                 name:'Spot Booked', 
                 component:'booking-list'
+            },
+            {
+                name:'Spot Available',
+                component:'booking-available'
             },
         ],
     }),

@@ -1,6 +1,11 @@
 <template>
     <v-container class="ma-0 pa-0 h-100 background-image">
-        <v-container class="mg56">
+        <v-container>
+            <div class="mt-10">
+                <v-btn icon text color="primary" :to="{
+                    name: 'loginPage'
+                }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
+            </div>
             <div>
                 <v-row>
                     <v-col cols="12">
@@ -10,7 +15,7 @@
                     </v-col>
                 </v-row>
             </div>
-            <div class="pa-4 ma-4 login-container bg-primary-light background-white">
+            <div class="pa-4 ma-4 custom-bs">
                 <v-form v-model="valid" ref="resetPassword">
                     <v-row>
                         <!-- <v-col cols="12" class="pt-0">
@@ -51,11 +56,12 @@ import logo from './logo.png'
 import bg from '@/assets/static/bg.png'
 import background from './login_banner.png'
 import bug from './bug.png'
-import { mdiTwitter, mdiFacebook, mdiArrowLeft} from '@mdi/js'
+import { mdiTwitter, mdiFacebook, mdiArrowLeft, mdiChevronLeft} from '@mdi/js'
 // import axios from "axios"
 export default {
     data: () => ({
         bg,
+        icon_back: mdiChevronLeft,
         iconFb: mdiFacebook,
         iconTw: mdiTwitter,
         iconBack: mdiArrowLeft,

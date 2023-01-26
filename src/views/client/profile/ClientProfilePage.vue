@@ -3,7 +3,7 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div v-if="currentUser">
-                <div class="d-flex aling-center custom-bs pa-4">
+                <!-- <div class="d-flex aling-center custom-bs pa-4">
                     <v-avatar size="60">
                         <img
                         :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
@@ -14,13 +14,70 @@
                         <h3>{{ currentUser.owner.fullName }}</h3>
                         <p class="f8-bold"> {{currentUser.email}}</p>
                     </div>
+                </div> -->
+                <div class="custom-bs pa-4 pt-8">
+                    <div class="text-center">
+                        <v-avatar color="primary" size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
+                            <v-icon dark>
+                                {{ icon_account}}
+                            </v-icon>
+                        </v-avatar>
+                        <v-avatar size="90" v-else>
+                            <img
+                            style="object-fit:cover"
+                            :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                            alt="Profile Pic">
+                        </v-avatar>
+                        <div class="pt-2 mb-4">
+                            <h4 class="text-capitalize">{{currentUser.fname}} {{ currentUser.lname}}</h4>
+                        </div>
+                    </div>
+                    <div class="mt-1 ml-3">
+                        <div class="d-flex align-center justify-space-between">
+                            <h5 class="mb-1 text-uppercase primary--text">Contact</h5>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-phone</v-icon>
+                            </div>
+                            <div>
+                                <p class="mb-2">{{currentUser.phone_no? currentUser.phone_no:'n/a'}} </p>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <div style="width:30px">
+                                <v-icon color="primary f9">mdi-email</v-icon>
+                            </div>
+                            <div>
+                                <p class="mb-2">{{currentUser.email ? currentUser.email:'n/a'}}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="d-flex align-center justify-space-between">
+                                <h5 class="mb-1 text-uppercase primary--text">Address</h5>
+                            </div>
+                            <div class="d-flex">
+                                <div style="width:30px">
+                                    <v-icon color="primary f9">mdi-map-marker</v-icon>
+                                </div>
+                                <div>
+                                    <p v-if="currentUser.owner.address">
+                                        {{currentUser.owner.address && currentUser.owner.address.add1 && currentUser.owner.address.add1 !='undefined'? currentUser.owner.address.add1:''}} {{currentUser.owner.address && currentUser.owner.address.add2 && currentUser.owner.address.add2!='undefined'? currentUser.owner.address.add2:''}} <br>
+                                        {{currentUser.owner.address && currentUser.owner.address.city && currentUser.owner.address.city !='undefined' ? currentUser.owner.address.city:''}} {{currentUser.owner.address && currentUser.owner.address.state && currentUser.owner.address.state!='undefined'? currentUser.owner.address.state:''}} <br>
+                                        {{currentUser.owner.address && currentUser.owner.address.zip && currentUser.owner.address.zip !='undefined' ? currentUser.owner.address.zip:''}} {{currentUser.owner.address && currentUser.owner.address.country && currentUser.owner.address.country!='undefined'? currentUser.owner.address.country:''}} <br>
+                                    </p>
+                                    <p v-else>n/a</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="setting-list custom-bs  pa-4 mt-4">
                     <ul>
                         <li v-for="(menu, index) in menusClient" class="" :key="index" @click="navigatePage(menu.route)">
-                            <div>
+                            <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">{{menu.icon}}</v-icon>
-                                <span class="f8-bold">{{ menu.name }}</span>
+                                <h5 class="text-uppercase" style="font-weight:400">{{ menu.name }}</h5>
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
@@ -58,8 +115,8 @@ export default {
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
                 {name:'Setting',icon:'mdi-cog',route:'change-password'},
-                // {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
-                // {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
+                {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
+                {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],
         

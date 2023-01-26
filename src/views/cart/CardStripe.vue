@@ -3,15 +3,15 @@
         <v-form id="paymentform">
             <v-row>
                 <v-col cols="12">
-                    <label class="f8-bold">Card Number</label>
+                    <label class="">Card Number</label>
                     <div id="card-number"></div>
                 </v-col>
                 <v-col cols="6">
-                    <label class="f8-bold">Card Expiry</label>
+                    <label class="">Card Expiry</label>
                     <div id="card-expiry"></div>
                 </v-col>
                 <v-col cols="6">
-                    <label class="f8-bold">CVC</label>
+                    <label class="">CVC</label>
                     <div id="card-cvc"></div>
                 </v-col>
             </v-row>
@@ -110,3 +110,9 @@ export default {
 
 }
 </script>
+<style lang="scss">
+label{
+    font-size: 15px;
+    font-weight: 500;
+}
+</style>

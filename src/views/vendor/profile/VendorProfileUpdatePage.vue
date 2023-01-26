@@ -81,7 +81,7 @@ import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { base_url } from '@/core/services/config'
 import InputUpload from '@/components/form-element/InputUpload'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
     name:'EditProfile',
     data() {
@@ -96,7 +96,7 @@ export default {
                 lname:'',
                 mobile_no:'',
                 email:'',
-                profile_pic:'',
+                profile_pic:'avatar.png',
             },
             file_name:'',
             ruleRequired: [
@@ -112,51 +112,61 @@ export default {
     },
     mounted() {
         if(this.currentUser) {
-            this.customer = this.currentUser;
+            // this.customer = this.currentUser;
+            this.customer.id = this.currentUser.id;
+            this.customer.fname = this.currentUser.fname;
+            this.customer.lname = this.currentUser.lname;
+            this.customer.email = this.currentUser.email;
+            this.customer.profile_pic = this.currentUser.profile_pic ? this.currentUser.profile_pic:'avatar.png';
+            this.customer.mobile_no = this.currentUser.mobile_no;
         }
     },
     methods: {
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
         handleBack(){
             this.$router.back();
         },
         changeImage(file){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             let formData = new FormData();
             formData.append("file",file.file);
             ApiService.post('/store-image', formData)
             .then((resp) => {
-                 this.$bus.$emit('HIDE_PAGE_LOADER');
+                 this.loaderHide();
                  this.customer.profile_pic = resp.file_name;
                  this.hasFile = true;
             })
             .catch(() => {
                 this.messageError("Failed ! choose image less than size 2mb");
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             });
         },
         async profileData() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.post('/profile').then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.customer.fname = resp.data.fname;
                 this.customer.lname = resp.data.lname;
                 this.customer.email = resp.data.email;
                 this.customer.mobile_no = resp.data.mobile_no ? resp.data.mobile_no : resp.data.phone_no;
             })
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             })
         },
         async updateProfile(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             this.customer.other_email = this.customer.email;
             await ApiService.post('/self/profile/contact', this.customer)
             .then(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageSuccess("Success");
+                this.fetchProfile();
             })
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError('Failed to update profile');
             })
         }

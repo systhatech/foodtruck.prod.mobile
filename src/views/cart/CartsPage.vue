@@ -28,7 +28,11 @@
                                                 class="mb-4 cart-item-single custom-bs pa-4"
                                                 :key="i">
                                                 <div class="pb-4">
-                                                    <div class="d-flex align-center justify-space-between" @click="viewModal(product)">
+                                                    <div class="d-flex justify-space-between" @click="viewModal(product)">
+                                    
+                                                        <div style="width:80px">
+                                                            <v-img width="80" :src="base_url+'/image-show/'+product.food_menu_item.profile_pic"></v-img>
+                                                        </div>
                                                         <div>
                                                             <p class="cart-item-name mb-0">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
                                                         </div>
@@ -48,9 +52,9 @@
                                                 <div class="d-flex align-center justify-space-between mt-4">
                                                     <p class="item-remove" @click="handleRemoveItem(product)">Remove</p>
                                                     <div class="d-flex align-center justify-space-around text-center" style="width:120px">
-                                                        <v-btn @click="handlePlus(product)" icon outlined color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
-                                                        <p  class="pb-0 mb-0">{{product.quantity}}</p>
-                                                        <v-btn @click="handleMinus(product)" icon outlined><v-icon>{{ iconMinus }}</v-icon></v-btn>
+                                                        <v-btn @click="handlePlus(product)" fab small color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
+                                                        <h4  class="pb-0 mb-0 pl-1 pr-1">{{product.quantity}}</h4>
+                                                        <v-btn @click="handleMinus(product)" fab small><v-icon>{{ iconMinus }}</v-icon></v-btn>
                                                     </div>
                                                 </div>
                                             </li>
@@ -102,7 +106,7 @@
         </v-container>
         <div class="custom-bottom-nav" v-if="cartItems && cartItems.length">
             <div>
-                <span class="amount">{{ formatAmount(cartAmount.sub_total) }}</span>
+                <h2 class="primary--text">{{ formatAmount(cartAmount.sub_total) }}</h2>
             </div>
             <v-btn rounded link to="/cart-payment" color="primary"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
         </div>
@@ -110,15 +114,15 @@
             <Bottomnavbar/>
         </div>
          <ModalConfirm 
-            :dialogConfirm="dialogConfirm" 
-            @close="handleClose" 
+            :dialogConfirm="modal_confirm" 
+            @close="handleCloseConfirm" 
             @handleConfirm="handleConfirm"/>
     </v-container>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-// import { base_url } from '@/core/services/config'
+import { base_url } from '@/core/services/config'
 import Topnavbar from "@/components/layout/TopnavbarBackCustom";
 import Bottomnavbar from "@/components/layout/NavbarBottomFixed";
 import ModalConfirm from '@/components/layout/DialogConfirm'
@@ -127,10 +131,11 @@ import { mdiArrowLeft } from '@mdi/js';
 export default {
     data() {
         return {
+            base_url,
             iconAddress: mdiMapMarker,
             iconArrowBack:mdiArrowLeft,
             iconCart: mdiCart,
-            dialogConfirm:false,
+            modal_confirm:false,
             transactionFee:0,
             convenienceFee:0,
             loading:false,
@@ -210,10 +215,10 @@ export default {
             this.varient = varient;
             console.log(varient);
             this.confirmSource = "varientItem";
-            this.dialogConfirm = true;
+            this.modal_confirm = true;
         },
         handleCloseConfirm() {
-            this.dialogConfirm = false;
+            this.modal_confirm = false;
         },
         handlePlus(cart){
             this.loaderShow();
@@ -232,29 +237,31 @@ export default {
             })
         },
         handleMinus(cart){
-            if(cart.qty == 1){
+            console.log(cart);
+            if(cart.quantity ==1 ){
                 this.messageError('Cannot update quantity');
                 return;
+            }else{
+                this.loaderShow();
+                ApiService.post('/carts-item-qty-update',{
+                    quantity: --cart.quantity,
+                    cart_id: cart.id,
+                })
+                .then((resp) => {
+                    this.messageSuccess(resp.message);
+                    this.fetchCarts();
+                    this.loaderHide();
+                })
+                .catch((error) => {
+                    this.loaderHide();
+                    console.log(error);
+                })
             }
-            this.loaderShow();
-            ApiService.post('/carts-item-qty-update',{
-                quantity: --cart.quantity,
-                cart_id: cart.id,
-            })
-            .then((resp) => {
-                this.messageSuccess(resp.message);
-                this.fetchCarts();
-                this.loaderHide();
-            })
-            .catch((error) => {
-                this.loaderHide();
-                console.log(error);
-            })
         },
         handleRemoveItem(cart) {
             this.itemDelete = cart;
             this.confirmSource = "cartItem";
-            this.dialogConfirm = true;
+            this.modal_confirm = true;
 
         },
         handleConfirm () {

@@ -69,7 +69,7 @@ export default {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.messageSuccess(resp.message);
                 this.$refs.formPassword.reset();
-                this.$router.push({name:'profilepage'});
+                // this.$router.push({name:'profilepage'});
             })
             .catch((error) => {
                 this.$bus.$emit('HIDE_PAGE_LOADER');

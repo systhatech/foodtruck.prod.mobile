@@ -46,7 +46,7 @@
                                     block
                                     @click="submit"
                                 >
-                                    UPdate
+                                    update
                                 </v-btn>
                             </div>
                         </v-col>
@@ -114,15 +114,15 @@ export default {
             let valid = this.$refs.formNewPassword.validate();
             if(!valid) return;
             else{
-                this.$bus.$emit('SHOW_PAGE_LOADER');
+                this.loaderShow();
                 ApiService.post('/update-password',this.password_new)
                 .then((resp) => {
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                    this.loaderHide();
                     this.messageSuccess(resp.message);
-                    this.$router.push({name:'profilePage'});
+                    // this.$router.push({name:'profilePage'});
                 })
                 .catch(() => {
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                    this.loaderHide();
                 })
             }
         },

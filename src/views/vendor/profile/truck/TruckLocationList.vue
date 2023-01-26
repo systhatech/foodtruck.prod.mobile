@@ -7,7 +7,7 @@
                         <div>
                             <h5 class="text-uppercase primary--text">date</h5>
                             <p class="mb-1"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>
-                            <p class="mb-4"> {{ formatTimeOnly(location.start_time)}} - {{ formatTimeOnly(location.end_time)}}</p>
+                            <p class="mb-4"> {{ formatTimeOnly(location.start_date)}} - {{ formatTimeOnly(location.end_date)}}</p>
                         </div>
                         <div>
                             <!-- <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon> -->

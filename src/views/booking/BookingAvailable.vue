@@ -1,8 +1,5 @@
 <template>
     <div class="mt-4">
-        <!-- <div>
-            <v-btn  fab small color="primary" @click="showFilter"><v-icon>mdi-filter</v-icon></v-btn>
-        </div> -->
         <div class="mt-4">
              <v-row v-if="locationBookings && Object.keys(locationBookings).length">
                 <v-col cols="12" sm="6" md="6" lg="6" xl="3" v-for="(booking, index) in locationBookings " :key="index">
@@ -11,14 +8,14 @@
                        
                         <div class="address-wrapper">
                             <div>
-                                <h4 class="mb-2">{{ booking && booking.company ? booking.company.neighbourhood_name : (booking.event ? booking.event.name :'') }}</h4>
+                                <h5 class="text-uppercase primary--text mb-2">{{ booking && booking.company ? booking.company.neighbourhood_name : (booking.event ? booking.event.name :'') }}</h5>
                                 <div class="d-flex">
                                     <div class="text-center mr-2">
                                         <v-icon color="primary">{{iconCalendar}}</v-icon>
                                     </div>
                                     <div>
-                                        <p class="f8-bold">{{ moment(booking.start_date).format('MMM DD, YYYY') }} - {{ moment(booking.end_date).format('MMM DD, YYYY')}}</p>
-                                        <p class="f8-bold">{{ formatTimeOnly(booking.start_date) }} - {{ formatTimeOnly(booking.end_date)}}</p>
+                                        <p class="">{{ moment(booking.start_date).format('MMM DD, YYYY') }} - {{ moment(booking.end_date).format('MMM DD, YYYY')}}</p>
+                                        <p class="">{{ formatTimeOnly(booking.start_date) }} - {{ formatTimeOnly(booking.end_date)}}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex mt-2">
@@ -26,8 +23,8 @@
                                         <v-icon color="primary">{{ iconAddress }}</v-icon>
                                     </div>
                                     <div>
-                                        <p class="f8">{{ booking ? booking.add1 :''}}</p>
-                                        <p class="f8">{{ booking ? booking.city :''}} {{ booking && booking.state ? booking.state :''}}, {{booking &&  booking.zip ? booking.zip :''}}</p>
+                                        <p class="">{{ booking ? booking.add1 :''}}</p>
+                                        <p class="">{{ booking ? booking.city :''}} {{ booking && booking.state ? booking.state :''}}, {{booking &&  booking.zip ? booking.zip :''}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -35,10 +32,9 @@
                         <div class="d-flex justify-space-around">
                         <v-btn
                             color="primary"
-                            outlined
                             rounded
+                            block
                             class="mx-auto mt-4"
-                            link
                             :to="'/spot/'+booking.id">
                             Book Now
                         </v-btn>
@@ -186,7 +182,6 @@ export default {
     p{
         padding: 0;
         margin: 0;
-        font-weight: 500;
     }
 }
 </style>
