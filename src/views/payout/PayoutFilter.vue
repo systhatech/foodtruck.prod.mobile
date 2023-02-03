@@ -56,7 +56,7 @@ import moment from 'moment'
     methods: {
         selectedStart(start) {
             this.minDate = moment(start.date).format('YYYY-MM-DD');
-            this.startDate = this.maxDate;
+            this.startDate = this.minDate;
         },
         selectedEnd(end){
             this.maxDate = moment(end.date).format('YYYY-MM-DD');
@@ -66,6 +66,10 @@ import moment from 'moment'
             this.$emit('close');
         },
         handleSearch(){
+            console.log({ 
+                start_date: this.startDate,
+                end_date: this.endDate,
+            });
             this.$emit('search',{ 
                 start_date: this.startDate,
                 end_date: this.endDate,

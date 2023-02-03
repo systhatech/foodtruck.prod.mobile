@@ -65,7 +65,7 @@ export default {
     },
     handleConfirm() {
       this.$bus.$emit("SHOW_PAGE_LOADER");
-      this.info.vendor_id = this.currentUser.vendor.id;
+      this.info.vendor_id = this.currentUser.client_id;
       ApiService.post("/report/resend", this.info)
         .then((resp) => {
           this.$bus.$emit("HIDE_PAGE_LOADER");

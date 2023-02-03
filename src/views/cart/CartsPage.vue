@@ -28,15 +28,20 @@
                                                 class="mb-4 cart-item-single custom-bs pa-4"
                                                 :key="i">
                                                 <div class="pb-4">
-                                                    <div class="d-flex justify-space-between" @click="viewModal(product)">
-                                    
+                                                    <div class="d-flex" @click="viewModal(product)">
+                                                        
                                                         <div style="width:80px">
                                                             <v-img width="80" :src="base_url+'/image-show/'+product.food_menu_item.profile_pic"></v-img>
                                                         </div>
-                                                        <div>
-                                                            <p class="cart-item-name mb-0">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
+                                                        <div class="pl-4">
+                                                            <div>
+                                                                <h5 class="text-uppercase pb-2 primary--text">{{ product.food_menu_item.name }} ({{ product.quantity }})</h5>
+                                                            </div>
+                                                            <div> 
+                                                                <p class="text-primary amount-text"></p>
+                                                                <h5 class="text-uppercase">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</h5>
+                                                            </div>
                                                         </div>
-                                                        <div> <p class="text-primary amount-text">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</p></div>
                                                     </div>
                                                     <ul class="varient_items" v-if="product.varients && product.varients.length">
                                                         <li v-for="(item, i) in product.varients" :key="i">
@@ -48,13 +53,13 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <v-divider></v-divider>
-                                                <div class="d-flex align-center justify-space-between mt-4">
+                                                <!-- <v-divider></v-divider> -->
+                                                <div class="d-flex align-center justify-space-between">
                                                     <p class="item-remove" @click="handleRemoveItem(product)">Remove</p>
                                                     <div class="d-flex align-center justify-space-around text-center" style="width:120px">
                                                         <v-btn @click="handlePlus(product)" fab small color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
                                                         <h4  class="pb-0 mb-0 pl-1 pr-1">{{product.quantity}}</h4>
-                                                        <v-btn @click="handleMinus(product)" fab small><v-icon>{{ iconMinus }}</v-icon></v-btn>
+                                                        <v-btn @click="handleMinus(product)" fab small color="error"><v-icon>{{ iconMinus }}</v-icon></v-btn>
                                                     </div>
                                                 </div>
                                             </li>
@@ -226,8 +231,8 @@ export default {
                 quantity: ++cart.quantity,
                 cart_id: cart.id,
             })
-            .then((resp) => {
-                this.messageSuccess(resp.message);
+            .then(() => {
+                // this.messageSuccess(resp.message);
                 this.fetchCarts();
                 this.loaderHide();
             })
@@ -247,8 +252,8 @@ export default {
                     quantity: --cart.quantity,
                     cart_id: cart.id,
                 })
-                .then((resp) => {
-                    this.messageSuccess(resp.message);
+                .then(() => {
+                    // this.messageSuccess(resp.message);
                     this.fetchCarts();
                     this.loaderHide();
                 })
@@ -276,8 +281,8 @@ export default {
             ApiService.post('carts-item-varient-delete',{
                 id : this.varient.id,
             })
-            .then((resp) => {
-                this.messageSuccess(resp.message);
+            .then(() => {
+                // this.messageSuccess(resp.message);
                 this.fetchCarts();
                 this.handleCloseConfirm();
                 this.loaderHide();
@@ -293,8 +298,8 @@ export default {
             ApiService.post('carts-item-delete',{
                 cart_id: this.itemDelete.id,
             })
-            .then((resp) => {
-                this.messageSuccess(resp.message);
+            .then(() => {
+                // this.messageSuccess(resp.message);
                 this.fetchCarts();
                 this.handleCloseConfirm();
                 this.loaderHide();
@@ -337,7 +342,7 @@ export default {
     bottom: 0;
     // border-top: 1px solid #dadada;
     width: 100%;
-    padding: 16px 16px 34px 16px;
+    padding: 13px 16px 18px 16px;
     display:flex;
     align-items:center;
     justify-content: space-between;
@@ -357,7 +362,7 @@ export default {
     margin-top:10px;
     padding:0;
     li{
-        font-size: 0.8rem;
+        // font-size: 0.8rem;
         font-weight: 400;
         margin-bottom: 10px;
         padding: 0 !important;
@@ -376,9 +381,9 @@ export default {
 }
 .cart-item-name{
     text-transform: capitalize;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom:10px;
+    // font-size: 0.9rem;
+    // font-weight: 600;
+    // margin-bottom:10px;
     // padding:0;
     &:hover{
         text-decoration: underline;

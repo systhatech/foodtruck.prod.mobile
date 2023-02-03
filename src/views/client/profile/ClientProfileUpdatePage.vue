@@ -156,8 +156,9 @@ export default {
             await ApiService.post('/self/profile/contact', this.customer)
             .then(() => {
                 this.loaderHide();
-                this.messageSuccess("Success");
+                // this.messageSuccess("Success");
                 this.fetchProfile();
+                this.handleBack();
             })
             .catch(() => {
                 this.loaderHide();

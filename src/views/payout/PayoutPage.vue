@@ -6,41 +6,40 @@
                     <div class="custom-bs pa-6" v-if="amount && Object.keys(amount).length && (default_payment == 'default_company')">
                         <div class="d-flex align-center justify-space-between">
                             <h4 class="ma-0">Available Fund</h4>
-                            <span class="color f9-bold">{{ formatAmount(amount.outstanding)}}</span>
+                            <span class="color">{{ formatAmount(amount.outstanding)}}</span>
                         </div>
                         <div class="text-center mt-4" v-if="default_payment == 'default_company'">
                             <v-btn :disabled="amount.outstanding < 10" color="primary" outlined rounded small @click="handleTransfer">Transfer</v-btn>
-                            <p class="min-amount" v-if="amount.outstanding < 10">Minimum payout amount must be 10$</p>
+                            <p class="error--text" v-if="amount.outstanding < 10">Minimum payout amount must be 10$</p>
                         </div>
                     </div>
                     <div class="mt-3 p-relative">
-                        <v-btn color="primary" fab small v-if="renderFilter" class="filter" @click="handleOpenFilter">
-                            <v-icon>{{iconFilter}}</v-icon>
+                        <v-btn color="primary" rounded v-if="renderFilter" @click="handleOpenFilter">
+                            <v-icon>{{iconFilter}}</v-icon> Select Date Range
                         </v-btn>
+                        <div class="pt-4">
+                            <p class="mb-0">Settlement from  <span style="font-weight:600">{{  formatStandardUSDate(start_date) }}</span> to <span style="font-weight:600">{{ formatStandardUSDate(end_date) }}</span></p>
+                        </div>
                         <div v-if="orders && Object.keys(orders).length" >
                             <div v-for="(dateWiseOrders, date) in orders" :key="date">
-                                <v-chip
-                                class="mb-2 mt-6"
-                                color="accent">
-                                {{ formatDateStandard(date) }}
-                                </v-chip>
+                                <span>{{ formatDateStandard(date) }}</span>
                                 <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                                     <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
                                         <div class="order_item custom-bs">
-                                            <p class="order_no"><span>Sales</span> <span class="amount"> {{formatAmount1(order.sub_total)}} </span></p>
-                                            <p class="order_no"><span>Tax</span> <span class="amount"> {{formatAmount1(order.tax)}} </span></p>
+                                            <p class="d-flex align-center"><span>Sales</span> <span class="amount"> : {{formatAmount1(order.sub_total)}} </span></p>
+                                            <p class="d-flex align-center"><span>Tax</span> <span class="amount"> : {{formatAmount1(order.tax)}} </span></p>
+                                            <v-divider class="mb-3 mt-2"></v-divider>
+                                            <h5 class="text-uppercase primary--text">Available Fund : {{formatAmount1(order.total_available)}} </h5>
                                              <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="order_no color-accent"><span>Available Fund</span> <span class="amount"> {{formatAmount1(order.total_available)}} </span></p>
-                                             <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="order_no"><span>Convenience fee</span> <span class="amount"> {{formatAmount1(order.conv_fee)}} </span></p>
-                                            <p class="order_no"><span>Service fee</span> <span class="amount"> {{formatAmount1(order.service_charge)}} </span></p>
+                                            <p class="d-flex align-center"><span>Convenience fee</span> <span class="amount"> : {{formatAmount1(order.conv_fee)}} </span></p>
+                                            <p class="d-flex align-center"><span>Service fee</span> <span class="amount"> : {{formatAmount1(order.service_charge)}} </span></p>
                                             <v-divider class="mb-3 mt-2"></v-divider>
-                                             <p class="order_no f9-bold"><span>Total Sales</span> <span class="amount"> {{formatAmount1(order.total)}} </span></p>
+                                            <h5 class="text-uppercase primary--text">Total Sales : {{formatAmount1(order.total)}} </h5>
                                             <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="order_no"><span>Cash Sales</span> <span class="amount"> {{formatAmount1(order.cash_sales)}} </span></p>
-                                            <p class="order_no"><span>Card Sales</span> <span class="amount"> {{formatAmount1(order.card_sales)}} </span></p>
+                                            <p class="d-flex align-center"><span>Cash Sales</span> <span class="amount"> : {{formatAmount1(order.cash_sales)}} </span></p>
+                                            <p class="d-flex align-center"><span>Card Sales</span> <span class="amount"> : {{formatAmount1(order.card_sales)}} </span></p>
                                             <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="order_no"><span>Transferred Amount</span> <span class="amount"> {{formatAmount1(order.payout)}} </span></p>
+                                            <h5 class="text-uppercase primary--text">Transferred Amount : {{formatAmount1(order.payout)}} </h5>
                                         </div>
                                     </v-col>
                                 </v-row>
@@ -85,11 +84,13 @@ import PayoutFilter from './PayoutFilter'
 import PayoutConfirm from './PayoutConfirm'
 import DialogProceed from '@/components/layout/DialogProceed'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 // import { ApiService } from '@/core/services/api.service'
 export default {
     name:'payoutPage',
     data() {
         return {
+            moment,
             title:'',
             renderFilter:false,
             iconFilter: mdiFilter,
@@ -103,12 +104,14 @@ export default {
             amount:{},
             date: new Date().toISOString().substr(0, 10), 
             modalPayoutFilter:false,
-            start_date:'',
-            end_date:'',
+            start_date: new Date().toISOString().substr(0, 10),
+            end_date: '',
             messageAddDetail:'Add Bank Detail Before Transfer',
         }
     },
     mounted() {
+        this.end_date = moment().add(7,'days').format('YYYY-MM-DD');
+        console.log(this.end_date);
         this.fetchProfile();
         this.fetchOrders();
     },

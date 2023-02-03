@@ -4,10 +4,10 @@
 
             <div class="mt-4" v-if="files && Object.keys(files).length">
                 <!-- <v-row> -->
-                    <div v-for="(file,index) in files" :key="index">
-                        <h5 class="text-capitalize mb-2 mt-4">{{index}}</h5>
-                        <v-row v-if="files[index].length">
-                            <v-col cols="6" v-for="(f,i) in files[index]" :key="i">
+                    <!-- <div v-for="(file,index) in files" :key="index">
+                        <h5 class="text-capitalize mb-2 mt-4">{{index}}</h5> -->
+                        <v-row v-if="files.length">
+                            <v-col cols="6" v-for="(f,i) in files" :key="i">
                                 <v-img 
                                     contain
                                     lazy-src="https://picsum.photos/id/11/10/6"
@@ -17,7 +17,7 @@
                                     ></v-img>
                             </v-col>
                         </v-row>
-                    </div>
+                    <!-- </div> -->
                 <!-- </v-row> -->
             </div>
             <div v-else class="unavailable">

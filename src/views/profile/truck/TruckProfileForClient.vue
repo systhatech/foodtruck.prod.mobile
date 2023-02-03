@@ -3,9 +3,9 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <div class="mb80">
             <div v-if="render">
-                <div v-if="items&&items.length">
+                <!-- <div v-if="items&&items.length">
                     <Carousel :items="items"/>
-                </div>
+                </div> -->
                 <v-container class="pa-0">
                     <div class="pa-4">
                         <div class="d-flex justify-space-between align-center">
@@ -24,7 +24,7 @@
                                 <div class="w100">
                                     <v-btn
                                     v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
-                                    outlined
+                                    
                                     class="mr-3"
                                     fab
                                     small
@@ -34,11 +34,11 @@
                                     <v-icon>mdi-phone</v-icon>
                                     </v-btn>
                                     <v-btn
-                                    outlined
+                                    
                                     fab
                                     small
                                     link
-                                    :to="'/conversation/vendors/'+truck.id"
+                                    :to="'/client/conversation/vendors/'+truck.id"
                                     color="primary"
                                     >
                                     <v-icon>mdi-chat</v-icon>
@@ -75,14 +75,14 @@
                 <h3>Loading...</h3>
             </div>
         </div>
-         <Bottomnavbar/>
+         <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
 import Banner from '@/components/layout/ComponentBanner'
 import TruckAbout from './TruckAbout';
@@ -141,6 +141,7 @@ export default {
     },
     mounted() {
         this.truckId = this.$router.currentRoute.params.truckId;
+        console.log(this.$router.currentRoute);
         this.profileData();
         this.$bus.$on('changeComponent', (data) => {
             this.orderDate = data.date;
@@ -221,7 +222,7 @@ export default {
     },
     components: {
         Topnavbar,
-        Bottomnavbar,
+        // Bottomnavbar,
         Carousel,
         Banner,
         'about': TruckAbout,

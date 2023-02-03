@@ -4,9 +4,9 @@
         <v-container>
            <div v-if="item && Object.keys(item).length" class="custom-bs">
                 <div>
-                    <v-img v-if="item.profile_pic !=='noimage.png'"
-                    :src="base_url+'/image-show/'+item.profile_pic"
-                    lazy-src="https://picsum.photos/id/11/100/60"
+                    <v-img
+                    :src="base_url+'/image-show/'+(item && item.profile_pic ? item.profile_pic:'noimage.png')"
+                    :lazy-src="base_url+'/image-show/noimage.png'"
                     height="160"
                     ></v-img>
                 </div>
@@ -18,7 +18,8 @@
                                 <span>{{formatAmount(item.price)}}</span>
                             </div>
                             <div>
-                                <v-btn color="primary" x-small fab class="mr-2" :to="'/vendor-menu-item-edit/'+item.id"><v-icon>mdi-lead-pencil</v-icon></v-btn>
+                                <!-- <v-btn color="primary" x-small fab class="mr-2" :to="'/vendor-menu-item-edit/'+item.id"><v-icon>mdi-lead-pencil</v-icon></v-btn> -->
+                                <v-btn color="primary" x-small fab class="mr-2" @click="handleEditItem(item)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
                             </div>
                         </div>
                         <div v-html="item.description"></div>
@@ -76,6 +77,11 @@
             @handleConfirm="handleDeleteConfirm"
             @close="handleClose"
             :dialogConfirm="modalConfirm"/>
+            <DialogMenuItemEdit 
+            @handleConfirm="handleDeleteConfirm"
+            @close="handleCloseModalItem"
+            :item="editItem"
+            :dialogMenuItemEdit="modal_item_update"/>
         </v-container>
          <!-- <Bottomnavbar value="0"/> -->
     </v-container>
@@ -83,14 +89,12 @@
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_url } from '@/core/services/config'
-// import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
 import moment from 'moment'
-// import InputUpload from '@/components/form-element/InputUpload'
 import DialogVarientAdd from '@/views/vendor/profile/components/TruckMenuVarientAdd'
 import DialogVarientUpdate from '@/views/vendor/profile/components/TruckMenuVarientUpdate'
 import DialogConfirm from '@/components/layout/DialogConfirm'
+import DialogMenuItemEdit from '@/views/vendor/profile/modal/ModalMenuItemEdit'
 import { mapGetters } from 'vuex'
 export default {
     name:'vendorMenuView',
@@ -128,7 +132,9 @@ export default {
             item:{},
             modalVarientUpdate:false,
             editVarient:{},
-            message:'Loading...'
+            message:'Loading...',
+            editItem:{},
+            modal_item_update:false,
         }
     },
     mounted() {
@@ -166,6 +172,10 @@ export default {
             this.editVarient = data;
             this.modalVarientUpdate = true;
         },
+        handleEditItem(item) {
+            this.editItem = item;
+            this.modal_item_update = true;
+        },
         handleAddVarient() {
             this.modalVarientAdd = true;
         },
@@ -180,6 +190,9 @@ export default {
             this.modalVarientAdd = false;
             this.modalVarientUpdate = false;
             this.modalConfirm = false;
+        },
+        handleCloseModalItem(){
+            this.modal_item_update = false;
         },
          fetchMenuData(){
             console.log("test");
@@ -266,6 +279,7 @@ export default {
         DialogVarientAdd,
         DialogVarientUpdate,
         DialogConfirm,
+        DialogMenuItemEdit,
         // InputAddress,
         // InputUpload,
         // InputAutocomplete

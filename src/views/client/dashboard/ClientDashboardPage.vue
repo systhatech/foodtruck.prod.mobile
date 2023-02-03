@@ -30,10 +30,10 @@
                     </v-btn>
                 </div>
             </div>
-                <AddGoogleMap :locationMarkers="locations"/>
+            <AddGoogleMap :locationMarkers="locations"/>
            
         </v-container>
-        <v-container v-else class="mg56 pt-4">
+        <v-container v-else class="mg56 pt-4 pb-14">
            <div>
                <div>
                    <div class="d-flex align-center justify-space-between">
@@ -70,7 +70,7 @@ import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import AddGoogleMap from './map/AddGoogleMap'
-import {socketHandler} from '@/core/services/socketio/socket'
+// import {socketHandler} from '@/core/services/socketio/socket'
 export default {
     data() {
         return {
@@ -136,17 +136,17 @@ export default {
             name: this.search,
             guest: localStorage.getItem('g_token'),
         });
-        let deviceToken = localStorage.getItem('d_token');
-        this.saveDeviceToken(deviceToken);
-        if(!this.currentUser) return;
-        try{
-            socketHandler.onlineStatus({
-                id : this.currentUser.table_id,
-                table : this.currentUser.table,
-            });
-        }catch(error) {
-            console.log({error})
-        }
+        // let deviceToken = localStorage.getItem('d_token');
+        // this.saveDeviceToken(deviceToken);
+        // if(!this.currentUser) return;
+        // try{
+        //     socketHandler.onlineStatus({
+        //         id : this.currentUser.table_id,
+        //         table : this.currentUser.table,
+        //     });
+        // }catch(error) {
+        //     console.log({error})
+        // }
     },
    
     beforeDestroy() {
@@ -495,3 +495,5 @@ export default {
         }
     }
 </style>
+
+

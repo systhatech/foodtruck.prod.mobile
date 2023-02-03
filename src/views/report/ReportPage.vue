@@ -9,7 +9,7 @@
                 <ul class="report-list">
                     <li v-for="(report, index) in reports" :key="index">
                         <div class="d-flex">
-                            <span class="report_date">{{formatStandardUSDate(report.created_at)}}</span> 
+                            <span class="report_date">{{formatDateTime(report.created_at)}}</span> 
                             <span class="report_name">{{report.report_name}}</span>
                         </div>
                         <div style="width:50px;">

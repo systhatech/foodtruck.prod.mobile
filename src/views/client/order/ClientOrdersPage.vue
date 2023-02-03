@@ -3,9 +3,9 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div>
-                <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
-                    {{ item.name }}
-                </v-chip>
+                <div>
+                    <OrderStatus :items="orderTypes" @selectedStatus="handleActive"/>
+                </div>
             </div>
             <div v-if="orders && Object.keys(orders).length">
                 <div v-for="(dateWiseOrders, date) in orders" :key="date">
@@ -14,19 +14,19 @@
                     </div>
                     <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                         <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
-                            <div class="custom-bs pa-4 d-flex align-center justify-space-between">
+                            <div class="custom-bs pa-4 d-flex align-center justify-space-between" @click="viewDetailPage(order)">
                                 <div>
                                     <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
                                     <p class="mb-0 text-capitalize">{{ order.customer_name }}</p>
-                                    <p class="mb-0" style="font-size:13px">{{ order.phone }}</p>
+                                    <p class="mb-0" style="font-size:13px; font-weight: 500;">{{ order.phone }}</p>
                                 </div>
-                                <div>
+                                <div class="text-right">
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
                                     <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <v-btn fab small color="primary" @click="viewDetailPage(order)"><v-icon>{{icon_right}}</v-icon></v-btn>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- <div class="order_item custom-bs" >
                                 <h4>{{order.order_no}}</h4>
@@ -64,7 +64,6 @@ import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import { ApiService } from '@/core/services/api.service'
 
 import { mdiChat, mdiChevronRight } from '@mdi/js'
-// import InputUpload from '@/components/form-element/InputUpload'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
@@ -87,29 +86,26 @@ export default {
             activeType:0,
             orders:[],
             pickup_date: new Date().toISOString().substr(0, 10), 
-            orderTypes: [],
-            otVendor: [
+            orderTypes: [
                 {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
-                // {name:'Processing',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'preparing'},
+                {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
+                {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
                 {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
                 {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
-            ],
-            otClient: [
-                {name:'Recent Orders',active_type:false,status:'recent-orders'},
-                {name:'Past Orders',active_type:false,status:'completed'},
+                {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
             refresh_time:10000,
         }
     },
     mounted() {
-        if(this.currentUser){
-            if(this.currentUser.table == 'clients'){
-                this.orderTypes = this.otClient;
-                this.status = "recent-orders";
-            }else{
-                this.orderTypes = this.otVendor;
-            }
-        }
+        // if(this.currentUser){
+        //     if(this.currentUser.table == 'clients'){
+        //         this.orderTypes = this.otClient;
+        //         this.status = "recent-orders";
+        //     }else{
+        //         this.orderTypes = this.otVendor;
+        //     }
+        // }
         this.fetchOrders();
     },
     methods: {
@@ -120,30 +116,30 @@ export default {
             this.$router.back();
         },
         async fetchOrders() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.post("/order-list",{
                 'status': this.status
             })
             .then((resp) => {
                 this.orders = resp.data;
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         },
         async refetchOrders() {
-             this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.post("/order-list",{
                 'status': this.status
             })
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.orders = resp.data;
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         },
@@ -152,7 +148,7 @@ export default {
         },
         handleActive(item, index){
             this.activeType = index;
-            this.status = item.status;
+            this.status = item.status.status;
             this.fetchOrders();
         },
         handleView(order){
@@ -176,6 +172,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        OrderStatus: ()=> import('@/components/OrdersStatusSlider.vue')
     },
     computed: {
         ...mapGetters({currentUser:'auth/user'}),

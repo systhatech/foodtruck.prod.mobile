@@ -7,7 +7,7 @@
                         <!-- <v-btn icon @click="handleClose">
                             <v-icon>mdi-close</v-icon>
                         </v-btn> -->
-                        <v-toolbar-title>{{ orderDetail.order_no }}</v-toolbar-title>
+                        <v-toolbar-title>{{ orderDetail  ? orderDetail.order_no:'' }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn text @click="handleClose">
@@ -18,7 +18,7 @@
                     <div class="pb82 p-relative background-image">
                         <template v-if="orderDetail && Object.keys(orderDetail).length">
                             <div class="custom-bs pa-4">
-                                <h5 class="text-uppercase">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
+                                <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
                                 <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail && orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no :orderDetail.client.contact.phone_no }}</p>
                                 <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{ orderDetail.client.contact.email}}</p>
                                 <div class="d-flex flex-start" v-if="orderDetail.pickup_addr">
@@ -34,12 +34,22 @@
 
                                 </div>
                                 <div>
-                                    <v-btn fab small color="primary"><v-icon>{{  icon_chat }}</v-icon></v-btn>
+                                    <v-btn fab small color="primary" :to="'/vendor/conversation/clients/'+orderDetail.client.id"><v-icon>{{  icon_chat }}</v-icon></v-btn>
+                                    <v-btn
+                                        fab
+                                        small
+                                        class="ml-4"
+                                        color="primary"
+                                        link
+                                        :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
+                                        <v-icon>{{icon_phone}}</v-icon>
+                                    </v-btn
+                                    >
                                 </div>
                             </div>
                             <div class="custom-bs pa-4 mt-4">
                                 <div class="d-flex align-center justify-space-between pb-4">
-                                    <h5 class="ma-0">ORDER: {{ orderDetail.order_no }} </h5>
+                                    <h5 class="ma-0 primary--text">ORDER: {{ orderDetail.order_no }} </h5>
                                     <v-chip class="text-capitalize" color="accent" small>{{
                                         orderDetail.status
                                     }}</v-chip>
@@ -123,9 +133,8 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="">Total </td>
-                                                        <td class=" text-right">
-                                                            {{ formatAmount(orderDetail.total_amount) }}</td>
+                                                        <td class=""><h5 class="primary--text text-uppercase">Total</h5> </td>
+                                                        <td class=" text-right"><h4 class="primary--text text-uppercase"> {{ formatAmount(orderDetail.total_amount) }}</h4> </td>
                                                     </tr>
                                                 </table>
                                                 <div class="text-right mt-4" v-if="orderDetail.payment">
@@ -154,16 +163,26 @@
                             <div v-if="order && order.status == 'new'"
                                 class="d-flex align-center justify-space-between w-100">
                                 <v-btn rounded :disabled="disableButton" color="error"
+                                text
                                     @click="onClick('archive')">archive</v-btn>
                                 <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton"
-                                    color="accent" @click="onClick('ready')">Ready For pickup</v-btn>
+                                    color="primary" @click="onClick('accepted')">Accept</v-btn>
+                            </div>
+                            <div v-if="order && order.status == 'accepted'"
+                                class="d-flex align-center justify-space-between w-100">
+                                <v-btn rounded :disabled="disableButton" color="error"
+                                    text
+                                    @click="onClick('archive')">archive</v-btn>
+                                <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton"
+                                    color="primary" @click="onClick('ready')">Ready For pickup</v-btn>
                             </div>
 
                             <div v-if="order && order.status == 'ready'"
                                 class="d-flex align-center justify-space-between w-100">
                                 <v-btn rounded :disabled="disableButton" color="error"
+                                text
                                     @click="onClick('archive')">archive</v-btn>
-                                <v-btn rounded :disabled="disableButton" color="accent"
+                                <v-btn rounded :disabled="disableButton" color="success"
                                     @click="onClick('completed')">completed</v-btn>
                             </div>
                         </div>
@@ -176,7 +195,7 @@
 </template>
 <script>
 import DialogConfirm from '@/components/layout/DialogConfirm';
-import { mdiArrowLeft, mdiClose, mdiMessage } from '@mdi/js'
+import { mdiArrowLeft, mdiClose, mdiChat, mdiPhone } from '@mdi/js'
 import { ApiService } from '@/core/services/api.service'
 import moment from 'moment'
 import { base_url } from '@/core/services/config'
@@ -212,7 +231,8 @@ export default {
             base_url,
             dialogConfirm: false,
             iconClose: mdiClose,
-            icon_chat: mdiMessage,
+            icon_chat: mdiChat,
+            icon_phone: mdiPhone,
             disableButton: false,
             moment,
             iconBack: mdiArrowLeft,

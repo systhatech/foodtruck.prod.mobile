@@ -12,11 +12,18 @@
                     {{iconAccount}}
                     </v-icon>
                 </v-avatar>
-            <v-toolbar-title style="font-size: 0.9rem;font-weight: 500;color:#fff; margin-left:10px;">Hi, <span class="text-capitalize">{{ currentUser? currentUser.fname :'welcome' }}</span></v-toolbar-title>
+            <v-toolbar-title style="font-size:16px; font-weight: 500;color:#fff; margin-left:10px;">Hi, <span class="text-capitalize">{{ currentUser? currentUser.fname :'welcome' }}</span></v-toolbar-title>
             <v-spacer></v-spacer>
-             <div @click="handleRouteCart" v-if="currentUser && cartItems && cartItems.length && (currentUser.table == 'clients')">
-                    <v-icon color="white">{{ iconCart }}</v-icon>
-                    <span style="color:#fff;">{{ cartItems.length }}</span>
+             <div @click="handleRouteCart" v-if="currentUser && cartItems && cartItems.length && (currentUser.table == 'clients')" class="pt-3 pr-4">
+                    <!-- <v-icon color="white">{{ iconCart }}</v-icon>
+                    <span style="color:#fff;">{{ cartItems.length }}</span> -->
+                    <v-badge
+                        small
+                        color="error"
+                        :content="Object.keys(cartItems).length"
+                        >
+                        <v-icon color="white">{{ iconCart }}</v-icon>
+                    </v-badge>
             </div>
             <!-- <v-menu offset-y v-if="currentUser">
                 <template v-slot:activator="{ on, attrs }">

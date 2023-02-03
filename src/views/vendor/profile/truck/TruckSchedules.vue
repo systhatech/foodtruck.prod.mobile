@@ -1,5 +1,5 @@
 <template>
-    <div class="pt-4">
+    <div class="">
          <div class="schedule-wrapper" v-if="truckProfile.working_hours && truckProfile.working_hours.length">
             <div
             class="schedulte-item-wrapper"

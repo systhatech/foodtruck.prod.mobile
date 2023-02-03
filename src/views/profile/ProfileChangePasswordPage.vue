@@ -54,13 +54,10 @@
                 </v-form>
             </div>
         </v-container>
-        <Bottomnavbar v-if="utype=='client'" :items="items" :value="indexValue"/>
-        <Bottomnavbar v-if="utype=='service_provider'" :items="technicalDashboardItems" :value="indexValue"/>
     </v-container>
 </template>
 <script>
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/Bottomnavbar'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import  JwtService from '@/core/services/jwt.service';
 export default {

@@ -3,10 +3,10 @@
         <div v-if="truckProfile.menus && truckProfile.menus.length">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
-                    <h3 class="pb-2 mt-8 text-capitalize text-center">{{ index }}</h3>
+                    <h5 class="pb-2 mt-8 text-uppercase">{{ index }}</h5>
 
                     <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
-                        <div class="d-flex align-center justify-space-between">
+                        <div class="d-flex align-center justify-space-between" @click="handleRoute(item)">
                             <div class="d-flex align-center"> 
                                 <v-img
                                 lazy-src="https://picsum.photos/id/11/10/6"
@@ -18,11 +18,8 @@
                                 ></v-img>
                                 <div class="pl-3 d-flex align-center justify-space-between w-100">
                                     <div>
-                                        <p class="mb-2 text-capitalize">{{item.name}}</p>
-                                        <h4 class="ma-0 primary--text">
-                                            {{ formatAmount(item.price)}}
-                                        </h4>
-                                  
+                                        <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
+                                        <p style="font-size:14px">{{ shortText(item.description,40) }}</p>
                                     </div>
                                     <!-- <div>
                                         
@@ -32,7 +29,8 @@
                                 </div>
                             </div>
                             <div>
-                                <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn>
+                                <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4>
+                                <!-- <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn> -->
                             </div>
                         </div>
                     </div>

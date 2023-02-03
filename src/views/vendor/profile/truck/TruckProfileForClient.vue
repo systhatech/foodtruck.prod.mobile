@@ -75,14 +75,14 @@
                 <h3>Loading...</h3>
             </div>
         </div>
-         <Bottomnavbar/>
+         <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
 import Banner from '@/components/layout/ComponentBanner'
 import TruckAbout from './TruckAbout';

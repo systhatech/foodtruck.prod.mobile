@@ -18,6 +18,13 @@ export default {
             });
             return newItem;
         },
+        shortText(text,size) {
+            if(text.length >size){
+                return text.slice(0,size)+"...";
+            }else{
+                return text;
+            }
+        },
         formatChatTime(date, prevDate, tz = '') {
             const instance = d => tz 
             ? (d ? moment.tz(d, 'America/Los_Angeles').clone().tz(tz) : moment.tz(tz)) 

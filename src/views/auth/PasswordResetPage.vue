@@ -10,7 +10,7 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center">
-                            <img :src="logo" width="90"/>
+                            <img :src="base_url+'/default-company/logo'" width="90" />
                         </div>
                     </v-col>
                 </v-row>
@@ -18,9 +18,6 @@
             <div class="pa-4 ma-4 custom-bs">
                 <v-form v-model="valid" ref="resetPassword">
                     <v-row>
-                        <!-- <v-col cols="12" class="pt-0">
-                            <p>Enter your email</p>
-                        </v-col> -->
                         <v-col cols="12" class="pt-0">
                             <v-text-field label="Your Email" :rules="emailRules" v-model="email"></v-text-field>
                         </v-col>
@@ -37,8 +34,7 @@
                 </v-form>
             </div>
             <div class="text-center pa-6 ma-4">
-                <!-- <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">Dont have an account ?</p> -->
-                <v-btn link to="/Login"  rounded color="primary" outlined><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
+                <v-btn text to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
             </div>
            
         </v-container>
@@ -46,29 +42,18 @@
     </v-container>
 </template>
 <script>
-// import { SET_AUTH } from "@/core/services/store/auth.module";
-// import { GET_LOGO } from "@/core/services/store/default_company.module";
-// import { mapGetters } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-// import JwtService from '@/core/services/jwt.service'
-// import Bottomnavbar from '@/components/layout/Bottomnavbar'
-import logo from './logo.png'
-import bg from '@/assets/static/bg.png'
-import background from './login_banner.png'
-import bug from './bug.png'
+import { base_url } from '@/core/services/config'
 import { mdiTwitter, mdiFacebook, mdiArrowLeft, mdiChevronLeft} from '@mdi/js'
-// import axios from "axios"
+
 export default {
     data: () => ({
-        bg,
+        base_url,
         icon_back: mdiChevronLeft,
         iconFb: mdiFacebook,
         iconTw: mdiTwitter,
         iconBack: mdiArrowLeft,
-        background,
-        logo,
         valid:true,
-        bug,
         showServiceProvider:false,
         email:'',
         serviceProvider:false,

@@ -28,7 +28,7 @@
                                 required @click:append="show_password = !show_password"></v-text-field>
                         </v-col>
                         <v-col cols="12" class="text-right pb-0 pt-0">
-                            <v-btn tile small text link to="/password-forget">Forget Password?</v-btn>
+                            <v-btn tile small text to="/password-forget">Forget Password?</v-btn>
                         </v-col>
                         <v-col cols="12">
                             <v-btn rounded color="primary" block class="mr-4" @click="submit">
@@ -82,15 +82,12 @@ export default {
             zip_code: '',
             country: '',
         },
-        destination: 'signup-customer',
-        // VueCordova
     }),
     components: {
         // Bottomnavbar,
     },
 
     mounted() {
-        // this.fetchLogo();
         this.locateGeoLocation();
 
     },
@@ -110,12 +107,21 @@ export default {
             this.signIn(this.login_info)
                 .then(() => {
                     this.loaderHide();
-                        this.fetchAddress();
+                    this.fetchAddress();
+                    if(this.$router.currentRoute.query){
+                        let route = this.$router.currentRoute.query;
+                        if(route.page && route.id){
+                            this.$router.push("/"+route.page+"/"+route.id);
+                        }else{
+                            this.$router.replace({
+                                name: 'home',
+                            })
+                        }
+                    }else{
                         this.$router.replace({
                             name: 'home',
                         })
-
-
+                    }
                 }).catch((error) => {
                     this.loaderHide();
                     if (error.response && error.response.data) {
@@ -129,24 +135,11 @@ export default {
         },
 
         locateGeoLocation: function () {
-
             navigator.geolocation.getCurrentPosition(res => {
                 this.location.lat = res.coords.latitude;
                 this.location.lng = res.coords.longitude;
             });
 
-        },
-        async fetchLogo() {
-            this.$bus.$emit('SHOW_PAGE_LOADER')
-            await ApiService.get("default-company/logo")
-                .then((resp) => {
-                    this.logo = resp;
-                    this.loaderHide();
-                })
-                .catch(() => {
-                    this.loaderHide();
-                    this.messageError('Sorry, Something goes wrong');
-                });
         },
         async fetchAddress() {
             this.loaderShow();

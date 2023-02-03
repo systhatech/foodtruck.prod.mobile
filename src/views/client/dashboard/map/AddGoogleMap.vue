@@ -29,7 +29,7 @@
 						v-if="infoContent.locate && infoContent.locate.contact" class="mr-2"
 						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon>mdi-phone</v-icon> </v-btn>
 					<v-btn fab outlined small color="primarylight" v-if="infoContent.table_name == 'vendors'"
-						:to="'/conversation/vendors/' + infoContent.table_id"><v-icon>mdi-chat</v-icon> </v-btn>
+						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon>mdi-chat</v-icon> </v-btn>
 				</div>
 			</gmap-info-window>
 			<div>
@@ -63,7 +63,6 @@ export default {
 	},
 	watch: {
 		locationMarkers(val) {
-			console.log(val);
 			this.loaderHide();
 			if (val.length > 0) {
 				this.center = val[0].position;
@@ -130,8 +129,6 @@ export default {
 		this.location.guest = localStorage.getItem('g_token');
 		this.fetchAddress();
 		this.type = this.currentUser ? this.currentUser.table : 'clients';
-
-		console.log(this.locationMarkers);
 	},
 
 	methods: {

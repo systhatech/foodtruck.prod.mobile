@@ -166,6 +166,7 @@ export default {
             .then(() => {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.messageSuccess('Updated successfully');
+                this.handleBack();
             })
             .catch(() => {
                 this.$bus.$emit('HIDE_PAGE_LOADER');

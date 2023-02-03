@@ -114,7 +114,7 @@ export default {
                 {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
-                {name:'Setting',icon:'mdi-cog',route:'change-password'},
+                {name:'Change Password',icon:'mdi-cog',route:'change-password'},
                 {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
                 {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},

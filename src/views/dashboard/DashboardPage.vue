@@ -69,11 +69,11 @@ export default {
         DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
     },
     mounted() {
-        this.fetchTrucks({ 
-            available: 1,
-            name: this.search,
-            guest: localStorage.getItem('g_token'),
-        });
+        // this.fetchTrucks({ 
+        //     available: 1,
+        //     name: this.search,
+        //     guest: localStorage.getItem('g_token'),
+        // });
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
         if(!this.currentUser) return;

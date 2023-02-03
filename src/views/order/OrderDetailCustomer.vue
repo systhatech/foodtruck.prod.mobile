@@ -1,5 +1,5 @@
 <template>
-    <v-container class="ma-0 pa-0 background-image mb-14 h-100">
+    <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
             <v-row>
@@ -8,13 +8,37 @@
                         <v-col cols="12" md="12" lg="12" xl="8" offset-xl="2">
                             <v-row>
                                 <v-col cols="12">
-                                     <div class="order-item-wrapper pa-4  custom-bs">
+                                    <div class="custom-bs pa-4">
+                                        <div class="mb-4">
+                                            <h5 class="primary--text text-uppercase">{{ orderDetail && orderDetail.vendor ? orderDetail.vendor.name :'' }}</h5>
+                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconPhone}}</v-icon> {{ orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone : orderDetail.vendor.contact.phone_no }}</p>
+                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconEmail}}</v-icon> {{ orderDetail && orderDetail.vendor && orderDetail.vendor.contact?orderDetail.vendor.contact.email :'unavailable'}}</p>
+                                        </div>
+                                        <h5 class="primary--text text-uppercase">Pickup Address</h5>
+                                        <div class="d-flex align-start" v-if="orderDetail.pickup_addr">
+                                            <v-icon color="primary" class="w-18">{{iconLocation}}</v-icon>
+                                            <div>
+                                                <p class="sub-text">{{ orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :'' }}</p>
+                                                <p class="sub-text" >
+                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.city:'' }}
+                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.state:'' }} 
+                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.zip:'' }}
+                                                </p>
+                                                <div class="mt-4">
+                                                    <!-- this.$router.push("/client/conversation/vendors/" + id); -->
+                                                    <v-btn fab color="primary" class="mr-2" link :href="`tel:${orderDetail.vendor.contact.phone_no ?orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`" small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
+                                                    <v-btn fab color="primary" link :to="'/client/conversation/vendors/'+orderDetail.vendor_id" small><v-icon>{{ iconChat }}</v-icon> </v-btn>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="order-item-wrapper pa-4  custom-bs mt-5">
                                         <div class="d-flex align-center justify-space-between">
-                                            <h4 class="ma-0">ORDER: {{orderDetail.order_no}} </h4> 
+                                            <h5 class="ma-0 primary--text">ORDER: {{orderDetail.order_no}} </h5> 
                                             <v-chip class="text-capitalize" color="accent" small>{{orderDetail.status}}</v-chip>
                                         </div>
                                         <div class="pb-2">
-                                            <h5>{{ formatDateToDay(orderDetail.pickup_date)}}</h5>
+                                            <p class="mb-0">{{ formatDateToDay(orderDetail.pickup_date)}}</p>
                                         </div>
                                         <v-divider></v-divider>
                                  
@@ -47,9 +71,9 @@
                                                         </div>
                                                         <div class="item-description">
                                                             <div>
-                                                                <h5 class="text-capitalize mb-0">{{ item.menu_item.name }}</h5>
-                                                                <p class="f8 text-capitalize mb-1">Quatity : {{ item.quantity }}</p>
-                                                                <p class="f8">{{ formatAmount(item.menu_item.price * item.quantity) }}</p>
+                                                                <h5 class="text-capitalize mb-0 primary--text">{{ item.menu_item.name }}</h5>
+                                                                <p class="fs15 text-capitalize mb-1">Quatity : {{ item.quantity }}</p>
+                                                                <p class="fs15">{{ formatAmount(item.menu_item.price * item.quantity) }}</p>
                                                             </div>
                                                         
                                                         </div>
@@ -59,7 +83,7 @@
                                                             <li v-for="(variant, index) in item.varients" :key="index">
                                                                 <div>
                                                                     <div class="d-flex justify-space-between">
-                                                                        <p class="text-capitalize f8-bold item-name">{{ variant.variant_item.name }}</p>
+                                                                        <p class="text-capitalize item-name">{{ variant.variant_item.name }}</p>
                                                                         <p class="item-name">{{ formatAmount(variant.amount) }}</p>
                                                                     </div>
                                                                 </div>
@@ -78,62 +102,39 @@
                                                 <v-col cols="12" md="6" lg="6" xl="6">
                                                      <table class="w-100">
                                                         <tr>
-                                                            <td class="f8">Sub Total</td>
-                                                            <td class="f8-bold text-right">{{ formatAmount(orderDetail.amount)}}</td>
+                                                            <td class="">Sub Total</td>
+                                                            <td class=" text-right">{{ formatAmount(orderDetail.amount)}}</td>
                                                         </tr>
                                                         <tr v-if="Number(orderDetail.service_charge)">
-                                                            <td class="f8">Service Charge</td>
-                                                            <td class="f8 text-right">{{formatAmount(orderDetail.service_charge)}}</td>
+                                                            <td class="">Service Charge</td>
+                                                            <td class=" text-right">{{formatAmount(orderDetail.service_charge)}}</td>
                                                         </tr>
                                                         <tr v-if="Number(orderDetail.tax_amt)">
-                                                            <!-- <td class="f8">Tax ({{ totalData.tax_amount}} %)</td> -->
-                                                            <td class="f8">Tax</td>
-                                                            <td class="f8 text-right">{{formatAmount(orderDetail.tax_amt)}}</td>
+                                                            <td class="">Tax</td>
+                                                            <td class=" text-right">{{formatAmount(orderDetail.tax_amt)}}</td>
                                                         </tr>
                                                         <tr v-if="Number(orderDetail.convenience_fee)">
-                                                            <td class="f8">Convenience fee</td>
-                                                            <td class="f8 text-right">{{formatAmount(orderDetail.convenience_fee)}}</td>
+                                                            <td class="">Convenience fee</td>
+                                                            <td class=" text-right">{{formatAmount(orderDetail.convenience_fee)}}</td>
                                                         </tr>
                                                         <tr v-if="Number(orderDetail.tips_amount)">
-                                                            <td class="f8">Tip</td>
-                                                            <td class="f8 text-right">{{formatAmount(orderDetail.tips_amount)}}</td>
+                                                            <td class="">Tip</td>
+                                                            <td class=" text-right">{{formatAmount(orderDetail.tips_amount)}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="f8-bold">Total </td>
-                                                            <td class="f8-bold text-right">{{formatAmount(orderDetail.total_amount)}}</td>
+                                                            <td class=""><h5 class="primary--text">TOTAL</h5> </td>
+                                                            <td class=" text-right"><h4 class="primary--text">{{formatAmount(orderDetail.total_amount)}}</h4></td>
                                                         </tr>
                                                     </table>
                                                     <div class="text-right mt-4" v-if="orderDetail.payment">
-                                                        <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'" class="payment text-uppercase color-secondary f8-bold">Not Paid</p>
-                                                        <p v-else class="payment color-primary f8-bold">Paid by: <span class="text-uppercase">{{orderDetail.payment.payment_type}}</span> ****{{orderDetail.payment.cr_last4}}</p>
+                                                        <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'" class="payment text-uppercase color-secondary ">Not Paid</p>
+                                                        <p v-else class="payment color-primary ">Paid by: <span class="text-uppercase">{{orderDetail.payment.payment_type}}</span> ****{{orderDetail.payment.cr_last4}}</p>
                                                     </div>
                                                 </v-col>
                                             </v-row>
                                         </div>
                                     </div>
-                                    <div class="custom-bs pa-4 mt-4">
-                                        <div class="mb-4">
-                                            <p class="name-address mb-2 text-capitalize">{{ orderDetail && orderDetail.vendor ? orderDetail.vendor.name :'' }}</p>
-                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconPhone}}</v-icon> {{ orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone : orderDetail.vendor.contact.phone_no }}</p>
-                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconEmail}}</v-icon> {{ orderDetail && orderDetail.vendor && orderDetail.vendor.contact?orderDetail.vendor.contact.email :'unavailable'}}</p>
-                                        </div>
-                                        <p class="name-address mb-2 text-capitalize">Pickup Address</p>
-                                        <div class="d-flex align-start" v-if="orderDetail.pickup_addr">
-                                            <v-icon color="primary" class="w-18">{{iconLocation}}</v-icon>
-                                            <div>
-                                                <p class="sub-text">{{ orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :'' }}</p>
-                                                <p class="sub-text" >
-                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.city:'' }}
-                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.state:'' }} 
-                                                    {{ orderDetail.pickup_addr? orderDetail.pickup_addr.zip:'' }}
-                                                </p>
-                                                <div class="mt-4">
-                                                    <v-btn fab outlined color="primary" class="mr-2" link :href="`tel:${orderDetail.vendor.contact.phone_no ?orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`" small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
-                                                    <v-btn fab outlined color="primary" link :to="'/conversation/vendors/'+orderDetail.vendor_id" small><v-icon>{{ iconChat }}</v-icon> </v-btn>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                    
                                 </v-col>
                             </v-row>
@@ -318,11 +319,12 @@ $bg-gray : #f5f5f5;
 .name-address{
     font-weight: 600;
     margin: 0px;
-    font-size: 0.9rem;
+    // font-size: 0.9rem;
 }
 .sub-text{
     margin: 0px;
     font-size: 0.9rem;
+    // font-size: 15px;
 }
 .order-item-wrapper{
     ul.main-items{
@@ -338,8 +340,8 @@ $bg-gray : #f5f5f5;
             .item-description{
                 width:100%;
                 p.item-name{
-                    font-size: 0.9rem;
-                    font-weight: 400;
+                    // font-size: 0.9rem;
+                    // font-weight: 400;
                     color: #0b0b0b;
                 }
             }
@@ -355,8 +357,8 @@ $bg-gray : #f5f5f5;
                         margin:0;
                     }
                     p.item-name{
-                        font-size: 0.8rem;
-                        font-weight: 400;
+                        // font-size: 0.8rem;
+                        // font-weight: 400;
                     }
                 }
             }

@@ -20,13 +20,13 @@
                 </v-form>
             </div>
         </v-container>
-        <Bottomnavbar :value="indexValue"/>
+        <!-- <Bottomnavbar :value="indexValue"/> -->
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_url } from '@/core/services/config'
 // import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
@@ -64,22 +64,21 @@ export default {
                 this.messageError('Field is empty');
                 return;
             }
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             await ApiService.post('/change_password',this.password).then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageSuccess(resp.message);
-                this.$refs.formPassword.reset();
-                // this.$router.push({name:'profilepage'});
+                this.handleBack();
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError(error.response.data.message);
             })
         },
     },
     components: {
         Topnavbar,
-        Bottomnavbar,
+        // Bottomnavbar,
         // InputUpload
     },
     computed: {

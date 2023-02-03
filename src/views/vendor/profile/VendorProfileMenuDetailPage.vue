@@ -4,7 +4,8 @@
         <div>
             <div class="p-relative background-image">
                 <div class="pa-4 text-center pt-6">
-                    <v-btn color="primary" rounded outlined block to="/vendor-menu-item-add">add new menu item</v-btn>
+                    <!-- <v-btn color="primary" rounded outlined block to="/vendor-menu-item-add">add new menu item</v-btn> -->
+                    <v-btn color="primary" rounded outlined block @click="handleMenuAdd()">add new menu item</v-btn>
                 </div>
                 <div class="pa-4">
                     <v-row>
@@ -12,7 +13,7 @@
                             <h5 class="mb-2 text-uppercase">{{ i }}</h5>
                             <div v-for="(item,index) in m" :key="index">
                                 <div class="mb-4">
-                                    <div class="d-flex align-center custom-bs pa-3 pl-0" style="min-height:114px"> 
+                                    <div class="d-flex align-center custom-bs pa-3 pl-0" style="min-height:114px" @click="viewMenu(item.id)">  
                                         <v-img
                                         lazy-src="https://picsum.photos/id/11/10/6"
                                         max-width="90"
@@ -20,7 +21,7 @@
                                         contain
                                         :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
                                         ></v-img>
-                                        <div class="pl-3 d-flex align-center justify-space-between w-100 h-100">
+                                        <div class="pl-3 w-100 h-100">
                                             <div class="d-flex justify-space-between flex-column h-100">
                                                 <div>
                                                     <h5 class="text-uppercase primary--text">{{item.name}}</h5>
@@ -28,9 +29,9 @@
                                                 </div>
                                                 <h4 class="primary--text">{{ formatAmount(item.price)}}</h4>
                                             </div>
-                                            <div>
-                                                <v-btn fab small text @click="viewMenu(item.id)"> <v-icon color="primary">{{ icon_right }}</v-icon></v-btn>
-                                            </div>
+                                            <!-- <div>
+                                                <v-btn fab small text > <v-icon color="primary">{{ icon_right }}</v-icon></v-btn>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -39,17 +40,16 @@
                     </v-row>
                 </div>
             </div>
+            <DialogMenuItemAdd 
+            @close="handleClose"
+            :dialogMenuItemAdd="modal_menu_add"/>
         </div>
     </v-container>
 </template>
 <script>
-import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_url } from '@/core/services/config'
 import { mdiChevronRight } from '@mdi/js'
-// import VendorMenuList from '@/views/vendor/profile/components/VendorMenuList.vue'
-// import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
 export default {
     name:'vendorMenuList',
@@ -68,19 +68,11 @@ export default {
         }
     },
     mounted() {
-        // VENDOR_MENU_EDIT
-        // this.$bus.$on("VENDOR_MENU_EDIT", (menu) => {
-        //     this.menu_data = menu;
-        //     this.cuisine_types = this.profile.cuisine_types;
-        //     this.is_edit = true;
-        //     this.modal_menu_add = true;
-        // });
         this.profileData();
     },
     methods: {
         handleMenuAdd(){
             this.cuisine_types = this.profile.cuisine_types;
-            this.is_edit = false;
             this.modal_menu_add = true;
         },
         viewMenu(id){
@@ -105,11 +97,8 @@ export default {
         },
     },
     components: {
-        // VendorMenuList,
-        Topnavbar,
-        // DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
-        // Bottomnavbar,
-        // InputUpload
+        Topnavbar:()=>import('@/components/layout/TopnavbarBackCustom'),
+        DialogMenuItemAdd: ()=> import('@/views/vendor/profile/modal/ModalMenuItemAdd'),
     },
     computed: {
         ...mapGetters({

@@ -2,19 +2,18 @@
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
-            <v-btn color="primary" to="/vendor-location-add" class="mb-4" rounded outlined block>Add New Schedule</v-btn>
+            <v-btn color="primary" @click="addSchedule()" class="mb-4" rounded outlined block>Add New Schedule</v-btn>
+            <!-- <v-btn color="primary" to="/vendor-location-add" class="mb-4" rounded outlined block>Add New Schedule</v-btn> -->
             <div>
                 <Location :truckProfile="profile"/>
             </div>
+            <DialogScheduleAdd :dialog-schedule="modal_schedule" @close="handleCloseModal"/>
         </v-container>
-         <Bottomnavbar value="0"/>
+         <!-- <Bottomnavbar value="0"/> -->
     </v-container>
 </template>
 <script>
-import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_url } from '@/core/services/config'
-import Location from './truck/TruckLocationList.vue'
 import { mapGetters } from 'vuex'
 export default {
     name:'ProfileSchedules',
@@ -23,23 +22,29 @@ export default {
             title:'',
             base_url,
             schedules:[],
+            modal_schedule: false,
             // profile:{},
         }
     },
     mounted() {
-        // this.profileData();
         console.log(this.profile);
     },
     methods: {
- 
         handleBack(){
             this.$router.back();
         },
+        handleCloseModal(){
+            this.modal_schedule = false;
+        },
+        addSchedule(){
+            this.modal_schedule = true;
+        }
     },
     components: {
-        Location,
-        Topnavbar,
-        Bottomnavbar,
+        Location: ()=> import('@/views/vendor/profile/components/TruckLocationList.vue'),
+        Topnavbar: ()=> import('@/components/layout/TopnavbarBackCustom'),
+        // Bottomnavbar,
+        DialogScheduleAdd: ()=>import('@/views/vendor/profile/modal/ModalVendorScheduleAdd')
         // InputUpload
     },
     computed: {

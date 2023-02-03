@@ -4,34 +4,33 @@
         <v-container class="mg56">
             <div v-if="cartItems && cartItems.length">
                 <div v-if="vendor">
-                    <div class="d-flex align-center mb-4">
+                    <div class="d-flex align-center mb-2">
                         <v-icon color="primary">mdi-account</v-icon>
-                        <h4 class="ml-2">Truck Detail</h4>
+                        <h5 class="ml-2 text-uppercase primary--text">Truck Detail</h5>
                     </div>
                     <div class="custom-bs pa-4">
                         <div class="d-flex w-100">
                             <div class="w-100 d-flex align-center justify-space-between">
                                 <div>
                                     <div>
-                                        <p class="f8 mb-0 text-capitalize">{{ vendor.name ? vendor.name:'-' }} </p>
-                                        <p class="f8 mb-0">{{  vendor.contact && vendor.contact.phone_no ? vendor.contact.phone_no : (vendor.contact && vendor.contact.mobile_no ?vendor.conact.mobile_no:'') }} </p>
-                                        <p class="f8 mb-0">{{ vendor.contact.email }} </p>
-                                       
+                                        <p class="mb-0 text-capitalize">{{ vendor.name ? vendor.name:'-' }} </p>
+                                        <p class="mb-0">{{  vendor.contact && vendor.contact.phone_no ? vendor.contact.phone_no : (vendor.contact && vendor.contact.mobile_no ?vendor.conact.mobile_no:'') }} </p>
+                                        <p class="mb-0">{{ vendor.contact.email }} </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex align-center mt-6 mb-4" v-if="vendor && vendor.address && Object.keys(vendor.address).length">
+                <div class="d-flex align-center mt-6 mb-2" v-if="vendor && vendor.address && Object.keys(vendor.address).length">
                     <v-icon color="primary">mdi-map-marker</v-icon>
-                    <h4 class="ml-2">Pickup Location</h4>
+                    <h5 class="ml-2 text-uppercase primary--text">Pickup Location</h5>
                 </div>
                 <div class="custom-bs pa-4" v-if="vendor && vendor.address && Object.keys(vendor.address).length">
                     <div v-if="vendor && vendor.address && Object.keys(vendor.address).length">
                         <div class="d-flex">
                             <div>
-                                <p class="ma-0 f8">
+                                <p class="ma-0">
                                     {{vendor.address && vendor.address.add1 ? vendor.address && vendor.address.add1:''}}<br>
                                     {{vendor.address && vendor.address.city?vendor.address && vendor.address.city:''}}
                                     {{vendor.address && vendor.address.state?vendor.address && vendor.address.state:''}}
@@ -45,19 +44,18 @@
                     </div>
                 </div>
                  <div class="mt-5" v-if="cart && cartItems">
-                    <div class="d-flex align-center mt-6 mb-4">
+                    <div class="d-flex align-center mt-6 mb-2">
                         <v-icon color="primary mr-2">mdi-notebook-check</v-icon>
-                        <h4 class="ml-2">Cart Items</h4>
+                        <h5 class="ml-2 text-uppercase primary--text">Cart Items</h5>
                     </div>
-                    <v-card class="no-border-radius custom-bs">
-                        <v-card-text>
+                    <div class="no-border-radius custom-bs pa-4">
+                        <div>
                             <div v-for="(product,index) in cartItems" :key="index" class="abc">
                                 <div class="product-item">
-                                    <p class="ma-0 f9-bold text-capitalize">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
-                                    <span class="f9-bold">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</span>
+                                    <p class="ma-0  text-capitalize">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
+                                    <span class="">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</span>
                                 </div>
                                 <div v-if="product.varients && product.varients.length">
-                                <!-- <p class="ma-0 f8-bold">Add ons </p> -->
                                     <div v-for="(item, i) in product.varients" :key="i" class="d-flex align-center justify-space-between bottom-padding">
                                         <p class="ma-0 pa-0 text-capitalize">{{item.variant_item.name}}</p>
                                         <span>{{formatAmount(item.variant_item.value * product.quantity)}}</span>
@@ -68,40 +66,40 @@
                                 <table class="w-100">
                                     <tr>
                                         <td>Sub Total</td>
-                                        <td class="f8-bold text-right">{{ formatAmount(cartAmount.sub_total)}}</td>
+                                        <td class="text-right">{{ formatAmount(cartAmount.sub_total)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.service_charge_percent">
                                         <td>Service Charge ({{ cartAmount.service_charge_percent}} %)</td>
-                                        <td class="f8 text-right">{{formatAmount(cartAmount.service_charge_amount)}}</td>
+                                        <td class="text-right">{{formatAmount(cartAmount.service_charge_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.tax_percent">
                                         <td>Tax ({{ cartAmount.tax_percent}} %)</td>
-                                        <td class="f8 text-right">{{formatAmount(cartAmount.tax_amount)}}</td>
+                                        <td class="text-right">{{formatAmount(cartAmount.tax_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.tip_amount">
                                         <td>Tip </td>
-                                        <td class="f8 text-right">{{formatAmount(cartAmount.tip_amount)}}</td>
+                                        <td class="text-right">{{formatAmount(cartAmount.tip_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.convenience_fee && (payment_method=='card')">
                                         <td>Convenience fee ({{ cartAmount.convenience_fee}} %)</td>
-                                        <td class="f8 text-right">{{formatAmount(cartAmount.convenience_fee)}}</td>
+                                        <td class="text-right">{{formatAmount(cartAmount.convenience_amount)}}</td>
                                     </tr>
                                     <tr v-if ="payment_method=='card'">
-                                        <td class="f9-bold">Total </td>
-                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.card_total + cartAmount.convenience_fee)}}</td>
+                                        <td class=""><h5 class="primary--text">TOTAL</h5> </td>
+                                        <td class=" text-right"><h5> {{formatAmount(cartAmount.card_total)}}</h5></td>
                                     </tr>
                                     <tr v-if="payment_method=='cash'">
-                                        <td class="f9-bold">Total </td>
-                                        <td class="f9-bold text-right">{{formatAmount(cartAmount.cash_total)}}</td>
+                                        <td class=""><h5 class="primary--text">TOTAL</h5> </td>
+                                        <td class=" text-right"> <h5>{{formatAmount(cartAmount.cash_total)}}</h5></td>
                                     </tr>
                                 </table>
                             </div>
-                        </v-card-text>
-                    </v-card>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex align-center mt-5 mb-4" v-if="vendor && Object.keys(vendor).length">
+                <div class="d-flex align-center mt-5 mb-2" v-if="vendor && Object.keys(vendor).length">
                     <v-icon color="primary">mdi-cash-plus</v-icon>
-                    <h4 class="ml-2">Leave Tip</h4>
+                    <h5 class="ml-2 text-uppercase primary--text">Leave Tip</h5>
                 </div>
                 <div class="custom-bs pa-3">
                     <div class="d-flex align-center flex-wrap">
@@ -120,9 +118,9 @@
                         <v-text-field></v-text-field>
                     </div> -->
                 </div>
-                <div class="d-flex align-center mt-5 mb-4" v-if="vendor && Object.keys(vendor).length">
+                <div class="d-flex align-center mt-5 mb-2" v-if="vendor && Object.keys(vendor).length">
                     <v-icon color="primary">mdi-credit-card</v-icon>
-                    <h4 class="ml-2">Payment Method</h4>
+                    <h5 class="ml-2 text-uppercase primary--text">Payment Method</h5>
                 </div>
                 <div class="custom-bs pa-4" v-if="vendor && Object.keys(vendor).length">
                     <div class="d-flex align-center justify-space-between">
@@ -144,8 +142,7 @@
                             </v-radio-group>
                         </div>
                         <div v-if="cartAmount && cartAmount.card_total">
-                            <!-- {{  formatAmount(parseFloat(cartAmount.card_total)) }} -->
-                            <h3 class="color-secondary" v-if ="payment_method=='card'">{{  formatAmount(parseFloat(cartAmount.card_total) + parseFloat(cartAmount.convenience_fee)) }}</h3>
+                            <h3 class="color-secondary" v-if ="payment_method=='card'">{{  formatAmount(parseFloat(cartAmount.card_total)) }}</h3>
                             <h3 class="color-secondary" v-if ="payment_method=='cash'">{{formatAmount(cartAmount.cash_total)}}</h3>
                         </div>
                     </div>
@@ -377,37 +374,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+p{
+    font-size: 15px;
+}
 .tip{
     border:1px solid #dadada;
-}
-.selected-address{
-    background: #fd4040;
-    padding: 12px;
-    border-radius: 3px;
-    color: #fff;
-}
-.custom-bottom-nav{
-    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
-    z-index: 2;
-    background: #ffffff;
-    position: fixed;
-    bottom: 0;
-    // border-top: 1px solid #dadada;
-    width: 100%;
-    padding: 20px;
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    .sign{
-        color:#75ab26;
-        font-size:0.9rem;
-        font-weight:600;
-    }
-    .amount{
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #75ab26;
-    }
 }
 .abc {
      &:not(:last-child) {

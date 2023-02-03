@@ -27,7 +27,7 @@
     </div>
     </template>
     <script>
-    import {mdiHome, mdiCart, mdiAccount, mdiChat, mdiFood,mdiHeadphones, mdiInformationVariant, mdiLogin} from "@mdi/js";
+    import {mdiHome, mdiCart, mdiAccount, mdiChat,mdiHeadphones, mdiInformationVariant, mdiLogin, mdiBasket} from "@mdi/js";
     import {ApiService} from "@/core/services/api.service";
     // import JwtService from "@/core/services/jwt.service";
     import {mapGetters} from "vuex";
@@ -41,7 +41,7 @@
             return {
                 iconHome: mdiHome,
                 iconCart: mdiCart,
-                iconFood: mdiFood,
+                iconFood: mdiBasket,
                 iconProfile: mdiAccount,
                 iconSupport: mdiHeadphones,
                 iconChat: mdiChat,

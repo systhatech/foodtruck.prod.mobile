@@ -198,16 +198,13 @@ export default {
             : "noimage.png";
           this.defaultValue = resp.data.category_id;
           this.defaultValueUnitType = resp.data.unit_type;
-          // console.log(this.defaultValue);
-          // console.log(resp);
+
         })
         .catch((error) => {
           this.$bus.$emit("HIDE_PAGE_LOADER");
           console.log(error);
         });
     },
-    handleBlur() {},
-
     handleBack() {
       this.$router.back();
     },

@@ -7,32 +7,16 @@
             </v-btn> 
             <v-toolbar-title style="font-size: 0.9rem;font-weight: 500; margin-left:10px; color:#fff;">{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <div @click="handleRouteCart" v-if="(currentUser && cartItems && cartItems.length && currentUser.table=='clients')">
-                <v-icon color="white">{{ iconCart }}</v-icon>
-                <span style="color:#fff;">{{ cartItems.length }}</span>
+            <div @click="handleRouteCart" v-if="currentUser && cartItems && cartItems.length && (currentUser.table == 'clients')" class="pt-3 pr-4">
+                <v-badge
+                    small
+                    color="error"
+                    :content="Object.keys(cartItems).length"
+                    >
+                    <v-icon color="white">{{ iconCart }}</v-icon>
+                </v-badge>
             </div>
-            <!-- <v-menu offset-y v-if="currentUser">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                    icon
-                    >
-                    <v-icon color="white">{{iconDot}}</v-icon>
-                    </v-btn>
-                </template>
-                <v-list>
-                    <v-list-item
-                    v-for="(item, index) in items"
-                    :key="index"
-                    @click="handleAction(item.action)"
-                    >
-                    <v-list-item-title><v-icon>{{ item.icon }}</v-icon> &nbsp; {{ item.title }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu> -->
-        </v-toolbar>
+            </v-toolbar>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

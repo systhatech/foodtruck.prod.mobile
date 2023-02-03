@@ -179,6 +179,7 @@ export default {
                 this.loaderHide();
                 this.messageSuccess("Success");
                 this.fetchProfile();
+                this.handleBack();
             })  
             .catch(() => {
                 this.loaderHide();

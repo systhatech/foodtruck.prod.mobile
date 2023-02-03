@@ -95,17 +95,17 @@ export default {
             this.$emit('close');
         },
         handleConfirm(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
-            this.info.vendor_id = this.currentUser.vendor.id;
+            this.loaderShow();
+            this.info.vendor_id = this.currentUser.table_id;
             this.info.type = this.reportType;
             ApiService.post('/report/create', this.info)
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.handleClose();
                 this.messageSuccess(resp.message);
             })
             .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.messageError("Sorry, Failed to generate/send rpeort");
             });
         },

@@ -239,7 +239,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 32px);
+    height: calc(100vh - 56px);
+    padding-bottom: 0 !important;
 }
 :root {
     //   --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -332,7 +333,7 @@ export default {
     max-width: 450px;
     padding: 15px;
     border-radius: 15px;
-    background: #3ab597;
+    background: #59a4bd;
     // color: #fff;
 }
 
@@ -347,10 +348,15 @@ export default {
     margin-right: 10px;
     font-weight: bold;
 }
+.right-msg .msg-info-time {
+    font-size: 0.8em;
+    color: #8b8989;
+    font-weight: 500;
+}
 
 .msg-info-time {
     font-size: 0.8em;
-    color: #ff5d5d;
+    color: #e1e1e1;
     font-weight: 500;
 }
 

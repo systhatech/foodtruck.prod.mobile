@@ -183,8 +183,9 @@ export default {
             await ApiService.post('/self/profile/address',this.address)
             .then(() => {
                 this.loaderHide();
-                this.messageSuccess("Success");
+                // this.messageSuccess("Success");
                 this.fetchProfile();
+                this.handleBack();
             })  
             .catch(() => {
                 this.loaderHide();

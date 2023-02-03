@@ -23,7 +23,7 @@
                                         </v-badge>
                                     </div>
                                     <div v-else>
-                                        <p class="mb-0">{{ member.name }}</p>
+                                        <h5 class="primary--text">{{ member.name }}</h5>
                                     </div>
                                     <div
                                         class="last_msg"
@@ -235,7 +235,7 @@ export default {
 
         .last_msg {
             margin: 0;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             // font-weight: 600;
         }
 

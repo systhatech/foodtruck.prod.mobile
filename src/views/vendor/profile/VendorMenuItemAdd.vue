@@ -11,7 +11,7 @@
                         md="12"
                         >
                             <div style="height:100px; width:120px; margin:0 auto;">
-                                <InputUpload :src="base_url+'/image-show/'+menu.profile_pic" 
+                                <InputUpload :src="base_url+'/image-show/'+(menu && menu.profile_pic ? menu.profile_pic:'noimage.png')" 
                                 type="menu_image" 
                                 :max-height="maxHeight"
                                 label="Change"
@@ -231,7 +231,7 @@ export default {
             this.menu.unit_type = data.selected_data;
         },
         fetchCategory(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             ApiService.get('lookup/food-menu-item-category')
             .then((resp) => {
                 this.loaderHide();
@@ -251,15 +251,16 @@ export default {
             this.$router.back();
         },
         changeImage(file){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             let formData = new FormData();
             formData.append("file",file.file);
             ApiService.post('/store-image', formData)
             .then((resp) => {
-                 this.loaderHide();
-                 this.menu.profile_pic = resp.file_name;
+                this.loaderHide();
+                this.menu.profile_pic = resp.file_name;
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 this.messageError("Failed ! choose image less than size 2mb");
                 this.loaderHide();
             });

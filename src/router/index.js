@@ -537,20 +537,20 @@ const routes = [
 	// 		}
 	// 	}
 	// },
-	{
-		path: '/truck-profile-location/:locationId',
-		name: 'truckLocationEdit',
-		component: () => import(/* webpackChunkName: "dashboardCustomer" */ '../views/profile/truck/TruckLocationEdit.vue'),
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/vendor-schedule/:locationId',
+	// 	name: 'truckLocationEdit',
+	// 	component: () => import(/* webpackChunkName: "dashboardCustomer" */ '../views/profile/truck/TruckLocationEdit.vue'),
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/truck-profile/:truckId',
 		name: 'TruckProfileForClient',

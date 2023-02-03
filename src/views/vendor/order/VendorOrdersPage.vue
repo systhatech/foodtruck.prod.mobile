@@ -4,28 +4,32 @@
      
         <v-container class="mg56">
             <div>
-                <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
+                <!-- <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
                     {{ item.name }}
-                </v-chip>
+                </v-chip> -->
+
+                <div>
+                    <OrderStatus :items="orderTypes" @selectedStatus="handleActive"/>
+                </div>
             </div>
             <div v-if="orders && Object.keys(orders).length" class="mt-3">
                 <div v-for="(dateWiseOrders, date) in orders" :key="date">
                     <h5 class="mt-6 pl-1 mb-1 text-uppercase">{{ formatDateStandard(date) }}</h5>
                     <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
                         <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
-                            <div class="custom-bs pa-4 d-flex align-center justify-space-between">
+                            <div class="custom-bs pa-4 d-flex align-center justify-space-between" @click="handleView(order)">
                                 <div>
                                     <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
                                     <p class="mb-0 text-capitalize">{{ order.customer_name }}</p>
-                                    <p class="mb-0" style="font-size:13px">{{ order.phone }}</p>
+                                    <p class="mb-0" style="font-size:13px; font-weight: 500;">{{ order.phone }}</p>
                                 </div>
-                                <div>
+                                <div class="text-right">
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
                                     <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
                                 </div>
-                                <div>
-                                    <v-btn fab small color="primary" @click="handleView(order)"><v-icon>{{icon_right}}</v-icon></v-btn>
-                                </div>
+                                <!-- <div>
+                                    <v-btn fab small color="primary" ><v-icon>{{icon_right}}</v-icon></v-btn>
+                                </div> -->
                             </div>
                             <!-- <div class="order_item custom-bs" >
                                 <p class="order_no"><span>{{order.order_no}}</span> <span class="amount"> {{formatAmount(order.total_amount)}} </span></p>
@@ -86,38 +90,45 @@ export default {
             activeType:0,
             orders:[],
             pickup_date: new Date().toISOString().substr(0, 10), 
-            orderTypes: [],
-            otVendor: [
+            orderTypes: [
                 {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
-                // {name:'Processing',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'preparing'},
+                {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
+                {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
                 {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
                 {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
+                {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
-            otClient: [
-                {name:'Recent Orders',active_type:false,status:'recent-orders'},
-                {name:'Past Orders',active_type:false,status:'completed'},
-            ],
+            // otVendor: [
+            //     {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
+            //     // {name:'Processing',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'preparing'},
+            //     {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
+            //     {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
+            // ],
+            // otClient: [
+            //     {name:'Recent Orders',active_type:false,status:'recent-orders'},
+            //     {name:'Past Orders',active_type:false,status:'completed'},
+            // ],
             refresh_time:10000,
         }
     },
     mounted() {
-        if(this.currentUser){
-            if(this.currentUser.table == 'clients'){
-                this.orderTypes = this.otClient;
-                this.status = "recent-orders";
-            }else{
-                this.orderTypes = this.otVendor;
-            }
-        }
+        // if(this.currentUser){
+        //     if(this.currentUser.table == 'clients'){
+        //         this.orderTypes = this.otClient;
+        //         this.status = "recent-orders";
+        //     }else{
+        //         this.orderTypes = this.otVendor;
+        //     }
+        // }
         this.fetchOrders();
     },
     methods: {
-        gotoChat(order){
-            this.$router.push("/conversation/clients/"+order.client_id);
-        },
-        gotoVendorChat(order){
-            this.$router.push("/conversation/vendor/"+order.vendor_id);
-        },
+        // gotoChat(order){
+        //     this.$router.push("/conversation/clients/"+order.client_id);
+        // },
+        // gotoVendorChat(order){
+        //     this.$router.push("/conversation/vendor/"+order.vendor_id);
+        // },
         handleBack(){
             this.$router.back();
         },
@@ -154,7 +165,7 @@ export default {
         },
         handleActive(item, index){
             this.activeType = index;
-            this.status = item.status;
+            this.status = item.status.status;
             this.fetchOrders();
         },
         handleView(order){
@@ -178,7 +189,8 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
-        OrderDetail
+        OrderDetail,
+        OrderStatus: ()=> import('@/components/OrdersStatusSlider.vue')
     },
     computed: {
         ...mapGetters({currentUser:'auth/user'}),

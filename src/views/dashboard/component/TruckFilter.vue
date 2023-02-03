@@ -32,7 +32,7 @@
 							<InputDatePicker class="mt-0" label="Select Date" @selectedDate="selectedDate"/>
 						</div>
 					</div> -->
-					<div class="mb-4">
+					<!-- <div class="mb-4">
 						<div>
 						<p class="mb-0">Cuisine</p>
 						<div>
@@ -42,7 +42,7 @@
 								@click="handleSelect(category,index)">{{ category.value}}</v-chip>
 						</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="mb-4">
 						<div>
 						<p class="mb-0">Radius</p>
@@ -61,21 +61,22 @@
 				</div>
 			</v-card-text>
 			<v-divider></v-divider>
-			<v-card-actions class="w-100 d-flex align-center justify-space-between pa-4">
+			<v-card-actions class="w-100 d-flex align-center justify-space-around pa-4">
 			<v-btn
 				color="primary"
+				class="pl-4 pr-4"
 				@click="handleFilter"
-				outlined
+				rounded
 			>
 				search
 			</v-btn>
-			<v-btn
+			<!-- <v-btn
 				color="primary"
 				@click="handleClear"
-				outlined
+				rounded
 			>
 				Clear
-			</v-btn>
+			</v-btn> -->
 			</v-card-actions>
 		</v-card>
 		</v-dialog>
@@ -109,7 +110,7 @@ import { ApiService } from '@/core/services/api.service'
         // InputDatePicker,
     },
     mounted() {
-        this.fetchCategories();
+        // this.fetchCategories();
     },
     methods:{
 		setClass(id){

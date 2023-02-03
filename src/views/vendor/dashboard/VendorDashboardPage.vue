@@ -103,12 +103,12 @@ export default {
        DialogConfirm,
     },
     mounted() {
-        this.fetchTrucks({ 
-            available: 1,
-            name: this.search,
-            // distance: this.distance,
-            guest: localStorage.getItem('g_token'),
-        });
+        // this.fetchTrucks({ 
+        //     available: 1,
+        //     name: this.search,
+        //     // distance: this.distance,
+        //     guest: localStorage.getItem('g_token'),
+        // });
         // this.handleAvailable();
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
