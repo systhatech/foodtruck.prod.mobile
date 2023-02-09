@@ -14,19 +14,19 @@
                         </v-col>
                         <v-col cols="12" class="pt-0 ma-0">
                             <!-- <v-btn color="secondary" :disabled="!valid" @click="handleUpdate" rounded block>Update</v-btn> -->
-                            <v-btn color="primary"  @click="handleUpdate" rounded block>Update</v-btn>
+                            <v-btn color="primary" large  @click="handleUpdate" rounded block>Update</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>
             </div>
         </v-container>
-        <!-- <Bottomnavbar :value="indexValue"/> -->
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { base_url } from '@/core/services/config'
 // import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
@@ -78,7 +78,7 @@ export default {
     },
     components: {
         Topnavbar,
-        // Bottomnavbar,
+        Bottomnavbar,
         // InputUpload
     },
     computed: {

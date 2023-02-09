@@ -14,7 +14,7 @@
           <v-btn
             color="primary"
             rounded
-            outlined
+            large
             @click="handleConfirm" >
             Proceed
           </v-btn>

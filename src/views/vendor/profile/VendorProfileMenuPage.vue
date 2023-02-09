@@ -1,11 +1,11 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <div class="section-sticky pa-4 d-flex align-center justify-space-between w-100">
+        <div class="custom-bs pa-4 d-flex align-center justify-space-between w-100">
             <h4>Available Menus</h4>
-            <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" rounded>Add New menu</v-btn>
+            <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" large rounded>Add New menu</v-btn>
         </div>
-        <v-container class="mg56 mt-16">
+        <v-container class="mb80 pb-14">
             <div>
                 <VendorMenuList :truckProfile="profile" @fetch="profileData"/>
             </div>
@@ -16,12 +16,13 @@
             :menuData="menu_data"
             :is-edit="is_edit"
             @close="handleClose"/>
+            <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { base_url } from '@/core/services/config'
 import VendorMenuList from '@/views/vendor/profile/components/VendorMenuList.vue'
 // import InputUpload from '@/components/form-element/InputUpload'
@@ -64,7 +65,7 @@ export default {
             this.$router.back();
         },
         async profileData() {
-            this.loaderShow();
+            // this.loaderShow();
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loaderHide();
                 this.profile = resp;
@@ -78,7 +79,7 @@ export default {
         VendorMenuList,
         Topnavbar,
         DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
-        // Bottomnavbar,
+        Bottomnavbar,
         // InputUpload
     },
     computed: {

@@ -1,6 +1,6 @@
 const base_url = "https://yummtrux.systha.com/api/v2"
 const support_url = "https://support.shubhu.com";
-const base_socket_url = "https://socketitruck.systha.com";
+const base_socket_url = "https://jwm.sysstha.com";
 const base_support_project_url = "https://yummtrux.systha.com";
 const support_client_username = "truck_quick";
 const key = 'foodtruck';

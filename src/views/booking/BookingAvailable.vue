@@ -34,6 +34,7 @@
                             color="primary"
                             rounded
                             block
+                            large
                             class="mx-auto mt-4"
                             :to="'/spot/'+booking.id">
                             Book Now
@@ -53,7 +54,15 @@
             </v-row>
             <v-row v-else>
                 <v-col cols="12">
-                    <div class="unavailable">{{ message }}</div>
+                    <!-- <div class="unavailable">{{ message }}</div> -->
+                    <div class="text-center">
+                        <div v-if="loading">
+                            <ComponentLoadingVue/>
+                        </div>
+                        <div class="unavailable" v-else>
+                            <p>{{  message }}</p>
+                        </div>
+                    </div>
                 </v-col>
             </v-row>
             <!-- <BookingFilter :modelBookingFilter="modelBookingFilter" @close="handleClose"/> -->
@@ -91,16 +100,19 @@ export default {
 
         modelBookingFilter:false,
         locationBookings : [],
-        message:'Loading...'
+        message:'Loading...',
+        loading:false,
     }),
      mounted() {
         this.fetchData();
     },
     methods:{
         async fetchData() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading =true;
             ApiService.get(`/location-bookings/all?start_date=${this.start_date}&&end_date=${this.end_date}&&zip=${this.zip_code}&&city=${this.city}&&vendor_id=${this.currentUser.table_id}`)
 			.then((resp) => {
+                this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.locationBookings = resp.data;
                 if(!this.locationBookings.length) {
@@ -108,6 +120,7 @@ export default {
                 }
 			})
             .catch((error) => {
+                this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.message = 'Error on fetching data'
                 console.log(error);
@@ -165,6 +178,7 @@ export default {
     },
     components: {
         ModalLocationBooking,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     }
     
 }

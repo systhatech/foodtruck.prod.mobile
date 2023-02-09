@@ -659,36 +659,36 @@ const routes = [
 			}
 		}
 	},
-	{
-		path: '/chat-list',
-		name: 'ChatListPage',
-		component: () => import(/* webpackChunkName: "TrucksAvailable" */ '../views/chat/ChatListPage.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
-	{
-		path: '/conversation/:type/:id',
-		name: 'ChatConversationPage',
-		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/chat/ChatConversationPage.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/chat-list',
+	// 	name: 'ChatListPage',
+	// 	component: () => import(/* webpackChunkName: "TrucksAvailable" */ '../views/chat/ChatListPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
+	// {
+	// 	path: '/conversation/:type/:id',
+	// 	name: 'ChatConversationPage',
+	// 	component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/chat/ChatConversationPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	// {
 	// 	path: '/orders',
 	// 	name: 'OrdersPage',
@@ -756,47 +756,47 @@ const routes = [
 			}
 		}
 	},
-	{
-		path: '/checkout-address',
-		name: 'CheckoutAddress',
-		component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddress.vue'),
-		meta: { requiresAuth: true }
-	},
-	{
-		path: '/checkout-address/:id',
-		name: 'addressnew',
-		component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddressAdd.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
-	{
-		path: '/checkout-address-note',
-		name: 'checkoutAddressNote',
-		component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddressNote.vue'),
-	},
-	{
-		path: '/checkout-payment-method',
-		name: 'checkoutPaymentMethod',
-		component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutPaymentMethod.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/checkout-address',
+	// 	name: 'CheckoutAddress',
+	// 	component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddress.vue'),
+	// 	meta: { requiresAuth: true }
+	// },
+	// {
+	// 	path: '/checkout-address/:id',
+	// 	name: 'addressnew',
+	// 	component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddressAdd.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
+	// {
+	// 	path: '/checkout-address-note',
+	// 	name: 'checkoutAddressNote',
+	// 	component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutAddressNote.vue'),
+	// },
+	// {
+	// 	path: '/checkout-payment-method',
+	// 	name: 'checkoutPaymentMethod',
+	// 	component: () => import(/* webpackChunkName: "CheckoutAddress" */ '../views/cart/CheckoutPaymentMethod.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/cart-order-completed',
 		name: 'orderComplete',
@@ -889,21 +889,21 @@ const routes = [
 		component: () => import(/* webpackChunkName: "PayoutPage" */ '../views/report/ReportPage.vue'),
 		meta: { requiresAuth: true }
 	},
-	{
-		path: '/report-commission',
-		name: 'commissionReport',
-		component: () => import(/* webpackChunkName: "ReviewPage" */ '../views/report/ReportCommission.vue'),
-		meta: { requiresAuth: true },
-		beforeEnter: (to, from, next) => {
-			if (store.getters['auth/user']) {
-				next();
-			}else{
-				next({
-					name: 'loginPage'
-				});
-			}
-		}
-	},
+	// {
+	// 	path: '/report-commission',
+	// 	name: 'commissionReport',
+	// 	component: () => import(/* webpackChunkName: "ReviewPage" */ '../views/report/ReportCommission.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 	{
 		path: '/report-sales',
 		name: 'salesReport',

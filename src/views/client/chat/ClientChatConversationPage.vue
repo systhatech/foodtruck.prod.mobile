@@ -3,20 +3,25 @@
         <Topnavbar :receiver="receiver" @back="handleBack"/>
         <v-container class="pt-0 content-cs">
             <main class="msger-chat" :style="{ height: customheight + 'px' }" id="chatMessages" ref="messageContainer">
-                <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
-                     v-for="(message,index) in messages" :key="index">
-                    <div class="msg-bubble">
-                        <div class="msg-info">
-                            <div class="msg-info-time">
-                                {{ formatChatTime(message.created_at, prevMessageDate(index), tz) }}
+                <div v-if="messages && messages.length">
+                    <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
+                         v-for="(message,index) in messages" :key="index">
+                        <div class="msg-bubble">
+                            <div class="msg-info">
+                                <div class="msg-info-time">
+                                    {{ formatChatTime(message.created_at, prevMessageDate(index), tz) }}
+                                </div>
+                            </div>
+    
+                            <div class="msg-text" @click="handleOrder(message.message)" v-html="message.message">
+                                <!-- {{ message.message }} -->
                             </div>
                         </div>
-
-                        <div class="msg-text" @click="handleOrder(message.message)" v-html="message.message">
-                            <!-- {{ message.message }} -->
-                        </div>
+    
                     </div>
-
+                </div>
+                <div v-else class="text-center w-100">    
+                    <ComponentLoadingVue/>
                 </div>
             </main>
             <div class="chat-box d-flex justify-space-between" ref="chatbox">
@@ -155,7 +160,8 @@ export default {
             return this.messages[index - 1].created_at;
         },
         fetchMessage() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             ApiService.post('/chat-messages', {
                 table_from: this.currentUser.table,
                 table_from_id: this.currentUser.table_id,
@@ -164,11 +170,13 @@ export default {
                 page: this.pageNo,
             })
                 .then((resp) => {
+                    this.loading = false;
                     this.loaderHide();
                     this.messages = resp.data;
                     this.receiver =  resp.meta;
                 })
                 .catch((error) => {
+                    this.loading = false;
                     this.loaderHide();
                     console.log(error);
                 })
@@ -224,6 +232,7 @@ export default {
     },
     components: {
         Topnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // Bottomnavbar,
         // InputUpload
     },
@@ -239,7 +248,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 126px);
     padding-bottom: 0 !important;
 }
 :root {

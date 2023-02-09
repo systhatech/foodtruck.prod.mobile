@@ -1,13 +1,14 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <div>
+        <div class="mb80">
             <div class="p-relative background-image">
                 <div class="pa-4 text-center pt-6">
                     <!-- <v-btn color="primary" rounded outlined block to="/vendor-menu-item-add">add new menu item</v-btn> -->
-                    <v-btn color="primary" rounded outlined block @click="handleMenuAdd()">add new menu item</v-btn>
+                    <v-btn color="primary" rounded large block @click="handleMenuAdd()">add new menu item</v-btn>
                 </div>
-                <div class="pa-4">
+                <!-- {{ menu.itemsGroup }} -->
+                <div class="pa-4" v-if="menu && menu.itemsGroup && Object.keys(menu.itemsGroup).length">
                     <v-row>
                         <v-col cols="12" sm="6" md="6" v-for="(m, i) in menu.itemsGroup" :key="i">
                             <h5 class="mb-2 text-uppercase">{{ i }}</h5>
@@ -39,14 +40,19 @@
                         </v-col>
                     </v-row>
                 </div>
+                <div v-else class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
             </div>
             <DialogMenuItemAdd 
             @close="handleClose"
             :dialogMenuItemAdd="modal_menu_add"/>
         </div>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor' 
 import { ApiService } from '@/core/services/api.service'
 import { base_url } from '@/core/services/config'
 import { mdiChevronRight } from '@mdi/js'
@@ -86,17 +92,22 @@ export default {
             this.$router.back();
         },
         async profileData() {
-            this.loaderShow();
+            this.loading =true;
+            // this.loaderShow();
             await ApiService.get('/menu/'+this.$router.currentRoute.params.menuId).then((resp) => {
+                this.loading = false;
                 this.loaderHide();
                 this.menu = resp.data;
             })
             .catch(() => {
+                this.loading = false;
                 this.loaderHide();
             })
         },
     },
     components: {
+        Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         Topnavbar:()=>import('@/components/layout/TopnavbarBackCustom'),
         DialogMenuItemAdd: ()=> import('@/views/vendor/profile/modal/ModalMenuItemAdd'),
     },

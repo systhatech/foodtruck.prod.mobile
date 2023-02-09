@@ -9,24 +9,20 @@
             <div>
                 <v-row>
                     <v-col cols="12">
-                        <div class="text-center">
-                            <img :src="base_url+'/default-company/logo'" width="90" />
+                        <div class="text-center mb-4">
+                            <img :src="base_url + '/default-company/logo'" width="90" />
                         </div>
                     </v-col>
                 </v-row>
             </div>
-            <div class="pa-4 ma-4 custom-bs">
+            <div class="pa-6 custom-bs">
                 <v-form v-model="valid" ref="resetPassword">
                     <v-row>
                         <v-col cols="12" class="pt-0">
                             <v-text-field label="Your Email" :rules="emailRules" v-model="email"></v-text-field>
                         </v-col>
-                        <v-col cols="12" >
-                            <v-btn
-                                rounded
-                                color="primary"
-                                block
-                                @click="submit">
+                        <v-col cols="12">
+                            <v-btn rounded large color="primary" block @click="submit">
                                 Submit
                             </v-btn>
                         </v-col>
@@ -34,17 +30,17 @@
                 </v-form>
             </div>
             <div class="text-center pa-6 ma-4">
-                <v-btn text to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
+                <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
             </div>
-           
+
         </v-container>
-   
+
     </v-container>
 </template>
 <script>
 import { ApiService } from '@/core/services/api.service'
 import { base_url } from '@/core/services/config'
-import { mdiTwitter, mdiFacebook, mdiArrowLeft, mdiChevronLeft} from '@mdi/js'
+import { mdiTwitter, mdiFacebook, mdiArrowLeft, mdiChevronLeft } from '@mdi/js'
 
 export default {
     data: () => ({
@@ -53,11 +49,11 @@ export default {
         iconFb: mdiFacebook,
         iconTw: mdiTwitter,
         iconBack: mdiArrowLeft,
-        valid:true,
-        showServiceProvider:false,
-        email:'',
-        serviceProvider:false,
-        indexValue:3,
+        valid: true,
+        showServiceProvider: false,
+        email: '',
+        serviceProvider: false,
+        indexValue: 3,
         loading: false,
         nameErrors: "",
         emailErrors: "",
@@ -73,21 +69,21 @@ export default {
             v => !!v || 'Required',
         ],
         items: [
-            {id:1, name:'',route:'',icon:'mdi-home', showText:false},
-            {id:2, name:'',route:'about',icon:'mdi-information'},
-            {id:3, name:'',route:'contact', icon:'mdi-notebook-check'},
-            {id:4, name:'',route:'login', icon:'mdi-login'},
+            { id: 1, name: '', route: '', icon: 'mdi-home', showText: false },
+            { id: 2, name: '', route: 'about', icon: 'mdi-information' },
+            { id: 3, name: '', route: 'contact', icon: 'mdi-notebook-check' },
+            { id: 4, name: '', route: 'login', icon: 'mdi-login' },
         ],
         lazy: false,
-        name:'Buglogic',
-        location:{
-            lat:0,
-            lng:0,
-            add1:'',
-            city:'',
-            state:'',
-            zip_code:'',
-            country:'',
+        name: 'Buglogic',
+        location: {
+            lat: 0,
+            lng: 0,
+            add1: '',
+            city: '',
+            state: '',
+            zip_code: '',
+            country: '',
         }
     }),
     components: {
@@ -96,7 +92,7 @@ export default {
     watch: {
         serviceProvider(newval) {
             newval ? this.login_info.client = 0 : this.login_info.client = 1;
-            if(newval) {
+            if (newval) {
                 localStorage.removeItem('destination');
             }
         }
@@ -107,7 +103,7 @@ export default {
     },
 
     methods: {
-        locateGeoLocation: function() {
+        locateGeoLocation: function () {
 
             navigator.geolocation.getCurrentPosition(res => {
                 this.location.lat = res.coords.latitude;
@@ -123,30 +119,30 @@ export default {
         async fetchLogo() {
             this.$bus.$emit('SHOW_PAGE_LOADER')
             await ApiService.get("default-company/logo")
-            .then((resp) => {
-                this.logo = resp.logo;
-                this.name = resp.name;
-                this.$bus.$emit('HIDE_PAGE_LOADER');
-            })
-            .catch(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
-                this.messageError('Sorry, Something goes wrong');
-            });
+                .then((resp) => {
+                    this.logo = resp.logo;
+                    this.name = resp.name;
+                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                })
+                .catch(() => {
+                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                    this.messageError('Sorry, Something goes wrong');
+                });
         },
 
         async submit() {
-            if(!this.$refs.resetPassword.validate()) return;
+            if (!this.$refs.resetPassword.validate()) return;
             this.$bus.$emit('SHOW_PAGE_LOADER');
-            ApiService.post('/password/reset', { email : this.email})
-            .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
-                this.messageSuccess(resp.message);
-                this.$router.push("/login");
-            })
-            .catch((error) => {
-                 this.$bus.$emit('HIDE_PAGE_LOADER');
-                this.messageError(error.response.data.message);
-            })
+            ApiService.post('/password/reset', { email: this.email })
+                .then((resp) => {
+                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                    this.messageSuccess(resp.message);
+                    this.$router.push("/login");
+                })
+                .catch((error) => {
+                    this.$bus.$emit('HIDE_PAGE_LOADER');
+                    this.messageError(error.response.data.message);
+                })
         },
     },
 };
@@ -161,44 +157,52 @@ export default {
 //     -o-background-size: cover;
 //     background-size: cover;
 // }
-.login-container{
+.login-container {
     // background: #acfa95;
     border-radius: 10px;
     margin-top: 27px !important;
 }
-.follow-us{
-    color:#fff;
+
+.follow-us {
+    color: #fff;
     font-weight: 300;
     font-size: 0.9rem;
+
     // text-align: right;
-    i{
+    i {
         -webkit-transform: scaleX(-1);
         transform: scaleX(-1);
-        color:#fff;
+        color: #fff;
         margin-right: 4px;
-        font-size:0.8rem;
+        font-size: 0.8rem;
     }
 
 }
-.social-links{
+
+.social-links {
+
     // text-align:right;
-    i{
-        color:#fff;
-        &:not(:last-child){
+    i {
+        color: #fff;
+
+        &:not(:last-child) {
             margin-right: 12px;
         }
     }
 }
+
 .abc {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
 }
-.footer-copyright{
+
+.footer-copyright {
     padding: 40px;
     bottom: 0;
-    p{
+
+    p {
         text-align: center;
         color: #4caf50;
         margin: 0;

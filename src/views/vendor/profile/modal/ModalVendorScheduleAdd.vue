@@ -15,7 +15,7 @@
                   <v-container>
                       <div class="background-image">
                         <div>
-                          <div class="pa-4 custom-bs pt-6">
+                          <div class="pa-4 custom-bs pt-6 mt-14">
     
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
@@ -91,15 +91,17 @@
                                     class="pb-0 pt-0"
                                     >
                                     <label for="">Start Date</label>
-                                    <DatePicker v-model="start_date" mode="dateTime">
-                                        <template v-slot="{ inputValue, inputEvents }">
-                                            <input
-                                            class="custom-input"
-                                            :value="inputValue"
-                                            v-on="inputEvents"
-                                            />
-                                        </template>
-                                    </DatePicker>
+                                    <div class="">
+                                        <DatePicker v-model="start_date" mode="dateTime">
+                                            <template v-slot="{ inputValue, inputEvents }">
+                                                <input
+                                                class="custom-input"
+                                                :value="inputValue"
+                                                v-on="inputEvents"
+                                                />
+                                            </template>
+                                        </DatePicker>
+                                    </div>
                                     </v-col>
                                     <v-col
                                     cols="6"
@@ -107,15 +109,17 @@
                                     class="pb-0 pt-0"
                                     >
                                     <label for="">End Date</label>
-                                    <DatePicker v-model="end_date" mode="dateTime">
-                                        <template v-slot="{ inputValue, inputEvents }">
-                                            <input
-                                            class="custom-input"
-                                            :value="inputValue"
-                                            v-on="inputEvents"
-                                            />
-                                        </template>
-                                    </DatePicker>
+                                    <div>
+                                        <DatePicker v-model="end_date" mode="dateTime">
+                                            <template v-slot="{ inputValue, inputEvents }">
+                                                <input
+                                                class="custom-input"
+                                                :value="inputValue"
+                                                v-on="inputEvents"
+                                                />
+                                            </template>
+                                        </DatePicker>
+                                    </div>
                                     </v-col>
                                     <!-- <v-col
                                     cols="12"
@@ -138,6 +142,7 @@
                                         <div class="pt-4 pb-4">
                                             <v-btn color="primary" block  
                                             rounded 
+                                            large
                                             @click="handleSubmit">Submit</v-btn>
                                         </div>
                                     </v-col>

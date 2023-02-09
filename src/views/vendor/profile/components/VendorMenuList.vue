@@ -32,10 +32,15 @@
             @handleConfirm="handleDeleteConfirm"
             @close="handleCloseDelete"/>
         </div>
-        <div v-else class="pa-4 unavailable">
-            <p>
-                {{ message}}
-            </p>
+        <div v-else class="pa-4 text-center">
+            <!-- <div v-if="loading"> -->
+                <ComponentLoadingVue/>
+            <!-- </div> -->
+            <!-- <div v-else class="unavailable">
+                <p>
+                    {{ message}}
+                </p>
+            </div> -->
         </div>
     </div>
 </template>
@@ -56,6 +61,7 @@ export default {
     data() {
         return {
             base_url,
+            loading:false,
             modal_confirm:false,
             message: 'Loading...',
             modal_menu_action:false,
@@ -66,7 +72,8 @@ export default {
     components:{
         ModalMenuAction: () => import('@/views/vendor/profile/modal/ModalMenuAction'),
         ModalMenuDetail: () => import('@/views/vendor/profile/modal/ModalVendorMenuDetail.vue'),
-        ModalDelete: () => import('@/components/layout/DialogConfirm')
+        ModalDelete: () => import('@/components/layout/DialogConfirm'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     methods: {
         handleView(){

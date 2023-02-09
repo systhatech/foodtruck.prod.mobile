@@ -48,7 +48,7 @@
 										</div>
 									</v-form>
 									<div class="text-center pt-4">
-										<v-btn color="primary" block rounded @click="handleSubmit">
+										<v-btn color="primary" block large rounded @click="handleSubmit">
 											Submit
 										</v-btn>
 									</div>

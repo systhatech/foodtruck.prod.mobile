@@ -3,7 +3,7 @@
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
             <div class="text-right">
-                <v-btn color="primary" block rounded @click="handleNewReport">new Report</v-btn>
+                <v-btn color="primary" block large rounded @click="handleNewReport">new Report</v-btn>
             </div>
             <div class="custom-bs pa-4 mt-4 pb-0" v-if="reports && reports.length">
                 <ul class="report-list">
@@ -20,9 +20,13 @@
                     </li>
                 </ul>
             </div>
-            <div v-else class="unavailbable text-center pt-10">
-                <p>{{ message }}</p>
-
+            <div v-else class="text-center pt-10">
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div class="unavailable" v-else>
+                    <p>{{ message }}</p>
+                </div>
             </div>
             <ReportNew 
                 :default-title="action.title"
@@ -36,7 +40,7 @@
                 @generate="generateReport" 
                 @close="closeResend"/>
         </v-container>
-        <Bottomnavbar :value="indexValue"/>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
@@ -46,11 +50,12 @@ import ReportResend from './modal/ReportResend.vue'
 import { ApiService } from '@/core/services/api.service'
 import { mapGetters } from 'vuex'
 import { mdiRedoVariant} from '@mdi/js'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 export default {
     data() {
         return {
             title:'',
+            loading:false,
             iconRedo: mdiRedoVariant,
             indexValue:1,
             reports:[],
@@ -71,7 +76,8 @@ export default {
         Topnavbar,
         ReportNew,
         ReportResend,
-        Bottomnavbar
+        Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     mounted() {
         this.fetchReport();
@@ -98,9 +104,11 @@ export default {
             console.log(param);
         },
         fetchReport(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.get('/report/'+ this.currentUser.table_id+'/report_sales')
             .then((response) => {
+                this.loading = false;
                 this.reports = response.data;
                 if(!this.reports.length){
                     this.message ="No report generated";
@@ -108,6 +116,7 @@ export default {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             })
             .catch(() => {
+                this.loading = false;
                 this.message ="Failed to fetch reports";
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             })

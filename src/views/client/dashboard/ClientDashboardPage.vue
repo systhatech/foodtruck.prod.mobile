@@ -1,6 +1,6 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <Topnavbar/>
+        <!-- <Topnavbar/> -->
         <v-container v-if="mapView" class="ma-0 pa-0">
             <div v-if="currentUser && currentUser.table == 'vendors'" class="test pl-3" :class=" available== 'available' ? 'bg-green' : 'bg-red'" id="rdg">
                 <v-radio-group
@@ -50,7 +50,12 @@
                     <TruckList :trucks="locations"/>
                </div>
                <div v-else class="text-center">
-                   <p class="text-capitalize">no trucks found</p>
+                    <!-- <div v-if="locations.length == 0"> -->
+                        <ComponentLoadingVue/>
+                    <!-- </div> -->
+                    <!-- <div v-else>
+                        <p>No trucks available</p>
+                    </div> -->
                </div>
            </div>
            <TruckFilter 
@@ -63,7 +68,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Topnavbar from '@/components/layout/Topnavbar'
+// import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import TruckList from '@/views/dashboard/component/TruckList'
 import TruckFilter from '@/views/dashboard/component/TruckFilter'
@@ -122,12 +127,13 @@ export default {
         }
     },
     components: {
-       Topnavbar,
+    //    Topnavbar,
         AddGoogleMap,
         // DialogFilter,
        Bottomnavbar,
        TruckFilter,
-       TruckList
+       TruckList,
+       ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // DialogConfirm,
     },
     mounted() {

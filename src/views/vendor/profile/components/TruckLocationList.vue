@@ -38,7 +38,7 @@
                 @close="handleClose"/>
         </div>
         <div v-else class="pa-4 unavailable">
-            <h4>No schedule available</h4>
+            <p>No schedule available</p>
         </div>
     </div>
 </template>

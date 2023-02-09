@@ -1,7 +1,7 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack" />
-        <v-container class="mg56">
+        <v-container class="mb80">
             <div v-if="render">
                 <div class="pa-4 custom-bs">
                     <h5 class="mb-2 text-uppercase primary--text">Subscription</h5>
@@ -75,8 +75,13 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="unavailable">
-                <p>{{ message }}</p>
+            <div v-else>
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div class="unavailable" v-else>
+                    <p>{{ message }}</p>
+                </div>
             </div>
         </v-container>
         <Bottomnavbar />
@@ -118,6 +123,7 @@ export default {
             hasSubscription: false,
             paymentData: {},
             render: false,
+            loading:false,
             message: 'Loading...'
         }
     },
@@ -139,9 +145,11 @@ export default {
             }
         },
         async fetchProfile() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             await ApiService.post("profile")
                 .then((response) => {
+                    this.loading = false;
                     if (response.data.owner.subscription === null) {
                         this.fetchPlans();
                     } else {
@@ -155,9 +163,11 @@ export default {
                 })
         },
         fetchPlans() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
             ApiService.post('/subscription/plans')
                 .then((resp) => {
+                    this.loading = false;
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                     this.subscriptions = resp.filter((sub) => !sub.subscription);
                     this.subscribed = resp.filter((sub) => sub.subscription);
@@ -166,20 +176,24 @@ export default {
                     this.render = true;
                 })
                 .catch(() => {
+                    this.loading = false;
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                     this.render = true;
                     this.message = "Sorry, something goes wrong. Please contact to support";
                 })
         },
         fetchSubscription(id) {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.post('/subscription/retrieve/' + id)
                 .then((resp) => {
+                    this.loading = false;
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                     this.paymentData = resp;
                     this.render = true;
                 })
                 .catch(() => {
+                    this.loading = false;
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                     this.render = true;
                     this.message = "Sorry, something goes wrong. Please contact to support";
@@ -236,6 +250,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // InputUpload
     },
     computed: {

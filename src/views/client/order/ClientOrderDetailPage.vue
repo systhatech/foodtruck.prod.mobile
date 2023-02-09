@@ -1,7 +1,7 @@
 <template>
     <v-container class="ma-0 pa-0 background-image mb-14 h-100">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container>
+        <v-container class="pb-12">
             <v-row>
                 <v-col cols="12" sm="12" md="12" lg="12" xl="12" v-if="render" >
                     <v-row>
@@ -139,13 +139,16 @@
                     </v-row>
                 </v-col>
                 <v-col cols="12" sm="12" md="12" lg="12" xl="12" v-else>
-                    <div class="unavailable">
-                        <p>{{ message }}</p>
+                    <div v-if="loading" class="text-center">
+                        <ComponentLoadingVue/>
+                    </div>
+                    <div v-else class="unavailable">
+                        <h3>{{ message }}</h3>
                     </div>
                 </v-col>
             </v-row>
         </v-container>
-        <!-- <Bottomnavbar :value="indexValue"/> -->
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
@@ -155,13 +158,14 @@ import { ApiService } from '@/core/services/api.service'
 import moment from 'moment'
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import { mapGetters } from 'vuex'
 
 export default {
     data() {
        return {
             title:'',
+            loading:false,
             iconLocation:mdiMapMarker,
             iconDate:mdiCalendar,
             iconTime:mdiClock,
@@ -200,19 +204,22 @@ export default {
     },
      components: {
         Topnavbar,
-        // Bottomnavbar,
+        Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // OrderDetail
         // InputUpload
     },
     methods: {
         async fetchOrderDetail(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
             if(!this.orderId) return;
             await ApiService.post('/order/detail', { 
                 order_id: this.orderId, 
                 vendor_id: this.currentUser.owner.vendor_id
             })
             .then((response) => {
+                this.loading = false;
                 this.orderDetail = response.data;
                 this.totalData = response.totalData;
                 if(this.orderDetail){
@@ -222,6 +229,7 @@ export default {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             })
             .catch(() => {
+                this.loading = false;
                 this.message = "Data not found";
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             });

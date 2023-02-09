@@ -3,9 +3,6 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <div class="mb80">
             <div v-if="render">
-                <!-- <div v-if="items&&items.length">
-                    <Carousel :items="items"/>
-                </div> -->
                 <v-container class="pa-0">
                     <div class="pa-4">
                         <div class="d-flex justify-space-between align-center">
@@ -17,33 +14,41 @@
                                     >
                                 </v-avatar>
                                 <div class="pa-4">
-                                    <h3 class="text-capitalize ma-0">{{ truck.name}}</h3>
+                                    <h3 class="text-capitalize ma-0 primary--text">{{ truck.name}}</h3>
+                                    <div>
+                                        <p class="mb-2">
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.add1 ? truckProfile.address.add1:'' }},
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.city ? truckProfile.address.city:'' }},<br>
+                                            {{ truckProfile && truckProfile.address && truckProfile.address.state ? truckProfile.address.state:'' }} 
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.zip ? truckProfile.address.zip:'' }},
+                                        </p>
+                                    </div>
+                                    <div class="w100">
+                                        <v-btn
+                                        v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
+                                        
+                                        class="mr-3"
+                                        fab
+                                        small
+                                        color="primary"
+                                        :href="`tel:${truckProfile.contact.mobile_no ? truckProfile.contact.mobile_no : truckProfile.contact.phone_no}`"
+                                        >
+                                        <v-icon>mdi-phone</v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                        
+                                        fab
+                                        small
+                                        link
+                                        :to="'/client/conversation/vendors/'+truck.id"
+                                        color="primary"
+                                        >
+                                        <v-icon>mdi-chat</v-icon>
+                                        </v-btn>
+                                    </div>
                                 </div>
                             </div>
                             <div>
-                                <div class="w100">
-                                    <v-btn
-                                    v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
-                                    
-                                    class="mr-3"
-                                    fab
-                                    small
-                                    color="primary"
-                                    :href="`tel:${truckProfile.contact.mobile_no ? truckProfile.contact.mobile_no : truckProfile.contact.phone_no}`"
-                                    >
-                                    <v-icon>mdi-phone</v-icon>
-                                    </v-btn>
-                                    <v-btn
-                                    
-                                    fab
-                                    small
-                                    link
-                                    :to="'/client/conversation/vendors/'+truck.id"
-                                    color="primary"
-                                    >
-                                    <v-icon>mdi-chat</v-icon>
-                                    </v-btn>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,17 +77,17 @@
                 </v-container>
             </div>
             <div v-else class="unavailable">
-                <h3>Loading...</h3>
+                <ComponentLoadingVue/>
             </div>
         </div>
-         <!-- <Bottomnavbar/> -->
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
 import Banner from '@/components/layout/ComponentBanner'
 import TruckAbout from './TruckAbout';
@@ -141,7 +146,6 @@ export default {
     },
     mounted() {
         this.truckId = this.$router.currentRoute.params.truckId;
-        console.log(this.$router.currentRoute);
         this.profileData();
         this.$bus.$on('changeComponent', (data) => {
             this.orderDate = data.date;
@@ -179,8 +183,9 @@ export default {
             });
         },
         async profileData() {
-            this.loaderShow();
-            await ApiService.get('/truck/profile/'+ this.truckId).then((resp) => {
+            // this.loaderShow();
+            await ApiService.get('/truck/profile/'+ this.truckId)
+            .then((resp) => {
                 this.render = true;
                 this.truckProfile = resp;
                 this.truck.id = resp.general.id;
@@ -222,7 +227,7 @@ export default {
     },
     components: {
         Topnavbar,
-        // Bottomnavbar,
+        Bottomnavbar,
         Carousel,
         Banner,
         'about': TruckAbout,
@@ -230,6 +235,7 @@ export default {
         'location': TruckLocation,
         'gallery': TruckGallery,
         'schedule': TruckSchedules,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     computed: {
         ...mapGetters({

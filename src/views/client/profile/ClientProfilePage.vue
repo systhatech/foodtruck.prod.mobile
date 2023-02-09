@@ -99,7 +99,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { base_url } from '@/core/services/config'
 import {PURGE_AUTH} from '@/core/services/store/auth.module'
 import  {ApiService} from '@/core/services/api.service';
-import { mdiChevronRight } from '@mdi/js'
+import { mdiAccount, mdiChevronRight } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket';
 export default {
     name:'ProfilePage',
@@ -108,6 +108,7 @@ export default {
             title:'',
             base_url,
             iconNavigate: mdiChevronRight,
+            icon_account: mdiAccount,
             indexValue:3,
             usericon:'',
             menusClient: [

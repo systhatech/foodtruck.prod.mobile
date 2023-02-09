@@ -1,74 +1,80 @@
 <template>
      <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container class="mg56">
-            <div>
-                    <div class="custom-bs pa-6" v-if="amount && Object.keys(amount).length && (default_payment == 'default_company')">
-                        <div class="d-flex align-center justify-space-between">
-                            <h4 class="ma-0">Available Fund</h4>
-                            <span class="color">{{ formatAmount(amount.outstanding)}}</span>
-                        </div>
-                        <div class="text-center mt-4" v-if="default_payment == 'default_company'">
-                            <v-btn :disabled="amount.outstanding < 10" color="primary" outlined rounded small @click="handleTransfer">Transfer</v-btn>
-                            <p class="error--text" v-if="amount.outstanding < 10">Minimum payout amount must be 10$</p>
+        <v-container class="mb80">
+            <div v-if="orders && orders.length">
+                <div class="custom-bs pa-6" v-if="amount && Object.keys(amount).length && (default_payment == 'default_company')">
+                    <div class="d-flex align-center justify-space-between">
+                        <h4 class="ma-0">Available Fund</h4>
+                        <span class="color">{{ formatAmount(amount.outstanding)}}</span>
+                    </div>
+                    <div class="text-center mt-4" v-if="default_payment == 'default_company'">
+                        <v-btn :disabled="amount.outstanding < 10" color="primary" outlined rounded small @click="handleTransfer">Transfer</v-btn>
+                        <p class="error--text" v-if="amount.outstanding < 10">Minimum payout amount must be 10$</p>
+                    </div>
+                </div>
+                <div class="mt-3 p-relative" v-if="orders && orders.length">
+                    <v-btn color="primary" rounded v-if="renderFilter" @click="handleOpenFilter">
+                        <v-icon>{{iconFilter}}</v-icon> Select Date Range
+                    </v-btn>
+                    <div class="pt-4">
+                        <p class="mb-0">Settlement from  <span style="font-weight:600">{{  formatStandardUSDate(start_date) }}</span> to <span style="font-weight:600">{{ formatStandardUSDate(end_date) }}</span></p>
+                    </div>
+                    <div v-if="orders && Object.keys(orders).length" >
+                        <div v-for="(dateWiseOrders, date) in orders" :key="date">
+                            <span>{{ formatDateStandard(date) }}</span>
+                            <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
+                                <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
+                                    <div class="order_item custom-bs">
+                                        <p class="d-flex align-center"><span>Sales</span> <span class="amount"> : {{formatAmount1(order.sub_total)}} </span></p>
+                                        <p class="d-flex align-center"><span>Tax</span> <span class="amount"> : {{formatAmount1(order.tax)}} </span></p>
+                                        <v-divider class="mb-3 mt-2"></v-divider>
+                                        <h5 class="text-uppercase primary--text">Available Fund : {{formatAmount1(order.total_available)}} </h5>
+                                            <v-divider class="mb-3 mt-2"></v-divider>
+                                        <p class="d-flex align-center"><span>Convenience fee</span> <span class="amount"> : {{formatAmount1(order.conv_fee)}} </span></p>
+                                        <p class="d-flex align-center"><span>Service fee</span> <span class="amount"> : {{formatAmount1(order.service_charge)}} </span></p>
+                                        <v-divider class="mb-3 mt-2"></v-divider>
+                                        <h5 class="text-uppercase primary--text">Total Sales : {{formatAmount1(order.total)}} </h5>
+                                        <v-divider class="mb-3 mt-2"></v-divider>
+                                        <p class="d-flex align-center"><span>Cash Sales</span> <span class="amount"> : {{formatAmount1(order.cash_sales)}} </span></p>
+                                        <p class="d-flex align-center"><span>Card Sales</span> <span class="amount"> : {{formatAmount1(order.card_sales)}} </span></p>
+                                        <v-divider class="mb-3 mt-2"></v-divider>
+                                        <h5 class="text-uppercase primary--text">Transferred Amount : {{formatAmount1(order.payout)}} </h5>
+                                    </div>
+                                </v-col>
+                            </v-row>
                         </div>
                     </div>
-                    <div class="mt-3 p-relative">
-                        <v-btn color="primary" rounded v-if="renderFilter" @click="handleOpenFilter">
-                            <v-icon>{{iconFilter}}</v-icon> Select Date Range
-                        </v-btn>
-                        <div class="pt-4">
-                            <p class="mb-0">Settlement from  <span style="font-weight:600">{{  formatStandardUSDate(start_date) }}</span> to <span style="font-weight:600">{{ formatStandardUSDate(end_date) }}</span></p>
-                        </div>
-                        <div v-if="orders && Object.keys(orders).length" >
-                            <div v-for="(dateWiseOrders, date) in orders" :key="date">
-                                <span>{{ formatDateStandard(date) }}</span>
-                                <v-row v-if="dateWiseOrders && dateWiseOrders.length > 0">
-                                    <v-col cols="12" v-for="(order, i) in dateWiseOrders" :key="i">
-                                        <div class="order_item custom-bs">
-                                            <p class="d-flex align-center"><span>Sales</span> <span class="amount"> : {{formatAmount1(order.sub_total)}} </span></p>
-                                            <p class="d-flex align-center"><span>Tax</span> <span class="amount"> : {{formatAmount1(order.tax)}} </span></p>
-                                            <v-divider class="mb-3 mt-2"></v-divider>
-                                            <h5 class="text-uppercase primary--text">Available Fund : {{formatAmount1(order.total_available)}} </h5>
-                                             <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="d-flex align-center"><span>Convenience fee</span> <span class="amount"> : {{formatAmount1(order.conv_fee)}} </span></p>
-                                            <p class="d-flex align-center"><span>Service fee</span> <span class="amount"> : {{formatAmount1(order.service_charge)}} </span></p>
-                                            <v-divider class="mb-3 mt-2"></v-divider>
-                                            <h5 class="text-uppercase primary--text">Total Sales : {{formatAmount1(order.total)}} </h5>
-                                            <v-divider class="mb-3 mt-2"></v-divider>
-                                            <p class="d-flex align-center"><span>Cash Sales</span> <span class="amount"> : {{formatAmount1(order.cash_sales)}} </span></p>
-                                            <p class="d-flex align-center"><span>Card Sales</span> <span class="amount"> : {{formatAmount1(order.card_sales)}} </span></p>
-                                            <v-divider class="mb-3 mt-2"></v-divider>
-                                            <h5 class="text-uppercase primary--text">Transferred Amount : {{formatAmount1(order.payout)}} </h5>
-                                        </div>
-                                    </v-col>
-                                </v-row>
-                            </div>
-                        </div>
-                        <div v-else class="mt-10 unavailable">
-                        <p>{{ message }}</p>
-                        </div>
+                    <div v-else class="mt-10 unavailable">
+                    <p>{{ message }}</p>
                     </div>
-                <!-- </div> -->
-                    
+                </div>                    
+                <PayoutConfirm 
+                    :modal-payout="modalPayout"
+                    :bank="bank"
+                    :amount="amount"
+                    @close="handleClose"
+                    @confirm="handlePayProceed"
+                />
+                <PayoutFilter 
+                    :modalPayoutFilter="modalPayoutFilter"
+                    @close="handleClose"
+                    @search="handleFilterSearch"
+                />
+                <DialogProceed 
+                :dialogConfirm="modalAddBankDetail" 
+                @close="handleClose" 
+                :message="messageAddDetail"
+                @handleConfirm="handleAddBankDetail"/>
             </div>
-            <PayoutConfirm 
-                :modal-payout="modalPayout"
-                :bank="bank"
-                :amount="amount"
-                @close="handleClose"
-                @confirm="handlePayProceed"
-            />
-            <PayoutFilter 
-                :modalPayoutFilter="modalPayoutFilter"
-                @close="handleClose"
-                @search="handleFilterSearch"
-            />
-            <DialogProceed 
-            :dialogConfirm="modalAddBankDetail" 
-            @close="handleClose" 
-            :message="messageAddDetail"
-            @handleConfirm="handleAddBankDetail"/>
+            <div v-else>
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>{{ message }}</p>
+                </div>
+            </div>
         </v-container>
          <Bottomnavbar/>
     </v-container>
@@ -76,7 +82,7 @@
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { mdiFilter } from '@mdi/js'
 // import DateStart from '@/components/form-element/InputDateRange'
 // import DateEnd from '@/components/form-element/InputDateLastPicker'
@@ -96,6 +102,7 @@ export default {
             iconFilter: mdiFilter,
             modalAddBankDetail:false,
             payouts:[],
+            loading:false,
             message:'Loading...',
             default_payment:null,
             orders:[],
@@ -176,23 +183,26 @@ export default {
         },
 
         async fetchOrders() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading= true;
             await ApiService.post("/payout/order-payout-list",{
                 status:'completed',
                 start_date: this.start_date,
                 end_date: this.end_date,
             })
             .then((resp) => {
+                this.loading = false;
                 this.loaderHide();
                 this.handleClose();
                 this.orders = resp.data;
                 this.renderFilter = true;
                 if(!this.orders.length) {
-                    this.message="No orders";
+                    this.message="No payout available yet";
                 }
                 this.amount = resp.amount;
             })
             .catch(() => {
+                this.loading = false;
                 this.loaderHide();
                 console.log("no fetch")
             })
@@ -200,6 +210,7 @@ export default {
     },
     components: {
         Topnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         Bottomnavbar,
         PayoutConfirm,
         PayoutFilter,

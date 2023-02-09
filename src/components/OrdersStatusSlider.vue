@@ -11,8 +11,8 @@
                 v-for="(item,n) in items"
                 :key="n">
                 <v-btn
-                    outlined
                     rounded
+                    large
                     :color="activeIndex==n ? 'primary' : 'lighten-1'"
                     class="ma-1"
                     @click="selectStatus(item,n)">

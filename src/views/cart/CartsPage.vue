@@ -113,7 +113,7 @@
             <div>
                 <h2 class="primary--text">{{ formatAmount(cartAmount.sub_total) }}</h2>
             </div>
-            <v-btn rounded link to="/cart-payment" color="primary"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
+            <v-btn rounded link to="/cart-payment" large color="primary"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
         </div>
         <div v-else>
             <Bottomnavbar/>
@@ -342,7 +342,7 @@ export default {
     bottom: 0;
     // border-top: 1px solid #dadada;
     width: 100%;
-    padding: 13px 16px 18px 16px;
+    padding: 13px 16px 26px 16px;
     display:flex;
     align-items:center;
     justify-content: space-between;

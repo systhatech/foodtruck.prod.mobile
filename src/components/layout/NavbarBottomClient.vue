@@ -12,12 +12,24 @@
        
 		<v-btn to="/client-chat-list">
 			<span>Message</span>
-			<div class="d-flex">
+			<!-- <div class="d-flex">
 				<v-icon>{{ iconChat }}</v-icon>
 				<span class="color-secondary f8-bold ">{{
 					count > 0 ? count : ""
 				}}</span>
-			</div>
+			</div> -->
+            <div v-if="count>0">
+                <v-badge
+                    small
+                    color="error"
+                    :content="count"
+                    >
+                    <v-icon color="primary">{{ iconChat }}</v-icon>
+                </v-badge>
+            </div>
+            <div v-else>
+                <v-icon>{{ iconChat }}</v-icon>
+            </div>
 		</v-btn>
         <v-btn to="/client-profile" >
 			<span>Account</span>
@@ -93,30 +105,38 @@ export default {
                 .then((resp) => {
                     this.members = resp;
                     this.count = 0;
+                    this.members.forEach(member => {
+                        if (member.last_message.table_from !== this.currentUser.table) {
+                            if (!member.last_message.is_seen) {
+                                this.count++;
+                            }
+                        }
+                    });
+                    // this.count = 0;
+                    // // this.members.forEach((member) => {
+                    // //     if (!member.last_message) return;
+                    // //     if (member.last_message.table_from !== this.currentUser.table) {
+                    // //         if (!member.last_message.is_seen) {
+                    // //             this.count++;
+                    // //         }
+                    // //     }
+                    // // });
                     // this.members.forEach((member) => {
-                    //     if (!member.last_message) return;
-                    //     if (member.last_message.table_from !== this.currentUser.table) {
-                    //         if (!member.last_message.is_seen) {
-                    //             this.count++;
-                    //         }
-                    //     }
-                    // });
-                    this.members.forEach((member) => {
-						if (!member.last_message) return;
-						if (member.last_message.table_from !== this.currentUser.table) {
-							if (!member.last_message.is_seen) {
+					// 	if (!member.last_message) return;
+					// 	if (member.last_message.table_from !== this.currentUser.table) {
+					// 		if (!member.last_message.is_seen) {
 							
-								this.count++;
-								if(this.played.indexOf(member.id) === -1 ) {
-									this.played.push(member.id);
-									this.notify.play();
-								}
-							}else{
-								const c = this.played.indexOf(member.id);
-								this.played.splice(c,1);
-							}
-						}
-					});
+					// 			this.count++;
+					// 			if(this.played.indexOf(member.id) === -1 ) {
+					// 				this.played.push(member.id);
+					// 				this.notify.play();
+					// 			}
+					// 		}else{
+					// 			const c = this.played.indexOf(member.id);
+					// 			this.played.splice(c,1);
+					// 		}
+					// 	}
+					// });
                 })
                 .catch(() => {
                     this.$bus.$emit("HIDE_PAGE_LOADER");

@@ -78,7 +78,7 @@
                         </v-col>
                     
                         <v-col cols="12" class="text-center">
-                            <v-btn block color="primary" rounded @click="handleUpdate">update</v-btn>
+                            <v-btn block large color="primary" rounded @click="handleUpdate">update</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>

@@ -1,7 +1,7 @@
 <template>
      <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container class="mg56">
+        <v-container class="mb80">
             <div class="custom-bs pa-6">
                 <h4 class="mb-4">Bank Account Detail</h4>
                 <v-divider></v-divider>
@@ -66,7 +66,7 @@
                             ></v-checkbox>
                         </v-col>
                         <v-col cols="12" class="ma-0 pt-0">
-                            <v-btn color="primary" block rounded @click="handleSubmit">Submit</v-btn>
+                            <v-btn color="primary" large block rounded @click="handleSubmit">Submit</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>

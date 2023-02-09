@@ -3,9 +3,9 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
             <div>
-                <v-btn link to="/support-add" color="primary" class="mb-6" block rounded>new support request</v-btn>
+                <v-btn to="/support-add" color="primary" class="mb-6" block rounded large>new support request</v-btn>
             </div>
-            <div class="mb-14" v-if="enqs.length">
+            <div class="mb-14" v-if="enqs && enqs.length">
                 <div class="support-item custom-bs pa-4" v-for="(item,index) in enqs" :key="index" @click="handleView(item)">
                     <p class="f8-bold mb-0 text-uppercase">#[{{item.id}}] {{ item.title }}</p>
                     <div class="d-flex justify-space-between">
@@ -15,14 +15,19 @@
                 </div>
             </div>
             <div v-else class="text-center pa-4">
-                <h4>No enquiry</h4>
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div class="unavailable" v-else>
+                    <p>No request found</p>
+                </div>
             </div>
             <ViewEnq 
                 :dialogView="modalView" 
                 :item="viewItem"
                 @close="handleClose"/>
         </v-container>
-         <Bottomnavbar :value="indexValue"/>
+         <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
@@ -30,7 +35,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import { ApiSupport } from '@/core/services/api.support'
 import ViewEnq from './EnqueryView.vue'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 // import InputUpload from '@/components/form-element/InputUpload'
 import { support_client_username } from '@/core/services/config'
 import { mapGetters } from 'vuex'
@@ -39,6 +44,7 @@ export default {
     data() {
         return {
             title:'',
+            loading:false,
             support_client_username,
             indexValue:0,
             date: new Date(),
@@ -102,14 +108,17 @@ export default {
             this.$router.back();
         },
         async fetchContent() {
-            this.loaderShow();
+            this.loading = true;
+            // this.loaderShow();
             // "https://support.shubhu.com/tool/tasks/all?username=foodie&relatable_id=100",
             await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.table_id)
             .then((resp) => {
+                this.loading = false;
                 this.loaderHide();
                 this.enqs = resp.data;
             })
             .catch(() => {
+                this.loading = false;
                 this.loaderHide();
             })
         },
@@ -117,7 +126,8 @@ export default {
     components: {
         Topnavbar,
         ViewEnq,
-        Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
+        // Bottomnavbar,
         // InputUpload
     },
     computed: {

@@ -86,6 +86,7 @@
                         </v-col>
                         <v-col cols="12" class="text-center">
                             <v-btn color="primary" block  
+                            large
                             rounded @click="handleSubmit">Submit</v-btn>
                         </v-col>
                     </v-row>

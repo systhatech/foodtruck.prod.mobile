@@ -1,15 +1,14 @@
 <template>
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container class="mg56">
-            <v-btn color="primary" @click="addSchedule()" class="mb-4" rounded outlined block>Add New Schedule</v-btn>
-            <!-- <v-btn color="primary" to="/vendor-location-add" class="mb-4" rounded outlined block>Add New Schedule</v-btn> -->
+        <v-container class="mb80">
+            <v-btn color="primary" @click="addSchedule()" class="mb-4" rounded large block>Add New Schedule</v-btn>
             <div>
                 <Location :truckProfile="profile"/>
             </div>
             <DialogScheduleAdd :dialog-schedule="modal_schedule" @close="handleCloseModal"/>
         </v-container>
-         <!-- <Bottomnavbar value="0"/> -->
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
@@ -27,7 +26,7 @@ export default {
         }
     },
     mounted() {
-        console.log(this.profile);
+        // 
     },
     methods: {
         handleBack(){
@@ -43,7 +42,7 @@ export default {
     components: {
         Location: ()=> import('@/views/vendor/profile/components/TruckLocationList.vue'),
         Topnavbar: ()=> import('@/components/layout/TopnavbarBackCustom'),
-        // Bottomnavbar,
+        Bottomnavbar: ()=> import('@/components/layout/NavbarBottomVendor'),
         DialogScheduleAdd: ()=>import('@/views/vendor/profile/modal/ModalVendorScheduleAdd')
         // InputUpload
     },

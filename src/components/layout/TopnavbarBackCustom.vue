@@ -1,7 +1,5 @@
 <template>
-       <v-toolbar 
-            color="primary" 
-            style="position: sticky;top: 0;px;z-index: 4;">
+      <v-toolbar  color="primary" elevation="1" style="position: sticky;top: 0;px;z-index: 4;">
            <v-btn color="white" class="pl-0" @click="handleBack" tile text>
             <v-icon color="white">mdi-chevron-left</v-icon>Back 
             </v-btn> 

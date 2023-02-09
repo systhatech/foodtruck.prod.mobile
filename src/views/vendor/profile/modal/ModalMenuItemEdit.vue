@@ -15,7 +15,7 @@
                     <v-container>
                         <div class="background-image">
                             <div>
-                                <div class="pa-4 custom-bs pt-6">
+                                <div class="pa-4 custom-bs mt-14">
 
                                     <v-form v-model="valid" ref="formLocation">
                                         <v-row>
@@ -53,9 +53,9 @@
                                                     label="Description" required></v-textarea>
                                             </v-col>
                                             <v-col cols="12">
-                                                <v-btn color="primary" block class="mb-6" rounded
+                                                <v-btn color="primary" block class="mb-6" rounded large
                                                     @click="handleSubmit">Update</v-btn>
-                                                <v-btn rounded block outlined color="error"
+                                                <v-btn rounded block outlined color="error" large
                                                     @click="confirmDelete">Delete</v-btn>
                                             </v-col>
                                         </v-row>
@@ -147,7 +147,7 @@ export default {
         confirmDelete() {
             this.dialogConfirm = true;
         },
-        handleCloseDelete(){
+        handleCloseDelete() {
             this.dialogConfirm = false;
             this.$emit('close');
         },

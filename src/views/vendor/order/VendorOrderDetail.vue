@@ -16,7 +16,7 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <div class="pb82 p-relative background-image">
-                        <template v-if="orderDetail && Object.keys(orderDetail).length">
+                        <template v-if="!loading && orderDetail && Object.keys(orderDetail).length">
                             <div class="custom-bs pa-4">
                                 <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
                                 <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail && orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no :orderDetail.client.contact.phone_no }}</p>
@@ -153,37 +153,43 @@
                             </div>
                         </template>
                         <template v-else>
-                            <div class="unavailable">
+                            <div v-if="loading" class="text-center">
+                                <ComponentLoadingVue/>
+                            </div>
+                            <div v-else class="unavailable">
                                 <h3>{{ message }}</h3>
                             </div>
                         </template>
                     </div>
-                    <div class="pa-4 custom-bs" style="position: fixed;bottom: 0;width: 100%;z-index: 1;" v-if="order.status!='completed'">
+                    <div class="pa-4 custom-bs pb-6" style="position: fixed;bottom: 0;width: 100%;z-index: 1;" v-if="order.status!='completed'">
                         <div class="d-flex align-center justify-space-between">
                             <div v-if="order && order.status == 'new'"
                                 class="d-flex align-center justify-space-between w-100">
-                                <v-btn rounded :disabled="disableButton" color="error"
-                                text
+                                <v-btn rounded :disabled="disableButton" color="error" text large
                                     @click="onClick('archive')">archive</v-btn>
-                                <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton"
+                                <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton" large
                                     color="primary" @click="onClick('accepted')">Accept</v-btn>
                             </div>
                             <div v-if="order && order.status == 'accepted'"
                                 class="d-flex align-center justify-space-between w-100">
-                                <v-btn rounded :disabled="disableButton" color="error"
-                                    text
-                                    @click="onClick('archive')">archive</v-btn>
-                                <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton"
-                                    color="primary" @click="onClick('ready')">Ready For pickup</v-btn>
+                                <v-btn rounded :disabled="disableButton" color="error" 
+                                large
+                                text
+                                @click="onClick('archive')">archive</v-btn>
+                                <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton" 
+                                large
+                                color="primary" @click="onClick('ready')">Ready For pickup</v-btn>
                             </div>
 
                             <div v-if="order && order.status == 'ready'"
                                 class="d-flex align-center justify-space-between w-100">
                                 <v-btn rounded :disabled="disableButton" color="error"
+                                large
                                 text
-                                    @click="onClick('archive')">archive</v-btn>
+                                @click="onClick('archive')">archive</v-btn>
                                 <v-btn rounded :disabled="disableButton" color="success"
-                                    @click="onClick('completed')">completed</v-btn>
+                                large
+                                @click="onClick('completed')">completed</v-btn>
                             </div>
                         </div>
                     </div>
@@ -216,12 +222,14 @@ export default {
                 this.fetchOrderDetail();
                 this.disableButton = false;
             } else {
+                this.loading = true;
                 this.render = false;
             }
         }
     },
     components: {
         DialogConfirm,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // NavbarClose
         // DialogAddressType
     },
@@ -251,20 +259,23 @@ export default {
             addressType: '',
             orderStatus: '',
             totalData: {},
+            loading:false,
             message: 'Loading...',
         }
     },
     methods: {
         async fetchOrderDetail() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
             if (!this.order || this.order.order_id == undefined) return;
             await ApiService.post('/order/detail', { order_id: this.order.order_id, vendor_id: this.currentUser.vendor_id })
                 .then((response) => {
+                    this.loading = false;
                     this.orderDetail = response.data;
                     this.totalData = response.total;
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                 })
                 .catch(() => {
+                    this.loading = false;
                     this.message = "Failed to fetch order";
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                 });

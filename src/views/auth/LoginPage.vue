@@ -1,54 +1,62 @@
 <template>
     <v-container class="ma-0 pa-0 h-100 background-image">
-        <v-container>
-            <div class="mt-10">
-                <v-btn icon text color="primary" :to="{
-                    name: 'home'
-                }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
-            </div>
-            <div class="pt-4">
-                <v-row>
-                    <v-col cols="12">
-                        <div class="text-center mb-2">
-                            <img :src="base_url+'/default-company/logo'" width="90" />
-                        </div>
-                    </v-col>
-                </v-row>
-            </div>
-            <div class="pa-4 custom-bs bg-primary-light">
-                <v-form ref="formLogin">
+        <v-container class="d-flex align-center" style="height:700px">
+            <div class="w-100">
+                <div class="pt-14">
                     <v-row>
-                        <v-col cols="12" class="pt-0">
-                            <v-text-field label="Email" :rules="emailRules" v-model="login_info.email"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" class="pt-0">
-                            <v-text-field class="pt-0" :append-icon="
-                                show_password ? 'mdi-eye' : 'mdi-eye-off'" :type="show_password ? 'text' : 'password'" name="password"
-                                v-model="login_info.password" label="Password" :rules="rulesRequired" autocomplete="off"
-                                required @click:append="show_password = !show_password"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" class="text-right pb-0 pt-0">
-                            <v-btn tile small text to="/password-forget">Forget Password?</v-btn>
-                        </v-col>
                         <v-col cols="12">
-                            <v-btn rounded color="primary" block class="mr-4" @click="submit">
-                                sign in
-                            </v-btn>
+                            <div class="mt-10">
+                                <v-btn icon text color="primary" :to="{
+                                    name: 'home'
+                                }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
+                            </div>
+                            <div class="text-center mb-2">
+                                <img :src="base_url+'/default-company/logo'" width="90" />
+                            </div>
+                        </v-col>
+                        <v-col cols="12" md="6" offset-md="3" lg="4" offset-lg="4">
+                            <div class="pa-6 custom-bs bg-primary-light">
+                                <v-form ref="formLogin">
+                                    <v-row>
+                                        <v-col cols="12" class="pt-0">
+                                            <v-text-field label="Email" :rules="emailRules"
+                                                v-model="login_info.email"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="pt-0">
+                                            <v-text-field class="pt-0" :append-icon="
+                                            show_password ? 'mdi-eye' : 'mdi-eye-off'" :type="show_password ? 'text' : 'password'"
+                                                name="password" v-model="login_info.password" label="Password"
+                                                :rules="rulesRequired" autocomplete="off" required
+                                                @click:append="show_password = !show_password"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" class="text-right pb-0 pt-0">
+                                            <v-btn tile small text to="/password-forget">Forget Password?</v-btn>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-btn rounded color="primary" large block class="mr-4" @click="submit">
+                                                sign in
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <div class="text-center pa-6 ma-4">
+                                                <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">sign up ?</p>
+                                                <div>
+                                                    <v-btn text to="signup-customer" color="primary">Customer</v-btn>|
+                                                    <v-btn text to="signup-truck" color="primary">Truck</v-btn>
+                                                </div>
+                                            </div>
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </div>
                         </v-col>
                     </v-row>
-                </v-form>
-            </div>
-            <div class="text-center pa-6 ma-4">
-                <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">sign up ?</p>
-                <div>
-                    <v-btn text to="signup-customer" color="primary">Customer</v-btn>| 
-                    <v-btn text to="signup-truck" color="primary">Truck</v-btn>
                 </div>
             </div>
         </v-container>
-
     </v-container>
 </template>
+
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
@@ -58,7 +66,7 @@ export default {
     data: () => ({
         icon_back: mdiChevronLeft,
         base_url,
-        logo:'',
+        logo: '',
         login_info: {
             email: "",
             password: "",
@@ -102,22 +110,22 @@ export default {
             signIn: 'auth/signIn'
         }),
         async submit() {
-            if(!this.$refs.formLogin.validate()) return;
+            if (!this.$refs.formLogin.validate()) return;
             this.loaderShow();
             this.signIn(this.login_info)
                 .then(() => {
                     this.loaderHide();
                     this.fetchAddress();
-                    if(this.$router.currentRoute.query){
+                    if (this.$router.currentRoute.query) {
                         let route = this.$router.currentRoute.query;
-                        if(route.page && route.id){
-                            this.$router.push("/"+route.page+"/"+route.id);
-                        }else{
+                        if (route.page && route.id) {
+                            this.$router.push("/" + route.page + "/" + route.id);
+                        } else {
                             this.$router.replace({
                                 name: 'home',
                             })
                         }
-                    }else{
+                    } else {
                         this.$router.replace({
                             name: 'home',
                         })
@@ -144,31 +152,31 @@ export default {
         async fetchAddress() {
             this.loaderShow();
             ApiService.get('/getapikeys')
-            .then(async (apiKeys) => {
-                let googleApiKey = apiKeys.google;
-                await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
-                    .then((resp) => {
-                        this.loaderHide();
-                        for (let addr of resp.results) {
-                            let address = this.parseGoogleResponse(addr.address_components);
-                            this.location.add1 = address.street_number + " " + address.route;
-                            this.location.city = address.locality;
-                            this.location.state = address.administrative_area_level_1;
-                            this.location.zip_code = address.postal_code;
-                            this.location.country = address.country;
-                            break;
-                        }
-                        this.updateLocation();
+                .then(async (apiKeys) => {
+                    let googleApiKey = apiKeys.google;
+                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
+                        .then((resp) => {
+                            this.loaderHide();
+                            for (let addr of resp.results) {
+                                let address = this.parseGoogleResponse(addr.address_components);
+                                this.location.add1 = address.street_number + " " + address.route;
+                                this.location.city = address.locality;
+                                this.location.state = address.administrative_area_level_1;
+                                this.location.zip_code = address.postal_code;
+                                this.location.country = address.country;
+                                break;
+                            }
+                            this.updateLocation();
 
-                    })
-                    .catch(() => {
-                        this.loaderHide();
-                    })
-            })
+                        })
+                        .catch(() => {
+                            this.loaderHide();
+                        })
+                })
         },
         async updateLocation() {
             this.loaderShow();
-            console.log("location",this.location);
+            // console.log("location", this.location);
             await ApiService.post('/location/save-current', this.location)
                 .then(() => {
                     this.loaderHide();

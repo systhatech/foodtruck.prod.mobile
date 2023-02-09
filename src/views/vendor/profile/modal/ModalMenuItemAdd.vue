@@ -15,7 +15,7 @@
                     <v-container>
                         <div class="background-image">
                             <div>
-                                <div class="pa-4 custom-bs pt-6">
+                                <div class="pa-4 custom-bs mt-14">
 
                                     <v-form v-model="valid" ref="formLocation">
                                         <v-row>
@@ -99,7 +99,7 @@
                                                 ></v-textarea>
                                             </v-col>
                                             <v-col cols="12" class="text-center">
-                                                <v-btn color="primary" block  
+                                                <v-btn color="primary" block  large
                                                 rounded @click="handleSubmit">Submit</v-btn>
                                             </v-col>
                                         </v-row>

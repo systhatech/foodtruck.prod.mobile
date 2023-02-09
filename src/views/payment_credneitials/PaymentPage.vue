@@ -1,7 +1,7 @@
 <template>
      <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container class="mg56">
+        <v-container class="mb80">
             <div v-if="default_payment">
                 <div v-if="default_payment=='vendor'">
                     <StripeDetail/>
@@ -19,7 +19,7 @@
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import BankDetail from './PaymentBankPage'
 import StripeDetail from './PaymentStripePage'
 import { mapGetters } from 'vuex'

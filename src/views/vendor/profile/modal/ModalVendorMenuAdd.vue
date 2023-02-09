@@ -4,7 +4,7 @@
             <v-dialog v-model="dialogMenuAdd" persistent scrollable fullscreen>
                 <v-card class="background-image" style="padding-top: 56px !important;">
                     <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
-                        <v-toolbar-title class="pl-0 text-capitalize">New Menu</v-toolbar-title>
+                        <v-toolbar-title class="pl-0 text-capitalize">{{ isEdit ? 'Update Menu':'Add Menu'}}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn text @click="handleClose">
@@ -13,7 +13,7 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <div>
-                        <div class="pa-4 custom-bs">
+                        <div class="pa-4 custom-bs mt-14">
                             <v-form ref="formMenu">
                                 <v-row>
                                     <v-col cols="12" md="6">
@@ -46,7 +46,7 @@
                                             ></v-checkbox>
                                     </v-col>
                                     <v-col cols="12">
-                                        <div class="w-100 text-center"><v-btn color="primary" rounded @click="handleSubmit()">submit</v-btn>
+                                        <div class="w-100 text-center"><v-btn block  large color="primary" rounded @click="handleSubmit()">submit</v-btn>
                                         </div>
                                     </v-col>
                                 </v-row>

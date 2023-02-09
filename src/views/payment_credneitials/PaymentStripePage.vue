@@ -51,7 +51,7 @@
                     cols="12"
                     md="12"
                     >
-                    <v-btn color="primary" block rounded @click="handleSubmit">Submit</v-btn>
+                    <v-btn color="primary" large block rounded @click="handleSubmit">Submit</v-btn>
                     </v-col>  
                 </v-row>
             </v-form>

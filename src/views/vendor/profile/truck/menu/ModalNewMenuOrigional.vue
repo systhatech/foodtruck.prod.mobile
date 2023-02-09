@@ -277,13 +277,13 @@
     </v-row>
 </template>
 <script>
-import { mdiPlus, mdiMinus, mdiClose } from '@mdi/js'
+import { mdiClose } from '@mdi/js'
 import InputAutocomplete from '../../../components/InputAutocompleteGlobal'
 import InputUpload from '../../../components/InputUpload'
-import { axiosWeb } from '../../../../utils/axios-web'
+// import { axiosWeb } from '../../../../utils/axios-web'
 import { axios } from '../../../../utils/axios'
 import { mapGetters } from 'vuex'
-import vueDropzone from "vue2-dropzone";
+// import vueDropzone from "vue2-dropzone";
 import DialogDelete from './DialogDelete';
 import DialogDeleteVariant from './DialogDeleteVariant';
 import ModalAddCategory from './ModalAddCategory';
@@ -597,7 +597,7 @@ export default {
         handleCategorySelected(item){
             this.$bus.$emit('SHOW_PAGE_LOADER');
             this.category_id = item.selected_data;
-            let abc = {};
+            // let abc = {};
             axios.post('/vendor/menus',{
                 vendor_id: this.currentUser.vendor.id,
                 categories: JSON.stringify(item.selected_data)
@@ -617,7 +617,7 @@ export default {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 // console.log(this.food_categories);
             })
-            .catch((error) => {
+            .catch(() => {
                 this.messageError('Something wrong!!');
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             });

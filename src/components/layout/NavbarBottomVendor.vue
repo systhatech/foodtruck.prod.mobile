@@ -12,12 +12,18 @@
        
 		<v-btn link to="/vendor-chat-list">
 			<span>Message </span>
-			<div class="d-flex">
-				<v-icon>{{ iconChat }}</v-icon>
-				<span class="color-secondary f8-bold ">{{
-					count > 0 ? count : ""
-				}}</span>
-			</div>
+			<div v-if="count>0">
+                <v-badge
+                    small
+                    color="error"
+                    :content="count"
+                    >
+                    <v-icon color="primary">{{ iconChat }}</v-icon>
+                </v-badge>
+            </div>
+            <div v-else>
+                <v-icon>{{ iconChat }}</v-icon>
+            </div>
 		</v-btn>
         <v-btn link to="/vendor-profile" >
 			<span>Account</span>

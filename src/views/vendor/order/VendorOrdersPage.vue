@@ -53,8 +53,13 @@
                     </v-row>
                 </div>
             </div>
-            <div v-else class="mt-10">
-                <p>No Items</p>
+            <div v-else class="mt-10 text-center">
+                <div v-if="loading">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No orders</p>
+                </div>
             </div>
             <OrderDetail :dialog-order-detail="dialogOrderDetail" @close="handleClose" :order="orderItem"/>
         </v-container>
@@ -86,6 +91,7 @@ export default {
             icon_right:mdiChevronRight,
             orderItem:{},
             // vendor_id:3,
+            loading:false,
             activeItem:0,
             activeType:0,
             orders:[],
@@ -133,15 +139,18 @@ export default {
             this.$router.back();
         },
         async fetchOrders() {
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loading = true;
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
             await ApiService.post("/order-list",{
                 'status': this.status
             })
             .then((resp) => {
+                this.loading = false;
                 this.orders = resp.data;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             })
             .catch((error) => {
+                this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 console.log(error);
             })
@@ -190,6 +199,7 @@ export default {
         Topnavbar,
         Bottomnavbar,
         OrderDetail,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         OrderStatus: ()=> import('@/components/OrdersStatusSlider.vue')
     },
     computed: {

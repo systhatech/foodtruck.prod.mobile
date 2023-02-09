@@ -17,7 +17,7 @@
                             <v-textarea label="Message" v-model="form.description" :rules="rulesRequired" auto-grow></v-textarea>
                         </v-col>
                         <v-col cols="12">
-                            <v-btn color="primary" rounded block @click="handleSubmit">Submit</v-btn>
+                            <v-btn color="primary" large rounded block @click="handleSubmit">Submit</v-btn>
                         </v-col>
                     </v-row>
 
@@ -26,14 +26,14 @@
                
             </div>
         </v-container>
-         <Bottomnavbar :value="indexValue"/>
+         <!-- <Bottomnavbar :value="indexValue"/> -->
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import { ApiSupport } from '@/core/services/api.support'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
 import { base_support_project_url,support_client_username } from '@/core/services/config'
 import { mapGetters } from 'vuex'
 export default {
@@ -115,7 +115,7 @@ export default {
     },
     components: {
         Topnavbar,
-        Bottomnavbar,
+        // Bottomnavbar,
         // InputUpload
     },
     computed: {

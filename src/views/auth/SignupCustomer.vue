@@ -39,7 +39,7 @@
                     </v-row>
                 </v-form>
                 <div class="text-center">
-                    <v-btn color="primary" rounded @click="handleSubmit()">Submit</v-btn>
+                    <v-btn color="primary" rounded block large @click="handleSubmit()">Submit</v-btn>
                 </div>
             </div>
         </v-container>

@@ -51,8 +51,13 @@
                     </v-row>
                 </div>
             </div>
-            <div v-else class="mt-10">
-                <p>No orders</p>
+            <div v-else class="mt-10 text-center">
+                <div v-if="loading">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No orders</p>
+                </div>
             </div>
         </v-container>
          <Bottomnavbar/>
@@ -71,7 +76,7 @@ export default {
     data() {
         return {
             title:'',
-            indexValue:1,
+            loading:false,
             icon_right:mdiChevronRight,
             moment,
             valid:true,
@@ -116,15 +121,17 @@ export default {
             this.$router.back();
         },
         async fetchOrders() {
-            this.loaderShow();
+            this.loading = true;
             await ApiService.post("/order-list",{
                 'status': this.status
             })
             .then((resp) => {
+                this.loading = false;
                 this.orders = resp.data;
                 this.loaderHide();
             })
             .catch((error) => {
+                this.loading = false;
                 this.loaderHide();
                 console.log(error);
             })
@@ -172,6 +179,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         OrderStatus: ()=> import('@/components/OrdersStatusSlider.vue')
     },
     computed: {

@@ -80,6 +80,7 @@
 					block
 					class="mb-6"
 					rounded
+          large
 					@click="handleSubmit"
 					>Update</v-btn
 				>

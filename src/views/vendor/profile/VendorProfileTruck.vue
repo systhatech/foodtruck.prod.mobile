@@ -71,6 +71,7 @@
                         </v-col> -->
                         <v-col cols="12" class="text-center">
                             <v-btn block color="primary"
+                            large
                              @click="updateGeneral" rounded>Update</v-btn>
                         </v-col>
                     </v-row>
@@ -78,14 +79,14 @@
                 </v-form>
             </div>
         </v-container>
-         <Bottomnavbar :value="indexValue"/>
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
 export default {

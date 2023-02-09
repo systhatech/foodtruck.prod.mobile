@@ -11,15 +11,15 @@
                                     <div class="custom-bs pa-4">
                                         <div class="mb-4">
                                             <h5 class="primary--text text-uppercase">{{ orderDetail && orderDetail.vendor ? orderDetail.vendor.name :'' }}</h5>
-                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconPhone}}</v-icon> {{ orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone : orderDetail.vendor.contact.phone_no }}</p>
-                                            <p class="sub-text"> <v-icon color="primary" class="w-18">{{iconEmail}}</v-icon> {{ orderDetail && orderDetail.vendor && orderDetail.vendor.contact?orderDetail.vendor.contact.email :'unavailable'}}</p>
+                                            <p class="mb-0"> <v-icon color="primary" class="w-18">{{iconPhone}}</v-icon> {{ orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone : orderDetail.vendor.contact.phone_no }}</p>
+                                            <p class="mb-0"> <v-icon color="primary" class="w-18">{{iconEmail}}</v-icon> {{ orderDetail && orderDetail.vendor && orderDetail.vendor.contact?orderDetail.vendor.contact.email :'unavailable'}}</p>
                                         </div>
                                         <h5 class="primary--text text-uppercase">Pickup Address</h5>
                                         <div class="d-flex align-start" v-if="orderDetail.pickup_addr">
                                             <v-icon color="primary" class="w-18">{{iconLocation}}</v-icon>
                                             <div>
-                                                <p class="sub-text">{{ orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :'' }}</p>
-                                                <p class="sub-text" >
+                                                <p class="mb-0">{{ orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :'' }}</p>
+                                                <p class="mb-0" >
                                                     {{ orderDetail.pickup_addr? orderDetail.pickup_addr.city:'' }}
                                                     {{ orderDetail.pickup_addr? orderDetail.pickup_addr.state:'' }} 
                                                     {{ orderDetail.pickup_addr? orderDetail.pickup_addr.zip:'' }}

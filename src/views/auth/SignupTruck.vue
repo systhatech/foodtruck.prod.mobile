@@ -55,7 +55,7 @@
                     </v-row>
                 </v-form>
                 <div class="text-center">
-                    <v-btn color="primary" rounded @click="handleSubmit()">Submit</v-btn>
+                    <v-btn color="primary" block large rounded @click="handleSubmit()">Submit</v-btn>
                 </div>
                       
             </div>

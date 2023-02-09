@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn link block rounded color="primary" to="/payment-bank-add" class="mb-6">Add Bank  Account</v-btn>
+        <v-btn large block rounded color="primary" to="/payment-bank-add">Add Bank  Account</v-btn>
         <div v-if="payouts && payouts.length">
             <div class="custom-bs pa-4 mb-4 d-flex justify-space-between" v-for="(payout, index) in payouts" :key="index">
                 <div class="">

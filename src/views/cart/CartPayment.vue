@@ -13,7 +13,7 @@
                             <div class="w-100 d-flex align-center justify-space-between">
                                 <div>
                                     <div>
-                                        <p class="mb-0 text-capitalize">{{ vendor.name ? vendor.name:'-' }} </p>
+                                        <h5 class="mb-0 text-capitalize text-uppercase">{{ vendor.name ? vendor.name:'-' }} </h5>
                                         <p class="mb-0">{{  vendor.contact && vendor.contact.phone_no ? vendor.contact.phone_no : (vendor.contact && vendor.contact.mobile_no ?vendor.conact.mobile_no:'') }} </p>
                                         <p class="mb-0">{{ vendor.contact.email }} </p>
                                     </div>
@@ -69,11 +69,11 @@
                                         <td class="text-right">{{ formatAmount(cartAmount.sub_total)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.service_charge_percent">
-                                        <td>Service Charge ({{ cartAmount.service_charge_percent}} %)</td>
+                                        <td>Service Charge</td>
                                         <td class="text-right">{{formatAmount(cartAmount.service_charge_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.tax_percent">
-                                        <td>Tax ({{ cartAmount.tax_percent}} %)</td>
+                                        <td>Taxes</td>
                                         <td class="text-right">{{formatAmount(cartAmount.tax_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.tip_amount">
@@ -81,16 +81,16 @@
                                         <td class="text-right">{{formatAmount(cartAmount.tip_amount)}}</td>
                                     </tr>
                                     <tr v-if="cartAmount.convenience_fee && (payment_method=='card')">
-                                        <td>Convenience fee ({{ cartAmount.convenience_fee}} %)</td>
+                                        <td>Convenience fee</td>
                                         <td class="text-right">{{formatAmount(cartAmount.convenience_amount)}}</td>
                                     </tr>
                                     <tr v-if ="payment_method=='card'">
                                         <td class=""><h5 class="primary--text">TOTAL</h5> </td>
-                                        <td class=" text-right"><h5> {{formatAmount(cartAmount.card_total)}}</h5></td>
+                                        <td class=" text-right"> <h4 class="primary--text">{{formatAmount(cartAmount.card_total)}}</h4></td>
                                     </tr>
                                     <tr v-if="payment_method=='cash'">
                                         <td class=""><h5 class="primary--text">TOTAL</h5> </td>
-                                        <td class=" text-right"> <h5>{{formatAmount(cartAmount.cash_total)}}</h5></td>
+                                        <td class=" text-right"> <h4 class="primary--text">{{formatAmount(cartAmount.cash_total)}}</h4></td>
                                     </tr>
                                 </table>
                             </div>
@@ -151,7 +151,7 @@
                     </div>
                    <div>
                         <div v-if="payment_method == 'cash' && cash_on_pickup">
-                            <v-btn block color="primary" rounded class="mt-4" @click="handleProceed">Proceed</v-btn>
+                            <v-btn large block color="primary" rounded class="mt-4" @click="handleProceed">Proceed</v-btn>
                         </div>
                        <div v-else-if="payment_method=='card'">
                            <div v-if="vendorPayment && vendorPayment.val1">
@@ -170,7 +170,7 @@
             </div>
             
         </v-container>
-        <Bottomnavbar :value="indexValue"/>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>

@@ -1,5 +1,6 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
+        <Topnavbar/>
         <div>
             <div v-if="currentUser && currentUser.table=='vendors'">
                 <DashboardVendor/>
@@ -11,6 +12,7 @@
     </v-container>
 </template>
 <script>
+import Topnavbar from '@/components/layout/Topnavbar'
 import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
@@ -65,6 +67,7 @@ export default {
         }
     },
     components: {
+        Topnavbar,
         DashboardVendor: ()=> import('@/views/vendor/dashboard/VendorDashboardPage'),
         DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
     },
@@ -74,9 +77,10 @@ export default {
         //     name: this.search,
         //     guest: localStorage.getItem('g_token'),
         // });
+        if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
+
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
-        if(!this.currentUser) return;
         try{
             socketHandler.onlineStatus({
                 id : this.currentUser.table_id,

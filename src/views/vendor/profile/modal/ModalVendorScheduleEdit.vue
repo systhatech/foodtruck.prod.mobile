@@ -138,6 +138,7 @@
                                         <div class="pt-4 pb-4">
                                             <v-btn color="primary" block  
                                             rounded 
+                                            large
                                             @click="handleSubmit">Submit</v-btn>
                                         </div>
                                     </v-col>

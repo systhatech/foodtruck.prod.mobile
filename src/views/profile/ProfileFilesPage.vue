@@ -18,7 +18,7 @@
                     </div>
                     <div class="pt-4">
                         <!-- <InputAutocomplete @selected="selected" :defaultClear="defaultClear" label="Image Type" :items="imageTypes"/> -->
-                        <v-btn color="primary" rounded block @click="handleUpload">Upload</v-btn>
+                        <v-btn color="primary" large rounded block @click="handleUpload">Upload</v-btn>
                     </div>
                 </div>
 
@@ -41,8 +41,8 @@
                         </v-row>    
                     </div>
                 </div>
-                <div v-else>
-                    <p>No images</p>
+                <div v-else class="text-center">
+                    <p class="pt-6">No images</p>
                 </div>
             </div>
             <DialogConfirm :dialogConfirm="dialogConfirm" message="Do you to delete ?" @handleConfirm="handleConfirm" @close="handleClose"/>

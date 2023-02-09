@@ -7,9 +7,6 @@
         fullscreen>
         <v-card class="background-image" style="padding-top: 56px !important;">
             <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
-                <!-- <v-btn fab small text @click="handleClose">
-                    <v-icon>mdi-chevron-left</v-icon>
-                </v-btn> -->
                 <v-toolbar-title class="text-capitalize">{{item.name}}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -19,7 +16,7 @@
                 </v-toolbar-items>
             </v-toolbar>
             <!-- <v-container> -->
-                <div class="pa-4 pb82 background-white pb-16" v-if="item && Object.keys(item).length">
+                <div class="pa-4 pb82 background-white pb-16 mt-14" v-if="item && Object.keys(item).length">
                     <div class="d-flex">
                         <div>
                             <v-img
@@ -39,7 +36,7 @@
                         </div>
                     </div>
                     <div id="menu-modal" v-if="item.variants.length">
-                        <div class="pt-5">
+                        <div class="pt-5 pl-4">
                             <p>Add Extra</p>
                             <div v-for="(varient,i) in item.variants"
                                 :key="i" class="mb-6">
@@ -98,7 +95,7 @@
                         </v-expansion-panels> -->
                     </div>
                 </div>
-                <div class="pa-4 custom-bs" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">
+                <div class="pa-4 custom-bs pb-8" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">
                     <div class="d-flex align-center justify-space-between">
                         <div class="d-flex align-center">
                             <v-btn
@@ -120,7 +117,7 @@
                                 <v-icon dark>{{ mdiMinus }}</v-icon>
                             </v-btn>
                         </div>
-                        <v-btn color="primary" rounded @click="addToCart(item)">Add to cart - {{getAmount(item)}}</v-btn>
+                        <v-btn color="primary" large rounded @click="addToCart(item)">Add to cart - {{getAmount(item)}}</v-btn>
                     </div>
                 </div>
             <!-- </v-container> -->

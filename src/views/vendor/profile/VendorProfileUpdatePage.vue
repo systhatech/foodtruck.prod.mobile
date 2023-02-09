@@ -65,6 +65,7 @@
                         </v-col>
                         <v-col cols="12" class="text-center">
                             <v-btn block color="primary" 
+                            large
                             @click="updateProfile" rounded>Update</v-btn>
                         </v-col>
                     </v-row>

@@ -1,6 +1,6 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <Topnavbar/>
+        <!-- <Topnavbar/> -->
         <v-container class="mg56 pt-4">
            <v-row>
             <v-col cols="12" md="6">
@@ -39,7 +39,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Topnavbar from '@/components/layout/Topnavbar'
+// import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
@@ -98,7 +98,7 @@ export default {
         }
     },
     components: {
-       Topnavbar,
+    //    Topnavbar,
        Bottomnavbar,
        DialogConfirm,
     },
@@ -110,8 +110,8 @@ export default {
         //     guest: localStorage.getItem('g_token'),
         // });
         // this.handleAvailable();
-        let deviceToken = localStorage.getItem('d_token');
-        this.saveDeviceToken(deviceToken);
+        // let deviceToken = localStorage.getItem('d_token');
+        // this.saveDeviceToken(deviceToken);
         if(!this.currentUser) return;
     
         try{
@@ -144,6 +144,7 @@ export default {
             this.fetchTrucks({ 
                 available: 1,
                 // distance: this.distance,
+                radius: this.distance,
                 name: this.search,
                 guest: localStorage.getItem('g_token'),
             });

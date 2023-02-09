@@ -1,6 +1,6 @@
 <template>
     <div class="pt-4 ">
-        <div v-if="truckProfile.menus && truckProfile.menus.length">
+        <div v-if="truckProfile && truckProfile.menus && truckProfile.menus.length">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
                     <h5 class="pb-2 mt-8 text-uppercase">{{ index }}</h5>
@@ -19,7 +19,7 @@
                                 <div class="pl-3 d-flex align-center justify-space-between w-100">
                                     <div>
                                         <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
-                                        <p style="font-size:14px">{{ shortText(item.description,40) }}</p>
+                                        <p style="font-size:14px" v-if="item.description">{{ shortText(item.description,40) }}</p>
                                     </div>
                                     <!-- <div>
                                         

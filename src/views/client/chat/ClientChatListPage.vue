@@ -4,7 +4,7 @@
         <v-container class="mg56">
             <div v-if="currentUser && members && members.length">
                 <ul class="chat-lists custom-bs pa-4">
-                    <li v-for="(member, index) in members" :key="index">
+                    <li v-for="(member, index) in members" :key="index" class="d-flex align-center justify-space-between" @click="handleRoute(member.id)">
                         <div class="d-flex align-center justify-space-between">
                             <div class="d-flex">
                                 <v-avatar color="indigo">
@@ -25,18 +25,20 @@
                                         </v-badge>
                                     </div>
                                     <div v-else>
-                                        <p class="mb-0">{{ member.name }}</p>
+                                        <h5 class="mb-0 primary--text">{{ member.name }}</h5>
                                     </div>
                                     <div class="last_msg"
                                         :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
                                         <div v-html="messageText(member.last_message)"></div>
                                     </div>
-                                    <p class="last_msg_date">{{formatChatListTime(member.last_message.created_at, tz)}}
-                                    </p>
+                                    <p class="last_msg_date pb-3">{{formatChatListTime(member.last_message.created_at, tz)}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right pt-3">
+                        <div>
+                            <v-btn fab text small><v-icon color="primary">mdi-chevron-right</v-icon></v-btn>
+                        </div>
+                        <!-- <div class="text-right pt-3">
                             <v-btn fab small color="primary" class="mr-3" @click="handleRoute(member.id)">
                                 <v-icon>{{ iconChat }}</v-icon>
                             </v-btn>
@@ -48,13 +50,19 @@
                             <v-btn fab small color="error" @click="handleOpenArkive(member.contact)">
                                 <v-icon>{{ iconArchive }}</v-icon>
                             </v-btn>
-                        </div>
+                        </div> -->
                     </li>
                 </ul>
             </div>
-            <div v-else class="mt-3">
-                <div class="custom-bs pa-4">
-                    <p>No chat history</p>
+            <div v-else>
+                <div class="w-100 text-center">
+                    <div v-if="loading">
+                        <ComponentLoadingVue/>
+                    </div>
+                 
+                    <div v-else class="unavailable">
+                        <p>No chats available</p>
+                    </div>
                 </div>
             </div>
             <DialogConfirm :dialogConfirm="dialogConfirm" :message="message" @handleConfirm="handleArchive"
@@ -108,6 +116,7 @@ export default {
                 table_name: "",
                 table_id: "",
             },
+            loading:false,
         };
     },
     mounted() {
@@ -167,13 +176,16 @@ export default {
             // }
         },
         fetchTrucks() {
-            this.$bus.$emit("SHOW_PAGE_LOADER");
+            this.loading = true;
+            // this.$bus.$emit("SHOW_PAGE_LOADER");
             ApiService.post("/chat/members")
                 .then((resp) => {
+                    this.loading = false;
                     this.$bus.$emit("HIDE_PAGE_LOADER");
                     this.members = resp;
                 })
                 .catch(() => {
+                    this.loading = false;
                     this.$bus.$emit("HIDE_PAGE_LOADER");
                     this.message("Failed to fetch members");
                 });
@@ -183,6 +195,7 @@ export default {
         Topnavbar,
         Bottomnavbar,
         DialogConfirm,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // InputUpload
     },
     computed: {
@@ -210,13 +223,13 @@ export default {
 
         .last_msg {
             margin: 0;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             // font-weight: 600;
         }
 
         .last_msg_date {
             margin: 0;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             // font-style: italic;
             color: #757575;
         }

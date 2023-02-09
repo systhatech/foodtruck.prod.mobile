@@ -44,6 +44,7 @@
                                     rounded
                                     color="primary"
                                     block
+                                    large
                                     @click="submit"
                                 >
                                     update
@@ -55,10 +56,12 @@
             </div>
         </v-container>
     </v-container>
+    <Bottomnavbar/>
 </template>
 <script>
 import { ApiService } from '@/core/services/api.service'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import  JwtService from '@/core/services/jwt.service';
 export default {
     name:'UpdatePasswordPage',

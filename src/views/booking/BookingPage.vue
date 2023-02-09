@@ -40,7 +40,7 @@ import BookingAvailable from './BookingAvailable'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import BookingList from './BookingList'
 import { mapGetters } from 'vuex'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 export default {
     data: () => ({
         selection: 1,

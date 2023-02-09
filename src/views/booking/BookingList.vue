@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             <div class="pt-4">
-                                <v-btn rounded v-if="booking.status !=='cancelled'" block color="primary" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
+                                <v-btn rounded large v-if="booking.status !=='cancelled'" block color="primary" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,13 @@
             </v-row>
             <v-row v-else>
             <v-col cols="12">
-                <div class="unavailable">{{ messageLoading }}</div>
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div class="unavailable" v-else>
+                    <p>{{  message }}</p>
+                </div>
+                <!-- <div class="unavailable">{{ messageLoading }}</div> -->
             </v-col>
         </v-row>
         <DialogConfirm :dialogConfirm="modalConfirm" @handleConfirm="handleConfirm" @close="handleClose" :message="message"/>
@@ -62,6 +68,7 @@ export default {
             bookingItem:{},
             modalConfirm:false,
             booking:null,
+            loading:false,
             message:'Do you want to cancel it ? if you cancel, it is non refundable.',
             locationSpotBooked:[],
             messageLoading:'Loading...',
@@ -82,9 +89,11 @@ export default {
     },
     methods: {
         async fetchBookedSpot() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             await ApiService.post("/location-bookings/booked", {vendor_id: this.currentUser.table_id})
 			.then((resp) => {
+                this.loading = false;
                 this.locationSpotBooked = resp.data;
                 if(!this.locationSpotBooked.lengtth){
                     this.messageLoading = 'No spot booked';
@@ -93,6 +102,7 @@ export default {
 				// commit("SET_LOCATION_BOOKED", resp.data);
 			})
             .catch((error) => {
+                this.loading = false;
                 console.log({error});
                 this.message = 'Error on fetching data'
                 this.loaderHide();
@@ -146,7 +156,8 @@ export default {
     },
     components: {
         ModalLocationBookingView,
-        DialogConfirm
+        DialogConfirm,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     }
 }
 </script>

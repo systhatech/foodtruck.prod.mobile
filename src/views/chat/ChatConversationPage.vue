@@ -3,20 +3,25 @@
         <Topnavbar :receiver="receiver" @back="handleBack"/>
         <v-container class="pt-0 content-cs">
             <main class="msger-chat" :style="{ height: customheight + 'px' }" id="chatMessages" ref="messageContainer">
-                <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
-                     v-for="(message,index) in messages" :key="index">
-                    <div class="msg-bubble">
-                        <div class="msg-info">
-                            <div class="msg-info-time">
-                                {{ formatChatTime(message.created_at, prevMessageDate(index), tz) }}
+                <div v-if="messages && messages.length">
+                    <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
+                         v-for="(message,index) in messages" :key="index">
+                        <div class="msg-bubble">
+                            <div class="msg-info">
+                                <div class="msg-info-time">
+                                    {{ formatChatTime(message.created_at, prevMessageDate(index), tz) }}
+                                </div>
+                            </div>
+    
+                            <div class="msg-text" @click="handleOrder(message.message)" v-html="message.message">
+                                <!-- {{ message.message }} -->
                             </div>
                         </div>
-
-                        <div class="msg-text" @click="handleOrder(message.message)" v-html="message.message">
-                            <!-- {{ message.message }} -->
-                        </div>
+    
                     </div>
-
+                </div>
+                <div v-else>
+                    <ComponentLoadingVue></ComponentLoadingVue>
                 </div>
             </main>
             <div class="chat-box d-flex align-center justify-space-between" ref="chatbox">
@@ -224,6 +229,7 @@ export default {
     },
     components: {
         Topnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // Bottomnavbar,
         // InputUpload
     },
@@ -401,5 +407,8 @@ export default {
 
 .msger-send-btn:hover {
     background: rgb(0, 180, 50);
+}
+p{
+    font-size: 14px;
 }
 </style>
