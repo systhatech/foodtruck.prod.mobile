@@ -28,7 +28,7 @@
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.lname" label="Last Name"></v-text-field>
                         </v-col>
                         <v-col cols="6">
-                            <v-text-field class="text-center" :rules="emailRules" v-model="customer_info.email" label="Email"></v-text-field>
+                            <v-text-field class="text-center" @blur="onCheckEmail" :rules="emailRules" v-model="customer_info.email" label="Email"></v-text-field>
                         </v-col>
                         <v-col cols="6">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
@@ -42,26 +42,22 @@
                     <v-btn color="primary" rounded block large @click="handleSubmit()">Submit</v-btn>
                 </div>
             </div>
+            <DialogError :dialogError="modal_error" :message="message_error" @close="handleClose"/>
         </v-container>
         <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
-// import { SET_AUTH } from "@/core/services/store/auth.module";
-// import { GET_LOGO } from "@/core/services/store/default_company.module";
 import { mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import JwtService from '@/core/services/jwt.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottom'
-import logo from './logo.png'
-import background from './login_banner.png'
-import bug from './bug.png'
 import { base_url } from '@/core/services/config'
 import { mdiTwitter, mdiFacebook, mdiHome, mdiAccount, mdiChat,mdiChevronLeft } from '@mdi/js'
-// import axios from "axios"
 export default {
     data: () => ({
          value: 1,
+         modal_error:false,
+         message_error:'Error',
         iconBack: mdiChevronLeft,
         iconFb: mdiFacebook,
         iconHome: mdiHome,
@@ -69,9 +65,6 @@ export default {
         iconChat: mdiChat,
         terms:true,
         iconTw: mdiTwitter,
-        background,
-        logo,
-        bug,
         base_url,
         showServiceProvider:false,
         login_info: {
@@ -96,12 +89,6 @@ export default {
         rulesRequired: [(v) => !!v || "Required"],
         showError:false,
         errorMessage:'Required',
-        items: [
-            {id:1, name:'',route:'',icon:'mdi-home', showText:false},
-            {id:2, name:'',route:'about',icon:'mdi-information'},
-            {id:3, name:'',route:'contact', icon:'mdi-notebook-check'},
-            {id:4, name:'',route:'login', icon:'mdi-login'},
-        ],
         customer_info:{
             fname:'',
             lname:'',
@@ -109,16 +96,6 @@ export default {
             phone_no:'',
             password:'',
         },
-        questions:[
-            {question:'Your Name',field:'name',type:'text',options:[]},
-            {question:'Your Phone',field:'phone',type:'phone',options:[]},
-            {question:'Your Email',field:'email',type:'email',options:[]},
-            // {question:'Gender',field:'gender',type:'radio_row',options:[
-            //     {text:'Male',value:'male'},
-            //     {text:'Female',value:'female'}
-            // ]},
-            {question:'Password',field:'password',type:'password',options:[]},
-        ],
         lazy: false,
         phone:'',
         name:'',
@@ -147,22 +124,21 @@ export default {
         }
     }),
     components: {
-        // Bottomnavbar,
+        DialogError :()=> import('@/components/layout/DialogError.vue')
     },
     watch: {
-        serviceProvider(newval) {
-            newval ? this.login_info.client = 0 : this.login_info.client = 1;
-            if(newval) {
-                localStorage.removeItem('destination');
-            }
-        }
+        // serviceProvider(newval) {
+        //     newval ? this.login_info.client = 0 : this.login_info.client = 1;
+        //     if(newval) {
+        //         localStorage.removeItem('destination');
+        //     }
+        // }
     },
     mounted() {
         if(JwtService.getToken()) {
             this.$router.replace({name:'dashboardPage'});
         }
         this.fetchLogo();
-        this.activeQuestion = this.questions[this.activeQuestionIndex];
         this.locateGeoLocation();
     },
 
@@ -170,6 +146,20 @@ export default {
          ...mapActions({
 			registerClient:'auth/signUpClient'
 		}),
+        handleClose(){
+            this.customer_info.email = "";
+            this.modal_error = false;
+        },
+        onCheckEmail(){
+            ApiService.post("/check/email",{ 'email': this.customer_info.email})
+            .then((resp)=>{
+                console.log(resp);
+            })
+            .catch((error)=>{
+                this.message_error = error.response.data.message;
+                this.modal_error = true;
+            })
+        },
         async handleSubmit(){
             if(!this.$refs.formSignupCustomer.validate()) return;
             this.loaderShow();

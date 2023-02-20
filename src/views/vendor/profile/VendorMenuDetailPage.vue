@@ -65,13 +65,13 @@
             @close="handleClose"
             :dialogConfirm="modalConfirm"/>
         </v-container>
-         <!-- <Bottomnavbar value="0"/> -->
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { base_url } from '@/core/services/config'
 // import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
 import moment from 'moment'

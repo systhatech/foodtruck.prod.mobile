@@ -13,7 +13,7 @@
 						</v-toolbar-items>
 					</v-toolbar>
 					<div>
-					<v-container class="custom-bs">
+					<v-container class="custom-bs pt-16">
 						<v-row>
 							<v-col cols="12" sm="8" offset-sm="2" md="6" offset-md="3">
 								<div>
@@ -28,7 +28,7 @@
 													<v-checkbox v-model="select_single" label="Select Single"></v-checkbox>
 												</div>
 			
-												<v-btn fab x-small color="accent"
+												<v-btn fab small color="accent"
 													@click="addItem()"><v-icon>mdi-plus</v-icon></v-btn>
 											</div>
 											<div>

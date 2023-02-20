@@ -41,7 +41,12 @@
                     </v-row>
                 </div>
                 <div v-else class="text-center">
-                    <ComponentLoadingVue/>
+                    <div v-if="loading" >
+                        <ComponentLoadingVue/>
+                    </div>
+                    <div v-else class="unavailable">
+                        <p>No menu item available</p>
+                    </div>
                 </div>
             </div>
             <DialogMenuItemAdd 
@@ -71,6 +76,7 @@ export default {
             cuisine_types:[],
             menu_data:{},
             menu:{},
+            loading: false,
         }
     },
     mounted() {

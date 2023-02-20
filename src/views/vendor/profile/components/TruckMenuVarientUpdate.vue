@@ -12,8 +12,8 @@
 							</v-btn>
 						</v-toolbar-items>
 					</v-toolbar>
-					<div>
-						<v-container class="custom-bs">
+					<div class="">
+						<v-container class="custom-bs pt-16">
 							<v-row>
 								<v-col cols="12" sm="8" offset-sm="2" md="6" offset-md="3">
 									<div>
@@ -30,7 +30,7 @@
 														<v-checkbox v-model="varient.select_single"
 															label="Select Single"></v-checkbox>
 													</div>
-													<v-btn fab x-small color="accent"
+													<v-btn fab small color="accent"
 														@click="addItem()"><v-icon>mdi-plus</v-icon></v-btn>
 												</div>
 												<div>
@@ -43,8 +43,8 @@
 																v-model="item.value" type="number"
 																label="Price"></v-text-field></v-col>
 														<v-col cols="2" class="text-center">
-															<!-- <v-btn fab x-small color="accent" @click="addItem(i)" v-if="i==0"><v-icon>mdi-plus</v-icon></v-btn> -->
-															<v-btn fab x-small color="error"
+															<!-- <v-btn fab small color="accent" @click="addItem(i)" v-if="i==0"><v-icon>mdi-plus</v-icon></v-btn> -->
+															<v-btn fab small color="error"
 																:disabled="varient.items.length == 1"
 																@click="removeItem(item, i)"><v-icon>mdi-minus</v-icon></v-btn>
 														</v-col>
@@ -59,6 +59,7 @@
 												color="primary"
 												rounded
 												block
+												large
 												@click="handleUpdate"
 											>
 												Update

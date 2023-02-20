@@ -2,7 +2,7 @@
     <v-container class="ma-0 pa-0 background-image h-100">
         <v-container>
             <div class="mt-10">
-                <div class="mt-6">
+                <div class="mt-4">
                     <v-btn icon text color="primary" 
                         :to="{
                             name:'loginPage'
@@ -23,41 +23,45 @@
             <div class="custom-bs pa-4">
                 <v-form ref="formSignupTruck">
                     <v-row>
-                        <v-col cols="6">
+                        <v-col cols="12" md="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.name" label="Truck Name"></v-text-field>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.vechicle_no" label="Truck Plate No."></v-text-field>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.model_no" label="Truck Model"></v-text-field>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="6" class="pb-2 pt-2">
                             <InputAutocomplete @selected="selectedAnswers" label="Truck Type" :items="truck_types"/>
                         </v-col>
-                        <v-col cols="6">
-                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.fname" label="First Name"></v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.lname" label="Last Name"></v-text-field>
-                        </v-col>
-                        <v-col cols="6">
+                        <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
                         </v-col>
-                        <v-col cols="6">
-                            <v-text-field class="text-center" :rules="emailRules" v-model="truck_info.email" label="Email"></v-text-field>
+                        <v-col cols="6" class="pb-2 pt-2">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.fname" label="First Name"></v-text-field>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols="6" class="pb-2 pt-2">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.lname" label="Last Name"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="6" class="pb-2 pt-2">
+                            <v-text-field class="text-center" :rules="emailRules" v-model="truck_info.email" @blur="onCheckEmail()" label="Email"></v-text-field>
+                            
+                        </v-col>
+                        <v-col cols="12" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" type="password" v-model="truck_info.password" label="Password"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" class="pb-6">
+                            <div class="text-center">
+                                <v-btn color="primary" block large rounded @click="handleSubmit()">Submit</v-btn>
+                            </div>
                         </v-col>
                        
                         
                     </v-row>
                 </v-form>
-                <div class="text-center">
-                    <v-btn color="primary" block large rounded @click="handleSubmit()">Submit</v-btn>
-                </div>
-                      
+               
+                <DialogError :dialogError="modal_error" :message="message_error" @close="handleClose"/>
             </div>
         </v-container>
         <!-- <Bottomnavbar/> -->
@@ -76,6 +80,7 @@ export default {
     data: () => ({
       
         base_url,
+        modal_error:false,
         iconBack: mdiChevronLeft,
         iconHome: mdiHome,
 
@@ -98,6 +103,7 @@ export default {
             email:'',
             password:'',
         },
+        message_error:'Error',
         truck_types:[],
         location:{
             lat:0,
@@ -111,6 +117,7 @@ export default {
     }),
     components: {
         InputAutocomplete,
+        DialogError :()=> import('@/components/layout/DialogError.vue')
     },
     mounted() {
         this.fetchLogo();
@@ -123,6 +130,20 @@ export default {
         ...mapActions({
 			registerVendor:'auth/signUpVendor'
 		}),
+        onCheckEmail(){
+            ApiService.post("/check/email",{ 'email': this.truck_info.email})
+            .then((resp)=>{
+                console.log(resp);
+            })
+            .catch((error)=>{
+                this.message_error = error.response.data.message;
+                this.modal_error = true;
+            })
+        },
+        handleClose(){
+            this.truck_info.email = "";
+            this.modal_error = false;
+        },
         locateGeoLocation: function() {
             navigator.geolocation.getCurrentPosition(res => {
                 this.location.lat = res.coords.latitude,

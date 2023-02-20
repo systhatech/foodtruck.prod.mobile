@@ -3,12 +3,12 @@
         <Topnavbar :title="title" @back="handleBack" />
         <v-container class="mb80">
             <div v-if="render">
-                <div class="pa-4 custom-bs">
+                <div class="">
                     <h5 class="mb-2 text-uppercase primary--text">Subscription</h5>
                     <v-divider></v-divider>
                     <div v-if="paymentData && Object.keys(paymentData).length">
                      
-                        <div class="pt-4 pb-4">
+                        <div class="custom-bs pa-4 mt-4">
                             <div>
                                 <div>
                                     <h5 class="text-uppercase">Subscriber Name</h5>
@@ -49,7 +49,7 @@
                     <div v-else>
                         <v-row v-if="subscriptions && subscriptions.length">
                             <v-col cols="6" v-for="(subscription, index) in subscriptions" :key="index">
-                                <div class="package-container">
+                                <div class="package-container mt-4">
                                     <div>
                                         <span class="price">{{ subscription.price }}</span><sup>$</sup>
                                     </div>
@@ -60,7 +60,7 @@
                                         <p class="f9-bold ma-0 text-capitalize">{{ subscription.name }}</p>
                                         <p class="f9 ma-0">{{ subscription.type }}</p>
                                     </div>
-                                    <v-btn depressed rounded style="gradient-bg" link
+                                    <v-btn depressed rounded color="primary" large block
                                         :to="'/subscription/' + subscription.id">Upgrade</v-btn>
                                 </div>
                             </v-col>

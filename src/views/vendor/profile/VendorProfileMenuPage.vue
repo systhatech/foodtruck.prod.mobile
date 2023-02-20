@@ -6,8 +6,16 @@
             <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" large rounded>Add New menu</v-btn>
         </div>
         <v-container class="mb80 pb-14">
-            <div>
-                <VendorMenuList :truckProfile="profile" @fetch="profileData"/>
+            <div v-if="loading" class="text-center w-100">
+                <ComponentLoadingVue/>
+            </div>
+            <div v-else>
+                <div v-if="profile.menus && profile.menus.length">
+                    <VendorMenuList :truckProfile="profile" @fetch="profileData"/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No menu available</p>
+                </div>
             </div>
         </v-container>
         <DialogMenuAdd 
@@ -39,6 +47,7 @@ export default {
             profile:{},
             cuisine_types:[],
             menu_data:{},
+            loading: false,
         }
     },
     mounted() {
@@ -66,12 +75,13 @@ export default {
         },
         async profileData() {
             // this.loaderShow();
+            this.loading = true;
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
-                this.loaderHide();
+                this.loading = false;
                 this.profile = resp;
             })
             .catch(() => {
-                this.loaderHide();
+                this.loading = false;
             })
         },
     },
@@ -79,6 +89,7 @@ export default {
         VendorMenuList,
         Topnavbar,
         DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         Bottomnavbar,
         // InputUpload
     },

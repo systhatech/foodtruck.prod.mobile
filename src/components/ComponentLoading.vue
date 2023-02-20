@@ -75,14 +75,14 @@
   height: 2.41px;
   top: -2.41px;
   left: 12.05px;
-  background: #774023;
+  background: #f55050;
   border-radius: 50%;
-  box-shadow: 0 28.92px 0 0 #774023;
+  box-shadow: 0 28.92px 0 0 #f55050;
 }
 .ldio-kpv33koa5db > div:nth-child(4) div:after {
   left: -2.41px;
   top: 12.05px;
-  box-shadow: 28.92px 0 0 0 #774023;
+  box-shadow: 28.92px 0 0 0 #f55050;
 }
 .loadingio-spinner-double-ring-mrlk94a5jbr {
   width: 241px;

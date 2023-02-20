@@ -1,7 +1,7 @@
 <template>
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
-        <v-container>
+        <v-container class="mb100">
            <div v-if="item && Object.keys(item).length" class="custom-bs">
                 <div>
                     <v-img
@@ -19,14 +19,14 @@
                             </div>
                             <div>
                                 <!-- <v-btn color="primary" x-small fab class="mr-2" :to="'/vendor-menu-item-edit/'+item.id"><v-icon>mdi-lead-pencil</v-icon></v-btn> -->
-                                <v-btn color="primary" x-small fab class="mr-2" @click="handleEditItem(item)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
+                                <v-btn color="primary" small fab class="mr-2" @click="handleEditItem(item)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
                             </div>
                         </div>
                         <div v-html="item.description"></div>
                     </div>
                     <div class="d-flex justify-space-between pt-4">
                         <div>
-                            <v-btn color="primary" small rounded @click="handleAddVarient">add varient</v-btn>
+                            <v-btn color="primary" large rounded @click="handleAddVarient">add varient</v-btn>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -35,8 +35,8 @@
                                 <div class="d-flex aling-center justify-space-between pb-4">
                                     <h5 class="text-uppercase pt-2">{{group.variant.name}}</h5>
                                     <div>
-                                        <v-btn x-small fab color="warning" class="mr-2" @click="handleEdit(group.variant)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
-                                        <v-btn x-small fab color="error" @click="handleDelete(group.variant)"><v-icon>mdi-close</v-icon></v-btn>
+                                        <v-btn small fab color="warning" class="mr-2" @click="handleEdit(group.variant)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
+                                        <v-btn small fab color="error" @click="handleDelete(group.variant)"><v-icon>mdi-close</v-icon></v-btn>
                                     </div>
                                 </div>
                                 <div v-for="(item,i) in group.variant.items" :key="i" 
@@ -51,11 +51,16 @@
                         </div>
                     </div>
                 </div>
-           </div>
-           <div class="unavailable" v-else>
-               <p>{{ message}}</p>
-           </div>
-           <DialogVarientAdd 
+            </div>
+            <div v-else>
+                <div v-if="loading" class="text-center">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>{{  message }}</p>
+                </div>
+            </div>
+            <DialogVarientAdd 
             :dialogVarientAdd="modalVarientAdd"
             :menuName="item.name"
             :menuId="item.id"
@@ -83,7 +88,7 @@
             :item="editItem"
             :dialogMenuItemEdit="modal_item_update"/>
         </v-container>
-         <!-- <Bottomnavbar value="0"/> -->
+         <Bottomnavbar/>
     </v-container>
 </template>
 <script>
@@ -91,6 +96,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import { base_url } from '@/core/services/config'
 import moment from 'moment'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogVarientAdd from '@/views/vendor/profile/components/TruckMenuVarientAdd'
 import DialogVarientUpdate from '@/views/vendor/profile/components/TruckMenuVarientUpdate'
 import DialogConfirm from '@/components/layout/DialogConfirm'
@@ -106,6 +112,7 @@ export default {
             modalVarientAdd:false,
             modalConfirm:false,
             moment,
+            loading: false,
             maxHeight:100,
             messageDelete:'Do you want to delete ?',
             title:'',
@@ -195,11 +202,13 @@ export default {
             this.modal_item_update = false;
         },
          fetchMenuData(){
-            console.log("test");
+            // console.log("test");
+            this.loading = true;
             this.menuId = this.$router.currentRoute.params.menuId;
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            // this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.get('menuitem/'+this.menuId)
             .then((resp) => {
+                this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.item = resp.data;
                 this.item.profile_pic = resp.data.profile_pic ? resp.data.profile_pic:'noimage.png';
@@ -207,6 +216,7 @@ export default {
                 this.defaultValueUnitType = resp.data.unit_type;
             })
             .catch((error) => {
+                this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 console.log(error);
             })
@@ -274,8 +284,9 @@ export default {
     },
     components: {
         Topnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // DatePicker,
-        // Bottomnavbar,
+        Bottomnavbar,
         DialogVarientAdd,
         DialogVarientUpdate,
         DialogConfirm,

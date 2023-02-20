@@ -15,151 +15,153 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <div class="pb82 p-relative background-image">
-                        <template v-if="!loading && orderDetail && Object.keys(orderDetail).length">
-                            <div class="custom-bs pa-4">
-                                <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
-                                <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail && orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no :orderDetail.client.contact.phone_no }}</p>
-                                <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{ orderDetail.client.contact.email}}</p>
-                                <div class="d-flex flex-start" v-if="orderDetail.pickup_addr">
-                                    <v-icon color="primary" class="w-18">mdi-map-marker</v-icon>
-                                    <div>
-                                        <p class="mb-1">{{orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :''}}</p>
-                                        <p class="mb-1">
-                                            {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.city : '' }}
-                                            {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.state : '' }}
-                                            {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.zip : '' }}
-                                        </p>
+                    <div class="pb82 p-relative background-image pt-16">
+                        <div class="pt-4">
+                            <template v-if="!loading && orderDetail && Object.keys(orderDetail).length">
+                                <div class="custom-bs pa-4">
+                                    <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
+                                    <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail && orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no :orderDetail.client.contact.phone_no }}</p>
+                                    <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{ orderDetail.client.contact.email}}</p>
+                                    <div class="d-flex flex-start" v-if="orderDetail.pickup_addr">
+                                        <v-icon color="primary" class="w-18">mdi-map-marker</v-icon>
+                                        <div>
+                                            <p class="mb-1">{{orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :''}}</p>
+                                            <p class="mb-1">
+                                                {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.city : '' }}
+                                                {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.state : '' }}
+                                                {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.zip : '' }}
+                                            </p>
+                                        </div>
+    
                                     </div>
-
+                                    <div>
+                                        <v-btn fab small color="primary" :to="'/vendor/conversation/clients/'+orderDetail.client.id"><v-icon>{{  icon_chat }}</v-icon></v-btn>
+                                        <v-btn
+                                            fab
+                                            small
+                                            class="ml-4"
+                                            color="primary"
+                                            link
+                                            :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
+                                            <v-icon>{{icon_phone}}</v-icon>
+                                        </v-btn
+                                        >
+                                    </div>
                                 </div>
-                                <div>
-                                    <v-btn fab small color="primary" :to="'/vendor/conversation/clients/'+orderDetail.client.id"><v-icon>{{  icon_chat }}</v-icon></v-btn>
-                                    <v-btn
-                                        fab
-                                        small
-                                        class="ml-4"
-                                        color="primary"
-                                        link
-                                        :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
-                                        <v-icon>{{icon_phone}}</v-icon>
-                                    </v-btn
-                                    >
-                                </div>
-                            </div>
-                            <div class="custom-bs pa-4 mt-4">
-                                <div class="d-flex align-center justify-space-between pb-4">
-                                    <h5 class="ma-0 primary--text">ORDER: {{ orderDetail.order_no }} </h5>
-                                    <v-chip class="text-capitalize" color="accent" small>{{
-                                        orderDetail.status
-                                    }}</v-chip>
-                                </div>
-                                <v-divider class="pt-4"></v-divider>
-                                <div class="order-item-wrapper">
-                                    <ul class="main-items mt-4">
-                                        <li v-for="(item, index) in orderDetail.items" :key="index">
-                                            <div>
-                                                <div class="d-flex">
-                                                    <div class="mr-2">
-                                                        <v-img
-                                                            :src="base_url + '/image-show/' + item.menu_item.profile_pic"
-                                                            :lazy-src="`https://picsum.photos/10/6?image=15`"
-                                                            class="grey lighten-2 mt-1" max-height="70" max-width="80"
-                                                            contain>
-                                                        </v-img>
-                                                    </div>
-                                                    <div class="item-description">
-                                                        <div>
-                                                            <h4 class="text-capitalize mb-0">{{ item.menu_item.name }}
-                                                            </h4>
-                                                            <p class="text-capitalize mb-1">Quatity : {{item.quantity}}
-                                                            </p>
-                                                            <p class="">{{formatAmount(item.menu_item.price *item.quantity)}}</p>
+                                <div class="custom-bs pa-4 mt-4">
+                                    <div class="d-flex align-center justify-space-between pb-4">
+                                        <h5 class="ma-0 primary--text">ORDER: {{ orderDetail.order_no }} </h5>
+                                        <v-chip class="text-capitalize" color="accent" small>{{
+                                            orderDetail.status
+                                        }}</v-chip>
+                                    </div>
+                                    <v-divider class="pt-4"></v-divider>
+                                    <div class="order-item-wrapper">
+                                        <ul class="main-items mt-4">
+                                            <li v-for="(item, index) in orderDetail.items" :key="index">
+                                                <div>
+                                                    <div class="d-flex">
+                                                        <div class="mr-2">
+                                                            <v-img
+                                                                :src="base_url + '/image-show/' + item.menu_item.profile_pic"
+                                                                :lazy-src="`https://picsum.photos/10/6?image=15`"
+                                                                class="grey lighten-2 mt-1" max-height="70" max-width="80"
+                                                                contain>
+                                                            </v-img>
                                                         </div>
-
+                                                        <div class="item-description">
+                                                            <div>
+                                                                <h4 class="text-capitalize mb-0">{{ item.menu_item.name }}
+                                                                </h4>
+                                                                <p class="text-capitalize mb-1">Quatity : {{item.quantity}}
+                                                                </p>
+                                                                <p class="">{{formatAmount(item.menu_item.price *item.quantity)}}</p>
+                                                            </div>
+    
+                                                        </div>
+                                                    </div>
+                                                    <div v-if="item.varients && item.varients.length > 0">
+                                                        <h5 class="mb-2 text-uppercase">Addional Items</h5>
+                                                        <v-divider></v-divider>
+                                                        <ul class="additional-items pt-6">
+                                                            <li v-for="(variant, index) in item.varients" :key="index">
+                                                                <div>
+                                                                    <div class="d-flex justify-space-between">
+                                                                        <p class="text-capitalize">{{variant.variant_item.name}}</p>
+                                                                        <p class="item-name">{{formatAmount(variant.amount)}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
-                                                <div v-if="item.varients && item.varients.length > 0">
-                                                    <h5 class="mb-2 text-uppercase">Addional Items</h5>
-                                                    <v-divider></v-divider>
-                                                    <ul class="additional-items pt-6">
-                                                        <li v-for="(variant, index) in item.varients" :key="index">
-                                                            <div>
-                                                                <div class="d-flex justify-space-between">
-                                                                    <p class="text-capitalize">{{variant.variant_item.name}}</p>
-                                                                    <p class="item-name">{{formatAmount(variant.amount)}}</p>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <v-divider class="mt-5"></v-divider>
-                                    <div>
-                                        <v-row>
-                                            <v-col cols="12" md="6" lg="6" xl="6">
-
-                                            </v-col>
-                                            <v-col cols="12" md="6" lg="6" xl="6">
-                                                <table class="w-100">
-                                                    <tr>
-                                                        <td class="">Sub Total</td>
-                                                        <td class=" text-right">{{ formatAmount(orderDetail.amount) }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-if="Number(orderDetail.service_charge)">
-                                                        <td class="">Service Charge</td>
-                                                        <td class="text-right">
-                                                            {{ formatAmount(orderDetail.service_charge) }}</td>
-                                                    </tr>
-                                                    <tr v-if="Number(orderDetail.tax_amt)">
-                                                        <!-- <td class="">Tax ({{ totalData.tax_amount}} %)</td> -->
-                                                        <td class="">Tax</td>
-                                                        <td class="text-right">{{ formatAmount(orderDetail.tax_amt) }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-if="Number(orderDetail.convenience_fee)">
-                                                        <td class="">Convenience fee</td>
-                                                        <td class="text-right">
-                                                            {{ formatAmount(orderDetail.convenience_fee) }}</td>
-                                                    </tr>
-                                                    <tr v-if="Number(orderDetail.tips_amount)">
-                                                        <td class="">Tip</td>
-                                                        <td class="text-right">{{
-                                                            formatAmount(orderDetail.tips_amount)
-                                                        }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class=""><h5 class="primary--text text-uppercase">Total</h5> </td>
-                                                        <td class=" text-right"><h4 class="primary--text text-uppercase"> {{ formatAmount(orderDetail.total_amount) }}</h4> </td>
-                                                    </tr>
-                                                </table>
-                                                <div class="text-right mt-4" v-if="orderDetail.payment">
-                                                    <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'"
-                                                        class="payment text-uppercase color-secondary ">Not Paid</p>
-                                                    <p v-else class="payment color-primary ">Paid by: <span
-                                                            class="text-uppercase">{{
-                                                                orderDetail.payment.payment_type
-                                                            }}</span>
-                                                        ****{{ orderDetail.payment.cr_last4 }}</p>
-                                                </div>
-                                            </v-col>
-                                        </v-row>
+                                            </li>
+                                        </ul>
+                                        <v-divider class="mt-5"></v-divider>
+                                        <div>
+                                            <v-row>
+                                                <v-col cols="12" md="6" lg="6" xl="6">
+    
+                                                </v-col>
+                                                <v-col cols="12" md="6" lg="6" xl="6">
+                                                    <table class="w-100">
+                                                        <tr>
+                                                            <td class="">Sub Total</td>
+                                                            <td class=" text-right">{{ formatAmount(orderDetail.amount) }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-if="Number(orderDetail.service_charge)">
+                                                            <td class="">Service Charge</td>
+                                                            <td class="text-right">
+                                                                {{ formatAmount(orderDetail.service_charge) }}</td>
+                                                        </tr>
+                                                        <tr v-if="Number(orderDetail.tax_amt)">
+                                                            <!-- <td class="">Tax ({{ totalData.tax_amount}} %)</td> -->
+                                                            <td class="">Tax</td>
+                                                            <td class="text-right">{{ formatAmount(orderDetail.tax_amt) }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-if="Number(orderDetail.convenience_fee)">
+                                                            <td class="">Convenience fee</td>
+                                                            <td class="text-right">
+                                                                {{ formatAmount(orderDetail.convenience_fee) }}</td>
+                                                        </tr>
+                                                        <tr v-if="Number(orderDetail.tips_amount)">
+                                                            <td class="">Tip</td>
+                                                            <td class="text-right">{{
+                                                                formatAmount(orderDetail.tips_amount)
+                                                            }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class=""><h5 class="primary--text text-uppercase">Total</h5> </td>
+                                                            <td class=" text-right"><h4 class="primary--text text-uppercase"> {{ formatAmount(orderDetail.total_amount) }}</h4> </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="text-right mt-4" v-if="orderDetail.payment">
+                                                        <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'"
+                                                            class="payment text-uppercase color-secondary ">Not Paid</p>
+                                                        <p v-else class="payment color-primary ">Paid by: <span
+                                                                class="text-uppercase">{{
+                                                                    orderDetail.payment.payment_type
+                                                                }}</span>
+                                                            ****{{ orderDetail.payment.cr_last4 }}</p>
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </template>
-                        <template v-else>
-                            <div v-if="loading" class="text-center">
-                                <ComponentLoadingVue/>
-                            </div>
-                            <div v-else class="unavailable">
-                                <h3>{{ message }}</h3>
-                            </div>
-                        </template>
+                            </template>
+                            <template v-else>
+                                <div v-if="loading" class="text-center">
+                                    <ComponentLoadingVue/>
+                                </div>
+                                <div v-else class="unavailable">
+                                    <h3>{{ message }}</h3>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                     <div class="pa-4 custom-bs pb-6" style="position: fixed;bottom: 0;width: 100%;z-index: 1;" v-if="order.status!='completed'">
                         <div class="d-flex align-center justify-space-between">

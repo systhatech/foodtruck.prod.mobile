@@ -1,13 +1,8 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar/>
-     
         <v-container class="mg56">
             <div>
-                <!-- <v-chip v-for="(item, index) in orderTypes" class="mr-2 text-uppercase" :color="activeType==index?'primary':''" :key="index" @click="handleActive(item, index)">
-                    {{ item.name }}
-                </v-chip> -->
-
                 <div>
                     <OrderStatus :items="orderTypes" @selectedStatus="handleActive"/>
                 </div>
@@ -27,28 +22,8 @@
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
                                     <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
                                 </div>
-                                <!-- <div>
-                                    <v-btn fab small color="primary" ><v-icon>{{icon_right}}</v-icon></v-btn>
-                                </div> -->
                             </div>
-                            <!-- <div class="order_item custom-bs" >
-                                <p class="order_no"><span>{{order.order_no}}</span> <span class="amount"> {{formatAmount(order.total_amount)}} </span></p>
-                                <div class="d-flex justify-space-between">
-                                    <div>
-                                        <p class="order_person">{{order.customer_name}}</p>
-                                        <p class="order_contact mb-2">{{formatPhoneNumber(order.phone)}}</p>
-                                        <v-chip class="accent text-capitalize" small>{{order.status}}</v-chip>
-                                    </div>
-                                    <div>
-                                        <div class="mt-2">
-                                            <v-btn fab small @click="gotoChat(order)" color="primary" outlined><v-icon>{{iconChat}}</v-icon></v-btn>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pt-4">
-                                    <v-btn block rounded color="primary" @click="handleView(order)">view</v-btn>
-                                </div>
-                            </div> -->
+                          
                         </v-col>
                     </v-row>
                 </div>
@@ -72,7 +47,6 @@ import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { ApiService } from '@/core/services/api.service'
 import OrderDetail from '@/views/vendor/order/VendorOrderDetail'
 import { mdiChat, mdiChevronRight } from '@mdi/js'
-// import InputUpload from '@/components/form-element/InputUpload'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 export default {
@@ -90,7 +64,6 @@ export default {
             iconChat:mdiChat,
             icon_right:mdiChevronRight,
             orderItem:{},
-            // vendor_id:3,
             loading:false,
             activeItem:0,
             activeType:0,
@@ -104,43 +77,20 @@ export default {
                 {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
                 {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
-            // otVendor: [
-            //     {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
-            //     // {name:'Processing',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'preparing'},
-            //     {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
-            //     {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
-            // ],
-            // otClient: [
-            //     {name:'Recent Orders',active_type:false,status:'recent-orders'},
-            //     {name:'Past Orders',active_type:false,status:'completed'},
-            // ],
             refresh_time:10000,
         }
     },
     mounted() {
-        // if(this.currentUser){
-        //     if(this.currentUser.table == 'clients'){
-        //         this.orderTypes = this.otClient;
-        //         this.status = "recent-orders";
-        //     }else{
-        //         this.orderTypes = this.otVendor;
-        //     }
-        // }
         this.fetchOrders();
     },
     methods: {
-        // gotoChat(order){
-        //     this.$router.push("/conversation/clients/"+order.client_id);
-        // },
-        // gotoVendorChat(order){
-        //     this.$router.push("/conversation/vendor/"+order.vendor_id);
-        // },
+    
         handleBack(){
             this.$router.back();
         },
         async fetchOrders() {
+            this.orders = [];
             this.loading = true;
-            // this.$bus.$emit('SHOW_PAGE_LOADER');
             await ApiService.post("/order-list",{
                 'status': this.status
             })
@@ -213,7 +163,6 @@ export default {
     margin: 0;
     font-size: 0.8rem;
     font-weight: 600;
-    // margin-top:14px;
     text-align: right;
 }
 .sticky-top{
@@ -224,12 +173,10 @@ export default {
     padding: 12px;
 }
 .form-container{
-    // .login-container{
     background: #acfa95;
     border-radius: 10px;
     margin-top: 27px !important;
     padding:20px;
-// }
 }
    $color-primary: #000000;
     $color-secondary: #01a6bc;
@@ -262,11 +209,9 @@ export default {
             margin: 0;
             font-size: 0.8rem;
             font-weight: 600;
-            // color: #01a6bc;
             display:flex;
             justify-content:space-between;
             margin-bottom:8px;
-            // flex-direction:column;
             span.amount{
                 font-size: 0.8rem;
             }

@@ -47,7 +47,7 @@
             </div>
             <DialogConfirm :dialogConfirm="dialogConfirm" message="Do you to delete ?" @handleConfirm="handleConfirm" @close="handleClose"/>
         </v-container>
-        <!-- <Bottomnavbar :value="indexValue" :index="indexValue"/> -->
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
@@ -56,7 +56,7 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 // import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
 import InputUpload from '@/components/form-element/InputUpload'
 import { ApiService } from '@/core/services/api.service'
-// import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogConfirm from '@/components/layout/DialogConfirm'
 import { base_url } from '@/core/services/config'
 // import  JwtService from '@/core/services/jwt.service';
@@ -166,6 +166,7 @@ export default {
     components: {
         Topnavbar,
         InputUpload,
+        Bottomnavbar,
         DialogConfirm
     }
 }

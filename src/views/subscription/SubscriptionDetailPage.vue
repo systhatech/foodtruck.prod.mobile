@@ -4,54 +4,54 @@
         <v-container class="mg56">
             <div v-if="personal && Object.keys(personal).length" class="pa-4 mb-4 custom-bs">
                 <div class="mb-4">
-                    <h4>Truck Information</h4>
-                    <p class="ma-0 f9">{{personal.general.name}}</p>
-                    <p class="ma-0 f9">{{personal.others.truck_type}}</p>
+                    <h4 class="primary--text">Truck Information</h4>
+                    <p class="ma-0 text-capitalize">{{personal.general.name}}</p>
+                    <p class="ma-0 text-capitalize f9">({{personal.others.truck_type}})</p>
                 </div>
                  <div class="mb-4">
-                    <h4>Contact Person</h4>
-                    <p class="ma-0 f9">{{personal.contact.fname}} {{personal.contact.lname}}</p>
-                    <p class="ma-0 f9">{{personal.contact.email}}</p>
-                    <p class="ma-0 f9">{{ formatPhoneNumber(personal.contact.mobile_no)}}</p>
+                    <h4 class="primary--text">Contact Person</h4>
+                    <p class="ma-0 text-capitalize">{{personal.contact.fname}} {{personal.contact.lname}}</p>
+                    <p class="ma-0">{{personal.contact.email}}</p>
+                    <p class="ma-0">{{ formatPhoneNumber(personal.contact.mobile_no)}}</p>
                 </div>
                 <div>
-                    <h4>Subscription</h4>
+                    <h4 class="primary--text">Subscription</h4>
                     <div v-html="plan.description"></div>
                     <v-divider></v-divider>
-                    <table class="w-100 mt-4">
-                        <tr>
-                            <td class="f8">Plan</td>
-                            <td class="text-right f8-bold"><h4 class="ma-0 f9 text-uppercase">{{plan.name}}</h4></td>
-                        </tr>
-                        <tr>
-                            <td class="f8">Plan Type</td>
-                            <td class="text-right f8-bold"><p class="ma-0 text-uppercase">{{plan.plan_type ? plan.plan_type :'No'}} Package</p></td>
-                        </tr>
-                        <tr>
-                            <td class="f8">Price</td>
-                            <td class="text-right f8-bold"><p class="ma-0 f9">{{formatAmount(plan.price)}}</p></td>
-                        </tr>
-                        <tr v-if="plan.convenience_fee">
-                            <td class="f8">Convenience Fee ({{ plan.convenience_fee}})%</td>
-                            <td class="text-right f8-bold"><p class="ma-0 f9">{{formatAmount(plan.convenience_fee_amount)}}</p></td>
-                        </tr>
-                        <tr v-if="plan.convenience_fee">
-                            <td class="f8-bold">Total Amount</td>
-                            <td class="text-right f8-bold"><p class="ma-0 f9">{{formatAmount(plan.total_amount)}}</p></td>
-                        </tr>
-                        <tr v-if="plan.trial_days">
-                            <!-- <td class="f8-bold">Total Amount</td> -->
-                            <td class="f8-bold text-right color-primary" colspan="2"><p class="ma-0 f9">{{plan.trial_days}} Days Free</p></td>
-                        </tr>
-                    </table>
-                    <!-- <h4 class="ma-0 f9 text-uppercase">{{plan.name}}</h4>
-                    <h4 class="ma-0 f9">{{formatAmount(plan.price)}}</h4>
-                    <p class="ma-0 f9 color-secondary text-uppercase">{{plan.plan_type ? plan.plan_type :'No'}} Package</p> -->
+                    <div class="w-100 mt-4">
+                        <div class="d-flex align-center justify-space-between">
+                            <div class="">Plan</div>
+                            <div class="text-right"><h4 class="ma-0 text-capitalize">{{plan.name}}</h4></div>
+                        </div>
+                        <div class="d-flex align-center justify-space-between">
+                            <div class="">Plan Type</div>
+                            <div class="text-right"><p class="ma-0 text-capitalize">{{plan.plan_type ? plan.plan_type :'No'}} Package</p></div>
+                        </div>
+                        <div class="d-flex align-center justify-space-between">
+                            <div class="">Price</div>
+                            <div class="text-right"><p class="ma-0">{{formatAmount(plan.price)}}</p></div>
+                        </div>
+                        <div v-if="plan.convenience_fee" class="d-flex align-center justify-space-between">
+                            <div class="">Convenience Fee ({{ plan.convenience_fee}})%</div>
+                            <div class="text-right"><p class="ma-0">{{formatAmount(plan.convenience_fee_amount)}}</p></div>
+                        </div>
+                        <div v-if="plan.convenience_fee" class="d-flex align-center justify-space-between pt-2 pb-2">
+                            <div class=""><h5 class="text-uppercase primary--text">Total Amount</h5></div>
+                            <div class="text-right "><h4 class="ma-0 primary--text">{{formatAmount(plan.total_amount)}}</h4></div>
+                        </div>
+                        <div v-if="plan.trial_days" class="">
+                            <!-- <div class="">Total Amount</div> -->
+                            <div class="text-right success--text"><p class="ma-0">{{plan.trial_days}} Days Free</p></div>
+                        </div>
+                    </div>
+                    <!-- <h4 class="ma-0 text-uppercase">{{plan.name}}</h4>
+                    <h4 class="ma-0">{{formatAmount(plan.price)}}</h4>
+                    <p class="ma-0 color-secondary text-uppercase">{{plan.plan_type ? plan.plan_type :'No'}} Package</p> -->
                     
                 </div>
             </div>
             <div  class="pa-4 custom-bs" v-if="initializeCard">
-                <h4 class="mb-2">Card Information</h4>
+                <h4 class="mb-2 primary--text">Card Information</h4>
                 <v-row>
                     <v-col cols="12">
                         <CardStripe @proceed="handleProceedCard"  :publishablekey="publishableKey"/>

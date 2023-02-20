@@ -121,6 +121,7 @@ export default {
             this.$router.back();
         },
         async fetchOrders() {
+            this.orders = [];
             this.loading = true;
             await ApiService.post("/order-list",{
                 'status': this.status

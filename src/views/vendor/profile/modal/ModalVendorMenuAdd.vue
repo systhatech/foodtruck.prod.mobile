@@ -12,8 +12,8 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <div>
-                        <div class="pa-4 custom-bs mt-14">
+                    <div class="">
+                        <div class="pa-6 pt-16 mt-4">
                             <v-form ref="formMenu">
                                 <v-row>
                                     <v-col cols="12" md="6">
@@ -80,7 +80,7 @@ export default {
                 this.menu.id = this.menuData.id;
                 this.menu.cusine = this.menuData.cusine;
                 this.menu.name = this.menuData.name;
-                this.menu.description = this.menuData.description;
+                this.menu.description = this.descriptionStripe(this.menuData.description);
                 this.menu.profile_pic = this.menuData.profile_pic;
                 this.is_active = this.menuData.is_active;
                 if(this.menuData.cusine){
@@ -122,6 +122,18 @@ export default {
         }
     },
     methods: {
+        descriptionStripe(str){
+            if ((str===null) || (str===''))
+                return false;
+            else
+                str = str.toString();
+                
+            // Regular expression to identify HTML tags in
+            // the input string. Replacing the identified
+            // HTML tag with a null string.
+            return str.replace( /(<([^>]+)>)/ig, '');
+        },
+
         handleSubmit(){
             if(!this.menu.cusine){
                 this.hasError = true;

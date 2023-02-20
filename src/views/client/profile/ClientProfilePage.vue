@@ -89,7 +89,7 @@
                 <p>{{message}}</p>
             </div>
         </v-container>
-        <Bottomnavbar :value="indexValue"/>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>

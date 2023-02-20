@@ -6,11 +6,11 @@
                         class="custom-bs h-100 pa-4">
                         <div class="d-flex align-center justify-space-between mb-2" >
                             <h5 class="text-uppercase primary--text">{{ booking && booking.location.name ? booking.location.name : 'No name' }}</h5>
-                            <span class="f9-bold color-primary">SPOT - {{ booking.spot }}</span>
+                            <span class="f8-bold primary--text">SPOT - {{ booking.spot }}</span>
                         </div>
                         <div class="address-wrapper">
                             <v-chip class="text-capitalize mb-4" :color="booking.status == 'booked' ? 'accent' :(booking.status == 'cancelled' ?'error':'warning')">{{ booking.status }}</v-chip>
-                            <div class="d-flex">
+                            <div class="d-flex mb-2">
                                 <div class="mr-2">
                                     <v-icon color="primary">{{ iconDate }}</v-icon>
                                 </div>
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             <div class="pt-4">
-                                <v-btn rounded large v-if="booking.status !=='cancelled'" block color="primary" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
+                                <v-btn rounded large v-if="booking.status !=='cancelled'" block color="error" @click="handleRequestCancel(booking)">Cancel Spot</v-btn>
                             </div>
                         </div>
                     </div>
