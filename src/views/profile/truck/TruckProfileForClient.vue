@@ -5,14 +5,16 @@
             <div v-if="render">
                 <v-container class="pa-0">
                     <div class="pa-4">
-                        <div class="d-flex justify-space-between align-center">
-                            <div class="d-flex align-center">
-                                <v-avatar size="60">
-                                <img
-                                    :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+truckProfile.general.profile_pic:base_url+'/image-show/usericon'"
-                                    alt="Profile Pic"
-                                    >
-                                </v-avatar>
+                        <div class="d-flex justify-space-between">
+                            <div class="d-flex">
+                                <div class="pt-4">
+                                    <v-avatar size="60">
+                                    <img
+                                        :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+truckProfile.general.profile_pic:base_url+'/image-show/usericon'"
+                                        alt="Profile Pic"
+                                        >
+                                    </v-avatar>
+                                </div>
                                 <div class="pa-4">
                                     <h3 class="text-capitalize ma-0 primary--text">{{ truck.name}}</h3>
                                     <div>
@@ -23,27 +25,25 @@
                                             {{  truckProfile && truckProfile.address && truckProfile.address.zip ? truckProfile.address.zip:'' }},
                                         </p>
                                     </div>
-                                    <div class="w100">
+                                    <div class="w-100">
                                         <v-btn
                                         v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
                                         
                                         class="mr-3"
                                         fab
-                                        small
                                         color="primary"
                                         :href="`tel:${truckProfile.contact.mobile_no ? truckProfile.contact.mobile_no : truckProfile.contact.phone_no}`"
                                         >
-                                        <v-icon>mdi-phone</v-icon>
+                                        <v-icon large>mdi-phone</v-icon>
                                         </v-btn>
                                         <v-btn
                                         
                                         fab
-                                        small
                                         link
                                         :to="'/client/conversation/vendors/'+truck.id"
                                         color="primary"
                                         >
-                                        <v-icon>mdi-chat</v-icon>
+                                        <v-icon large>mdi-chat</v-icon>
                                         </v-btn>
                                     </div>
                                 </div>

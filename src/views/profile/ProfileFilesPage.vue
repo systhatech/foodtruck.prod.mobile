@@ -59,6 +59,7 @@ import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogConfirm from '@/components/layout/DialogConfirm'
 import { base_url } from '@/core/services/config'
+import { mapActions } from 'vuex'
 // import  JwtService from '@/core/services/jwt.service';
 export default {
     name:'ProfileAddressPage',
@@ -90,6 +91,9 @@ export default {
         this.fetchImages();
     },
     methods: {
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
         handleConfirm(){
             this.loaderShow();
             ApiService.post("/file/delete",{id: this.fileToDelete.id})
@@ -134,6 +138,7 @@ export default {
                     this.defaultClear = true;
                     this.fetchImages();
                     this.messageSuccess(resp.message);
+                    this.fetchProfile();
                 })
                 .catch((error) => {
                     this.loaderHide();

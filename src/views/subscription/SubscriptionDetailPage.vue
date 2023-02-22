@@ -6,7 +6,7 @@
                 <div class="mb-4">
                     <h4 class="primary--text">Truck Information</h4>
                     <p class="ma-0 text-capitalize">{{personal.general.name}}</p>
-                    <p class="ma-0 text-capitalize f9">({{personal.others.truck_type}})</p>
+                    <!-- <p class="ma-0 text-capitalize f9">({{personal.others.truck_type}})</p> -->
                 </div>
                  <div class="mb-4">
                     <h4 class="primary--text">Contact Person</h4>

@@ -75,7 +75,7 @@ export default {
             this.fetchCarts();
         },
         handleRoute() {
-            if (this.$router.currentRoute.name !== 'homePage') {
+            if (this.$router.currentRoute.name !== 'home') {
                 this.$router.push("/");
             }
         },
@@ -86,7 +86,11 @@ export default {
             }
         },
         viewProfile() {
-            this.$router.push('/profile').catch(() => { });
+            if(this.currentUser.table == 'vendors'){
+                this.$router.push('/vendor-profile').catch(() => { });
+            }else if(this.currentUser.table =='clients'){
+                this.$router.push('/client-profile').catch(() => { });
+            }
         },
         handleBack() {
             this.$emit('back');

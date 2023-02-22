@@ -141,11 +141,11 @@
                                                     <div class="text-right mt-4" v-if="orderDetail.payment">
                                                         <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'"
                                                             class="payment text-uppercase color-secondary ">Not Paid</p>
-                                                        <p v-else class="payment color-primary ">Paid by: <span
+                                                        <p v-else class="payment success--text mb-0">Paid by: <span
                                                                 class="text-uppercase">{{
                                                                     orderDetail.payment.payment_type
-                                                                }}</span>
-                                                            ****{{ orderDetail.payment.cr_last4 }}</p>
+                                                                }}</span> ****{{ orderDetail.payment.cr_last4 }}</p>
+                                                                <span class="f9">{{ formatDateTime(orderDetail.payment.created_at) }}</span>
                                                     </div>
                                                 </v-col>
                                             </v-row>

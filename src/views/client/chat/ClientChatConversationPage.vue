@@ -125,9 +125,15 @@ export default {
             
         });
         socketHandler.on('scrollToBottom', function () {
-            setTimeout(() => {
-                plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
-            },500);
+            // setTimeout(() => {
+            //     plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
+            // },500);
+
+            if(plugin.$refs.messageContainer){
+                setTimeout(() => {
+                    plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
+                },500);
+            }
         });
         // this.customheight = this.$refs.messageContainer.scrollHeight - 00;
         this.fetchMessage();
@@ -141,10 +147,12 @@ export default {
 
         handleOrder(message) {
             if(!message.includes('href'))return;
-            let href = message.match(/\/order\/[\d]+/);
-            if(!(0 in href)) return;
-            let  orderId = href[0].replace(/[^\d]/g, '')
-            this.$router.replace({name:'OrderDetailPage',params: { orderId: orderId}});
+
+            // let href = message.match(/\/order\/[\d]+/);
+            // if(!(0 in href)) return;
+            // let  orderId = href[0].replace(/[^\d]/g, '')
+            // console.log(orderId);
+            // this.$router.replace({name:'clientOrderDetailPage',params: { orderId: orderId}});
         },
         scrollToBottom(){
             setTimeout(() => {

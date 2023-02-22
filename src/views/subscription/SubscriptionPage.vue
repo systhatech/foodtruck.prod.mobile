@@ -60,7 +60,7 @@
                                         <p class="f9-bold ma-0 text-capitalize">{{ subscription.name }}</p>
                                         <p class="f9 ma-0">{{ subscription.type }}</p>
                                     </div>
-                                    <v-btn depressed rounded color="primary" large block
+                                    <v-btn depressed rounded color="white" large block
                                         :to="'/subscription/' + subscription.id">Upgrade</v-btn>
                                 </div>
                             </v-col>

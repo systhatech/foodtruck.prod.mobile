@@ -46,6 +46,11 @@ const routes = [
 		name: 'PasswordResetPage',
 		component: () => import(/* webpackChunkName: "PasswordResetPage" */ '../views/auth/PasswordResetPage.vue'),
 	},
+	{
+		path: '/verify-email',
+		name: 'VerifyEmailPage',
+		component: () => import(/* webpackChunkName: "PasswordResetPage" */ '../views/auth/VerifyEmailPage.vue'),
+	},
 
 	{
 		path: '/signup-customer',
@@ -725,15 +730,15 @@ const routes = [
 		name: 'OrderDetailPage',
 		component: () => import(/* webpackChunkName: "OrdersDetailCustomerPage" */ '../views/order/OrderDetailCustomer.vue'),
 		meta: { requiresAuth: true },
-		// beforeEnter: (to, from, next) => {
-		// 	if (store.getters['auth/user']) {
-		// 		next();
-		// 	}else{
-		// 		next({
-		// 			name: 'home'
-		// 		});
-		// 	}
-		// }
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'home'
+				});
+			}
+		}
 	},
 	{
 		path: '/carts',

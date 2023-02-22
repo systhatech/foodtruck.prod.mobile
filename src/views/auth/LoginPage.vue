@@ -113,22 +113,27 @@ export default {
             if (!this.$refs.formLogin.validate()) return;
             this.loaderShow();
             this.signIn(this.login_info)
-                .then(() => {
+                .then((resp) => {
                     this.loaderHide();
-                    this.fetchAddress();
-                    if (this.$router.currentRoute.query) {
-                        let route = this.$router.currentRoute.query;
-                        if (route.page && route.id) {
-                            this.$router.push("/" + route.page + "/" + route.id);
+                    if(resp && resp.verify){
+                        console.log("here", {resp});
+                        this.$router.push({ name:'VerifyEmailPage', query:{ email: resp.email, type:'clients'}});
+                    }else{
+                        this.fetchAddress();
+                        if (this.$router.currentRoute.query) {
+                            let route = this.$router.currentRoute.query;
+                            if (route.page && route.id) {
+                                this.$router.push("/" + route.page + "/" + route.id);
+                            } else {
+                                this.$router.replace({
+                                    name: 'home',
+                                })
+                            }
                         } else {
                             this.$router.replace({
                                 name: 'home',
                             })
                         }
-                    } else {
-                        this.$router.replace({
-                            name: 'home',
-                        })
                     }
                 }).catch((error) => {
                     this.loaderHide();
@@ -175,17 +180,16 @@ export default {
                 })
         },
         async updateLocation() {
-            this.loaderShow();
+            // this.loaderShow();
             // console.log("location", this.location);
             await ApiService.post('/location/save-current', this.location)
-                .then(() => {
-                    this.loaderHide();
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.loaderHide();
-
-                })
+            .then(() => {
+                this.loaderHide();
+            })
+            .catch((error) => {
+                console.log(error);
+                this.loaderHide();
+            })
         }
     },
 };

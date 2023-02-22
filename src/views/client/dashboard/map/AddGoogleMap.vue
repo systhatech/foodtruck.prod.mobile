@@ -14,21 +14,23 @@
 					</div>
 					<div class="d-flex">
 						<v-icon color="primary">{{ iconLocation }}</v-icon>
-						<div class="f8-bold">
-							{{ infoContent.add1 ? infoContent.add1 : '' }}
-							{{ infoContent.city ? infoContent.city : '' }}
-							{{ infoContent.state ? infoContent.state : '' }}
-							{{ infoContent.zip_code ? infoContent.zip_code : '' }}
+						<div class="">
+							<p class="mb-0 f9">
+								{{ infoContent.add1 ? infoContent.add1 : '' }}
+								{{ infoContent.city ? infoContent.city : '' }}
+								{{ infoContent.state ? infoContent.state : '' }}
+								{{ infoContent.zip_code ? infoContent.zip_code : '' }}
+							</p>
 						</div>
 					</div>
 				</div>
 				<div class="pb-2 pt-4" v-if="type == 'clients'">
-					<v-btn fab outlined small color="primarylight" v-if="infoContent.table_name == 'vendors'" class="mr-2"
+					<v-btn fab outlined color="primarylight" v-if="infoContent.table_name == 'vendors'" class="mr-2"
 						:to="'/truck-profile/' + infoContent.table_id"><v-icon>mdi-food</v-icon> </v-btn>
-					<v-btn fab outlined small color="primarylight"
+					<v-btn fab outlined color="primarylight"
 						v-if="infoContent.locate && infoContent.locate.contact" class="mr-2"
 						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon>mdi-phone</v-icon> </v-btn>
-					<v-btn fab outlined small color="primarylight" v-if="infoContent.table_name == 'vendors'"
+					<v-btn fab outlined color="primarylight" v-if="infoContent.table_name == 'vendors'"
 						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon>mdi-chat</v-icon> </v-btn>
 				</div>
 			</gmap-info-window>
@@ -61,14 +63,14 @@ export default {
 		newCenter: {},
 		locations: {},
 	},
-	watch: {
-		locationMarkers(val) {
-			this.loaderHide();
-			if (val.length > 0) {
-				this.center = val[0].position;
-			}
-		}
-	},
+	// watch: {
+	// 	locationMarkers(val) {
+	// 		this.loaderHide();
+	// 		if (val.length > 0) {
+	// 			this.center = val[0].position;
+	// 		}
+	// 	}
+	// },
 	data() {
 		return {
 			iconbus,
@@ -129,6 +131,7 @@ export default {
 		this.location.guest = localStorage.getItem('g_token');
 		this.fetchAddress();
 		this.type = this.currentUser ? this.currentUser.table : 'clients';
+		this.center = this.locationMarkers[0].position;
 	},
 
 	methods: {

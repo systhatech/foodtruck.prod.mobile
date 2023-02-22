@@ -19,13 +19,14 @@
                                 <div class="pl-4">
                                     <div v-if="member.unread_messages_count">
                                         <v-badge
+                                            class="text-capitalize"
                                             color="error"
                                             :content="member.unread_messages_count">
                                             {{ member.name }}
                                         </v-badge>
                                     </div>
                                     <div v-else>
-                                        <h5 class="mb-0 primary--text">{{ member.name }}</h5>
+                                        <h5 class="mb-0 primary--text text-capitalize">{{ member.name }}</h5>
                                     </div>
                                     <div class="last_msg"
                                         :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">

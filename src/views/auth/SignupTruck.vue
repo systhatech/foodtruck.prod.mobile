@@ -23,21 +23,18 @@
             <div class="custom-bs pa-4">
                 <v-form ref="formSignupTruck">
                     <v-row>
-                        <v-col cols="12" md="6" class="pb-2 pt-2">
+                        <v-col cols="6" md="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.name" label="Truck Name"></v-text-field>
                         </v-col>
                         <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.vechicle_no" label="Truck Plate No."></v-text-field>
                         </v-col>
-                        <v-col cols="6" class="pb-2 pt-2">
+                        <!-- <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.model_no" label="Truck Model"></v-text-field>
-                        </v-col>
-                        <v-col cols="6" class="pb-2 pt-2">
+                        </v-col> -->
+                        <!-- <v-col cols="6" class="pb-2 pt-2">
                             <InputAutocomplete @selected="selectedAnswers" label="Truck Type" :items="truck_types"/>
-                        </v-col>
-                        <v-col cols="6" class="pb-2 pt-2">
-                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
-                        </v-col>
+                        </v-col> -->
                         <v-col cols="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.fname" label="First Name"></v-text-field>
                         </v-col>
@@ -46,7 +43,9 @@
                         </v-col>
                         <v-col cols="12" md="6" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="emailRules" v-model="truck_info.email" @blur="onCheckEmail()" label="Email"></v-text-field>
-                            
+                        </v-col>
+                        <v-col cols="12" class="pb-2 pt-2">
+                            <v-text-field class="text-center" :rules="rulesRequired" v-model="truck_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
                         </v-col>
                         <v-col cols="12" class="pb-2 pt-2">
                             <v-text-field class="text-center" :rules="rulesRequired" type="password" v-model="truck_info.password" label="Password"></v-text-field>
@@ -56,8 +55,6 @@
                                 <v-btn color="primary" block large rounded @click="handleSubmit()">Submit</v-btn>
                             </div>
                         </v-col>
-                       
-                        
                     </v-row>
                 </v-form>
                
@@ -71,7 +68,7 @@
 import { mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import JwtService from '@/core/services/jwt.service'
-import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
+// import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
 import { base_url } from '@/core/services/config'
 
 import { mdiHome,mdiChevronLeft } from '@mdi/js'
@@ -95,7 +92,7 @@ export default {
         truck_info:{
             name:'',
             vechicle_no:'',
-            model_no:'',
+            model_no:'default',
             truck_type_id:'',
             fname:'',
             lname:'',
@@ -116,11 +113,11 @@ export default {
         },
     }),
     components: {
-        InputAutocomplete,
+        // InputAutocomplete,
         DialogError :()=> import('@/components/layout/DialogError.vue')
     },
     mounted() {
-        this.fetchLogo();
+        // this.fetchLogo();
         this.fetchVendorTypes();
         this.locateGeoLocation();
 
@@ -131,11 +128,16 @@ export default {
 			registerVendor:'auth/signUpVendor'
 		}),
         onCheckEmail(){
+            if(!this.truck_info.email) return;
+
+            this.loaderShow();
             ApiService.post("/check/email",{ 'email': this.truck_info.email})
             .then((resp)=>{
+                this.loaderHide();
                 console.log(resp);
             })
             .catch((error)=>{
+                this.loaderHide();
                 this.message_error = error.response.data.message;
                 this.modal_error = true;
             })
@@ -168,18 +170,20 @@ export default {
             this.loaderShow();
             await ApiService.post('/register/vendor', this.truck_info)
             .then((resp) => {
-                this.messageSuccess("Registered successfully")
-                JwtService.saveToken(resp.token);
-                JwtService.saveUtype(resp.user.table);
-                this.fetchAddress();
+                this.loaderHide();
+                // this.messageSuccess("Registered successfully")
+                console.log(resp);
+                this.$router.push({ name:'VerifyEmailPage', query:{ email: this.truck_info.email, type:'vendors'}});
+                // this.fetchAddress();
             })
             .catch((error) => {
                 this.loaderHide();
-                if(error.response.data){
-                    this.messageError(error.response.data.message);
-                }else{
-                    this.messageError(error.response.statusText);
-                }
+                // if(error.response.data){
+                //     this.messageError(error.response.data.message);
+                // }else{
+                //     this.messageError(error.response.statusText);
+                // }
+                console.log({error});
             })
         },
       
@@ -202,7 +206,7 @@ export default {
             this.loaderShow();
             await ApiService.post('/register/vendor', this.truck_info)
             .then((resp) => {
-                this.messageSuccess("Registered successfully")
+                // this.messageSuccess("Registered successfully")
                 JwtService.saveToken(resp.token);
                 JwtService.saveUtype(resp.user.table);
                 this.fetchAddress();

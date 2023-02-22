@@ -1,7 +1,7 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <!-- <Topnavbar/> -->
-        <v-container v-if="mapView" class="ma-0 pa-0">
+        <v-container v-if="map_view" class="ma-0 pa-0">
             <div v-if="currentUser && currentUser.table == 'vendors'" class="test pl-3" :class=" available== 'available' ? 'bg-green' : 'bg-red'" id="rdg">
                 <v-radio-group
                     v-model="available"
@@ -22,11 +22,13 @@
             <div class="pl-6 pr-6 pt-4">
                 <div class="d-flex align-center justify-space-between">
                     <v-text-field label="Search" small></v-text-field>
-                    <v-btn class="ml-4" fab color="primary" small @click="modelFilter=true">
-                        <v-icon>{{iconFilter}}</v-icon>
+                    <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
+                        <v-icon large >{{icon_filter}}</v-icon>
                     </v-btn>
-                    <v-btn class="ml-4" fab color="primary" small @click="changeView">
-                        <v-icon>{{iconMap}}</v-icon>
+                 
+                    <v-btn class="ml-4" fab color="primary" @click="changeView">
+                        <v-icon large v-if="map_view">{{icon_list}}</v-icon>
+                        <v-icon large v-else>{{icon_map}}</v-icon>
                     </v-btn>
                 </div>
             </div>
@@ -38,11 +40,12 @@
                <div>
                    <div class="d-flex align-center justify-space-between">
                         <v-text-field label="Search" small v-model="search"></v-text-field>
-                        <v-btn class="ml-4" fab color="primary" small @click="modelFilter=true">
-                            <v-icon>{{iconFilter}}</v-icon>
+                        <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
+                            <v-icon large>{{icon_filter}}</v-icon>
                         </v-btn>
-                        <v-btn class="ml-4" fab color="primary" small @click="changeView">
-                            <v-icon>{{iconMap}}</v-icon>
+                        <v-btn class="ml-4" fab color="primary" @click="changeView()">
+                            <v-icon large v-if="map_view">{{icon_list}}</v-icon>
+                            <v-icon large v-else>{{icon_map}}</v-icon>
                         </v-btn>
                    </div>
                </div>
@@ -73,7 +76,7 @@ import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import TruckList from '@/views/dashboard/component/TruckList'
 import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'
-import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
+import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
 import AddGoogleMap from './map/AddGoogleMap'
 // import {socketHandler} from '@/core/services/socketio/socket'
 export default {
@@ -82,8 +85,9 @@ export default {
             search:'',
             iconHome: mdiHome,
             iconProfile: mdiAccount,
-            iconFilter: mdiFilter,
-            iconMap: mdiMap,
+            icon_filter: mdiFilter,
+            icon_map: mdiMap,
+            icon_list: mdiViewList,
             iconChat: mdiChat,
             currentItem:0,
             countMessages:0,
@@ -122,7 +126,7 @@ export default {
                 {id:2,name:"Porters Coffee House", address:'80 kane west hardford 1'}
             ],
             modelFilter:false,
-            mapView:false,
+            map_view:false,
             // locations:'',
         }
     },
@@ -171,8 +175,8 @@ export default {
         }),
        
         changeView(){
-            this.mapView = !this.mapView;
-            this.fetchData();
+            this.map_view = !this.map_view;
+            // this.fetchData();
         },
         handleFilter(params) {
             this.loaderShow();

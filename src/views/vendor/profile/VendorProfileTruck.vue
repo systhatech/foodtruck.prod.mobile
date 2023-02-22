@@ -16,6 +16,9 @@
                             label="Change"
                             @changeImage="changeImage"/>
                         </div>
+                        <div class="pa-4">
+                            <p class="text-center">Truck Logo</p>
+                        </div>
                         </v-col>
                         <v-col
                         class="pb-0 pt-0"

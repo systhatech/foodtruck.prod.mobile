@@ -2,9 +2,6 @@
     <div>
         
         <div class="custom-bs" v-if="render">
-            <!-- <div class="header-stripe bg-primary">
-                <h4 class="mb-0">Stripe Credientials</h4>
-            </div> -->
             <v-form class="pa-6" ref="formStripe">
                 <h4 class="mb-4">Stripe Credientials</h4>
                 <v-divider class="mb-4"></v-divider>
@@ -67,7 +64,7 @@
 </template>
 <script>
 import { ApiService } from '@/core/services/api.service'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 import DialogConform from '@/components/layout/DialogConfirm'
 export default {
     name:'payoutStripe',
@@ -94,6 +91,7 @@ export default {
         this.fetchDetail();
     },
     methods: {
+        ...mapActions({ 'fetchCurrentUser': 'auth/fetchProfile'}),
         handleClose() {
             this.modalConfirm = false;
         },
@@ -112,6 +110,7 @@ export default {
                 this.messageSuccess(resp.message);
                 this.loaderHide();
                 this.handleClose();
+                this.fetchCurrentUser();
             })
             .catch((error) => {
                 this.loaderHide();

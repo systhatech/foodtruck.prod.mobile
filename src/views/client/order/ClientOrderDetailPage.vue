@@ -124,8 +124,9 @@
                                                         </tr>
                                                     </table>
                                                     <div class="text-right mt-4" v-if="orderDetail.payment">
-                                                        <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'" class="payment text-uppercase color-secondary f8-bold">Not Paid</p>
-                                                        <p v-else class="payment color-primary f8-bold">Paid by: <span class="text-uppercase">{{orderDetail.payment.payment_type}}</span> ****{{orderDetail.payment.cr_last4}}</p>
+                                                        <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'" class="payment text-uppercase color-secondary f8-bold mb-0">Not Paid</p>
+                                                        <p v-else class="payment success--text f8-bold mb-0">PAID BY: <span class="text-uppercase">{{orderDetail.payment.payment_type}}</span> ****{{orderDetail.payment.cr_last4}}</p>
+                                                        <span class="f9">{{ formatDateTime(orderDetail.payment.created_at) }}</span>
                                                     </div>
                                                 </v-col>
                                             </v-row>

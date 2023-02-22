@@ -7,7 +7,7 @@
                     <li v-for="(member, index) in members" :key="index" @click="handleRoute(member.id)" class="d-flex align-center justify-space-between">
                         <div class="d-flex align-center justify-space-between">
                             <div class="d-flex">
-                                <v-avatar color="indigo">
+                                <v-avatar color="primary">
                                     <v-img alt="avatar" :src="base_url +'/image-show/'+ member.profile_pic" v-if="member.profile_pic"></v-img>
                                     <v-img alt="avatar" :src="base_url +'/image-show/'+ member.contact.profile_pic" v-else-if="member.contact && member.contact.profile_pic"></v-img>
                                     <v-icon dark v-else>
@@ -17,13 +17,14 @@
                                 <div class="pl-4">
                                     <div v-if="member.unread_messages_count">
                                         <v-badge
+                                            class="text-capitalize"
                                             color="error"
                                             :content="member.unread_messages_count">
                                             {{ member.name }}
                                         </v-badge>
                                     </div>
                                     <div v-else>
-                                        <h5 class="mb-0 primary--text">{{ member.name }}</h5>
+                                        <h5 class="mb-0 primary--text text-capitalize">{{ member.name }}</h5>
                                     </div>
                                     <div class="last_msg"
                                         :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
@@ -101,7 +102,7 @@ import {ApiService} from "@/core/services/api.service";
 import Bottomnavbar from "@/components/layout/NavbarBottomVendor";
 import DialogConfirm from "@/components/layout/DialogConfirm";
 import {mapGetters} from "vuex";
-import { mdiPhone, mdiArchiveOutline, mdiChat, mdiAccountCircle} from '@mdi/js';
+import { mdiPhone, mdiArchiveOutline, mdiChat, mdiAccount} from '@mdi/js';
 
 export default {
     name: "ChatList",
@@ -111,7 +112,7 @@ export default {
             iconPhone: mdiPhone,
             iconArchive: mdiArchiveOutline,
             iconChat: mdiChat,
-            iconAccount: mdiAccountCircle,
+            iconAccount: mdiAccount,
             base_url,
             title: "",
             indexValue: 2,

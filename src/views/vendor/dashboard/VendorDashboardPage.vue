@@ -1,37 +1,73 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <!-- <Topnavbar/> -->
-        <v-container class="mg56 pt-4">
+        <v-container class="mb80 pt-4">
            <v-row>
-            <v-col cols="12" md="6">
-                <div class="custom-bs pa-4">
-                    <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
-                </div>
-            </v-col>
-            <v-col cols="12" md="6">
-                <div class="custom-bs pa-4">
-                    <div class="pb-2">
-                        <h4>Clients Nearby You</h4>
+                <v-col cols="12" md="6">
+                    <div class="custom-bs pa-4">
+                        <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
                     </div>
-                    <!-- <v-divider></v-divider> -->
-                    <div class="pt-2">
-                        <div>
-                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(10)">10km</v-btn>
-                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(20)">20km</v-btn>
-                            <v-btn class="mr-2" rounded color="primary" @click="handleFechClient(40)">40km</v-btn>
-                        </div>
-                    </div>
-                    <div class="pt-4">
-                        <p>There are  {{ clientLocations }} clients near you.</p>
-                    </div>
-                </div>
-            </v-col>
-            <v-col cols="12" md="6">
-                <!-- <div class="custom-bs pa-4"> -->
-                   <v-btn rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
-                <!-- </div> -->
-            </v-col>
+                </v-col>
+                <v-col cols="12" md="6" class="text-center">
+                    <v-btn block large rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
+                </v-col>
             </v-row>
+            <div v-if="loading" class="text-center">
+                <ComponentLoadingVue/>
+            </div>
+            <div v-else>
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <div class="custom-bs pa-4 mb-4">
+                            <div class="pb-2">
+                                <h4>Clients Nearby You</h4>
+                            </div>
+                            <div class="pt-2">
+                                <div>
+                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(10)">10km</v-btn>
+                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(20)">20km</v-btn>
+                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(40)">40km</v-btn>
+                                </div>
+                            </div>
+                            <div class="pt-4">
+                                <p>There are  {{ clientLocations }} clients near you.</p>
+                            </div>
+                        </div>
+                        <!-- <h2 class="mb-4 pl-4">Complete Following Steps</h2> -->
+                        <div class="custom-bs pa-4 mb-4" v-if="!currentUser.owner.profile_pic">
+                            <div class="pt-2 text-center">
+                            <p class="error--text">Upload your truck logo</p>
+                            <v-btn color="primary" large rounded to="/vendor-profile-truck">Upload</v-btn>
+                            </div>
+                        </div>
+                        <div class="custom-bs pa-4 mb-4" v-if="!Object.keys(truck_profile).length">
+                            <div class="pt-2 text-center">
+                            <p class="error--text">Add Food Menus</p>
+                            <v-btn color="primary" large rounded to="/vendor-profile-menu">Add now</v-btn>
+                            </div>
+                        </div>
+                        <div class="custom-bs pa-4 mb-4" v-if="currentUser && currentUser.owner && !currentUser.owner.payment_credential">
+                            <div class="pt-2 text-center">
+                            <p class="error--text">Add stripe payment credentials</p>
+                            <v-btn color="primary" large rounded to="/payments">Add now</v-btn>
+                            </div>
+                        </div>
+                        <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.locations.length">
+                            <div class="pt-2 text-center">
+                            <p class="error--text">Add Schedules</p>
+                            <v-btn color="primary" large rounded to="/vendor-profile-schedule">Add now</v-btn>
+                            </div>
+                        </div>
+                        <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.attachments.length">
+                            <div class="pt-2 text-center">
+                            <p class="error--text">Add Gallery</p>
+                            <v-btn color="primary" large rounded to="/profile-files">Add Now</v-btn>
+                            </div>
+                        </div>
+                    </v-col>
+                  
+                </v-row>
+            </div>
             <DialogConfirm :dialog-confirm="modal_confirm" :message="message" @close="handleClose" @handleConfirm="handleConfirm"/>
         </v-container>
         <Bottomnavbar/>
@@ -95,25 +131,34 @@ export default {
             locations:[],
             clients:[],
             distance:10,
+            truck_profile:{},
+            loading:false,
         }
     },
     components: {
     //    Topnavbar,
        Bottomnavbar,
        DialogConfirm,
+       ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     mounted() {
-        // this.fetchTrucks({ 
-        //     available: 1,
-        //     name: this.search,
-        //     // distance: this.distance,
-        //     guest: localStorage.getItem('g_token'),
-        // });
-        // this.handleAvailable();
-        // let deviceToken = localStorage.getItem('d_token');
-        // this.saveDeviceToken(deviceToken);
         if(!this.currentUser) return;
-    
+        
+        if(!this.availableLocations.length){
+            this.fetchTrucks({ 
+                available: 1,
+                // distance: this.distance,
+                radius: this.distance,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+            })
+            .then((resp) => {
+                this.loading = false;
+                console.log({resp});
+            })
+        }
+        this.loading = true;
+        this.profileData();
         try{
             socketHandler.onlineStatus({
                 id : this.currentUser.table_id,
@@ -139,6 +184,18 @@ export default {
             fetchTrucks:'truck/fetchTrucks',
             fetchProfile:'auth/fetchProfile',
         }),
+        async profileData() {
+            // this.loaderShow();
+            this.loading = true;
+            await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
+                this.loading = false;
+                this.truck_profile = resp;
+                console.log(this.truck_profile);
+            })
+            .catch(() => {
+                this.loading = false;
+            })
+        },
         handleFechClient(radius){
             this.distance = radius;
             this.fetchTrucks({ 
@@ -195,198 +252,14 @@ export default {
                 name:'SubscriptionPage'
             });
         }
-        // handleFilter(params) {
-        //     this.loaderShow();
-        //     params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
-        //     params.available =  1;
-        //      ApiService.post('/location/search/km',params)
-        //     .then((resp) => {
-        //         this.loaderHide();
-        //         this.trucks = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //         this.locations = this.trucks;
-        //         this.handleCloseFilter();
-        //         this.zoomLevel = 12;
-        //         this.loaderHide();
-        //     })
-        //     .catch((error) => {
-        //         this.loaderHide();
-        //         if(error.response && error.response.data && error.response.data.message){
-        //             this.messageError(error.response.data.message);
-        //         }
-        //         this.messageError(error.response.data.message);
-        //         this.loaderHide();
-        //     });
-        // },
-        // handleCloseFilter(){
-        //     this.modelFilter = false;
-        // },
-        // checkPremium() {
-        //     if((this.utype == 'vendors')){
-        //         this.fetchProfile();
-        //     }
-        // },
-        // async fetchProfile() {
-        //     await ApiService.post("profile").then((response) => {
-        //         if(response.data.owner.subscription === null){
-        //             this.available = "unavailable";
-        //             this.modal_confirm = true;
-        //             this.subscribed = false;
-        //         }else{
-        //             this.subscribed = true;
-        //         }
-		// 	})
-		// 	.catch(() => {
-        //         console.log("no fetch")
-		// 	})
-        // },
-       
-        // handleConfirm(){
-        //     this.$router.push({name :'SubscriptionPage'});
-        // },
-        // handleCloseConfirm(){
-        //     this.available = "unavailable";
-        //     this.modal_confirm = false;
-        // },
-      
-        // handleFilter() {
-        //     this.filter = true;
-        //     this.fetchCurrentCityTrucks();
-        // },
-        // handleAvailable(){
-        //     this.loaderShow();
-        //     let availability = this.available;
-        //      ApiService.post('/location/all',{ 
-        //         available: availability,
-        //         guest: localStorage.getItem('g_token'),
-        //     })
-        //     .then((resp) => {
-        //         this.loaderHide();
-        //         this.locations = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //         this.zoomLevel = 12;
-        //         this.trucks = this.locations;
-        //         this.clients = resp.filter((item)=>item.table_name =='clients');
-        //     })
-        //     .catch(() => {
-        //         this.loaderHide();
-        //     });
-        // },
-        // fetchDataInterval() {
-        //     this.dataInterval = setInterval(() => {
-        //         if(!this.filter){
-        //             this.fetchData(false)
-        //         }
-        //     }, 500);
-        // },
-        // fetchData(showLoader = true){
-        // fetchData(){
-        // // console.log(showLoader)
-        //     // console.log("test");
-        //     // if(showLoader){
-        //     //     this.loaderShow();
-        //     // }
-        //     // let avai = (this.available == "available") ? 1 : 0;
-        //     // if(this.utype === 'clients') {
-        //      let   avai = 1;
-        //     // }
-        //     this.loaderShow();
-        //     ApiService.post('/location/all',{ 
-        //         available: avai,
-        //         name: this.search,
-        //         guest: localStorage.getItem('g_token'),
-        //     })
-        //     .then((resp) => {
-        //         this.locations = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //         this.loaderHide();
-           
-        //         // this.checkPremium();
-        //         this.zoomLevel = 12;
-        //     })
-        //     .catch(() => {
-        //         this.loaderHide();
-        //         this.checkPremium();
-        //     });
-        // },
-
-        // fetchCurrentCityTrucks(){
-        //     this.loaderShow();
-        //     ApiService.post('/location/trucks',{ guest: localStorage.getItem('g_token') , available:1})
-        //     .then((resp) => {
-        //         this.loaderHide();
-        //         this.trucks = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //         console.log(this.trucks);
-        //         this.zoomLevel = 12;
-        //     })
-        //     .catch((error) => {
-        //         this.loaderHide();
-        //         console.log(error);
-        //     });
-        // },
-        // filterZipCode(zip){
-        //     this.loaderShow();
-        //     ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
-        //     .then((resp) => {
-        //         // this.loaderHide();
-        //         // this.handleClose();
-        //         this.trucks = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //          this.locations = this.trucks;
-        //         this.zoomLevel = 12;
-        //     })
-        //     .catch(() => {
-        //         this.loaderHide();
-        //     });
-        // },
-        // fetchFilterData(dist){
-        //     this.loaderShow();
-        //     ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
-        //     .then((resp) => {
-        //         // this.loaderHide();
-        //         // this.handleClose();
-        //         this.trucks = resp.map((location) => ({
-        //             ...location, position: {
-        //                 lat: Number(location.lat),
-        //                 lng: Number(location.lng)
-        //             }
-        //         }));
-        //          this.locations = this.trucks;
-        //         this.zoomLevel = 12;
-        //     })
-        //     .catch((error) => {
-        //         this.loaderHide();
-        //         this.messageError(error.response.data.message);
-        //         // console.log(error);
-        //     });
-        // },
           
     },
     computed: {
         ...mapGetters({
             currentUser:'auth/user',
-            availableLocations:'truck/trucks'
+            availableLocations:'truck/trucks',
+            truckMenus:'truck/truckMenus',
+            profile:'auth/profile',
         }),
 
         clientLocations(){

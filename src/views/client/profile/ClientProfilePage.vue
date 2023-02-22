@@ -29,7 +29,7 @@
                             alt="Profile Pic">
                         </v-avatar>
                         <div class="pt-2 mb-4">
-                            <h4 class="text-capitalize">{{currentUser.fname}} {{ currentUser.lname}}</h4>
+                            <h4 class="text-capitalize primary--text">{{currentUser.fname}} {{ currentUser.lname}}</h4>
                         </div>
                     </div>
                     <div class="mt-1 ml-3">

@@ -21,8 +21,7 @@
                                     </h4>
                                     <div
                                         class="last_msg"
-                                        :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''"
-                                        >
+                                        :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
                                         <div v-html="messageText(member.last_message)">
                                         <!-- {{ }} -->
                                         </div>

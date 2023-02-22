@@ -1,12 +1,12 @@
 <template>
-    <v-container class="ma-0 pa-0 h-100 background-image">
-        <v-container>
-            <div class="mt-10">
+    <v-container class="ma-0 pa-0 h-100 background-image d-flex align-center justify-space-around">
+        <v-container style="height:600px">
+            <!-- <div class="mt-10">
                 <v-btn icon text color="primary" :to="{
                     name: 'loginPage'
                 }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
-            </div>
-            <div>
+            </div> -->
+            <!-- <div>
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center mb-4">
@@ -14,23 +14,28 @@
                         </div>
                     </v-col>
                 </v-row>
-            </div>
+            </div> -->
             <div class="pa-6 custom-bs">
                 <v-form v-model="valid" ref="resetPassword">
                     <v-row>
-                        <v-col cols="12" class="pt-0">
-                            <v-text-field label="Your Email" :rules="emailRules" v-model="email"></v-text-field>
+                        <v-col cols="12" class="pt-4">
+                            <label for="">Email verification code has been sent to <span class="primary--text">{{ email }}</span></label>
+                            <v-text-field label="Code" :rules="rulesRequired" v-model="code"></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <v-btn rounded large color="primary" block @click="submit">
                                 Submit
                             </v-btn>
+                            <div class="pt-6">
+                                <v-btn text color="primary" block @click="resendCode()"> Resend Code </v-btn>
+                            </div>
+                         
                         </v-col>
                     </v-row>
                 </v-form>
             </div>
             <div class="text-center pa-6 ma-4">
-                <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
+                <!-- <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn> -->
             </div>
 
         </v-container>
@@ -39,28 +44,11 @@
 </template>
 <script>
 import { ApiService } from '@/core/services/api.service'
-import { base_url } from '@/core/services/config'
-import { mdiTwitter, mdiFacebook, mdiArrowLeft, mdiChevronLeft } from '@mdi/js'
-
 export default {
     data: () => ({
-        base_url,
-        icon_back: mdiChevronLeft,
-        iconFb: mdiFacebook,
-        iconTw: mdiTwitter,
-        iconBack: mdiArrowLeft,
-        valid: true,
-        showServiceProvider: false,
+        valid:true,
         email: '',
-        serviceProvider: false,
-        indexValue: 3,
-        loading: false,
-        nameErrors: "",
-        emailErrors: "",
-        checkboxErrors: "",
-        show_password: false,
-        activateAccount: false,
-        accountActivated: false,
+        code:'',
         emailRules: [
             v => !!v || 'E-mail is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -68,81 +56,35 @@ export default {
         rulesRequired: [
             v => !!v || 'Required',
         ],
-        items: [
-            { id: 1, name: '', route: '', icon: 'mdi-home', showText: false },
-            { id: 2, name: '', route: 'about', icon: 'mdi-information' },
-            { id: 3, name: '', route: 'contact', icon: 'mdi-notebook-check' },
-            { id: 4, name: '', route: 'login', icon: 'mdi-login' },
-        ],
-        lazy: false,
-        name: 'Buglogic',
-        location: {
-            lat: 0,
-            lng: 0,
-            add1: '',
-            city: '',
-            state: '',
-            zip_code: '',
-            country: '',
-        }
     }),
     components: {
         // Bottomnavbar,
     },
-    watch: {
-        serviceProvider(newval) {
-            newval ? this.login_info.client = 0 : this.login_info.client = 1;
-            if (newval) {
-                localStorage.removeItem('destination');
-            }
-        }
-    },
     mounted() {
-        this.locateGeoLocation();
-        // this.updateLocation();
+        this.email = this.$router.currentRoute.query.email;
     },
 
     methods: {
-        locateGeoLocation: function () {
-
-            navigator.geolocation.getCurrentPosition(res => {
-                this.location.lat = res.coords.latitude;
-                this.location.lng = res.coords.longitude;
-            });
-
-        },
-
         handleServiceProvider() {
             this.showServiceProvider = true;
             this.serviceProvider = true;
         },
-        async fetchLogo() {
-            this.$bus.$emit('SHOW_PAGE_LOADER')
-            await ApiService.get("default-company/logo")
-                .then((resp) => {
-                    this.logo = resp.logo;
-                    this.name = resp.name;
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
-                })
-                .catch(() => {
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
-                    this.messageError('Sorry, Something goes wrong');
-                });
+        resendCode(){
+            console.log("resend code", this.email);
         },
-
         async submit() {
-            if (!this.$refs.resetPassword.validate()) return;
+            // if (!this.$refs.resetPassword.validate()) return;
+
             this.$bus.$emit('SHOW_PAGE_LOADER');
-            ApiService.post('/password/reset', { email: this.email })
+            ApiService.post('/email-verify-now', { email: this.email, code: this.code })
                 .then((resp) => {
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                     this.messageSuccess(resp.message);
                     this.$router.push("/login");
                 })
                 .catch((error) => {
-                    console.log({error})
                     this.$bus.$emit('HIDE_PAGE_LOADER');
-                    // this.messageError(error.response.data.message);
+                    this.messageError(error.response.data.message);
                 })
         },
     },

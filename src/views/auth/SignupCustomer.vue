@@ -27,10 +27,10 @@
                         <v-col cols="6">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.lname" label="Last Name"></v-text-field>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="12" md="6">
                             <v-text-field class="text-center" @blur="onCheckEmail" :rules="emailRules" v-model="customer_info.email" label="Email"></v-text-field>
                         </v-col>
-                        <v-col cols="6">
+                        <v-col cols="12" md="6">
                             <v-text-field class="text-center" :rules="rulesRequired" v-model="customer_info.phone_no" label="Phone No." v-mask="'(###) ###-####'"></v-text-field>
                         </v-col>
                         <v-col cols="12">
@@ -50,7 +50,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-import JwtService from '@/core/services/jwt.service'
+// import JwtService from '@/core/services/jwt.service'
 import { base_url } from '@/core/services/config'
 import { mdiTwitter, mdiFacebook, mdiHome, mdiAccount, mdiChat,mdiChevronLeft } from '@mdi/js'
 export default {
@@ -135,10 +135,10 @@ export default {
         // }
     },
     mounted() {
-        if(JwtService.getToken()) {
-            this.$router.replace({name:'dashboardPage'});
-        }
-        this.fetchLogo();
+        // if(JwtService.getToken()) {
+        //     this.$router.replace({name:'dashboardPage'});
+        // }
+        // this.fetchLogo();
         this.locateGeoLocation();
     },
 
@@ -151,11 +151,16 @@ export default {
             this.modal_error = false;
         },
         onCheckEmail(){
+            if(!this.customer_info.email) return;
+            
+            this.loaderShow();
             ApiService.post("/check/email",{ 'email': this.customer_info.email})
             .then((resp)=>{
+                this.loaderHide();
                 console.log(resp);
             })
             .catch((error)=>{
+                this.loaderHide();
                 this.message_error = error.response.data.message;
                 this.modal_error = true;
             })
@@ -165,11 +170,31 @@ export default {
             this.loaderShow();
             await ApiService.post('/register/client', this.customer_info)
             .then((resp) => {
-                this.messageSuccess("Registered Successfully");
-                JwtService.saveToken(resp.token);
-                JwtService.saveUtype(resp.user.table);
-                this.fetchAddress();
+                this.loaderHide();
+                console.log(resp);
+                // this.messageSuccess("Registered Successfully");
+                // JwtService.saveToken(resp.token);
+                // JwtService.saveUtype(resp.user.table);
+                // this.fetchAddress();
+                this.$router.push({ name:'VerifyEmailPage', query:{ email: this.customer_info.email, type:'clients'}});
+                // this.sendEmailVerification(this.customer_info.email);
                 
+            })
+            .catch((error) => {
+                this.loaderHide();
+                if(error.response.data){
+                    this.messageError(error.response.data.message);
+                }else{
+                    this.messageError(error.response.statusText);
+                }
+            })
+        },
+        async sendEmailVerification(email){
+            this.loaderShow();
+            await ApiService.post('/email-verification', {email})
+            .then(() => {
+                this.loaderHide();
+                this.$router.push({ name:'VerifyEmailPage', query:{ email: this.customer_info.email, type:'clients'}});
             })
             .catch((error) => {
                 this.loaderHide();
@@ -314,10 +339,10 @@ export default {
                 email: this.answers[2],
                 password: this.answers[3],
             })
-            .then((resp) => {
+            .then(() => {
                  this.messageSuccess("Registered Successfully");
-                JwtService.saveToken(resp.token);
-                JwtService.saveUtype(resp.user.table);
+                // JwtService.saveToken(resp.token);
+                // JwtService.saveUtype(resp.user.table);
                 this.fetchAddress();
                 
             })

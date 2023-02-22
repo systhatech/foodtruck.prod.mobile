@@ -37,7 +37,11 @@ export default {
     actions: {
         async signIn({ dispatch }, credientials){
             let response = await ApiService.post('/login', credientials);
-            return dispatch('attempt', response.token);
+            if(response.verify){
+                return response;
+            }else{
+                return dispatch('attempt', response.token);
+            }
         },
         async signUpClient({ dispatch }, credientials){
             let response = await ApiService.post('/register/client', credientials);
