@@ -63,14 +63,14 @@ export default {
 		newCenter: {},
 		locations: {},
 	},
-	// watch: {
-	// 	locationMarkers(val) {
-	// 		this.loaderHide();
-	// 		if (val.length > 0) {
-	// 			this.center = val[0].position;
-	// 		}
-	// 	}
-	// },
+	watch: {
+		locationMarkers(val) {
+			this.loaderHide();
+			if (val.length > 0) {
+				this.center = val[0].position;
+			}
+		}
+	},
 	data() {
 		return {
 			iconbus,
@@ -236,6 +236,6 @@ export default {
 }
 
 .map-height {
-	height: calc(100vh - 216px);
+	height: calc(100vh - 252px);
 }
 </style>
