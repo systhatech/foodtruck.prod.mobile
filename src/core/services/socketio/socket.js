@@ -187,6 +187,13 @@ let socketHandler = {
         );
     },
     handleMessageSend() {
+        // console.log({
+        //     table_from: this.table_from,
+        //     table_from_id: this.table_from_id,
+        //     table_to: this.table_to,
+        //     table_to_id: this.table_to_id,
+        //     message: this.textbox.val().trim(),
+        // });
         this.socket.emit(this.channelOne, {
             table_from: this.table_from,
             table_from_id: this.table_from_id,
