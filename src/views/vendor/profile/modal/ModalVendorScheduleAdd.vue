@@ -96,7 +96,7 @@
                                             <template v-slot="{ inputValue, inputEvents }">
                                                 <input
                                                 class="custom-input"
-                                                :value="moment(inputValue).format('M/d/YY h:mm a')"
+                                                :value="moment(inputValue).format('M/D/YY h:mm a')"
                                                 v-on="inputEvents"
                                                 />
                                             </template>
@@ -114,7 +114,7 @@
                                             <template v-slot="{ inputValue, inputEvents }">
                                                 <input
                                                 class="custom-input"
-                                                :value="moment(inputValue).format('M/d/YY h:mm a')"
+                                                :value="moment(inputValue).format('M/D/YY h:mm a')"
                                                 v-on="inputEvents"
                                                 />
                                             </template>

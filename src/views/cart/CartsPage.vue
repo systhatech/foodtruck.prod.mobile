@@ -103,7 +103,7 @@
                     <div class="unavailable">
                         <div>
                             <h3 class="mb-6">Your cart is empty!</h3>
-                            <v-btn block color="primary" rounded :to="{ name: 'home' }"><v-icon>{{iconArrowBack}}</v-icon>shop now</v-btn>
+                            <v-btn block large color="primary" rounded :to="{ name: 'home' }"><v-icon>{{iconArrowBack}}</v-icon>shop now</v-btn>
                         </div>
                     </div>
                 </v-col>
