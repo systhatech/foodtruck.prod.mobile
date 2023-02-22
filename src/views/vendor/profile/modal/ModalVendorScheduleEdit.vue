@@ -15,7 +15,7 @@
                   <v-container>
                       <div class="background-image">
                         <div>
-                          <div class="pa-4 custom-bs pt-6">
+                            <div class="pa-4 custom-bs pt-6 mt-14">
     
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
@@ -95,7 +95,7 @@
                                         <template v-slot="{ inputValue, inputEvents }">
                                             <input
                                             class="custom-input"
-                                            :value="inputValue"
+                                            :value="moment(inputValue).format('M/D/YY h:mm a')"
                                             v-on="inputEvents"
                                             />
                                         </template>
@@ -111,7 +111,7 @@
                                         <template v-slot="{ inputValue, inputEvents }">
                                             <input
                                             class="custom-input"
-                                            :value="inputValue"
+                                            :value="moment(inputValue).format('M/D/YY h:mm a')"
                                             v-on="inputEvents"
                                             />
                                         </template>
@@ -127,7 +127,7 @@
                                             <template v-slot="{ inputValue, inputEvents }">
                                                 <input
                                                 class="custom-input"
-                                                :value="inputValue"
+                                                :value="moment(inputValue).format('M/D/YY h:mm a')"
                                                 v-on="inputEvents"
                                                 />
                                             </template>
@@ -240,46 +240,6 @@ export default {
     confirmDelete() {
         this.dialogConfirm = true;
     },
-    // async fetchLocation() {
-    //   this.loaderShow();
-    //   this.locationId = this.$router.currentRoute.params.locationId;
-    //   await ApiService.post("/vendor/location/find", {
-    //     locationId: this.locationId,
-    //   })
-    //     .then((resp) => {
-    //       this.address = resp.data;
-    //       this.address.start_time = moment(
-    //         resp.data.start_time,
-    //         "YYYY-MM-DD HH:mm:ss"
-    //       ).toDate();
-    //       this.address.end_time = moment(
-    //         resp.data.end_time,
-    //         "YYYY-MM-DD HH:mm:ss"
-    //       ).toDate();
-    //       this.address.start_date = moment(
-    //         resp.data.start_date,
-    //         "YYYY-MM-DD HH:mm:ss"
-    //       ).toDate();
-    //       this.address.end_date = moment(
-    //         resp.data.end_date,
-    //         "YYYY-MM-DD HH:mm:ss"
-    //       ).toDate();
-
-    //       this.defaultValue = resp.data.add1;
-
-    //       this.address.add1 = resp.data.add1;
-    //       this.address.city = resp.data.city;
-    //       this.address.state = resp.data.state;
-    //       this.address.zip = resp.data.zip;
-    //       this.address.vendor_id = resp.data.vendor_id;
-
-    //       this.loaderHide();
-    //     })
-    //     .catch(() => {
-    //       this.loaderHide();
-    //       this.messageError("Failed to update address");
-    //     });
-    // },
     async handleDelete() {
       this.loaderShow();
       this.locationId = this.$router.currentRoute.params.locationId;
@@ -340,36 +300,6 @@ export default {
                 console.log(error);
             })
         }
-    // handleUpdate() {
-    //   let valid = this.$refs.formLocation.validate();
-    //   if (!valid) {
-    //     this.messsageError("Flease fillup form fields");
-    //     return;
-    //   }
-    //   let selectedDate = moment(this.address.start_date).format("YYYY-MM-DD"),
-    //     timeStart = moment(this.address.start_time).format("HH:mm:ss"),
-    //     timeEnd = moment(this.address.end_time).format("HH:mm:ss");
-
-    //   this.address.start_date = moment(this.address.start_date).format(
-    //     "YYYY-MM-DD HH:mm:ss"
-    //   );
-
-    //   this.address.start_time = selectedDate + " " + timeStart;
-    //   this.address.end_time = selectedDate + " " + timeEnd;
-    //   this.address.vendor_id = this.currentUser.table_id;
-    //   this.loaderShow();
-    //   ApiService.post("vendor/location-create", this.address)
-    //     .then((resp) => {
-    //       this.loaderHide();
-    //       this.messageSuccess(resp.message);
-    //       this.$router.push("/profile-schedule");
-    //     })
-    //     .catch((error) => {
-    //       this.loaderHide();
-    //       console.log(error);
-    //     });
-    // },
-
   },
   computed: {
       ...mapGetters({
@@ -382,5 +312,6 @@ export default {
 .custom-input{
     border-bottom: 1px solid #afafaf;
     padding: 4px 0;
+    max-width: 100%;
 }
 </style>

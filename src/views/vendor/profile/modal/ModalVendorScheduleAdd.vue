@@ -297,36 +297,6 @@ export default {
             console.log(error);
         })
     }
-    // handleUpdate() {
-    //   let valid = this.$refs.formLocation.validate();
-    //   if (!valid) {
-    //     this.messsageError("Flease fillup form fields");
-    //     return;
-    //   }
-    //   let selectedDate = moment(this.address.start_date).format("YYYY-MM-DD"),
-    //     timeStart = moment(this.address.start_time).format("HH:mm:ss"),
-    //     timeEnd = moment(this.address.end_time).format("HH:mm:ss");
-
-    //   this.address.start_date = moment(this.address.start_date).format(
-    //     "YYYY-MM-DD HH:mm:ss"
-    //   );
-
-    //   this.address.start_time = selectedDate + " " + timeStart;
-    //   this.address.end_time = selectedDate + " " + timeEnd;
-    //   this.address.vendor_id = this.currentUser.table_id;
-    //   this.loaderShow();
-    //   ApiService.post("vendor/location-create", this.address)
-    //     .then((resp) => {
-    //       this.loaderHide();
-    //       this.messageSuccess(resp.message);
-    //       this.$router.push("/profile-schedule");
-    //     })
-    //     .catch((error) => {
-    //       this.loaderHide();
-    //       console.log(error);
-    //     });
-    // },
-
   },
   computed: {
       ...mapGetters({
@@ -419,16 +389,6 @@ input#tj-datetime-input {
                   border: 0;
                   padding: 0;
                   margin: 0;
-
-                  // p {
-                  //     padding: 0;
-                  //     margin: 0;
-                  // }
-
-                  // p.item-name {
-                  //     font-size: 0.8rem;
-                  //     font-weight: 400;
-                  // }
               }
           }
       }
@@ -446,5 +406,6 @@ input#tj-datetime-input {
 .custom-input{
     border-bottom: 1px solid #afafaf;
     padding: 4px 0;
+    max-width: 100%;
 }
 </style>

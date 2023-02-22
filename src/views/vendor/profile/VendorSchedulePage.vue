@@ -2,7 +2,7 @@
     <v-container class="ma-0 pa-0 background-image h-100">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mb80">
-            <v-btn color="primary" @click="addSchedule()" class="mb-4" rounded large block>Add New Schedule</v-btn>
+            <v-btn outlined color="primary" @click="addSchedule()" class="mb-4" rounded large block><v-icon>mdi-plus</v-icon> Add New Schedule</v-btn>
             <div>
                 <Location :truckProfile="profile"/>
             </div>
@@ -82,10 +82,7 @@ export default {
     box-shadow: 3px 5px 28px -7px rgba(184,184,184,0.52);
 }
 .form-container{
-    // .login-container{
-    // background: #acfa95;
     border-radius: 10px;
-    // margin-top: 27px !important;
     padding:20px;
 // }
 }

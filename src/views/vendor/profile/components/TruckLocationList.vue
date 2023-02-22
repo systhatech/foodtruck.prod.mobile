@@ -27,7 +27,7 @@
                              Nearby Client - {{ location.clients_count }}
                         </div> -->
                         <div class="pt-4">
-                            <v-btn block rounded color="warning" @click="handleRoute(location)">update</v-btn>
+                            <v-btn block large rounded color="warning" @click="handleRoute(location)">update</v-btn>
                         </div>
                     </div>
                 </li>
