@@ -15,6 +15,7 @@
             color="primary"
             rounded
             large
+            block
             @click="handleConfirm" >
             Proceed
           </v-btn>

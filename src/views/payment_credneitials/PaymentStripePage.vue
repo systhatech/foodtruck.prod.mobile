@@ -54,7 +54,12 @@
             </v-form>
         </div>
         <div class="unavailable" v-else>
-            <p>{{message}}</p>
+            <div v-if="loading">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No orders</p>
+                </div>
         </div>
         <DialogConform 
             :dialogConfirm="modalConfirm" 
@@ -82,6 +87,7 @@ export default {
             },
             render:false,
             message:'Loading...',
+            loading:false,
             rulesRequired: [
                 v => !!v || 'Required',
             ],
@@ -111,6 +117,7 @@ export default {
                 this.loaderHide();
                 this.handleClose();
                 this.fetchCurrentUser();
+                this.handleBack();
             })
             .catch((error) => {
                 this.loaderHide();
@@ -120,9 +127,11 @@ export default {
         },
      
         async fetchDetail() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             await ApiService.post("/profile")
             .then((resp) => {
+                this.loading = false;
                 this.stripeDetail.vendor_id = resp.data.table_id;
                 if(resp.data.owner.payment_credential) {
                     this.stripeDetail = resp.data.owner.payment_credential;
@@ -131,6 +140,7 @@ export default {
                 this.loaderHide();
             })
             .catch((error) => {
+                this.loading = false;
                  this.message='Failed to fetch data';
                 this.loaderHide();
                 console.log(error);
@@ -142,6 +152,7 @@ export default {
     },
     components:{
         DialogConform,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     computed: {
           ...mapGetters({

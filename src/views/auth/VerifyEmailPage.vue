@@ -19,8 +19,10 @@
                 <v-form v-model="valid" ref="resetPassword">
                     <v-row>
                         <v-col cols="12" class="pt-4">
-                            <label for="">Email verification code has been sent to <span class="primary--text">{{ email }}</span></label>
-                            <v-text-field label="Code" :rules="rulesRequired" v-model="code"></v-text-field>
+                            <v-form ref="formCode">
+                                <label for="">Email verification code has been sent to <span class="primary--text">{{ email }}</span><v-btn color="warning" text small @click="handleEdit()">edit email</v-btn></label>
+                                <v-text-field label="Code" :rules="rulesRequired" v-model="code"></v-text-field>
+                            </v-form>
                         </v-col>
                         <v-col cols="12">
                             <v-btn rounded large color="primary" block @click="submit">
@@ -32,7 +34,9 @@
                          
                         </v-col>
                     </v-row>
+
                 </v-form>
+                <DialogEditEmail :dialogEditEmail="modal_edit_email" :email="email" @close="handleClose()"/>
             </div>
             <div class="text-center pa-6 ma-4">
                 <!-- <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn> -->
@@ -56,25 +60,52 @@ export default {
         rulesRequired: [
             v => !!v || 'Required',
         ],
+        modal_edit_email:false,
     }),
     components: {
         // Bottomnavbar,
+        DialogEditEmail:()=>import('@/components/layout/DialogEditEmail')
     },
     mounted() {
         this.email = this.$router.currentRoute.query.email;
     },
 
     methods: {
+        handleClose(){
+            this.modal_edit_email = false;
+            setTimeout(() => {
+                this.email = this.$router.currentRoute.query.email;
+                console.log(this.email);
+            }, 200);
+        },
+        handleEdit(){
+            console.log("edit");
+            this.modal_edit_email = true;
+        },
         handleServiceProvider() {
             this.showServiceProvider = true;
             this.serviceProvider = true;
         },
-        resendCode(){
-            console.log("resend code", this.email);
+        async resendCode(){
+            this.loaderShow();
+            await ApiService.post('/email-verification', {'email' : this.$router.currentRoute.query.email, 'new_email': this.$router.currentRoute.query.email})
+            .then((resp) => {
+                this.loaderHide();
+                this.handleClose();
+                this.messageSuccess(resp.message);
+            })
+            .catch((error) => {
+                this.loaderHide();
+                if(error.response.data){
+                    this.messageError(error.response.data.message);
+                }else{
+                    this.messageError(error.response.statusText);
+                }
+            })
         },
         async submit() {
-            // if (!this.$refs.resetPassword.validate()) return;
-
+            if (!this.$refs.formCode.validate()) return;
+            // console.log(this.$router.query.email);
             this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.post('/email-verify-now', { email: this.email, code: this.code })
                 .then((resp) => {

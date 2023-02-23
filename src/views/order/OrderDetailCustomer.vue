@@ -149,7 +149,8 @@
                 </v-col>
             </v-row>
         </v-container>
-        <Bottomnavbar :value="indexValue"/>
+        <BottomnavbarClient v-if="currentUser.table=='clients'"/>
+        <BottomnavbarVendor v-if="currentUser.table=='vendors'"/>
     </v-container>
 </template>
 <script>
@@ -159,7 +160,8 @@ import { ApiService } from '@/core/services/api.service'
 import moment from 'moment'
 import { base_url } from '@/core/services/config'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-import Bottomnavbar from '@/components/layout/NavbarBottomFixed'
+import BottomnavbarClient from '@/components/layout/NavbarBottomClient'
+import BottomnavbarVendor from '@/components/layout/NavbarBottomVendor'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -204,7 +206,8 @@ export default {
     },
      components: {
         Topnavbar,
-        Bottomnavbar,
+        BottomnavbarClient,
+        BottomnavbarVendor,
         // OrderDetail
         // InputUpload
     },

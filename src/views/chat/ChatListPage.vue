@@ -7,9 +7,9 @@
                     <li v-for="(member, index) in members" :key="index">
                         <div class="d-flex align-center justify-space-between">
                             <div class="d-flex">
-                                <v-avatar color="indigo">
-                                    <v-img alt="avatar" :src="base_url +'/image-show/'+ member.profile_pic" v-if="member.profile_pic"></v-img>
-                                    <v-img alt="avatar" :src="base_url +'/image-show/'+ member.contact.profile_pic" v-else-if="member.contact && member.contact.profile_pic"></v-img>
+                                <v-avatar color="primary">
+                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ member.profile_pic" v-if="member.profile_pic"></v-img>
+                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ member.contact.profile_pic" v-else-if="member.contact && member.contact.profile_pic"></v-img>
                                     <v-icon dark v-else>
                                         {{iconAccount}}
                                     </v-icon>

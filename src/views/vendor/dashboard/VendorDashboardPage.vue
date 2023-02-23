@@ -40,7 +40,7 @@
                             <v-btn color="primary" large rounded to="/vendor-profile-truck">Upload</v-btn>
                             </div>
                         </div>
-                        <div class="custom-bs pa-4 mb-4" v-if="!Object.keys(truck_profile).length">
+                        <div class="custom-bs pa-4 mb-4" v-if="Object.keys(truck_profile).length && !truck_profile.menus.length">
                             <div class="pt-2 text-center">
                             <p class="error--text">Add Food Menus</p>
                             <v-btn color="primary" large rounded to="/vendor-profile-menu">Add now</v-btn>
@@ -190,7 +190,7 @@ export default {
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loading = false;
                 this.truck_profile = resp;
-                console.log(this.truck_profile);
+                console.log("profile_data : ",this.truck_profile);
             })
             .catch(() => {
                 this.loading = false;

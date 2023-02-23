@@ -5,12 +5,12 @@
             <div v-if="currentUser">
                 <div class="custom-bs pa-4 pt-8">
                     <div class="text-center">
-                        <v-avatar color="primary" size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
+                        <v-avatar color="primary" tile size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
                             <v-icon dark>
                                 {{ icon_account}}
                             </v-icon>
                         </v-avatar>
-                        <v-avatar size="90" v-else>
+                        <v-avatar size="90" tile v-else>
                             <img
                             style="object-fit:cover"
                             :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
@@ -66,7 +66,7 @@
                         <li v-for="(menu, index) in menusVendor" class="" :key="index" @click="navigatePage(menu.route)">
                             <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">{{menu.icon}}</v-icon>
-                                <h5 class="text-uppercase" style="font-weight:400">{{ menu.name }}</h5>
+                                <p class="text-capitalize mb-0">{{ menu.name }}</p>
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>

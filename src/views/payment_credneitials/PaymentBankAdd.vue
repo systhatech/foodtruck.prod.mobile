@@ -196,7 +196,7 @@ export default {
             this.modalConfirm = true;
         },
         handleAddAddress(){
-            this.$router.push("/profile-address");
+            this.$router.push("/vendor-profile-address");
         },
         handleConfirm(){
             let validForm = this.$refs.formPayout.validate();

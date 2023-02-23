@@ -1,39 +1,47 @@
 <template>
     <div class="pt-4 ">
-        <div v-if="truckProfile && truckProfile.menus && truckProfile.menus.length">
+        <!-- {{  truckProfile.menus }} -->
+        <div v-if="truckProfile && truckProfile.menus">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
-                <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
-                    <h5 class="pb-2 mt-8 text-uppercase">{{ index }}</h5>
-
-                    <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
-                        <div class="d-flex align-center justify-space-between" @click="handleRoute(item)">
-                            <div class="d-flex align-center"> 
-                                <v-img
-                                lazy-src="https://picsum.photos/id/11/10/6"
-                                max-width="100"
-                                width="100"
-                                aspect-ratio="1.7"
-                                contain
-                                :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
-                                ></v-img>
-                                <div class="pl-3 d-flex align-center justify-space-between w-100">
-                                    <div>
-                                        <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
-                                        <p style="font-size:14px" v-if="item.description">{{ shortText(item.description,40) }}</p>
+                <div v-if="Object.keys(menu.itemsGroup).length">
+                    <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
+                    <div >
+                        <div v-for="(groupItem, index) in menu.itemsGroup" :key="index" class="pl-2">
+                            <p class="pb-0 mb-0 mt-2 text-capitalize">{{ index }}</p>
+                            <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
+                                <div class="d-flex align-center justify-space-between" @click="handleRoute(item)">
+                                    <div class="d-flex align-center"> 
+                                        <v-img
+                                        lazy-src="https://picsum.photos/id/11/10/6"
+                                        max-width="100"
+                                        width="100"
+                                        aspect-ratio="1.7"
+                                        contain
+                                        :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
+                                        ></v-img>
+                                        <div class="pl-3 d-flex align-center justify-space-between w-100">
+                                            <div>
+                                                <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
+                                                <p style="font-size:14px" v-if="item.description">{{ shortText(item.description,40) }}</p>
+                                            </div>
+                                            <!-- <div>
+                                                
+                                                <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
+                                                <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
+                                            </div> -->
+                                        </div>
                                     </div>
-                                    <!-- <div>
-                                        
-                                        <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
-                                        <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
-                                    </div> -->
+                                    <div>
+                                        <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4>
+                                        <!-- <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn> -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4>
-                                <!-- <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn> -->
                             </div>
                         </div>
                     </div>
+                </div>
+                <div v-else class="unavailable">
+                    <p>Menu not available</p>
                 </div>
             </div>
             <ModalMenu :dialog="dialog" :vendorId="vendorId" :item="item" @close="handleClose"/>   

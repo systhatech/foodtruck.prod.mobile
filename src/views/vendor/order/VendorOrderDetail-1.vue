@@ -141,11 +141,11 @@
                                                     <div class="text-right mt-4" v-if="orderDetail.payment">
                                                         <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'"
                                                             class="payment text-uppercase color-secondary ">Not Paid</p>
-                                                        <p v-else class="payment success--text mb-0 text-uppercase f8">Paid by: <span
+                                                        <p v-else class="payment success--text mb-0">Paid by: <span
                                                                 class="text-uppercase">{{
                                                                     orderDetail.payment.payment_type
                                                                 }}</span> ****{{ orderDetail.payment.cr_last4 }}</p>
-                                                                <span class="f8">{{ formatDateTime(orderDetail.payment.created_at) }}</span>
+                                                                <span class="f9">{{ formatDateTime(orderDetail.payment.created_at) }}</span>
                                                     </div>
                                                 </v-col>
                                             </v-row>
@@ -173,6 +173,16 @@
                                     color="primary" @click="onClick('accepted')">Accept</v-btn>
                             </div>
                             <div v-if="order && order.status == 'accepted'"
+                                class="d-flex align-center justify-space-between w-100">
+                                <v-btn rounded :disabled="disableButton" color="error" 
+                                large
+                                text
+                                @click="onClick('archive')">archive</v-btn>
+                                <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton" 
+                                large
+                                color="primary" @click="onClick('preparing')">Preparing</v-btn>
+                            </div>
+                            <div v-if="order && order.status == 'preparing'"
                                 class="d-flex align-center justify-space-between w-100">
                                 <v-btn rounded :disabled="disableButton" color="error" 
                                 large

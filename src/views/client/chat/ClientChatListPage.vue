@@ -1,16 +1,16 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar />
-        <v-container class="mg56">
+        <v-container class="mg56 pa-0">
             <div v-if="currentUser && members && members.length">
-                <ul class="chat-lists custom-bs pa-4">
-                    <li v-for="(member, index) in members" :key="index" class="d-flex align-center justify-space-between" @click="handleRoute(member.id)">
-                        <div class="d-flex align-center justify-space-between">
+                <ul class="chat-lists custom-bs pt-0">
+                    <li v-for="(member, index) in members" :key="index" class="d-flex align-center justify-space-between pa-2 pt-4" @click="handleRoute(member.id)">
+                        <div class="d-flex align-center justify-space-between pt-0 pb-2 pl-3 pr-3">
                             <div class="d-flex">
-                                <v-avatar color="indigo">
-                                    <v-img alt="avatar" :src="base_url + '/image-show/' + member.profile_pic"
-                                        v-if="member.profile_pic"></v-img>
-                                    <v-img alt="avatar" :src="base_url + '/image-show/' + member.contact.profile_pic"
+                                <v-avatar tile>
+                                    <v-img alt="avatar" contain :src="base_url + '/image-show/' + member.profile_pic"
+                                        v-if="member.profile_pic" tile></v-img>
+                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + member.contact.profile_pic"
                                         v-else-if="member.contact && member.contact.profile_pic"></v-img>
                                     <v-icon dark v-else>
                                         {{ iconAccount }}
@@ -26,13 +26,13 @@
                                         </v-badge>
                                     </div>
                                     <div v-else>
-                                        <h5 class="mb-0 primary--text text-capitalize">{{ member.name }}</h5>
+                                        <h4 class="mb-0 primary--text text-capitalize">{{ member.name }}</h4>
                                     </div>
                                     <div class="last_msg"
                                         :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
                                         <div v-html="messageText(member.last_message)"></div>
                                     </div>
-                                    <p class="last_msg_date pb-3">{{formatChatListTime(member.last_message.created_at, tz)}}</p>
+                                    <p class="last_msg_date pb-0">{{formatChatListTime(member.last_message.created_at, tz)}}</p>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +218,7 @@ export default {
         // padding-bottom: 20px;
 
         &:not(:last-child) {
-            margin-bottom: 20px;
+            margin-bottom: 0px;
             border-bottom: 1px solid #dadada;
         }
 
