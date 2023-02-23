@@ -20,7 +20,7 @@
                                 </div>
                                 <div class="text-right">
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
-                                    <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
+                                    <v-chip small class="text-capitalize" :color="order.status =='cancelled'?'error':'primary'">{{ order.status }}</v-chip>
                                 </div>
                             </div>
                           

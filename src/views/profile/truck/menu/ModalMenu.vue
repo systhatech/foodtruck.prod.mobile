@@ -117,7 +117,7 @@
                                 <v-icon dark>{{ mdiMinus }}</v-icon>
                             </v-btn>
                         </div>
-                        <v-btn color="primary" large rounded @click="addToCart(item)">Add to cart - {{getAmount(item)}}</v-btn>
+                        <v-btn color="primary" large rounded @click="addToCart(item)">Add to cart</v-btn>
                     </div>
                 </div>
             <!-- </v-container> -->

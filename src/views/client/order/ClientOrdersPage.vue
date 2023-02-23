@@ -94,7 +94,7 @@ export default {
             orderTypes: [
                 {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
                 {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
-                {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
+                // {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
                 {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
                 {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
                 {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},

@@ -345,9 +345,9 @@ export default {
     max-width: 450px;
     padding: 15px;
     border-radius: 15px;
-    background: #59a4bd;
-    // color: #fff;
+    background: #e4e4e4;
 }
+
 
 .msg-info {
     display: flex;
@@ -368,13 +368,12 @@ export default {
 
 .msg-info-time {
     font-size: 0.8em;
-    color: #e1e1e1;
-    font-weight: 500;
+    color: #7e7e7e;
 }
 
 .left-msg .msg-bubble {
     border-bottom-left-radius: 0;
-    color:#fff;
+    color:#171717;
 }
 
 .right-msg {

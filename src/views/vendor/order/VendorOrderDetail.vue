@@ -7,7 +7,7 @@
                         <!-- <v-btn icon @click="handleClose">
                             <v-icon>mdi-close</v-icon>
                         </v-btn> -->
-                        <v-toolbar-title>{{ orderDetail  ? orderDetail.order_no:'' }}</v-toolbar-title>
+                        <v-toolbar-title>{{ orderDetail ? orderDetail.order_no : '' }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn text @click="handleClose">
@@ -19,41 +19,41 @@
                         <div class="pt-4">
                             <template v-if="!loading && orderDetail && Object.keys(orderDetail).length">
                                 <div class="custom-bs pa-4">
-                                    <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname ?orderDetail.fullName : (orderDetail && orderDetail.client ?orderDetail.client.fullName: '') }}</h5>
-                                    <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail && orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no :orderDetail.client.contact.phone_no }}</p>
-                                    <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{ orderDetail.client.contact.email}}</p>
+                                    <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname
+                                        ? orderDetail.fullName : (orderDetail && orderDetail.client
+                                            ? orderDetail.client.fullName : '') }}</h5>
+                                    <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail &&
+                                        orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no
+                                        : orderDetail.client.contact.phone_no }}</p>
+                                    <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{
+                                        orderDetail.client.contact.email }}</p>
                                     <div class="d-flex flex-start" v-if="orderDetail.pickup_addr">
                                         <v-icon color="primary" class="w-18">mdi-map-marker</v-icon>
                                         <div>
-                                            <p class="mb-1">{{orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 :''}}</p>
+                                            <p class="mb-1">{{ orderDetail.pickup_addr ? orderDetail.pickup_addr.add1 : '' }}
+                                            </p>
                                             <p class="mb-1">
                                                 {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.city : '' }}
                                                 {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.state : '' }}
                                                 {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.zip : '' }}
                                             </p>
                                         </div>
-    
+
                                     </div>
                                     <div>
-                                        <v-btn fab small color="primary" :to="'/vendor/conversation/clients/'+orderDetail.client.id"><v-icon>{{  icon_chat }}</v-icon></v-btn>
-                                        <v-btn
-                                            fab
-                                            small
-                                            class="ml-4"
-                                            color="primary"
-                                            link
+                                        <v-btn fab small color="primary"
+                                            :to="'/vendor/conversation/clients/' + orderDetail.client.id"><v-icon>{{ icon_chat
+                                            }}</v-icon></v-btn>
+                                        <v-btn fab small class="ml-4" color="primary" link
                                             :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
-                                            <v-icon>{{icon_phone}}</v-icon>
-                                        </v-btn
-                                        >
+                                            <v-icon>{{ icon_phone }}</v-icon>
+                                        </v-btn>
                                     </div>
                                 </div>
                                 <div class="custom-bs pa-4 mt-4">
                                     <div class="d-flex align-center justify-space-between pb-4">
                                         <h5 class="ma-0 primary--text">ORDER: {{ orderDetail.order_no }} </h5>
-                                        <v-chip class="text-capitalize" color="accent" small>{{
-                                            orderDetail.status
-                                        }}</v-chip>
+                                        <v-chip class="text-capitalize" :color="orderDetail.status=='cancelled'?'error':'accent'" small>{{orderDetail.status }}</v-chip>
                                     </div>
                                     <v-divider class="pt-4"></v-divider>
                                     <div class="order-item-wrapper">
@@ -73,11 +73,12 @@
                                                             <div>
                                                                 <h4 class="text-capitalize mb-0">{{ item.menu_item.name }}
                                                                 </h4>
-                                                                <p class="text-capitalize mb-1">Quatity : {{item.quantity}}
+                                                                <p class="text-capitalize mb-1">Quatity : {{ item.quantity }}
                                                                 </p>
-                                                                <p class="">{{formatAmount(item.menu_item.price *item.quantity)}}</p>
+                                                                <p class="">{{ formatAmount(item.menu_item.price
+                                                                    * item.quantity) }}</p>
                                                             </div>
-    
+
                                                         </div>
                                                     </div>
                                                     <div v-if="item.varients && item.varients.length > 0">
@@ -87,8 +88,10 @@
                                                             <li v-for="(variant, index) in item.varients" :key="index">
                                                                 <div>
                                                                     <div class="d-flex justify-space-between">
-                                                                        <p class="text-capitalize">{{variant.variant_item.name}}</p>
-                                                                        <p class="item-name">{{formatAmount(variant.amount)}}</p>
+                                                                        <p class="text-capitalize">
+                                                                            {{ variant.variant_item.name }}</p>
+                                                                        <p class="item-name">
+                                                                            {{ formatAmount(variant.amount) }}</p>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -101,7 +104,7 @@
                                         <div>
                                             <v-row>
                                                 <v-col cols="12" md="6" lg="6" xl="6">
-    
+
                                                 </v-col>
                                                 <v-col cols="12" md="6" lg="6" xl="6">
                                                     <table class="w-100">
@@ -134,18 +137,24 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td class=""><h5 class="primary--text text-uppercase">Total</h5> </td>
-                                                            <td class=" text-right"><h4 class="primary--text text-uppercase"> {{ formatAmount(orderDetail.total_amount) }}</h4> </td>
+                                                            <td class="">
+                                                                <h5 class="primary--text text-uppercase">Total</h5>
+                                                            </td>
+                                                            <td class=" text-right">
+                                                                <h4 class="primary--text text-uppercase"> {{
+                                                                    formatAmount(orderDetail.total_amount) }}</h4>
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                     <div class="text-right mt-4" v-if="orderDetail.payment">
                                                         <p v-if="orderDetail.payment.payment_type.toLowerCase() == 'cash'"
                                                             class="payment text-uppercase color-secondary ">Not Paid</p>
-                                                        <p v-else class="payment success--text mb-0 text-uppercase f8">Paid by: <span
-                                                                class="text-uppercase">{{
-                                                                    orderDetail.payment.payment_type
-                                                                }}</span> ****{{ orderDetail.payment.cr_last4 }}</p>
-                                                                <span class="f8">{{ formatDateTime(orderDetail.payment.created_at) }}</span>
+                                                        <p v-else class="payment success--text mb-0 text-uppercase f8">Paid
+                                                            by: <span class="text-uppercase">{{
+                                                                orderDetail.payment.payment_type
+                                                            }}</span> ****{{ orderDetail.payment.cr_last4 }}</p>
+                                                        <span class="f8">{{ formatDateTime(orderDetail.payment.created_at)
+                                                        }}</span>
                                                     </div>
                                                 </v-col>
                                             </v-row>
@@ -155,7 +164,7 @@
                             </template>
                             <template v-else>
                                 <div v-if="loading" class="text-center">
-                                    <ComponentLoadingVue/>
+                                    <ComponentLoadingVue />
                                 </div>
                                 <div v-else class="unavailable">
                                     <h3>{{ message }}</h3>
@@ -163,35 +172,32 @@
                             </template>
                         </div>
                     </div>
-                    <div class="pa-4 custom-bs pb-6" style="position: fixed;bottom: 0;width: 100%;z-index: 1;" v-if="order.status!='completed'">
-                        <div class="d-flex align-center justify-space-between">
-                            <div v-if="order && order.status == 'new'"
-                                class="d-flex align-center justify-space-between w-100">
-                                <v-btn rounded :disabled="disableButton" color="error" text large
-                                    @click="onClick('archive')">archive</v-btn>
-                                <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton" large
-                                    color="primary" @click="onClick('accepted')">Accept</v-btn>
-                            </div>
-                            <div v-if="order && order.status == 'accepted'"
-                                class="d-flex align-center justify-space-between w-100">
-                                <v-btn rounded :disabled="disableButton" color="error" 
-                                large
-                                text
-                                @click="onClick('archive')">archive</v-btn>
-                                <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton" 
-                                large
-                                color="primary" @click="onClick('ready')">Ready For pickup</v-btn>
-                            </div>
-
-                            <div v-if="order && order.status == 'ready'"
-                                class="d-flex align-center justify-space-between w-100">
-                                <v-btn rounded :disabled="disableButton" color="error"
-                                large
-                                text
-                                @click="onClick('archive')">archive</v-btn>
-                                <v-btn rounded :disabled="disableButton" color="success"
-                                large
-                                @click="onClick('completed')">completed</v-btn>
+                    <div v-if="order.status!='cancelled'">
+                        <div class="pa-4 custom-bs pb-6" style="position: fixed;bottom: 0;width: 100%;z-index: 1;"
+                            v-if="order.status != 'completed'">
+                            <div class="d-flex align-center justify-space-between">
+                                <div v-if="order && order.status == 'new'"
+                                    class="d-flex align-center justify-space-between w-100">
+                                    <v-btn rounded :disabled="disableButton" color="error" text large
+                                        @click="onClick('cancelled')">Cancel</v-btn>
+                                    <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton" large
+                                        color="primary" @click="onClick('accepted')">Accept</v-btn>
+                                </div>
+                                <div v-if="order && order.status == 'accepted'"
+                                    class="d-flex align-center justify-space-between w-100">
+                                    <v-btn rounded :disabled="disableButton" color="error" large text
+                                        @click="onClick('archive')">archive</v-btn>
+                                    <v-btn v-if="order && order.status == 'accepted'" rounded :disabled="disableButton" large
+                                        color="primary" @click="onClick('ready')">Ready For pickup</v-btn>
+                                </div>
+    
+                                <div v-if="order && order.status == 'ready'"
+                                    class="d-flex align-center justify-space-between w-100">
+                                    <v-btn rounded :disabled="disableButton" color="error" large text
+                                        @click="onClick('archive')">archive</v-btn>
+                                    <v-btn rounded :disabled="disableButton" color="success" large
+                                        @click="onClick('completed')">completed</v-btn>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -261,7 +267,7 @@ export default {
             addressType: '',
             orderStatus: '',
             totalData: {},
-            loading:false,
+            loading: false,
             message: 'Loading...',
         }
     },
@@ -437,5 +443,4 @@ $bg-gray : #f5f5f5;
 
 .card-actions {
     padding: 0 14px 14px 14px !important;
-}
-</style>
+}</style>
