@@ -10,6 +10,10 @@ import { VueMaskDirective } from 'v-mask'
 import * as VueGoogleMaps from 'vue2-google-maps' // Import package
 // import { StripePlugin } from '@vue-stripe/vue-stripe';
 Vue.config.productionTip = false
+let guestToken = localStorage.getItem('g_token');
+if(!guestToken){
+    localStorage.setItem('g_token',Math.floor(Date.now()));
+}
 Vue.component('google-map', VueGoogleMaps.Map);
 Vue.use(VueGoogleMaps, {
   load: {

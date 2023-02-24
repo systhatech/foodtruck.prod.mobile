@@ -69,7 +69,7 @@ export default {
             modalConfirm:false,
             booking:null,
             loading:false,
-            message:'Do you want to cancel it ? if you cancel, it is non refundable.',
+            message:'No spot booked',
             locationSpotBooked:[],
             messageLoading:'Loading...',
         }

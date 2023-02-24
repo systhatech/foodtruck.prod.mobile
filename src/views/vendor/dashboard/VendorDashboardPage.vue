@@ -12,6 +12,31 @@
                     <v-btn block large rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
                 </v-col>
             </v-row>
+           <v-row>
+                <v-col cols="12" md="6">
+                    <div class="custom-bs pa-4">
+                        <div class="d-flex align-center justify-space-between">
+                            <h4>Current Location</h4>
+                            <div>
+                                <v-btn fab text color="primary" @click="handleRefreshLocation()"><v-icon large>mdi-refresh</v-icon></v-btn>
+                            </div>
+                        </div>
+                        <div v-if="profile && profile.active_location">
+                            <p>{{  profile.active_location.add1 }} {{ profile.active_location.add2 }} <br>
+                                {{ profile.active_location.city }} {{ profile.active_location.state }} <br>
+                                {{ profile.active_location.zip }} {{ profile.active_location.country }} 
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p>n/a</p>
+                        </div>
+                        <!-- <p>{{ profile.active_location }}</p> -->
+                    </div>
+                </v-col>
+                <!-- <v-col cols="12" md="6" class="text-center">
+                    <v-btn block large rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
+                </v-col> -->
+            </v-row>
             <div v-if="loading" class="text-center">
                 <ComponentLoadingVue/>
             </div>
@@ -75,7 +100,6 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-// import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
@@ -133,6 +157,10 @@ export default {
             distance:10,
             truck_profile:{},
             loading:false,
+            current_location:{
+                lat:0,
+                lng:0,
+            }
         }
     },
     components: {
@@ -142,23 +170,22 @@ export default {
        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     mounted() {
+        this.locateGeoLocation();
         if(!this.currentUser) return;
         
-        if(!this.availableLocations.length){
-            this.fetchTrucks({ 
-                available: 1,
-                // distance: this.distance,
-                radius: this.distance,
-                name: this.search,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.loading = false;
-                console.log({resp});
-            })
-        }
-        this.loading = true;
-        this.profileData();
+        // if(!this.availableLocations.length){
+        //     this.fetchTrucks({ 
+        //         available: 1,
+        //         // distance: this.distance,
+        //         radius: this.distance,
+        //         name: this.search,
+        //         guest: localStorage.getItem('g_token'),
+        //     })
+        //     .then((resp) => {
+        //         this.loading = false;
+        //         console.log({resp});
+        //     })
+        // }        
         try{
             socketHandler.onlineStatus({
                 id : this.currentUser.table_id,
@@ -167,6 +194,8 @@ export default {
         }catch(error) {
             console.log({error})
         }
+        //UPDATE CURRENT LOCATIONS
+        this.fetchDataInterval();
     },
    
     beforeDestroy() {
@@ -184,13 +213,14 @@ export default {
             fetchTrucks:'truck/fetchTrucks',
             fetchProfile:'auth/fetchProfile',
         }),
+        handleRefreshLocation(){
+            this.fetchAddress();
+        },
         async profileData() {
-            // this.loaderShow();
             this.loading = true;
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loading = false;
                 this.truck_profile = resp;
-                console.log("profile_data : ",this.truck_profile);
             })
             .catch(() => {
                 this.loading = false;
@@ -251,6 +281,71 @@ export default {
             this.$router.push({
                 name:'SubscriptionPage'
             });
+        },
+
+        // update location
+        fetchDataInterval() {
+            this.dataInterval = setInterval(() => {
+                this.locateGeoLocation(false)
+            }, 300000);
+        },
+        async locateGeoLocation() {
+            this.loading = true;
+            navigator.geolocation.getCurrentPosition(res => {
+                this.current_location.lat = res.coords.latitude;
+                this.current_location.lng = res.coords.longitude;
+            });
+            await this.fetchAddress();
+        },
+        async fetchAddress() {
+            // this.loaderShow();
+            ApiService.get('/getapikeys')
+                .then(async (apiKeys) => {
+                    let googleApiKey = apiKeys.google;
+                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.current_location.lat},${this.current_location.lng}&key=${googleApiKey}`)
+                        .then((resp) => {
+                            this.loaderHide();
+                            for (let addr of resp.results) {
+                                let address = this.parseGoogleResponse(addr.address_components);
+                                this.current_location.add1 = address.street_number + " " + address.route;
+                                this.current_location.city = address.locality;
+                                this.current_location.state = address.administrative_area_level_1;
+                                this.current_location.zip_code = address.postal_code;
+                                this.current_location.country = address.country;
+                                break;
+                            }
+                            this.updateLocation();
+                        })
+                        .catch(() => {
+                            this.loaderHide();
+                        })
+                })
+        },
+        async updateLocation() {
+            await ApiService.post('/location/save-current', this.current_location)
+            .then(() => {
+                this.profileData();
+                this.fetchAllTrucks();
+                this.loaderHide();
+            })
+            .catch((error) => {
+                console.log(error);
+                this.loaderHide();
+            })
+        },
+
+        fetchAllTrucks() {
+            this.loading = true;
+            this.fetchTrucks({ 
+                available: 1,
+                // distance: this.distance,
+                radius: this.distance,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+            })
+            .then(() => {
+                this.loading = false;
+            })
         }
           
     },

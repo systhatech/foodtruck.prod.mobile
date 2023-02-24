@@ -18,12 +18,19 @@
                                 <div class="pa-4">
                                     <h3 class="text-capitalize ma-0 primary--text">{{ truck.name}}</h3>
                                     <div>
-                                        <p class="mb-2">
+                                        <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
                                             {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }},
                                             {{  truckProfile && truckProfile.active_location && truckProfile.active_location.city ? truckProfile.active_location.city:'' }},<br>
                                             {{ truckProfile && truckProfile.active_location && truckProfile.active_location.state ? truckProfile.active_location.state:'' }} 
                                             {{  truckProfile && truckProfile.active_location && truckProfile.active_location.zip ? truckProfile.active_location.zip:'' }},
                                         </p>
+                                        <p class="mb-2" v-else-if="truckProfile && truckProfile.address">
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.add1 ? truckProfile.address.add1:'' }},
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.city ? truckProfile.address.city:'' }},<br>
+                                            {{ truckProfile && truckProfile.address && truckProfile.address.state ? truckProfile.address.state:'' }} 
+                                            {{  truckProfile && truckProfile.address && truckProfile.address.zip ? truckProfile.address.zip:'' }},
+                                        </p>
+                                        <p v-else>Address Not available</p>
                                     </div>
                                     <div class="w-100">
                                         <v-btn

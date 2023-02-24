@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <!-- <v-icon class="f18" color="primary">{{iconDistance}}</v-icon> -->
-                            <span class="pl-2">{{ truck.distance? truck.distance : 0 }} km away</span>
+                            <span class="pl-2">{{ truck.distance? truck.distance : 0 }}</span>
                         </div>
                         <!-- <div class="mt-2" v-if="truck.categories">
                             <v-chip color="primary" 

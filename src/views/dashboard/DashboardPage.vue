@@ -15,27 +15,12 @@
 import Topnavbar from '@/components/layout/Topnavbar'
 import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
 export default {
     data() {
         return {
             search:'',
-            iconHome: mdiHome,
-            iconProfile: mdiAccount,
-            iconFilter: mdiFilter,
-            iconMap: mdiMap,
-            iconChat: mdiChat,
-            currentItem:0,
-            countMessages:0,
             zoomLevel:14,
-            row:'',
-            dashboardItems: [],
-            // trucks:[],
-            value: 1,
-            
-            // locations:[],
-            locationsList:[],
             filter:false,
             distance:10,
             available:"available",
@@ -43,7 +28,7 @@ export default {
             modalConfirm:false,
             message:'Please upgrade to Pro',
             dataInterval : null,
-            location:{
+            current_location:{
                 lat:0,
                 lng:0,
                 city:'',
@@ -53,15 +38,7 @@ export default {
                 country:'',
                 guest:'',
             },
-            utype:'',
-            availableaaa:'',
-            refresh:true,
-            subscribed:true,
-            isLoggedin:false,
-            trucks:[
-                {id:1,name:"cafe de cart", address:'80 kane west hardford'},
-                {id:2,name:"Porters Coffee House", address:'80 kane west hardford 1'}
-            ],
+          
             modelFilter:false,
             mapView:false
         }
@@ -77,6 +54,7 @@ export default {
         //     name: this.search,
         //     guest: localStorage.getItem('g_token'),
         // });
+        // this.locateGeoLocation();
         if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
 
         let deviceToken = localStorage.getItem('d_token');
@@ -159,15 +137,7 @@ export default {
                 console.log("no fetch")
 			})
         },
-        updateAvailability() {
-            if(this.subscribed){
-                this.updateAvaiability();
-            }else{
-             
-                this.available = "unavailable";
-                this.modalConfirm = true;
-            }
-        },
+       
         saveDeviceToken(token){
             ApiService.post("/firebase/deviceToken/save",{ deviceToken: token })
               .then(() => {
@@ -178,52 +148,13 @@ export default {
                 console.log("Failed to save device token");
               });
         },
-        async updateAvaiability(){
-            this.loaderShow();
-            await ApiService.post('/self/availability',{ is_active : this.available == "available" ? 1 : 0})
-            .then(() => {
-                this.handleAvailable();
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        handleConfirm(){
-            this.$router.push({name :'SubscriptionPage'});
-        },
-        handleCloseConfirm(){
-            this.available = "unavailable";
-            this.modalConfirm = false;
-        },
+     
+
         handleClose() {
             this.filter = false;
         },
-        // handleFilter() {
-        //     this.filter = true;
-        //     this.fetchCurrentCityTrucks();
-        // },
-        handleAvailable(){
-            this.loaderShow();
-            let availability = this.available == "available" ? 1 : 0;
-             ApiService.post('/location/all',{ 
-                available: availability,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.loaderHide();
-                this.locations = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.zoomLevel = 12;
-                this.trucks = this.locations;
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
+     
+       
         fetchDataInterval() {
             this.dataInterval = setInterval(() => {
                 if(!this.filter){
@@ -231,17 +162,8 @@ export default {
                 }
             }, 500);
         },
-        // fetchData(showLoader = true){
         fetchData(){
-        // console.log(showLoader)
-            // console.log("test");
-            // if(showLoader){
-            //     this.loaderShow();
-            // }
-            // let avai = (this.available == "available") ? 1 : 0;
-            // if(this.utype === 'clients') {
-             let   avai = 1;
-            // }
+            let   avai = 1;
             this.loaderShow();
             ApiService.post('/location/all',{ 
                 available: avai,
@@ -256,8 +178,6 @@ export default {
                     }
                 }));
                 this.loaderHide();
-           
-                // this.checkPremium();
                 this.zoomLevel = 12;
             })
             .catch(() => {
@@ -325,6 +245,51 @@ export default {
                 // console.log(error);
             });
         },
+
+        // locateGeoLocation: function () {
+        //     navigator.geolocation.getCurrentPosition(res => {
+        //         this.current_location.lat = res.coords.latitude;
+        //         this.current_location.lng = res.coords.longitude;
+        //     });
+        //     this.fetchAddress();
+        // },
+        // async fetchAddress() {
+        //     // this.loaderShow();
+        //     ApiService.get('/getapikeys')
+        //         .then(async (apiKeys) => {
+        //             let googleApiKey = apiKeys.google;
+        //             await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.current_location.lat},${this.current_location.lng}&key=${googleApiKey}`)
+        //                 .then((resp) => {
+        //                     this.loaderHide();
+        //                     for (let addr of resp.results) {
+        //                         let address = this.parseGoogleResponse(addr.address_components);
+        //                         this.current_location.add1 = address.street_number + " " + address.route;
+        //                         this.current_location.city = address.locality;
+        //                         this.current_location.state = address.administrative_area_level_1;
+        //                         this.current_location.zip_code = address.postal_code;
+        //                         this.current_location.country = address.country;
+        //                         break;
+        //                     }
+        //                     this.updateLocation();
+                            
+        //                     console.log(this.current_location);
+        //                 })
+        //                 .catch(() => {
+        //                     this.loaderHide();
+        //                 })
+        //         })
+        // },
+        // async updateLocation() {
+        //     await ApiService.post('/location/save-current', this.current_location)
+        //     .then((resp) => {
+        //         console.log(resp);
+        //         this.loaderHide();
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         this.loaderHide();
+        //     })
+        // }
           
     },
     computed: {

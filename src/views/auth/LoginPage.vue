@@ -89,6 +89,7 @@ export default {
             state: '',
             zip_code: '',
             country: '',
+            type:'create',
         },
     }),
     components: {
@@ -180,8 +181,6 @@ export default {
                 })
         },
         async updateLocation() {
-            // this.loaderShow();
-            // console.log("location", this.location);
             await ApiService.post('/location/save-current', this.location)
             .then(() => {
                 this.loaderHide();

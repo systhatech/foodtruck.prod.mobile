@@ -53,12 +53,12 @@
                     <TruckList :trucks="locations"/>
                </div>
                <div v-else class="text-center">
-                    <!-- <div v-if="locations.length == 0"> -->
+                    <div v-if="loading">
                         <ComponentLoadingVue/>
-                    <!-- </div> -->
-                    <!-- <div v-else>
+                    </div>
+                    <div v-else class="unavailable">
                         <p>No trucks available</p>
-                    </div> -->
+                    </div>
                </div>
            </div>
            <TruckFilter 
@@ -106,7 +106,7 @@ export default {
             modalConfirm:false,
             message:'Please upgrade to Pro',
             dataInterval : null,
-            location:{
+            current_location:{
                 lat:0,
                 lng:0,
                 city:'',
@@ -127,6 +127,7 @@ export default {
             ],
             modelFilter:false,
             map_view:false,
+            loading:false,
             // locations:'',
         }
     },
@@ -140,35 +141,21 @@ export default {
        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // DialogConfirm,
     },
-    mounted() {
-        this.fetchTrucks({ 
-            available: 1,
-            name: this.search,
-            guest: localStorage.getItem('g_token'),
-        });
-        // let deviceToken = localStorage.getItem('d_token');
-        // this.saveDeviceToken(deviceToken);
-        // if(!this.currentUser) return;
-        // try{
-        //     socketHandler.onlineStatus({
-        //         id : this.currentUser.table_id,
-        //         table : this.currentUser.table,
-        //     });
-        // }catch(error) {
-        //     console.log({error})
-        // }
+    async mounted() {
+        await this.locateGeoLocation();
+        this.fetchDataInterval();
     },
    
     beforeDestroy() {
         clearInterval(this.dataInterval);
     },
-    watch:{
-        search(newval){
-            if(newval.length >3){
-                this.fetchData();
-            }
-        }
-    },
+    // watch:{
+    //     search(newval){
+    //         if(newval.length >3){
+    //             this.fetchData();
+    //         }
+    //     }
+    // },
     methods: {
         ...mapActions({
             fetchTrucks:'truck/fetchTrucks'
@@ -266,10 +253,7 @@ export default {
         handleClose() {
             this.filter = false;
         },
-        // handleFilter() {
-        //     this.filter = true;
-        //     this.fetchCurrentCityTrucks();
-        // },
+
         handleAvailable(){
             this.loaderShow();
             let availability = this.available == "available" ? 1 : 0;
@@ -292,24 +276,10 @@ export default {
                 this.loaderHide();
             });
         },
-        fetchDataInterval() {
-            this.dataInterval = setInterval(() => {
-                if(!this.filter){
-                    this.fetchData(false)
-                }
-            }, 500);
-        },
+      
         // fetchData(showLoader = true){
         fetchData(){
-        // console.log(showLoader)
-            // console.log("test");
-            // if(showLoader){
-            //     this.loaderShow();
-            // }
-            // let avai = (this.available == "available") ? 1 : 0;
-            // if(this.utype === 'clients') {
              let   avai = 1;
-            // }
             this.loaderShow();
             ApiService.post('/location/all',{ 
                 available: avai,
@@ -393,6 +363,67 @@ export default {
                 // console.log(error);
             });
         },
+
+        fetchDataInterval() {
+            this.dataInterval = setInterval(() => {
+                this.locateGeoLocation(false)
+            }, 300000);
+        },
+        async locateGeoLocation() {
+            this.loading = true;
+            navigator.geolocation.getCurrentPosition(res => {
+                this.current_location.lat = res.coords.latitude;
+                this.current_location.lng = res.coords.longitude;
+            });
+            await this.fetchAddress();
+        },
+        async fetchAddress() {
+            // this.loaderShow();
+            ApiService.get('/getapikeys')
+                .then(async (apiKeys) => {
+                    let googleApiKey = apiKeys.google;
+                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.current_location.lat},${this.current_location.lng}&key=${googleApiKey}`)
+                        .then((resp) => {
+                            this.loaderHide();
+                            for (let addr of resp.results) {
+                                let address = this.parseGoogleResponse(addr.address_components);
+                                this.current_location.add1 = address.street_number + " " + address.route;
+                                this.current_location.city = address.locality;
+                                this.current_location.state = address.administrative_area_level_1;
+                                this.current_location.zip_code = address.postal_code;
+                                this.current_location.country = address.country;
+                                break;
+                            }
+                            this.updateLocation();
+                        })
+                        .catch(() => {
+                            this.loaderHide();
+                        })
+                })
+        },
+        async updateLocation() {
+            await ApiService.post('/location/save-current', this.current_location)
+            .then(() => {
+                this.fetchAllTrucks();
+                this.loaderHide();
+            })
+            .catch((error) => {
+                console.log(error);
+                this.loaderHide();
+            })
+        },
+        fetchAllTrucks() {
+            this.loading = true;
+            this.fetchTrucks({ 
+                available: 1,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+                unit:'mile'
+            })
+            .then(()=>{
+                this.loading = false;
+            })
+        }
           
     },
     computed: {

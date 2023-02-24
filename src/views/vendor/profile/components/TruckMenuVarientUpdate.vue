@@ -146,15 +146,15 @@ export default {
 		async handleDelete() {
 			this.loaderShow();
 			await ApiService.get('/varient/delete/' + this.itemDelete.id)
-				.then(() => {
-					this.loaderHide();
-					this.$emit('reloadNow');
-					this.handleClose();
-					this.close();
-				})
-				.catch(() => {
-					this.loaderHide();
-				});
+			.then(() => {
+				this.loaderHide();
+				this.$emit('reloadNow');
+				this.handleClose();
+				this.close();
+			})
+			.catch(() => {
+				this.loaderHide();
+			});
 
 		},
 		close() {

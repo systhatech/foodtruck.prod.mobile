@@ -5,8 +5,8 @@
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-if="Object.keys(menu.itemsGroup).length">
                     <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
-                    <div >
-                        <div v-for="(groupItem, index) in menu.itemsGroup" :key="index" class="pl-2">
+                    <div>
+                        <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
                             <p class="pb-0 mb-0 mt-2 text-capitalize">{{ index }}</p>
                             <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
                                 <div class="d-flex align-center justify-space-between" @click="handleRoute(item)">
@@ -40,9 +40,9 @@
                         </div>
                     </div>
                 </div>
-                <div v-else class="unavailable">
+                <!-- <div v-else class="unavailable">
                     <p>Menu not available</p>
-                </div>
+                </div> -->
             </div>
             <ModalMenu :dialog="dialog" :vendorId="vendorId" :item="item" @close="handleClose"/>   
         </div>

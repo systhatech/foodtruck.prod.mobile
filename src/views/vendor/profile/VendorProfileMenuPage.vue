@@ -74,7 +74,6 @@ export default {
             this.$router.back();
         },
         async profileData() {
-            // this.loaderShow();
             this.loading = true;
             await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loading = false;

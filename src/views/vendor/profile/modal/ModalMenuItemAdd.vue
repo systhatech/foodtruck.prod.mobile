@@ -62,20 +62,6 @@
                                             class="pb-0 pt-0"
                                             md="6"
                                             >
-                                                <InputAutocomplete @selected="selectedAnswers" label="Category" :items="categories"/>
-                                            </v-col>
-                                            <v-col
-                                            cols="6"
-                                            class="pb-0 pt-0"
-                                            md="6"
-                                            >
-                                                <InputAutocomplete @selected="selectedType" label="Unit Type" :items="unit_type"/>
-                                            </v-col>
-                                            <v-col
-                                            cols="6"
-                                            class="pb-0 pt-0"
-                                            md="6"
-                                            >
                                                 <v-text-field
                                                     v-model="menu.unit"
                                                     :rules="requiredRules"
@@ -84,6 +70,35 @@
                                                     required
                                                 ></v-text-field>
                                             </v-col>
+                                            <v-col
+                                            cols="12"
+                                            class="pb-0 pt-0"
+                                            md="6"
+                                            >
+                                            <div class="d-flex align-center w-100">
+                                            <div style="flex-grow:1">
+                                                    <InputAutocomplete @selected="selectedAnswers" label="Category" :items="categories"/>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('menu_item_category','category name')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                </div>
+                                            </div>
+                                            </v-col>
+                                            <v-col
+                                            cols="12"
+                                            class="pb-0 pt-0"
+                                            md="6"
+                                            >
+                                            <div class="d-flex align-center w-100">
+                                            <div style="flex-grow:1">
+                                                    <InputAutocomplete @selected="selectedType" label="Unit Type" :items="unit_type"/>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('unit_type','unit type')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                </div>
+                                            </div>
+                                            </v-col>
+                                           
 
 
                                             <v-col
@@ -111,6 +126,13 @@
                                 @close="handleClose" />
                         </div>
                     </v-container>
+                    <ModalCuisineType 
+                    :availableCuisines="lookup_values"
+                    :code="lookup_code"
+                    :label="lookup_label"
+                    :dialogCuisineType="modal_vendor_lookup" 
+                    @fetchCuisines="fetchVendorLookups"
+                    @close="handleCloseCuisineType()"/>
                 </v-card>
             </v-dialog>
         </v-row>
@@ -139,7 +161,8 @@ export default {
         // InputAddress,
         DialogConfirm,
         InputAutocomplete,
-        InputUpload
+        InputUpload,
+        ModalCuisineType: ()=> import('@/views/vendor/profile/modal/ModalCuisineType')
     },
     data() {
         return {
@@ -166,7 +189,12 @@ export default {
             selectedData: "",
             src: "noimage.png",
             categories: [],
+
             unit_type: [],
+            lookup_code:'',
+            lookup_label:'',
+            modal_vendor_lookup:false,
+            lookup_values:[],
         }
     },
     watch: {
@@ -204,6 +232,18 @@ export default {
         ...mapActions({
             fetchProfile: 'auth/fetchProfile'
         }),
+        fetchVendorLookups(param){
+            console.log("here", param);
+        },
+        handleAddLookup(code, label){
+            this.lookup_code = code;
+            this.lookup_label = label;
+            this.modal_vendor_lookup = true;
+        },
+        handleCloseCuisineType(){
+            this.modal_vendor_lookup = false;
+            // this.fetchCuisineTypes();
+        },
         selectedType(data) {
             this.menu.unit_type = data.selected_data;
         },

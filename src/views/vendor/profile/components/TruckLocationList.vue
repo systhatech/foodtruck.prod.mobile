@@ -5,12 +5,14 @@
                 <li class="" v-for="(location, index) in truckProfile.locations" :key="index">
                     <div class="pa-4 custom-bs p-relative">
                         <div>
-                            <h5 class="text-uppercase primary--text">date</h5>
+                            <div class="d-flex align-center justify-space-between">
+                                <h5 class="text-uppercase primary--text">date</h5>
+                                <v-btn fab small color="error" text @click="handleDelete(location)"><v-icon>mdi-close</v-icon></v-btn>
+                            </div>
                             <p class="mb-1"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>
                             <p class="mb-4"> {{ formatTimeOnly(location.start_date)}} - {{ formatTimeOnly(location.end_date)}}</p>
                         </div>
                         <div>
-                            <!-- <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon> -->
                             <h5 class="text-uppercase primary--text">Location</h5>
                             <div>
                                 <p class="ma-0">
@@ -22,10 +24,6 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- <div class="d-flex align-center"> 
-                             <v-icon color="primary" class="mr-2">{{ iconAccount }}</v-icon> 
-                             Nearby Client - {{ location.clients_count }}
-                        </div> -->
                         <div class="pt-4">
                             <v-btn block large rounded color="warning" @click="handleRoute(location)">update</v-btn>
                         </div>
@@ -36,6 +34,10 @@
                 :location="location"
                 :dialogScheduleEdit="modal_schedule_edit"
                 @close="handleClose"/>
+            <DialogConfirm 
+                :dialogConfirm="modal_confirm"
+                @confirm="handleConfirmDelete"
+                @close="handleClose"/>
         </div>
         <div v-else class="pa-4 unavailable">
             <p>No schedule available</p>
@@ -45,6 +47,8 @@
 <script>
 import { base_url } from '@/core/services/config'
 import { mdiMapMarker, mdiCalendar,mdiClock, mdiAccount } from '@mdi/js'
+import { mapActions } from 'vuex'
+import { ApiService } from '@/core/services/api.service'
 export default {
     props:{
         truckProfile:{},
@@ -59,6 +63,8 @@ export default {
             iconAccount:mdiAccount,
             message:'Loading...',
             location:{},
+            modal_confirm:false,
+            selected_schedule:null,
         }
     },
     watch: {
@@ -71,17 +77,40 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            'fetchProfile':'auth/fetchProfile'
+        }),
         handleRoute(location) {
             this.location = location;
             this.modal_schedule_edit = true;
             // this.$router.push("/truck-profile-location/"+id);
         },
         handleClose(){
+            this.modal_confirm = false;
             this.modal_schedule_edit = false;
+        },
+        handleDelete(data){
+            this.selected_schedule = data;
+            this.modal_confirm = true;
+        },
+        async handleConfirmDelete() {
+            this.loaderShow();
+            await ApiService.post("/vendor/location-delete", {
+                location_id: this.selected_schedule.id,
+            })
+			.then(() => {
+                this.fetchProfile();
+				this.loaderHide();
+				this.handleClose();
+			})
+			.catch(() => {
+				this.loaderHide();
+			});
         }
     },
     components:{
         ModalSchedule: ()=> import('@/views/vendor/profile/modal/ModalVendorScheduleEdit'),
+        DialogConfirm: ()=> import('@/components/layout/DialogDeleteConfirm'),
     }
 }
 </script>

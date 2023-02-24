@@ -29,12 +29,19 @@
                                     <v-col cols="12" md="6" class="ma-0 pt-0 pb-0">
                                         <v-text-field label="Menu Name" v-model="menu.name" :rules="rulesRequired"></v-text-field>
                                     </v-col>
-                                    <v-col cols="12" md="6" class="ma-0 pt-0 pb-0">
-                                        <InputAutocomplete @selected="selectedItem" 
-                                        label="Cuisine Type" 
-                                        :default-value="defaultCuisine"
-                                        :error="hasError" 
-                                        :items="cuisine_types"/>
+                                    <v-col cols="12" md="6" class="ma-0 pt-0 pb-0 w-100">
+                                        <div class="d-flex align-center w-100">
+                                            <div style="flex-grow:1">
+                                                <InputAutocomplete @selected="selectedItem" 
+                                                label="Cuisine Type" 
+                                                :default-value="defaultCuisine"
+                                                :error="hasError" 
+                                                :items="cuisine_types"/>
+                                            </div>
+                                            <div class="ml-4">
+                                                <v-btn small color="primary" fab @click="handleAddCusineType()"><v-icon>mdi-plus</v-icon></v-btn>
+                                            </div>
+                                        </div>
                                     </v-col>
                                     <v-col cols="12" md="6" class="ma-0 pt-0 pb-0">
                                         <v-textarea label="Menu Description" v-model="menu.description" :rules="rulesRequired"></v-textarea>
@@ -53,6 +60,13 @@
                             </v-form> 
                         </div>
                     </div>
+                    <ModalCuisineType 
+                    :availableCuisines="cuisine_types"
+                    :dialogCuisineType="modal_cuisine_type" 
+                    code="cuisine_type"
+                    label="Cuisine Name"
+                    @fetchCuisines="fetchCuisineTypes"
+                    @close="handleCloseCuisineType()"/>
                 </v-card>
             </v-dialog>
         </v-row>
@@ -72,13 +86,14 @@ export default {
         },
         menuData:{},
         isEdit:{},
-        cuisine_types:{}
+        // cuisine_types:{}
     },
     watch:{
         dialogMenuAdd(newval){
+            this.fetchCuisineTypes();
             if(newval && this.isEdit){
                 this.menu.id = this.menuData.id;
-                this.menu.cusine = this.menuData.cusine;
+                // this.menu.cusine = this.menuData.cusine;
                 this.menu.name = this.menuData.name;
                 this.menu.description = this.descriptionStripe(this.menuData.description);
                 this.menu.profile_pic = this.menuData.profile_pic;
@@ -87,6 +102,7 @@ export default {
                     let data = this.cuisine_types.filter((item) => item.value == this.menuData.cusine);
                     this.defaultCuisine = data[0];
                 }
+               
             }else{
                 this.menu = {
                     name:'',
@@ -119,9 +135,31 @@ export default {
                 profile_pic:'default.png',
             },
             is_active:false,
+            modal_cuisine_type:false,
+            cuisine_types:[],
         }
     },
     methods: {
+        fetchCuisineTypes() {
+            ApiService.post("/vendor-lookup-cuisine-types",{
+                "code":"cuisine_type"
+            })
+            .then((resp) =>{
+                this.cuisine_types = resp.data;
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                console.log(error);
+                // this.messageError(error.message);
+            })
+        },
+        handleCloseCuisineType(){
+            this.modal_cuisine_type = false;
+            this.fetchCuisineTypes();
+        },
+        handleAddCusineType(){
+            this.modal_cuisine_type = true;
+        },
         descriptionStripe(str){
             if ((str===null) || (str===''))
                 return false;
@@ -159,7 +197,7 @@ export default {
             .catch((error) =>{
                 this.loaderHide();
                 console.log(error);
-                this.messageSuccess(error.message);
+                // this.messageError(error.message);
             })
         },
         selectedItem(item){
@@ -188,7 +226,8 @@ export default {
     },
     components:{
         InputUpload: ()=> import('@/components/form-element/InputUpload'),
-        InputAutocomplete: ()=> import('@/components/layout/InputAutocompleteSingleTextValue')
+        InputAutocomplete: ()=> import('@/components/layout/InputAutocompleteSingleTextValue'),
+        ModalCuisineType: ()=> import('@/views/vendor/profile/modal/ModalCuisineType')
     },
     computed: {
         ...mapGetters({

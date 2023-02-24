@@ -7,11 +7,16 @@ const ApiService = Axios.create({
 });
 ApiService.interceptors.request.use(req => {
     let id_token = localStorage.getItem('id_token');
+    let guest_token = localStorage.getItem('g_token');
     delete req.headers.Authorization;
     delete req.headers.common.Authorization;
     req.data = req.data ? req.data : {};
     if (id_token) {
         req.data.access_token = id_token;
+    }
+    if (guest_token) {
+        req.data.guest = guest_token;
+        req.data.guest_token = guest_token;
     }
     if(req.data instanceof FormData){
         req.headers['Content-Type'] ="multipart/form-data";

@@ -112,7 +112,7 @@ export default {
             indexValue:3,
             usericon:'',
             menusClient: [
-                {name:'Support',icon:'mdi-headphones',route:'support'},
+                // {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
                 {name:'Change Password',icon:'mdi-cog',route:'change-password'},

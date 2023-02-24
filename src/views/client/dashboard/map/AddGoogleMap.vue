@@ -6,7 +6,7 @@
 				<div>
 					<div class="mb-4">
 						<div v-if="infoContent.table_name == 'vendors'">
-							<h3 class="color-secondary text-capitalize">{{
+							<h3 class="primary--text text-capitalize">{{
 								infoContent.locate ? infoContent.locate.name : ''
 							}}</h3>
 

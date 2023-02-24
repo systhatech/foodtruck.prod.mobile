@@ -894,6 +894,12 @@ const routes = [
 		component: () => import(/* webpackChunkName: "PayoutPage" */ '../views/report/ReportPage.vue'),
 		meta: { requiresAuth: true }
 	},
+	{
+		path: '/sales-summary',
+		name: 'SalesSummaryPage',
+		component: () => import(/* webpackChunkName: "PayoutPage" */ '../views/vendor/sales/SalesSummaryPage.vue'),
+		meta: { requiresAuth: true }
+	},
 	// {
 	// 	path: '/report-commission',
 	// 	name: 'commissionReport',
