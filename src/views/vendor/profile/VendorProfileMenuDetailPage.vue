@@ -8,10 +8,10 @@
                     <v-btn color="primary" rounded large block @click="handleMenuAdd()">add new menu item</v-btn>
                 </div>
                 <!-- {{ menu.itemsGroup }} -->
-                <div class="pa-4" v-if="menu && menu.itemsGroup && Object.keys(menu.itemsGroup).length">
+                <div class="pa-4" v-if="menu && menu.categoryGroup && Object.keys(menu.categoryGroup).length">
                     <v-row>
-                        <v-col cols="12" sm="6" md="6" v-for="(m, i) in menu.itemsGroup" :key="i">
-                            <h5 class="mb-2 text-uppercase">{{ i }}</h5>
+                        <v-col cols="12" sm="6" md="6" v-for="(m, i) in menu.categoryGroup" :key="i">
+                            <h5 class="mb-2 text-uppercase">{{ i ? i:'no category' }}</h5>
                             <div v-for="(item,index) in m" :key="index">
                                 <div class="mb-4">
                                     <div class="d-flex align-center custom-bs pa-3 pl-0" style="min-height:114px" @click="viewMenu(item.id)">  
@@ -26,9 +26,13 @@
                                             <div class="d-flex justify-space-between flex-column h-100">
                                                 <div>
                                                     <h5 class="text-uppercase primary--text">{{item.name}}</h5>
-                                                    <p class="mb-1 f8 text-uppercase">({{item.itemCategory ? item.itemCategory:'n/a'}})</p>
+                                                    <div class="d-flex text-capitalize">
+                                                        <h4 class="">{{ formatAmount(item.price)}}</h4>
+                                                        <span v-if="item.unit">/{{ item.unit }}</span>
+                                                    </div>
+                                                    <p>{{  item.description ? shortText(item.description,55) :'n/a' }}</p>
+                                                    <!-- <p class="mb-1">{{item.description ? item.description:'n/a'}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, nam.</p> -->
                                                 </div>
-                                                <h4 class="primary--text">{{ formatAmount(item.price)}}</h4>
                                             </div>
                                             <!-- <div>
                                                 <v-btn fab small text > <v-icon color="primary">{{ icon_right }}</v-icon></v-btn>

@@ -15,7 +15,8 @@
                         <div class="d-flex align-center justify-space-between">
                             <div>
                                 <h5 class="text-uppercase primary--text">{{ item.name }}</h5>
-                                <span>{{formatAmount(item.price)}}</span>
+                                <p class="mb-0">{{formatAmount(item.price)}}</p>
+                                <p class="text-capitalize">({{item.category ? item.category:'n/a'}})</p>
                             </div>
                             <div>
                                 <!-- <v-btn color="primary" x-small fab class="mr-2" :to="'/vendor-menu-item-edit/'+item.id"><v-icon>mdi-lead-pencil</v-icon></v-btn> -->
@@ -129,7 +130,7 @@ export default {
                 unit:'',
                 description:'',
                 profile_pic:'noimage.png',
-                category_id:'',
+                item_category_id:'',
                 vendor_id:'',
             },
             selectedData:'',
@@ -197,22 +198,23 @@ export default {
             this.modalVarientAdd = false;
             this.modalVarientUpdate = false;
             this.modalConfirm = false;
+            this.fetchMenuData();
         },
         handleCloseModalItem(){
             this.modal_item_update = false;
+            this.fetchMenuData();
         },
          fetchMenuData(){
             // console.log("test");
             this.loading = true;
             this.menuId = this.$router.currentRoute.params.menuId;
-            // this.$bus.$emit('SHOW_PAGE_LOADER');
             ApiService.get('menuitem/'+this.menuId)
             .then((resp) => {
                 this.loading = false;
                 this.$bus.$emit('HIDE_PAGE_LOADER');
                 this.item = resp.data;
                 this.item.profile_pic = resp.data.profile_pic ? resp.data.profile_pic:'noimage.png';
-                this.defaultValue = resp.data.category_id;
+                this.defaultValue = resp.data.item_category_id;
                 this.defaultValueUnitType = resp.data.unit_type;
             })
             .catch((error) => {
@@ -222,7 +224,7 @@ export default {
             })
         },
         selectedAnswers(data) {
-            this.menu.category_id = data.selected_data;
+            this.menu.item_category_id = data.selected_data;
         },
         selectedType(data) {
             this.menu.unit_type = data.selected_data;

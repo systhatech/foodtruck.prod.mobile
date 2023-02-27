@@ -80,7 +80,7 @@
                                                     <InputAutocomplete @selected="selectedAnswers" label="Category" :items="categories"/>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <v-btn small color="primary" fab @click="handleAddLookup('menu_item_category','category name')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('menu_item_category','Category Name')"><v-icon>mdi-plus</v-icon></v-btn>
                                                 </div>
                                             </div>
                                             </v-col>
@@ -94,7 +94,7 @@
                                                     <InputAutocomplete @selected="selectedType" label="Unit Type" :items="unit_type"/>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <v-btn small color="primary" fab @click="handleAddLookup('unit_type','unit type')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('unit_type','Unit Type')"><v-icon>mdi-plus</v-icon></v-btn>
                                                 </div>
                                             </div>
                                             </v-col>
@@ -183,7 +183,7 @@ export default {
                 unit: "",
                 description: "",
                 profile_pic: "noimage.png",
-                category_id: "",
+                item_category_id: "",
                 vendor_id: "",
             },
             selectedData: "",
@@ -195,37 +195,29 @@ export default {
             lookup_label:'',
             modal_vendor_lookup:false,
             lookup_values:[],
+            // lookup_seleted:[],
         }
     },
     watch: {
         dialogMenuItemAdd(newval) {
             if (newval) {
-            //     this.menu = {
-            //         name: "",
-            //         price: "",
-            //         unit_type: "",
-            //         unit: "",
-            //         description: "",
-            //         profile_pic: "noimage.png",
-            //         category_id: "",
-            //         vendor_id: "",
-            //     },
-            //     this.defaultValue = "";
                 this.fetchCategory();
+                this.fetchUnitType();
+            }else{
+                this.menu = {
+                    name: "",
+                    price: "",
+                    unit_type: "",
+                    unit: "",
+                    description: "",
+                    profile_pic: "noimage.png",
+                    item_category_id: "",
+                    vendor_id: "",
+                }
+                this.categories = [];
+                this.unit_type = [];
+                this.lookup_values = [];
             }
-            // }else{
-            //     this.menu = {
-            //         name: "",
-            //         price: "",
-            //         unit_type: "",
-            //         unit: "",
-            //         description: "",
-            //         profile_pic: "noimage.png",
-            //         category_id: "",
-            //         vendor_id: "",
-            //     },
-            //     this.defaultValue = "";
-            // }
         }
     },
     methods: {
@@ -233,9 +225,19 @@ export default {
             fetchProfile: 'auth/fetchProfile'
         }),
         fetchVendorLookups(param){
-            console.log("here", param);
+            if(param.code =='menu_item_category'){
+                this.fetchCategory();
+            }else if(param.code=='unit_type'){
+                this.fetchUnitType();
+            }
         },
         handleAddLookup(code, label){
+            if(code == 'unit_type'){
+                this.lookup_values = this.unit_type;
+            }
+            if(code == 'menu_item_category'){
+                this.lookup_values = this.categories;
+            }
             this.lookup_code = code;
             this.lookup_label = label;
             this.modal_vendor_lookup = true;
@@ -269,20 +271,33 @@ export default {
         },
         selectedAnswers(data) {
             console.log(data);
-            this.menu.category_id = data.selected_data;
+            this.menu.item_category_id = data.selected_data;
         },
         fetchCategory() {
             this.loaderShow();
-            ApiService.get("lookup/food-menu-item-category")
+            ApiService.post("/vendor-lookup-values",{'code': 'menu_item_category'})
                 .then((resp) => {
                     this.loaderHide();
-                    this.categories = resp.food_category;
-                    this.unit_type = resp.unit_type;
+                    this.categories = resp.data;
+                    this.lookup_values = this.categories;
                 })
                 .catch((error) => {
                     this.loaderHide();
                     console.log(error);
                 });
+        },
+        fetchUnitType() {
+            this.loaderShow();
+            ApiService.post("/vendor-lookup-values",{'code': 'unit_type'})
+            .then((resp) => {
+                this.loaderHide();
+                this.unit_type = resp.data;
+                this.lookup_values = this.unit_type;
+            })
+            .catch((error) => {
+                this.loaderHide();
+                console.log(error);
+            });
         },
         handleBack() {
             this.$router.back();

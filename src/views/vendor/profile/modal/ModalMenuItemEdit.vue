@@ -35,6 +35,10 @@
                                                     label="Price" required></v-text-field>
                                             </v-col>
                                             <v-col cols="6" class="pb-0 pt-0" md="6">
+                                                <v-text-field v-model="menu.unit" :rules="requiredRules" label="Quantity"
+                                                    type="number" v-mask="'####'" required></v-text-field>
+                                            </v-col>
+                                            <!-- <v-col cols="6" class="pb-0 pt-0" md="6">
                                                 <InputAutocomplete @selected="selectedAnswers"
                                                     :defaultValue="defaultValue" label="Category" :items="categories" />
                                             </v-col>
@@ -42,11 +46,44 @@
                                                 <InputAutocomplete @selected="selectedType"
                                                     :defaultValue="defaultValueUnitType" label="Unit Type"
                                                     :items="unit_type" />
+                                            </v-col> -->
+                                            <v-col
+                                            cols="12"
+                                            class="pb-0 pt-0"
+                                            md="6"
+                                            >
+                                            <div class="d-flex align-center w-100">
+                                            <div style="flex-grow:1">
+                                                    <InputAutocomplete 
+                                                        @selected="selectedAnswers" 
+                                                        :defaultValue="defaultValue"
+                                                        label="Category" 
+                                                        :items="categories"/>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('menu_item_category','Category Name')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                </div>
+                                            </div>
                                             </v-col>
-                                            <v-col cols="6" class="pb-0 pt-0" md="6">
-                                                <v-text-field v-model="menu.unit" :rules="requiredRules" label="Unit"
-                                                    type="number" v-mask="'####'" required></v-text-field>
+                                            <v-col
+                                            cols="12"
+                                            class="pb-0 pt-0"
+                                            md="6"
+                                            >
+                                            <div class="d-flex align-center w-100">
+                                            <div style="flex-grow:1">
+                                                    <InputAutocomplete 
+                                                    label="Unit Type" 
+                                                    @selected="selectedType" 
+                                                    :defaultValue="defaultValueUnitType"
+                                                    :items="unit_type"/>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <v-btn small color="primary" fab @click="handleAddLookup('unit_type','Unit Type')"><v-icon>mdi-plus</v-icon></v-btn>
+                                                </div>
+                                            </div>
                                             </v-col>
+                                          
 
                                             <v-col cols="12" class="pb-0 pt-0" md="12">
                                                 <v-textarea v-model="menu.description" :rules="requiredRules"
@@ -65,6 +102,13 @@
                             </div>
                             <DialogConfirm :dialogConfirm="dialogConfirm" @handleConfirm="handleDelete"
                                 @close="handleCloseDelete" />
+                                <ModalCuisineType 
+                                :availableCuisines="lookup_values"
+                                :code="lookup_code"
+                                :label="lookup_label"
+                                :dialogCuisineType="modal_vendor_lookup" 
+                                @fetchCuisines="fetchVendorLookups"
+                                @close="handleCloseCuisineType()"/>
                         </div>
                     </v-container>
                 </v-card>
@@ -98,7 +142,8 @@ export default {
         // InputAddress,
         DialogConfirm,
         InputAutocomplete,
-        InputUpload
+        InputUpload,
+        ModalCuisineType: ()=> import('@/views/vendor/profile/modal/ModalCuisineType')
     },
     data() {
         return {
@@ -121,19 +166,26 @@ export default {
                 unit: "",
                 description: "",
                 profile_pic: "noimage.png",
-                category_id: "",
+                item_category_id: "",
                 vendor_id: "",
             },
             selectedData: "",
             src: "noimage.png",
             categories: [],
             unit_type: [],
+            lookup_code:'',
+            lookup_label:'',
+            modal_vendor_lookup:false,
+            lookup_values:[],
+
         }
     },
     watch: {
         dialogMenuItemEdit(newval) {
             if (newval) {
+                this.menu = this.item;
                 this.fetchCategory();
+                this.fetchUnitType();
             }
         }
     },
@@ -141,6 +193,58 @@ export default {
         ...mapActions({
             fetchProfile: 'auth/fetchProfile'
         }),
+        fetchVendorLookups(param){
+            if(param.code =='menu_item_category'){
+                this.fetchCategory();
+            }else if(param.code=='unit_type'){
+                this.fetchUnitType();
+            }
+        },
+        fetchCategory() {
+            this.loaderShow();
+            ApiService.post("/vendor-lookup-values",{'code': 'menu_item_category'})
+                .then((resp) => {
+                    this.loaderHide();
+                    this.categories = resp.data;
+                    this.lookup_values = this.categories;
+                    let selected = this.categories.filter((item)=>item.id == this.menu.item_category_id);
+                    setTimeout(() => {
+                        this.defaultValue = selected[0];
+                    }, 200);
+                })
+                .catch((error) => {
+                    this.loaderHide();
+                    console.log(error);
+                });
+        },
+        fetchUnitType() {
+            this.loaderShow();
+            ApiService.post("/vendor-lookup-values",{'code': 'unit_type'})
+            .then((resp) => {
+                this.loaderHide();
+                this.unit_type = resp.data;
+                this.lookup_values = this.unit_type;
+                let selected = this.unit_type.filter((item)=>item.id == this.menu.unit_type);
+                setTimeout(() => {
+                    this.defaultValueUnitType = selected[0];
+                }, 200);
+            })
+            .catch((error) => {
+                this.loaderHide();
+                console.log(error);
+            });
+        },
+        handleAddLookup(code, label){
+            if(code == 'unit_type'){
+                this.lookup_values = this.unit_type;
+            }
+            if(code == 'menu_item_category'){
+                this.lookup_values = this.categories;
+            }
+            this.lookup_code = code;
+            this.lookup_label = label;
+            this.modal_vendor_lookup = true;
+        },
         selectedType(data) {
             this.menu.unit_type = data.selected_data;
         },
@@ -171,29 +275,28 @@ export default {
                 });
         },
         selectedAnswers(data) {
-            console.log(data);
-            this.menu.category_id = data.selected_data;
+            this.menu.item_category_id = data.selected_data;
         },
-        fetchCategory() {
-            this.loaderShow();
-            ApiService.get("lookup/food-menu-item-category")
-                .then((resp) => {
-                    this.loaderHide();
-                    this.categories = resp.food_category;
-                    this.unit_type = resp.unit_type;
+        // fetchCategory() {
+        //     this.loaderShow();
+        //     ApiService.get("lookup/food-menu-item-category")
+        //         .then((resp) => {
+        //             this.loaderHide();
+        //             this.categories = resp.food_category;
+        //             this.unit_type = resp.unit_type;
 
-                    this.menu = this.item;
-                    this.menu.profile_pic = this.item.profile_pic
-                        ? this.item.profile_pic
-                        : "noimage.png";
-                    this.defaultValue = this.item.category_id;
-                    this.defaultValueUnitType = this.item.unit_type;
-                })
-                .catch((error) => {
-                    this.loaderHide();
-                    console.log(error);
-                });
-        },
+        //             this.menu = this.item;
+        //             this.menu.profile_pic = this.item.profile_pic
+        //                 ? this.item.profile_pic
+        //                 : "noimage.png";
+        //             this.defaultValue = this.item.category_id;
+        //             this.defaultValueUnitType = this.item.unit_type;
+        //         })
+        //         .catch((error) => {
+        //             this.loaderHide();
+        //             console.log(error);
+        //         });
+        // },
         handleBack() {
             this.$router.back();
         },

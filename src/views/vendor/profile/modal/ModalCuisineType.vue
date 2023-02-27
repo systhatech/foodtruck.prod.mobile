@@ -90,7 +90,7 @@ export default {
             .then((resp) =>{
                 this.loaderHide();
                 this.$refs.formCuisineType.reset();
-                this.$emit('fetchCuisines');
+                this.$emit('fetchCuisines',{'code': this.code});
                 console.log(resp);
             })
             .catch((error) =>{

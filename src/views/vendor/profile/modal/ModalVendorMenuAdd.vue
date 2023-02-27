@@ -98,11 +98,6 @@ export default {
                 this.menu.description = this.descriptionStripe(this.menuData.description);
                 this.menu.profile_pic = this.menuData.profile_pic;
                 this.is_active = this.menuData.is_active;
-                if(this.menuData.cusine){
-                    let data = this.cuisine_types.filter((item) => item.value == this.menuData.cusine);
-                    this.defaultCuisine = data[0];
-                }
-               
             }else{
                 this.menu = {
                     name:'',
@@ -141,17 +136,34 @@ export default {
     },
     methods: {
         fetchCuisineTypes() {
-            ApiService.post("/vendor-lookup-cuisine-types",{
-                "code":"cuisine_type"
-            })
-            .then((resp) =>{
+            ApiService.post("/vendor-lookup-values",{'code': 'cuisine_type'})
+            .then((resp) => {
+                this.loaderHide();
                 this.cuisine_types = resp.data;
+                if(this.isEdit){
+                    if(this.menuData.cusine){
+                        let data = this.cuisine_types.filter((item) => item.value == this.menuData.cusine);
+                        this.defaultCuisine = data[0];
+                    }
+                }
+                // this.lookup_values = this.categories;
             })
-            .catch((error) =>{
+            .catch((error) => {
                 this.loaderHide();
                 console.log(error);
-                // this.messageError(error.message);
-            })
+            });
+
+            // ApiService.post("/vendor-lookup-cuisine-types",{
+            //     "code":"cuisine_type"
+            // })
+            // .then((resp) =>{
+            //     this.cuisine_types = resp.data;
+            // })
+            // .catch((error) =>{
+            //     this.loaderHide();
+            //     console.log(error);
+            //     // this.messageError(error.message);
+            // })
         },
         handleCloseCuisineType(){
             this.modal_cuisine_type = false;

@@ -46,9 +46,9 @@
                                                 :src="base_url + '/image-show/' + menu.profile_pic"></v-img>
                                         </div>
                                         <h5 class="primary--text text-uppercase pt-4">{{ menu.name }}</h5>
-                                        <p class="f8 text-uppercase">({{ menu.cusine }})</p>
+                                        <p class="f8 text-uppercase" v-if="menu.cusineType">({{ menu.cusineType ? menu.cusineType:'-' }})</p>
                                     </div>
-                                    <v-chip :color="menu.is_active ? 'primary' : 'error'">{{ menu.is_active ? 'Active Menu':'Inactive' }}</v-chip>
+                                    <v-chip class="mt-4" :color="menu.is_active ? 'primary' : 'error'">{{ menu.is_active ? 'Active Menu':'Inactive' }}</v-chip>
 
                                 </div>
                             </div>
