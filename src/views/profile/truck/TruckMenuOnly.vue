@@ -1,9 +1,10 @@
 <template>
     <div class="pt-4 ">
         <!-- {{  truckProfile.menus }} -->
+
         <div v-if="truckProfile && truckProfile.menus">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
-                <div v-if="Object.keys(menu.categoryGroup).length">
+                <div v-if="menu && menu.categoryGroup && Object.keys(menu.categoryGroup).length">
                     <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
                     <div>
                         <div v-for="(groupItem, index) in menu.categoryGroup" :key="index">

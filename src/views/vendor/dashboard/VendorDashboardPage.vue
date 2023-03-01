@@ -169,7 +169,7 @@ export default {
             mapView:false,
             locations:[],
             clients:[],
-            distance:10,
+            distance:20,
             truck_profile:{},
             loading:false,
             current_location:{
@@ -220,6 +220,7 @@ export default {
     methods: {
         ...mapActions({
             fetchTrucks:'truck/fetchTrucks',
+            fetchTrucksSearch:'truck/fetchTrucksSearch',
             fetchProfile:'auth/fetchProfile',
         }),
         handleSendNotification(){
@@ -256,12 +257,15 @@ export default {
             this.selected_mile = index;
             this.distance = radius;
             this.loaderShow();
-            this.fetchTrucks({ 
+            this.fetchTrucksSearch({ 
                 available: 1,
-                // distance: this.distance,
-                radius: this.distance,
-                name: this.search,
-                guest: localStorage.getItem('g_token'),
+                distance: this.distance,
+                // radius: this.distance,
+                // name: this.search,
+                // guest: localStorage.getItem('g_token'),
+                guest :  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'',
+                unit : "mile",
+                // this.fetchTrucksSearch(params)
             }).then(() =>{
                 this.loaderHide()
             })
@@ -369,11 +373,11 @@ export default {
 
         fetchAllTrucks() {
             this.loading = true;
-            this.fetchTrucks({ 
+            this.fetchTrucksSearch({ 
                 available: 1,
-                // distance: this.distance,
-                radius: this.distance,
-                name: this.search,
+                distance: this.distance,
+                // radius: this.distance,
+                // name: this.search,
                 guest: localStorage.getItem('g_token'),
             })
             .then(() => {

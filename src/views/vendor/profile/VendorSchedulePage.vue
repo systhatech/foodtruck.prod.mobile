@@ -4,7 +4,7 @@
         <v-container class="mb80">
             <v-btn outlined color="primary" @click="addSchedule()" class="mb-4" rounded large block><v-icon>mdi-plus</v-icon> Add New Schedule</v-btn>
             <p class="mb-0 text-center" style="text-decoration: underline;" @click="handleClick('user_mannual_schedules')">Video tutorial, how to setup schedule?</p>
-            <div class="d-flex align-center justify-space-around pt-4">
+            <div class="d-flex align-center justify-space-around pt-4" v-if="truckProfile && truckProfile.locations && Object.keys(truckProfile.locations).length">
                 <div class="share-icon">
                     <ShareNetwork
                         network="facebook"

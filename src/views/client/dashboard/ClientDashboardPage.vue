@@ -1,60 +1,23 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <!-- <Topnavbar/> -->
+        <div class="pa-4 pt-2 pb-2">
+            <div class="d-flex align-center justify-space-between">
+                <v-text-field label="Search" :loading="search_loading" small v-model="search"></v-text-field>
+                <v-btn class="ml-4" fab color="primary" @click="handleFilterModalOpen">
+                    <v-icon large>{{icon_filter}}</v-icon>
+                </v-btn>
+                <v-btn class="ml-4" fab color="primary" @click="changeView()">
+                    <v-icon large v-if="map_view">{{icon_list}}</v-icon>
+                    <v-icon large v-else>{{icon_map}}</v-icon>
+                </v-btn>
+            </div>
+        </div>
         <v-container v-if="map_view" class="ma-0 pa-0">
-            <div v-if="currentUser && currentUser.table == 'vendors'" class="test pl-3" :class=" available== 'available' ? 'bg-green' : 'bg-red'" id="rdg">
-                <v-radio-group
-                    v-model="available"
-                    color="primary"
-                    v-on:change="updateAvailability"
-                    row
-                    >
-                    <v-radio
-                        label="Available"
-                        value="available"
-                    ></v-radio>
-                    <v-radio
-                        label="Unavailable"
-                        value="unavailable"
-                    ></v-radio>
-                </v-radio-group>
-            </div>
-            <div class="pl-6 pr-6 pt-4">
-                <div class="d-flex align-center justify-space-between">
-                    <div>
-                        <v-text-field label="Search" v-model="search"></v-text-field>
-                        <!-- <div>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, iure.</p>
-                            <img :src="spinnerImg" alt="">
-                        </div> -->
-                    </div>
-                    <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
-                        <v-icon large >{{icon_filter}}</v-icon>
-                    </v-btn>
-                 
-                    <v-btn class="ml-4" fab color="primary" @click="changeView">
-                        <v-icon large v-if="map_view">{{icon_list}}</v-icon>
-                        <v-icon large v-else>{{icon_map}}</v-icon>
-                    </v-btn>
-                </div>
-            </div>
             <AddGoogleMap :locationMarkers="locations"/>
-           
         </v-container>
         <v-container v-else class="mg56 pt-4 pb-14">
            <div>
-               <div>
-                   <div class="d-flex align-center justify-space-between">
-                        <v-text-field label="Search" :loading="search_loading" small v-model="search"></v-text-field>
-                        <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
-                            <v-icon large>{{icon_filter}}</v-icon>
-                        </v-btn>
-                        <v-btn class="ml-4" fab color="primary" @click="changeView()">
-                            <v-icon large v-if="map_view">{{icon_list}}</v-icon>
-                            <v-icon large v-else>{{icon_map}}</v-icon>
-                        </v-btn>
-                   </div>
-               </div>
                <div v-if="locations && locations.length">
                     <TruckList :trucks="locations"/>
                </div>
@@ -67,11 +30,11 @@
                     </div>
                </div>
            </div>
-           <TruckFilter 
-            :dialogFilter="modelFilter"
-            @filter="handleFilter"
-            @close="handleCloseFilter"/>
         </v-container>
+        <TruckFilter 
+         :dialogFilter="modelFilter"
+         @filter="handleFilter"
+         @close="handleCloseFilter"/>
         <Bottomnavbar/>
     </v-container>
 </template>
@@ -179,6 +142,9 @@ export default {
             fetchTrucks:'truck/fetchTrucks',
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
+        handleFilterModalOpen(){
+            this.modelFilter=true
+        },
        
         changeView(){
             this.map_view = !this.map_view;

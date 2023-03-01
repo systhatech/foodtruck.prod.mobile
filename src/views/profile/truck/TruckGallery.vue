@@ -1,8 +1,8 @@
 <template>
     <div class="pt-4">
-        <div class="form-container custom-bs pa-4">
+        <div class="form-container">
 
-            <div class="mt-4" v-if="files && Object.keys(files).length">
+            <div class="mt-4 custom-bs pa-4" v-if="files && Object.keys(files).length">
                 <!-- <v-row> -->
                     <!-- <div v-for="(file,index) in files" :key="index">
                         <h5 class="text-capitalize mb-2 mt-4">{{index}}</h5> -->

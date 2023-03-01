@@ -1,87 +1,58 @@
 <template>
-	<v-row justify="center">
-		<v-dialog
-		scrollable
-		persistent
-		v-model="dialogFilter"
-		>
-		<v-card>
-			<v-toolbar
-			elevation="0"
-			dark
-			color="primary"
-			>
-			<v-toolbar-title>Filter</v-toolbar-title>
-			<v-spacer></v-spacer>
-			<v-toolbar-items>
-				<v-btn
-				text
-				icon
-				class="ma-0 pa-0"
-				@click="handleClose"
-				>
-				<v-icon>{{ iconClose }}</v-icon>
-				</v-btn>
-			</v-toolbar-items>
-			</v-toolbar>
-			<v-card-text>
-				<div class="pt-4">
-					<!-- <div class="mb-4">
-						<div>
-						<p class="mb-0">Date</p>
-							<InputDatePicker class="mt-0" label="Select Date" @selectedDate="selectedDate"/>
+    <v-row justify="center">
+        <v-dialog
+        v-model="dialogFilter"
+        persistent
+        scrollable
+        fullscreen>
+        <v-card class="background-image" style="padding-top: 56px !important;">
+            <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
+                <v-toolbar-title class="text-capitalize">Filter</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn text @click="handleClose">
+                        Close
+                    </v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <!-- <v-container> -->
+                <div class="pa-4 pb82 background-white pb-16 mt-14">
+					<div class="custom-bs pa-4">
+						<div class="mb-4">
+							<div>
+								<Lookup label="Cuisines" :items="cuisine_types" @selected="handleSelectedCuisines"/>
+							</div>
 						</div>
-					</div> -->
-					<div class="mb-4">
-						<div>
-						<!-- <p class="mb-0">Cuisine</p> -->
-						<!-- <div>
-							<v-chip v-for="(category,index) in categories" :key="index" 
-								class="mr-2 text-capitalize mb-2" 
-								:color="setClass(category.id)"
-								@click="handleSelect(category,index)">{{ category.value}}</v-chip>
-						</div> -->
-						<div>
-							<Lookup label="Cuisines" :items="cuisine_types" @selected="handleSelectedCuisines"/>
+						<div class="mb-4">
+							<div>
+							<p class="mb-0">Radius</p>
+							<v-text-field class="pt-0"  
+								v-model="radius"
+								type="number"></v-text-field>
+							</div>
 						</div>
+						<div class="mb-4">
+							<div>
+							<p class="mb-0">ZIP CODE</p>
+							<v-text-field class="pt-0" type="number"
+								v-model="zip"></v-text-field>
+							</div>
 						</div>
-					</div>
-					<div class="mb-4">
-						<div>
-						<p class="mb-0">Radius</p>
-						<v-text-field class="pt-0"  
-							v-model="radius"
-							type="number"></v-text-field>
-						</div>
-					</div>
-					<div class="mb-4">
-						<div>
-						<p class="mb-0">ZIP CODE</p>
-						<v-text-field class="pt-0" type="number"
-							v-model="zip"></v-text-field>
+						<div class="w-100 d-flex align-center justify-space-around pa-4">
+							<v-btn
+								color="primary"
+								@click="handleFilter"
+								rounded
+								large
+								block
+							>
+								search
+							</v-btn>
 						</div>
 					</div>
 				</div>
-			</v-card-text>
-			<v-divider></v-divider>
-			<v-card-actions class="w-100 d-flex align-center justify-space-around pa-4">
-			<v-btn
-				color="primary"
-				@click="handleFilter"
-				rounded
-				large
-				block
-			>
-				search
-			</v-btn>
-			<!-- <v-btn
-				color="primary"
-				@click="handleClear"
-				rounded
-			>
-				Clear
-			</v-btn> -->
-			</v-card-actions>
+			
+			
 		</v-card>
 		</v-dialog>
 	</v-row>
