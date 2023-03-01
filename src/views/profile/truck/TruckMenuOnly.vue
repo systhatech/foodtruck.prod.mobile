@@ -3,11 +3,11 @@
         <!-- {{  truckProfile.menus }} -->
         <div v-if="truckProfile && truckProfile.menus">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
-                <div v-if="Object.keys(menu.itemsGroup).length">
+                <div v-if="Object.keys(menu.categoryGroup).length">
                     <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
                     <div>
-                        <div v-for="(groupItem, index) in menu.itemsGroup" :key="index">
-                            <p class="pb-0 mb-0 mt-2 text-capitalize">{{ index }}</p>
+                        <div v-for="(groupItem, index) in menu.categoryGroup" :key="index">
+                            <h4 class="pb-0 mb-0 mt-2 text-capitalize primary--text">{{ index  }}</h4>
                             <div cols="6" v-for="(item,i) in groupItem" class="custom-bs pa-3 mb-4" :key="i">
                                 <div class="d-flex align-center justify-space-between" @click="handleRoute(item)">
                                     <div class="d-flex align-center"> 
@@ -22,7 +22,29 @@
                                         <div class="pl-3 d-flex align-center justify-space-between w-100">
                                             <div>
                                                 <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
-                                                <p style="font-size:14px" v-if="item.description">{{ shortText(item.description,40) }}</p>
+                                                <div class="d-flex">
+                                                    <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> <span class="" v-if="item.unit">&nbsp;/{{ item.unit }}</span>
+                                                </div>
+                                                <div v-if="item.is_special">
+                                                    <!-- <ShareNetwork
+                                                        network="facebook"
+                                                        url="https://yummtrux.systha.com/mobile/index.html#/truck-profile/1"
+                                                        title="Say hi to Vite! A brand new, extremely fast development setup for Vue."
+                                                        description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
+                                                        quote="">
+                                                        <v-icon>mdi-facebook</v-icon>
+                                                    </ShareNetwork>
+                                                    <ShareNetwork
+                                                        network="twitter"
+                                                        url="https://yummtrux.systha.com/mobile/index.html#/truck-profile/1"
+                                                        title="Say hi to Vite! A brand new, extremely fast development setup for Vue."
+                                                        description="This week, I’d like to introduce you to 'Vite', which means 'Fast'. It’s a brand new development setup created by Evan You."
+                                                        quote="">
+                                                        <v-icon>mdi-twitter</v-icon>
+                                                    </ShareNetwork> -->
+                                                </div>
+                                                <v-chip small color="success" v-if="item.is_special" class="mb-1">{{ item.is_special? 'Todays Special':'' }}</v-chip>
+                                                <p v-if="item.description">{{ shortText(item.description,40) }}</p>
                                             </div>
                                             <!-- <div>
                                                 
@@ -32,7 +54,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4>
+                                        <!-- <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> -->
                                         <!-- <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn> -->
                                     </div>
                                 </div>

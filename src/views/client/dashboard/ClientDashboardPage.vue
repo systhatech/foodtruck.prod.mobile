@@ -21,7 +21,13 @@
             </div>
             <div class="pl-6 pr-6 pt-4">
                 <div class="d-flex align-center justify-space-between">
-                    <v-text-field label="Search" small></v-text-field>
+                    <div>
+                        <v-text-field label="Search" v-model="search"></v-text-field>
+                        <!-- <div>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, iure.</p>
+                            <img :src="spinnerImg" alt="">
+                        </div> -->
+                    </div>
                     <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
                         <v-icon large >{{icon_filter}}</v-icon>
                     </v-btn>
@@ -39,7 +45,7 @@
            <div>
                <div>
                    <div class="d-flex align-center justify-space-between">
-                        <v-text-field label="Search" small v-model="search"></v-text-field>
+                        <v-text-field label="Search" :loading="search_loading" small v-model="search"></v-text-field>
                         <v-btn class="ml-4" fab color="primary" @click="modelFilter=true">
                             <v-icon large>{{icon_filter}}</v-icon>
                         </v-btn>
@@ -78,11 +84,14 @@ import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
 import AddGoogleMap from './map/AddGoogleMap'
+import spinnerImg from './spinner.gif'
 // import {socketHandler} from '@/core/services/socketio/socket'
 export default {
     data() {
         return {
             search:'',
+            search_loading:false,
+            spinnerImg,
             iconHome: mdiHome,
             iconProfile: mdiAccount,
             icon_filter: mdiFilter,
@@ -128,6 +137,8 @@ export default {
             modelFilter:false,
             map_view:false,
             loading:false,
+            searchTimer:null,
+  
             // locations:'',
         }
     },
@@ -148,17 +159,25 @@ export default {
    
     beforeDestroy() {
         clearInterval(this.dataInterval);
+        clearTimeout(this.searchTimer);
     },
-    // watch:{
-    //     search(newval){
-    //         if(newval.length >3){
-    //             this.fetchData();
-    //         }
-    //     }
-    // },
+    watch:{
+        search(newval){
+            
+            if(newval.length >=3 || newval.length ==0){
+                // this.fetchData();
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    this.search_loading = true;
+                    this.fetchAllTrucks();
+                }, 800);
+            }
+        }
+    },
     methods: {
         ...mapActions({
-            fetchTrucks:'truck/fetchTrucks'
+            fetchTrucks:'truck/fetchTrucks',
+            fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
        
         changeView(){
@@ -169,28 +188,41 @@ export default {
             this.loaderShow();
             params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
             params.available =  1;
-             ApiService.post('/location/search/km',params)
-            .then((resp) => {
+            params.unit = "mile";
+            this.fetchTrucksSearch(params)
+            .then(()=>{
+                this.loading = false;
                 this.loaderHide();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.locations = this.trucks;
+                this.search_loading = false; 
                 this.handleCloseFilter();
-                this.zoomLevel = 12;
-                this.loaderHide();
             })
-            .catch((error) => {
+            .catch((error)=>{
                 this.loaderHide();
-                if(error.response && error.response.data && error.response.data.message){
-                    this.messageError(error.response.data.message);
-                }
-                this.messageError(error.response.data.message);
-                this.loaderHide();
-            });
+                this.loading = false;
+                console.log(error)
+            })
+            // ApiService.post('/search',params)
+            // .then((resp) => {
+            //     this.loaderHide();
+            //     this.trucks = resp.map((location) => ({
+            //         ...location, position: {
+            //             lat: Number(location.lat),
+            //             lng: Number(location.lng)
+            //         }
+            //     }));
+            //     this.locations = this.trucks;
+            //     this.handleCloseFilter();
+            //     this.zoomLevel = 12;
+            //     this.loaderHide();
+            // })
+            // .catch((error) => {
+            //     this.loaderHide();
+            //     if(error.response && error.response.data && error.response.data.message){
+            //         this.messageError(error.response.data.message);
+            //     }
+            //     this.messageError(error.response.data.message);
+            //     this.loaderHide();
+            // });
         },
         handleCloseFilter(){
             this.modelFilter = false;
@@ -422,6 +454,7 @@ export default {
             })
             .then(()=>{
                 this.loading = false;
+                this.search_loading = false;
             })
         }
           

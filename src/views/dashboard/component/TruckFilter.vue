@@ -32,17 +32,20 @@
 							<InputDatePicker class="mt-0" label="Select Date" @selectedDate="selectedDate"/>
 						</div>
 					</div> -->
-					<!-- <div class="mb-4">
+					<div class="mb-4">
 						<div>
-						<p class="mb-0">Cuisine</p>
-						<div>
+						<!-- <p class="mb-0">Cuisine</p> -->
+						<!-- <div>
 							<v-chip v-for="(category,index) in categories" :key="index" 
 								class="mr-2 text-capitalize mb-2" 
 								:color="setClass(category.id)"
 								@click="handleSelect(category,index)">{{ category.value}}</v-chip>
+						</div> -->
+						<div>
+							<Lookup label="Cuisines" :items="cuisine_types" @selected="handleSelectedCuisines"/>
 						</div>
 						</div>
-					</div> -->
+					</div>
 					<div class="mb-4">
 						<div>
 						<p class="mb-0">Radius</p>
@@ -64,9 +67,10 @@
 			<v-card-actions class="w-100 d-flex align-center justify-space-around pa-4">
 			<v-btn
 				color="primary"
-				class="pl-4 pr-4"
 				@click="handleFilter"
 				rounded
+				large
+				block
 			>
 				search
 			</v-btn>
@@ -99,28 +103,44 @@ import { ApiService } from '@/core/services/api.service'
         notifications: false,
         sound: true,
         widgets: false,
-        radius:0,
+        radius:10,
         zip:"",
         date: new Date().toISOString().substr(0, 10), 
 		categories:[],   
-		selectedItems:[],     
+		selectedItems:[],    
+		cuisine_types:[], 
+		selected_cuisines:[],
       }
     },
     components: {
         // InputDatePicker,
+		Lookup: ()=> import('@/components/form-element/InputAutocompleteIdValueWithTag.vue')
     },
     mounted() {
-        // this.fetchCategories();
+		this.fetchCuisines();
     },
     methods:{
+		handleSelectedCuisines(param){
+			console.log(param.selected_data);
+			this.selected_cuisines = param.selected_data;
+		},
+		fetchCuisines(){
+			ApiService.post("/vendor-lookup-search")
+			.then((resp) => {
+				this.cuisine_types = resp.data;
+			})
+			.catch((error) => {
+				this.isLoading = false;
+				console.log({error});
+			});
+		},
+
 		setClass(id){
 			let ids = this.selectedItems.map((item) => item.id);
 			if(ids.includes(id)){
 				return "primary";
 			}
 			return "";
-			// return false;
-			// let isSelected = this.selectedItems.filter((item) => )
 		},
 		handleSelect(value){
 			let exist = this.selectedItems.filter((item) => item.id == value.id);
@@ -131,15 +151,7 @@ import { ApiService } from '@/core/services/api.service'
 			}
 			console.log(this.selectedItems);
 		},
-        fetchCategories() {
-           ApiService.get("/self/menus")
-           .then((response) => {
-				this.categories = response;
-           })
-           .catch((error) => {
-             console.log(error);
-           })
-        },
+       
         handleClose(){
             this.$emit('close');
         },
@@ -151,7 +163,7 @@ import { ApiService } from '@/core/services/api.service'
                 date: this.date,
                 zip: this.zip,
                 distance: this.radius ? this.radius: 0,
-				cuisines: this.selectedItems.map((item) => item.id),
+				cuisines: this.selected_cuisines,
             })
         },
         handleClear(){

@@ -1,16 +1,46 @@
 <template>
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
-        <div class="custom-bs pa-4 d-flex align-center justify-space-between w-100">
-            <h4>Available Menus</h4>
-            <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" large rounded>Add New menu</v-btn>
+        <div class="custom-bs pa-4  w-100">
+            <div class="d-flex align-center justify-space-between">
+                <h4>Available Menus</h4>
+                <v-btn color="primary" @click="handleMenuAdd()" class="mb-2" large rounded>Add New menu</v-btn>
+            </div>
         </div>
         <v-container class="mb80 pb-14">
             <div v-if="loading" class="text-center w-100">
                 <ComponentLoadingVue/>
             </div>
             <div v-else>
+                <p class="text-center" style="text-decoration: underline;" @click="handleClick('user_mannual_menu')">Video tutorial, how to setup menu?</p>
                 <div v-if="profile.menus && profile.menus.length">
+                    <div class="d-flex align-center justify-space-around">
+                        <div class="share-icon">
+                            <ShareNetwork
+                                network="facebook"
+                                :url="link_url"
+                                :title="post_title"
+                                description=""
+                                quote=""
+                                hashtags=""
+                            >
+                                <v-btn fab text color="blue"><v-icon large>mdi-facebook</v-icon></v-btn>
+                            </ShareNetwork>
+                         
+                            <ShareNetwork
+                                network="twitter"
+                                :url="link_url"
+                                :title="post_title"
+                                description=""
+                                quote=""
+                                hashtags=""
+                            >
+                                <v-btn fab text color="primary"><v-icon large>mdi-twitter</v-icon></v-btn>
+                            </ShareNetwork>
+                               <!-- <Facebook :url="link_url" scale="2"/>
+                            <Twitter :url="link_url" scale="2"/> -->
+                        </div>
+                    </div>
                     <VendorMenuList :truckProfile="profile" @fetch="profileData"/>
                 </div>
                 <div v-else class="unavailable">
@@ -25,6 +55,7 @@
             :is-edit="is_edit"
             @close="handleClose"/>
             <Bottomnavbar/>
+            <ModalVideoPlayer/>
     </v-container>
 </template>
 <script>
@@ -33,6 +64,8 @@ import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { base_url } from '@/core/services/config'
 import VendorMenuList from '@/views/vendor/profile/components/VendorMenuList.vue'
+import ModalVideoPlayer from '@/views/vendor/profile/modal/ModalVideoPlayer.vue'
+// import { Facebook, Twitter } from 'vue-socialmedia-share';
 // import InputUpload from '@/components/form-element/InputUpload'
 import { mapGetters } from 'vuex'
 export default {
@@ -48,6 +81,8 @@ export default {
             cuisine_types:[],
             menu_data:{},
             loading: false,
+            link_url:'',
+            post_title:'',
         }
     },
     mounted() {
@@ -59,8 +94,13 @@ export default {
             this.modal_menu_add = true;
         });
         this.profileData();
+        this.link_url = "https://yummtrux.systha.com/mobile/index.html#/truck-profile/"+this.currentUser.table_id+"?cmp=menus";
+        this.post_title = this.currentUser.owner.name+" : Today's special menu";
     },
     methods: {
+        handleClick(param){
+            this.$bus.$emit('MODAL_VIDEO_PLAYER_OPEN',{param});
+        },
         handleMenuAdd(){
             this.cuisine_types = this.profile.cuisine_types;
             this.is_edit = false;
@@ -86,10 +126,13 @@ export default {
     },
     components: {
         VendorMenuList,
+        ModalVideoPlayer,
         Topnavbar,
         DialogMenuAdd: ()=> import('@/views/vendor/profile/modal/ModalVendorMenuAdd'),
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         Bottomnavbar,
+        // Facebook,
+        // Twitter
         // InputUpload
     },
     computed: {
@@ -143,5 +186,12 @@ export default {
     // margin-top: 27px !important;
     padding:20px;
 // }
+}
+.share-icon{
+    display: flex;
+
+    a{
+        text-decoration: none;
+    }
 }
 </style>

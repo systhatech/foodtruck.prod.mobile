@@ -7,39 +7,42 @@
                     <v-col cols="12" sm="6" md="6" v-for="(menu, index) in menus" :key="index">
                         <div class="custom-bs pa-4" @click="handleMenuAction(menu)">
                             <div>
-                                <div class="w-100 text-right" style="position: relative;">
-                                    <v-menu offset-y left>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-btn dark icon v-bind="attrs" v-on="on">
-                                                <v-icon color="primary">mdi-dots-vertical</v-icon>
-                                            </v-btn>
-                                        </template>
-
-                                        <v-list>
-                                            <v-list-item>
-                                                <v-list-item-title @click="handleView(menu)"><v-icon
-                                                        color="primary">mdi-eye</v-icon>&nbsp;&nbsp;&nbsp;View</v-list-item-title>
-                                            </v-list-item>
-                                            <v-list-item>
-                                                <v-list-item-title @click="handleEdit(menu)"> <v-icon
-                                                        color="warning">mdi-pencil</v-icon>&nbsp;&nbsp;&nbsp;
-                                                    Update</v-list-item-title>
-                                            </v-list-item>
-                                            <v-list-item>
-                                                <v-list-item-title @click="handleDelete(menu)"> <v-icon
-                                                        color="error">mdi-trash-can</v-icon>&nbsp;&nbsp;&nbsp;
-                                                    Delete</v-list-item-title>
-                                            </v-list-item>
-                                            <v-list-item>
-                                                <v-list-item-title @click="handleActive(menu)" class="pb-2"> <v-btn block
-                                                        large rounded :color="menu.is_active ? 'error' : 'primary'">{{
-                                                            menu.is_active ? 'Make Inactive' : 'Make Active'
-                                                        }}</v-btn></v-list-item-title>
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-menu>
+                                <div class="d-flex align-center justify-space-between">
+                                   
+                                    <div class="w-100 text-right" style="position: relative;">
+                                        <v-menu offset-y left>
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-btn dark icon v-bind="attrs" v-on="on">
+                                                    <v-icon color="primary">mdi-dots-vertical</v-icon>
+                                                </v-btn>
+                                            </template>
+    
+                                            <v-list>
+                                                <v-list-item>
+                                                    <v-list-item-title @click="handleView(menu)"><v-icon
+                                                            color="primary">mdi-eye</v-icon>&nbsp;&nbsp;&nbsp;View</v-list-item-title>
+                                                </v-list-item>
+                                                <v-list-item>
+                                                    <v-list-item-title @click="handleEdit(menu)"> <v-icon
+                                                            color="warning">mdi-pencil</v-icon>&nbsp;&nbsp;&nbsp;
+                                                        Update</v-list-item-title>
+                                                </v-list-item>
+                                                <v-list-item>
+                                                    <v-list-item-title @click="handleDelete(menu)"> <v-icon
+                                                            color="error">mdi-trash-can</v-icon>&nbsp;&nbsp;&nbsp;
+                                                        Delete</v-list-item-title>
+                                                </v-list-item>
+                                                <v-list-item>
+                                                    <v-list-item-title @click="handleActive(menu)" class="pb-2"> <v-btn block
+                                                            large rounded :color="menu.is_active ? 'error' : 'primary'">{{
+                                                                menu.is_active ? 'Make Inactive' : 'Make Active'
+                                                            }}</v-btn></v-list-item-title>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
+                                    </div>
                                 </div>
-                                <div class="text-center">
+                                <div class="text-center pt-4">
                                     <div @click="handleView(menu)">
                                         <div class="w-100 d-flex align-center justify-space-around">
                                             <v-img height="100" width="100" contain
@@ -249,4 +252,6 @@ export default {
     padding: 20px;
     min-height: 330px;
     // }
-}</style>
+}
+
+</style>

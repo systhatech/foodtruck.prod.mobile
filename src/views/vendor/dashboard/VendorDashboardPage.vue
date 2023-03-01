@@ -18,7 +18,7 @@
                         <div class="d-flex align-center justify-space-between">
                             <h4>Current Location</h4>
                             <div>
-                                <v-btn fab text color="primary" @click="handleRefreshLocation()"><v-icon large>mdi-refresh</v-icon></v-btn>
+                                <!-- <v-btn fab text color="primary" @click="handleRefreshLocation()"><v-icon large>mdi-refresh</v-icon></v-btn> -->
                             </div>
                         </div>
                         <div v-if="profile && profile.active_location">
@@ -30,6 +30,7 @@
                         <div v-else>
                             <p>n/a</p>
                         </div>
+                        <v-btn block rounded color="primary" large @click="handleRefreshLocation()">update location </v-btn>
                         <!-- <p>{{ profile.active_location }}</p> -->
                     </div>
                 </v-col>
@@ -48,15 +49,18 @@
                                 <h4>Clients Nearby You</h4>
                             </div>
                             <div class="pt-2">
-                                <div>
-                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(10)">10km</v-btn>
-                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(20)">20km</v-btn>
-                                    <v-btn class="mr-2" large rounded color="primary" @click="handleFechClient(40)">40km</v-btn>
+                                <div class="d-flex">
+                                    <div v-for="(mile, index) in miles" :key="index">
+                                        <v-btn v-if="index==selected_mile" rounded outlined color="primary">{{ mile }} miles</v-btn>
+                                        <v-btn v-else color="primary" rounded text @click="handleFechClient(mile, index)">{{ mile }} miles</v-btn>
+                                    </div>
+                                
                                 </div>
                             </div>
-                            <div class="pt-4">
+                            <div class="pt-4 text-center">
                                 <p>There are  {{ clientLocations }} clients near you.</p>
                             </div>
+                            <v-btn rounded block large @click="handleSendNotification">Send notification</v-btn> 
                         </div>
                         <!-- <h2 class="mb-4 pl-4">Complete Following Steps</h2> -->
                         <div class="custom-bs pa-4 mb-4" v-if="!currentUser.owner.profile_pic">
@@ -89,11 +93,22 @@
                             <v-btn color="primary" large rounded to="/profile-files">Add Now</v-btn>
                             </div>
                         </div>
+                        <div class="custom-bs mb-4" v-if="video">
+                            <div class="">
+                                
+                                <!-- <p class="error--text">Video tutorial, how it works?</p> -->
+                                <div class="pa-4" v-if="video_description">
+                                    <h4 class="mb-0">{{ video_description}}</h4>
+                                </div>
+                                <video autoplay width="100%" controls :src="video"></video>
+                            </div>
+                        </div>
                     </v-col>
                   
                 </v-row>
             </div>
             <DialogConfirm :dialog-confirm="modal_confirm" :message="message" @close="handleClose" @handleConfirm="handleConfirm"/>
+            <DialogNearbyNotification/>
         </v-container>
         <Bottomnavbar/>
     </v-container>
@@ -160,7 +175,11 @@ export default {
             current_location:{
                 lat:0,
                 lng:0,
-            }
+            },
+            video:'',
+            video_description:'',
+            miles:[10, 20,40],
+            selected_mile:1,
         }
     },
     components: {
@@ -168,24 +187,14 @@ export default {
        Bottomnavbar,
        DialogConfirm,
        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
+       DialogNearbyNotification: () => import('@/views/vendor/dashboard/modal/ModalNearbyNotification'),
     },
     mounted() {
         this.locateGeoLocation();
+        this.fetchData();
         if(!this.currentUser) return;
         
-        // if(!this.availableLocations.length){
-        //     this.fetchTrucks({ 
-        //         available: 1,
-        //         // distance: this.distance,
-        //         radius: this.distance,
-        //         name: this.search,
-        //         guest: localStorage.getItem('g_token'),
-        //     })
-        //     .then((resp) => {
-        //         this.loading = false;
-        //         console.log({resp});
-        //     })
-        // }        
+   
         try{
             socketHandler.onlineStatus({
                 id : this.currentUser.table_id,
@@ -213,6 +222,23 @@ export default {
             fetchTrucks:'truck/fetchTrucks',
             fetchProfile:'auth/fetchProfile',
         }),
+        handleSendNotification(){
+            console.log("send notification");
+            let clients = this.availableLocations.filter((item)=>item.table_name =='clients');
+            // return clients.length;
+            this.$bus.$emit('MODAL_NEARBY_NOTIFICATION',{ clients });
+        },
+        fetchData(){    
+            ApiService.post("/site-setting-video-link",{'code':'vendor_dashboard_how_it_works'})
+            .then((resp)=>{
+                this.video = resp.data.value;
+                this.video_description = resp.data.description;
+                console.log({resp});
+            })            
+            .catch((error)=>{
+                console.log({error});
+            })
+        },
         handleRefreshLocation(){
             this.fetchAddress();
         },
@@ -226,15 +252,22 @@ export default {
                 this.loading = false;
             })
         },
-        handleFechClient(radius){
+        handleFechClient(radius, index){
+            this.selected_mile = index;
             this.distance = radius;
+            this.loaderShow();
             this.fetchTrucks({ 
                 available: 1,
                 // distance: this.distance,
                 radius: this.distance,
                 name: this.search,
                 guest: localStorage.getItem('g_token'),
-            });
+            }).then(() =>{
+                this.loaderHide()
+            })
+            .catch((error)=>{
+                console.log(error);
+            })
             // console.log(radius);
         },
         updateAvailability() {

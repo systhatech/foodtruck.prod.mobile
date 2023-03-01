@@ -6,32 +6,33 @@
 				<div>
 					<div class="mb-4">
 						<div v-if="infoContent.table_name == 'vendors'">
-							<h3 class="primary--text text-capitalize">{{
-								infoContent.locate ? infoContent.locate.name : ''
-							}}</h3>
-
+							<h2 class="primary--text text-capitalize">{{infoContent.locate ? infoContent.locate.name : ''}}</h2>
 						</div>
 					</div>
-					<div class="d-flex">
-						<v-icon color="primary">{{ iconLocation }}</v-icon>
+					<div class="d-flex w-100">
+						<!-- <v-icon color="primary">{{ iconLocation }}</v-icon> -->
 						<div class="">
-							<p class="mb-0 f9">
+							<p class="mb-0 f8">
 								{{ infoContent.add1 ? infoContent.add1 : '' }}
 								{{ infoContent.city ? infoContent.city : '' }}
 								{{ infoContent.state ? infoContent.state : '' }}
 								{{ infoContent.zip_code ? infoContent.zip_code : '' }}
 							</p>
+							<div class="d-flex pt-4">
+								<v-chip outlined color="primary" class="mr-2 text-capitalize" v-for="(c, index) in infoContent.cuisines" :key="index">{{c.value}}</v-chip>
+							</div>
 						</div>
 					</div>
+					
 				</div>
 				<div class="pb-2 pt-4" v-if="type == 'clients'">
-					<v-btn fab outlined color="primarylight" v-if="infoContent.table_name == 'vendors'" class="mr-2"
-						:to="'/truck-profile/' + infoContent.table_id"><v-icon>mdi-food</v-icon> </v-btn>
-					<v-btn fab outlined color="primarylight"
+					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'" class="mr-2"
+						:to="'/truck-profile/' + infoContent.table_id"><v-icon large>mdi-food</v-icon> </v-btn>
+					<v-btn fab color="primary"
 						v-if="infoContent.locate && infoContent.locate.contact" class="mr-2"
-						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon>mdi-phone</v-icon> </v-btn>
-					<v-btn fab outlined color="primarylight" v-if="infoContent.table_name == 'vendors'"
-						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon>mdi-chat</v-icon> </v-btn>
+						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon large>mdi-phone</v-icon> </v-btn>
+					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'"
+						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon large>mdi-chat</v-icon> </v-btn>
 				</div>
 			</gmap-info-window>
 			<div>

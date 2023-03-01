@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pb-12">
         <div v-if="truckProfile && truckProfile.locations && Object.keys(truckProfile.locations).length">
             <ul class="location-list mt-6">
                 <li class="" v-for="(location, index) in truckProfile.locations" :key="index">

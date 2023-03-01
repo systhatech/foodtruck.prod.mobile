@@ -83,6 +83,18 @@
                                                 </div>
                                             </div>
                                             </v-col>
+                                            <v-col
+                                            cols="12"
+                                            class="pb-0 pt-0"
+                                            md="6"
+                                            >
+                                            <div class="w-100">
+                                                <v-checkbox
+                                                v-model="menu.is_special"
+                                                label="Today's Special"
+                                                ></v-checkbox>
+                                            </div>
+                                            </v-col>
                                           
 
                                             <v-col cols="12" class="pb-0 pt-0" md="12">
@@ -164,6 +176,7 @@ export default {
                 price: "",
                 unit_type: "",
                 unit: "",
+                is_special:0,
                 description: "",
                 profile_pic: "noimage.png",
                 item_category_id: "",

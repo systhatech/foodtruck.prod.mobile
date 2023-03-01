@@ -30,13 +30,12 @@
                                                         <h4 class="">{{ formatAmount(item.price)}}</h4>
                                                         <span v-if="item.unit">/{{ item.unit }}</span>
                                                     </div>
+                                                    <div>
+                                                        <v-chip v-if="item.is_special" small color="success">Today's Special</v-chip>
+                                                    </div>
                                                     <p>{{  item.description ? shortText(item.description,55) :'n/a' }}</p>
-                                                    <!-- <p class="mb-1">{{item.description ? item.description:'n/a'}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, nam.</p> -->
                                                 </div>
                                             </div>
-                                            <!-- <div>
-                                                <v-btn fab small text > <v-icon color="primary">{{ icon_right }}</v-icon></v-btn>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>

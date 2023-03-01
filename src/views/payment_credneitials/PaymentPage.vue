@@ -4,7 +4,11 @@
         <v-container class="mb80">
             <div v-if="default_payment">
                 <div v-if="default_payment=='vendor'">
-                    <StripeDetail/>
+                    <StripeDetail class="mb-6"/>
+                    <div class="pa-4">
+                        <p class="mb-0 text-center" style="text-decoration: underline;" @click="handleClick('user_mannual_payment')">Video tutorial, setting up stripe accout</p>
+                        <ModalVideoPlayer/>
+                    </div>
                 </div>
                 <div v-else>
                     <BankDetail/>
@@ -22,6 +26,8 @@ import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import BankDetail from './PaymentBankPage'
 import StripeDetail from './PaymentStripePage'
+
+import ModalVideoPlayer from '@/views/vendor/profile/modal/ModalVideoPlayer.vue'
 import { mapGetters } from 'vuex'
 export default {
     name:'PaymentPage',
@@ -39,7 +45,9 @@ export default {
         }
     },
     methods: {
-       
+        handleClick(param){  
+            this.$bus.$emit('MODAL_VIDEO_PLAYER_OPEN',{param});
+        },
         handleBack() {
             this.$router.back();
         },
@@ -49,6 +57,7 @@ export default {
         Bottomnavbar,
         BankDetail,
         StripeDetail,
+        ModalVideoPlayer,
     },
     computed: {
           ...mapGetters({

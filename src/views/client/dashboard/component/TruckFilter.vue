@@ -107,6 +107,7 @@ import { ApiService } from '@/core/services/api.service'
     },
     components: {
         // InputDatePicker,
+		// Lookup: ()=> import('@/components/form-element/AutocompleteApi.vue')
     },
     mounted() {
         this.fetchCategories();

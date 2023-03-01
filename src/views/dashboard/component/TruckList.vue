@@ -25,6 +25,11 @@
                             <v-icon class="" color="primary">{{iconAddress}}</v-icon>
                             <span class="pl-1">{{truck.add1}}</span>
                         </div>
+                        <div class="mb-2 " v-if="truck && truck.cuisines && truck.cuisines.length">
+                            <div class="d-flex">
+                                <v-chip small color="primary" class="mr-2 text-capitalize" v-for="(c, index) in truck.cuisines" :key="index">{{c.value}}</v-chip>
+                            </div>
+                        </div>
                         <div>
                             <!-- <v-icon class="f18" color="primary">{{iconClock}}</v-icon> -->
                             <span class="pl-2">{{ formatDateTime(truck.date)}}</span>

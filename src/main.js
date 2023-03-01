@@ -34,7 +34,8 @@ Vue.use(vueEventCalendar, {
 import VCalendar from 'v-calendar'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 Vue.component('date-picker', DatePicker)
-
+import VueSocialSharing from 'vue-social-sharing'
+Vue.use(VueSocialSharing);
 // Use v-calendar & v-date-picker components
 Vue.use(VCalendar, {
     componentPrefix: 'vc', // Use <vc-calendar /> instead of <v-calendar />

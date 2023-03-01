@@ -44,6 +44,8 @@
     "vue-image-markup": "^3.2.0",
     "vue-native-notification": "^1.1.1",
     "vue-router": "^3.2.0",
+    "vue-social-sharing": "^3.0.9",
+    "vue-socialmedia-share": "^1.0.1",
     "vue2-google-maps": "^0.10.7",
     "vuejs-datetimepicker": "^1.1.13",
     "vuetify": "^2.4.0",

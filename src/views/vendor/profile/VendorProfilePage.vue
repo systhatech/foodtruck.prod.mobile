@@ -4,6 +4,9 @@
         <v-container class="mg56">
             <div v-if="currentUser">
                 <div class="custom-bs pa-4 pt-8">
+                   
+                       
+             
                     <div class="text-center">
                         <v-avatar color="primary" tile size="90"  v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
                             <v-icon dark>
@@ -19,6 +22,9 @@
                         <div class="pt-2 mb-4">
                             <h4 class="text-capitalize">{{currentUser.fname}} {{ currentUser.lname}}</h4>
                             <h4 class="text-capitalize primary--text">({{currentUser.owner.name}})</h4>
+                            <div class="mt-4">
+                                <v-btn rounded outlined large color="error" @click="signOut()">Logout <v-icon>mdi-logout</v-icon></v-btn>
+                            </div>
                         </div>
                     </div>
                     <div class="mt-1 ml-3">
@@ -87,6 +93,7 @@ import { mapGetters, mapActions } from 'vuex';
 import { base_url } from '@/core/services/config'
 import { mdiAccount, mdiChevronRight } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket';
+import { ApiService } from "@/core/services/api.service";
 export default {
     name:'ProfilePage',
     data() {
@@ -105,7 +112,7 @@ export default {
                 {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
                 {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
                 {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
+                // {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
                 {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
                 {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},
                 {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
@@ -113,7 +120,8 @@ export default {
                 {name:'Change Password',icon:'mdi-key',route:'change-password'},
                 {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
                 {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
-                {name:'Logout',icon:'mdi-logout',route:'logout'},
+                // {name:'Social Media Account',icon:'mdi-facebook',route:'vendor-social-media-account'},
+                // {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],
             utype:'',
             general:{},
@@ -127,11 +135,33 @@ export default {
         Topnavbar,
         Bottomnavbar
     },
+    mounted() {
+        console.log("test");
+        this.fetchSetting();
+    },
     methods: {
         ...mapActions({
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
         }),
+        fetchSetting() {
+            // show_spot_booking
+            ApiService.post("/site-setting-video-link",{'code':'show_spot_booking'})
+            .then((resp)=>{
+                // this.video = resp.data.value;
+                // this.video_description = resp.data.description;
+                if(resp.data.value){
+                    // console.log("here", resp.data.value);
+                    this.menusVendor.push({name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'});
+                }else{
+                    console.log("failed", resp.data.value);
+                }
+                // console.log({resp});
+            })            
+            .catch((error)=>{
+                console.log({error});
+            })
+        },
         signOut() {
             this.loaderShow();
             this.signOutAction()

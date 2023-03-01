@@ -900,6 +900,12 @@ const routes = [
 		component: () => import(/* webpackChunkName: "PayoutPage" */ '../views/vendor/sales/SalesSummaryPage.vue'),
 		meta: { requiresAuth: true }
 	},
+	{
+		path: '/vendor-faq',
+		name: 'VendorFaqPage',
+		component: () => import(/* webpackChunkName: "PayoutPage" */ '../views/vendor/faq/VendorFaqPage.vue'),
+		meta: { requiresAuth: true }
+	},
 	// {
 	// 	path: '/report-commission',
 	// 	name: 'commissionReport',
@@ -919,6 +925,21 @@ const routes = [
 		path: '/report-sales',
 		name: 'salesReport',
 		component: () => import(/* webpackChunkName: "ReviewPage" */ '../views/report/ReportSales.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-social-media-account',
+		name: 'socialMediaAccount',
+		component: () => import(/* webpackChunkName: "ReviewPage" */ '../views/vendor/profile/VendorProfileSocialMedia.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {

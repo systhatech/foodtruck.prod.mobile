@@ -23,6 +23,9 @@
                                 <v-btn color="primary" small fab class="mr-2" @click="handleEditItem(item)"><v-icon>mdi-lead-pencil</v-icon></v-btn>
                             </div>
                         </div>
+                        <div v-if="item.is_special" class="mb-4">
+                            <v-chip color="success">Today's Special</v-chip>
+                        </div>
                         <div v-html="item.description"></div>
                     </div>
                     <div class="d-flex justify-space-between pt-4">

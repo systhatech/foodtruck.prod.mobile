@@ -25,6 +25,10 @@
                 <v-icon>{{ iconChat }}</v-icon>
             </div>
 		</v-btn>
+        <!-- <v-btn link to="/vendor-faq" >
+			<span>FAQs</span>
+			<v-icon>{{ iconFaq }}</v-icon>
+		</v-btn> -->
         <v-btn link to="/vendor-profile" >
 			<span>Account</span>
 			<v-icon>{{ iconProfile }}</v-icon>
@@ -33,7 +37,7 @@
 </div>
 </template>
 <script>
-import {mdiHome, mdiCart, mdiAccount, mdiChat,mdiHeadphones, mdiInformationVariant, mdiLogin, mdiBasket} from "@mdi/js";
+import {mdiHome, mdiCart, mdiAccount, mdiChat,mdiHeadphones, mdiInformationVariant, mdiLogin, mdiBasket, mdiInformation} from "@mdi/js";
 import {ApiService} from "@/core/services/api.service";
 // import JwtService from "@/core/services/jwt.service";
 import {mapGetters} from "vuex";
@@ -50,6 +54,7 @@ export default {
             iconFood: mdiBasket,
             iconProfile: mdiAccount,
             iconSupport: mdiHeadphones,
+            iconFaq: mdiInformation,
             iconChat: mdiChat,
             iconLogin: mdiLogin,
             iconAbout: mdiInformationVariant,

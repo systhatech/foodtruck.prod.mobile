@@ -29,10 +29,11 @@
                         </div>
                         <div class="pl-4">
                             <h5 class="text-uppercase primary--text">{{item.name}}</h5>
-                            <h4 class="primary--text">{{formatAmount(item.price)}}</h4>
-                            <div class="pb-4">
-                                {{item.description ? item.description : ''}}
+                            <p v-if="item.category" class="text-capitalize mb-2">({{ item.category }})</p>
+                            <div class="d-flex">
+                                <h4 class="primary--text">{{formatAmount(item.price)}}</h4><span v-if="item.unit"> /{{ item.unit }}</span>
                             </div>
+                            <div class="pb-4">{{item.description ? item.description : ''}}</div>
                         </div>
                     </div>
                     <div id="menu-modal" v-if="item.variants.length">
@@ -61,38 +62,6 @@
                                 </ul>
                             </div>
                         </div>
-                       <!-- <v-expansion-panels  v-model="panel" multiple>
-                            <v-expansion-panel
-                                elevation="0"
-                                v-for="(varient,i) in item.variants"
-                                :key="i">
-                                <v-expansion-panel-header class="text-capitalize">
-                                    {{ varient.variant ? varient.variant.name :'' }}
-                                </v-expansion-panel-header>
-    
-                                <v-expansion-panel-content v-if="varient.variant.items.length">
-                                    <ul class="flavour-list pl-6 pr-6">
-                                        <li v-for="(single,index) in varient.variant.items" :key="index">
-                                             <v-checkbox
-                                                style="font-size:0.8rem !important; text-transform:capitalize"
-                                               
-                                                v-model="itemSelected"
-                                                :value="single"
-                                                color="primary"
-                                                hide-details
-                                            >
-                                            <template v-slot:label>
-                                                <div>
-                                                    <p class="mb-0">{{ single.name }}</p>
-                                                    <p class="mb-0">{{ formatAmount(single.value)}} </p>
-                                                </div>
-                                            </template>
-                                            </v-checkbox>
-                                        </li>
-                                    </ul>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels> -->
                     </div>
                 </div>
                 <div class="pa-4 custom-bs pb-8" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">

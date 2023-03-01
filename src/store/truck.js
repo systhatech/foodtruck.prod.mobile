@@ -129,6 +129,20 @@ export default {
                 console.log(error);
             }
         },
+        async fetchTrucksSearch({commit}, payload) {
+            try {
+               await ApiService.post('/location/search',payload)
+               .then((resp) => {
+                    commit("SET_TRUCKS", resp);
+               }) 
+               .catch((error) => {
+                   console.log(error);
+               })
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async fetchCarts({ commit }) {
             // if()
             let cartId = localStorage.getItem('pcid') ? localStorage.getItem('pcid'):'';
@@ -158,6 +172,7 @@ export default {
                 commit("SET_VENDOR_CREDIENTIALS", null);
             }
         },
+        
         // async fetchCarts({ commit }, payload) {
         //     try {
         //         await ApiService.post("/cart-list/fetch",{

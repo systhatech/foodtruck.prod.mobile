@@ -159,6 +159,15 @@ export default {
             this.activeComponent = data.component;
             this.activeItem = 0;
         })
+
+        if(this.$router.currentRoute.query && Object.keys(this.$router.currentRoute.query).length){
+            this.activeComponent = this.$router.currentRoute.query.cmp;
+            this.menuitems.forEach((element, i) => {
+                if(element.component == this.activeComponent){
+                    this.activeItem = i;
+                }
+            });
+        }
     },
     methods: {
         handleClose(){

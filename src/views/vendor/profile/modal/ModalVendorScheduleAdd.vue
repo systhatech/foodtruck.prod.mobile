@@ -180,17 +180,29 @@ export default {
           required: true,
           type: Boolean,
       },
-      // menu: {
-      //     required: true,
-      // }
   },
   watch: {
-      dialogOrderDetail(newval) {
+        dialogSchedule(newval) {
           if (newval) {
-              this.fetchOrderDetail();
-              this.disableButton = false;
-          } else {
-              this.render = false;
+            this.defaultValue = "";
+            console.log("test", this.defaultValue);
+            //   this.fetchOrderDetail();
+            //   this.disableButton = false;
+        } else {
+            // this.render = false;
+                setTimeout(() => {
+                    this.defaultValue = "";
+                }, 500);
+                this.address = {
+                    add1:'',
+                    city:'',
+                    state:'',
+                    zip:'',
+                    country:'',
+                    country_code:'',
+                    lat:'',
+                    lon:'',
+                }
           }
       }
   },
@@ -232,29 +244,42 @@ export default {
         fetchProfile:'auth/fetchProfile'
     }),
     handleClose() {
+        this.address = {
+            add1:'',
+            city:'',
+            state:'',
+            zip:'',
+            country:'',
+            country_code:'',
+            lat:'',
+            lon:'',
+        }
+        // setTimeout(() => {        
+        this.defaultValue = "";
         this.$emit('close')
+        // }, 500);
     },
     confirmDelete() {
         this.dialogConfirm = true;
     },
     async handleDelete() {
-      this.loaderShow();
-      this.locationId = this.$router.currentRoute.params.locationId;
-      await ApiService.post("/vendor/location-delete", {
-        location_id: this.locationId,
-      })
-        .then((resp) => {
-            this.loaderHide();
-            this.messageSuccess(resp.message);
-            this.fetchProfile();
+        this.loaderShow();
+        this.locationId = this.$router.currentRoute.params.locationId;
+        await ApiService.post("/vendor/location-delete", {
+            location_id: this.locationId,
         })
-        .catch(() => {
-          this.loaderHide();
-          this.messageError("Failed to update address");
-        });
+            .then((resp) => {
+                this.loaderHide();
+                this.messageSuccess(resp.message);
+                this.fetchProfile();
+            })
+            .catch(() => {
+            this.loaderHide();
+            this.messageError("Failed to update address");
+            });
     },
     handleBack() {
-      this.$router.back();
+        this.$router.back();
     },
     addressSelected(addr) {
         this.address.add1 = addr.add1;
@@ -265,10 +290,8 @@ export default {
         this.address.country_code = addr.country_code;
         this.address.lat = addr.lat;
         this.address.lon = addr.lng;
-    
-        console.log(this.address);
         setTimeout(() => {
-            this.defaultValue = addr.locality;
+            this.defaultValue = addr.add1;
         }, 200);
     },
     handleSubmit(){
