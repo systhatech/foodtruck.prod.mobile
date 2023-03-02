@@ -208,7 +208,7 @@ export default {
         this.fetchLogo();
         this.activeQuestion = this.questions[this.activeQuestionIndex];
         this.fetchVendorTypes();
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
 
     },
 

@@ -98,7 +98,7 @@ export default {
         }
     },
     mounted() {
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
         // this.updateLocation();
     },
 

@@ -116,7 +116,8 @@ export default {
         // DialogConfirm,
     },
     async mounted() {
-        await this.locateGeoLocation();
+        this.fetchAllTrucks();
+        // await this.locateGeoLocation();
         this.fetchDataInterval();
     },
    

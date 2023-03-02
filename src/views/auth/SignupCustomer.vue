@@ -139,7 +139,7 @@ export default {
         //     this.$router.replace({name:'dashboardPage'});
         // }
         // this.fetchLogo();
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
     },
 
     methods: {

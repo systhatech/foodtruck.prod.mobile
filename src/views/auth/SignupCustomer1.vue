@@ -216,7 +216,7 @@ export default {
         }
         this.fetchLogo();
         this.activeQuestion = this.questions[this.activeQuestionIndex];
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
     },
 
     methods: {

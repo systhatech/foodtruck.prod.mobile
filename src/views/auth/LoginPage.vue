@@ -97,7 +97,7 @@ export default {
     },
 
     mounted() {
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
 
     },
     computed: {
@@ -115,6 +115,7 @@ export default {
             this.loaderShow();
             this.signIn(this.login_info)
                 .then((resp) => {
+                    this.locateGeoLocation();
                     this.loaderHide();
                     if(resp && resp.verify){
                         console.log("here", {resp});

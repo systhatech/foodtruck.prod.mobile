@@ -150,7 +150,7 @@ export default {
             .then((resp)=>{
                 // this.video = resp.data.value;
                 // this.video_description = resp.data.description;
-                if(resp.data.value){
+                if(parseInt(resp.data.value)){
                     // console.log("here", resp.data.value);
                     this.menusVendor.push({name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'});
                 }else{

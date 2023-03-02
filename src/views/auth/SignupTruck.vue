@@ -119,7 +119,7 @@ export default {
     mounted() {
         // this.fetchLogo();
         this.fetchVendorTypes();
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
 
     },
 

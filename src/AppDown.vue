@@ -97,7 +97,7 @@ export default {
         //     this.$router.push({name:'dashboardPage'});
         // }
         this.fetchLogo();
-        this.locateGeoLocation();
+        // this.locateGeoLocation();
         this.destination = localStorage.getItem('destination') ? localStorage.getItem('destination'):'signup-customer';
     },
 

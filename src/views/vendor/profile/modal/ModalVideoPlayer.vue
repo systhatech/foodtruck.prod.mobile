@@ -17,7 +17,7 @@
                             <div>
                                 <div class="custom-bs mt-14">
 
-                                    <video autoplay width="100%" controls :src="video"></video>
+                                    <video autoplay width="100%" controls :src="video" type='video/mp4'></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>
