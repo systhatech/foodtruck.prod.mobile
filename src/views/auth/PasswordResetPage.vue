@@ -10,7 +10,7 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center mb-4">
-                            <img :src="base_url + '/default-company/logo'" width="90" />
+                            <img :src="base_url + '/default-company/logo'" width="200" />
                         </div>
                     </v-col>
                 </v-row>

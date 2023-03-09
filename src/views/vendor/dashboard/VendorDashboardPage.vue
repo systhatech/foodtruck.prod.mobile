@@ -100,11 +100,18 @@
                                 <div class="pa-4" v-if="video_description">
                                     <h4 class="mb-0">{{ video_description}}</h4>
                                 </div>
-                                <video autoplay width="100%" controls :src="video" type='video/mp4'></video>
+                                <video autoplay width="100%" controls :src="video" type='video/mp4' playsinline></video>
+                                <!-- <video class="header-background" width="100%" autoplay controls="true" playsinline>
+                                    <source :src="video" type="video/mp4"/>
+                                </video> -->
+                                <div class="w-100">
+                                    <!-- <vue-core-video-player :src="video"></vue-core-video-player> -->
+                                    <!-- <video-player :options="videoOptions"></video-player> -->
+                                </div>
+                                <!-- <iframe width="420" height="315" :src="video"></iframe> -->
                             </div>
                         </div>
                     </v-col>
-                  
                 </v-row>
             </div>
             <DialogConfirm :dialog-confirm="modal_confirm" :message="message" @close="handleClose" @handleConfirm="handleConfirm"/>
@@ -120,6 +127,7 @@ import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
+
 export default {
     data() {
         return {
@@ -184,10 +192,11 @@ export default {
     },
     components: {
     //    Topnavbar,
-       Bottomnavbar,
-       DialogConfirm,
-       ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
-       DialogNearbyNotification: () => import('@/views/vendor/dashboard/modal/ModalNearbyNotification'),
+        // videoPlayer,
+        Bottomnavbar,
+        DialogConfirm,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
+        DialogNearbyNotification: () => import('@/views/vendor/dashboard/modal/ModalNearbyNotification'),
     },
     mounted() {
         // this.locateGeoLocation();

@@ -15,12 +15,12 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center mb-2">
-                            <img :src="base_url+'/default-company/logo'" width="90" />
+                            <img :src="base_url+'/default-company/logo'" width="190" />
                         </div>
                     </v-col>
                 </v-row>
             </div>
-            <div class="custom-bs pa-4">
+            <div class="custom-bs pa-4 mt-4">
                 <v-form ref="formSignupTruck">
                     <v-row>
                         <v-col cols="6" md="6" class="pb-2 pt-2">

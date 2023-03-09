@@ -13,12 +13,12 @@
                 <v-row>
                     <v-col cols="12">
                         <div class="text-center mb-2">
-                            <img :src="base_url+'/default-company/logo'" width="90" />
+                            <img :src="base_url+'/default-company/logo'" width="180" />
                         </div>
                     </v-col>
                 </v-row>
             </div>
-            <div class="custom-bs pa-4 bg-primary-light">
+            <div class="custom-bs pa-4 bg-primary-light mt-4">
                 <v-form ref="formSignupCustomer">
                     <v-row>
                         <v-col cols="6">

@@ -17,7 +17,11 @@
                             <div>
                                 <div class="custom-bs mt-14">
 
-                                    <video autoplay width="100%" controls :src="video" type='video/mp4'></video>
+                                    <!-- <video autoplay width="100%" controls :src="video" type='video/mp4' playsinline></video> -->
+                                    <!-- <video class="header-background" width="100%" loop autoplay muted controls="true" playsinline>
+                                        <source :src="video" type="video/mp4"/>
+                                    </video> -->
+                                    <video width="100%" webkit-playsinline playsinline class="screen-video" :src="video" reload="metadata" autoplay controls></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>

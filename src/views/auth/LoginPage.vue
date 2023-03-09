@@ -10,8 +10,8 @@
                                     name: 'home'
                                 }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
                             </div>
-                            <div class="text-center mb-2">
-                                <img :src="base_url+'/default-company/logo'" width="90" />
+                            <div class="text-center mb-0 mt-6">
+                                <img :src="base_url+'/default-company/logo'" width="200" />
                             </div>
                         </v-col>
                         <v-col cols="12" md="6" offset-md="3" lg="4" offset-lg="4">
@@ -38,7 +38,7 @@
                                             </v-btn>
                                         </v-col>
                                         <v-col cols="12">
-                                            <div class="text-center pa-6 ma-4">
+                                            <div class="text-center ma-2">
                                                 <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">sign up ?</p>
                                                 <div>
                                                     <v-btn text to="signup-customer" color="primary">Customer</v-btn>|
