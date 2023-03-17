@@ -39,10 +39,10 @@
                                         </v-col>
                                         <v-col cols="12">
                                             <div class="text-center ma-2">
-                                                <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;">sign up ?</p>
+                                                <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;"></p>
                                                 <div>
-                                                    <v-btn text to="signup-customer" color="primary">Customer</v-btn>|
-                                                    <v-btn text to="signup-truck" color="primary">Truck</v-btn>
+                                                    <v-btn to="/signup-customer" class="mb-4" outlined color="primary">Sign up as Customer</v-btn>
+                                                    <v-btn to="/signup-truck" outlined color="primary">Sign up as Truck</v-btn>
                                                 </div>
                                             </div>
                                         </v-col>

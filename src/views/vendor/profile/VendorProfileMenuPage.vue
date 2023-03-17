@@ -27,6 +27,16 @@
                                 <v-btn fab text color="blue"><v-icon large>mdi-facebook</v-icon></v-btn>
                             </ShareNetwork>
                          
+                            <!-- <ShareNetwork
+                                network=""
+                                url=""
+                                title=""
+                                description=""
+                                quote=""
+                                hashtags=""
+                            >
+                                <v-btn fab text color="primary"><v-icon large>mdi-instagram</v-icon></v-btn>
+                            </ShareNetwork> -->
                             <ShareNetwork
                                 network="twitter"
                                 :url="link_url"

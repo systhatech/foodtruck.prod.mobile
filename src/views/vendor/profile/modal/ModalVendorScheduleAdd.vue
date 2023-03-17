@@ -2,7 +2,7 @@
   <div>
       <v-row justify="center">
           <v-dialog v-model="dialogSchedule" persistent scrollable fullscreen>
-              <v-card style="padding-top: 56px !important;">
+              <v-card style="margin-top: 56px !important;">
                   <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
                       <v-toolbar-title class="pl-0 text-capitalize">Add Schedule</v-toolbar-title>
                       <v-spacer></v-spacer>
@@ -19,6 +19,27 @@
     
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
+                                    <v-col
+                                        cols="12"
+                                        class="pb-0"
+                                        md="12"
+                                        >
+                                        <div style="height:200px; margin:0 auto;" class="pt-5">
+                                            <InputUpload 
+                                            type="menu_image" 
+                                            :max-height="maxHeight"
+                                            label="select"
+                                            :remove="remove"
+                                            @changeImage="changeImage"/>
+                                        </div>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        class="pb-0"
+                                        md="12"
+                                        >
+                                        <v-text-field label="Location/event name" v-model="address.name"></v-text-field>
+                                    </v-col>
                                     <v-col
                                         cols="12"
                                         class="pb-0"
@@ -171,6 +192,7 @@ import moment from 'moment'
 import { ApiService } from "@/core/services/api.service";
 import DialogConfirm from "@/components/layout/DialogConfirm";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
+import InputUpload from '@/components/form-element/InputUpload'
 import { base_url } from '@/core/services/config'
 // import datetime from 'vuejs-datetimepicker';
 import { mapGetters, mapActions } from 'vuex'
@@ -211,6 +233,7 @@ export default {
     // datetime,
     InputAddress:()=>import('@/components/form-element/InputGoogleAddress'),
     DialogConfirm,
+    InputUpload,
   },
   data() {
       return {
@@ -227,6 +250,8 @@ export default {
             ],
             defaultValue:'',
             address: {
+                name:'',
+                banner:'',
                 add1:'',
                 city:'',
                 state:'',
@@ -237,14 +262,36 @@ export default {
                 lon:'',
             },
             selectedData:'',
+            file:{
+                file_name:'',
+                type:'gallery',
+            },
+            remove:false,
+            maxHeight:300,
       }
   },
   methods: {
     ...mapActions({
         fetchProfile:'auth/fetchProfile'
     }),
+    changeImage(file){
+        this.loaderShow();
+        let formData = new FormData();
+        formData.append("file",file.file);
+        ApiService.post('/store-image', formData)
+        .then((resp) => {
+                this.loaderHide();
+                this.address.banner = resp.file_name;
+        })
+        .catch(() => {
+            this.messageError("Failed ! choose image less than size 2mb");
+            this.loaderHide();
+        });
+    },
     handleClose() {
         this.address = {
+            name:'',
+            banner:'',
             add1:'',
             city:'',
             state:'',
@@ -254,10 +301,8 @@ export default {
             lat:'',
             lon:'',
         }
-        // setTimeout(() => {        
         this.defaultValue = "";
         this.$emit('close')
-        // }, 500);
     },
     confirmDelete() {
         this.dialogConfirm = true;
@@ -268,15 +313,15 @@ export default {
         await ApiService.post("/vendor/location-delete", {
             location_id: this.locationId,
         })
-            .then((resp) => {
-                this.loaderHide();
-                this.messageSuccess(resp.message);
-                this.fetchProfile();
-            })
-            .catch(() => {
+        .then((resp) => {
+            this.loaderHide();
+            this.messageSuccess(resp.message);
+            this.fetchProfile();
+        })
+        .catch(() => {
             this.loaderHide();
             this.messageError("Failed to update address");
-            });
+        });
     },
     handleBack() {
         this.$router.back();
@@ -304,7 +349,7 @@ export default {
         this.address.vendor_id = this.currentUser.table_id;
         let start_date = moment(this.start_date).format('YYYY-MM-DD HH:mm:ss');
         let end_date = moment(this.end_date).format('YYYY-MM-DD HH:mm:ss');
-        ApiService.post('vendor/location-create',{
+        ApiService.post('/vendor/location-create',{
             ...this.address,
             start_date,
             end_date,

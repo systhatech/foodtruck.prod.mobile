@@ -22,7 +22,11 @@
                                 </div>
                                 <div class="text-right">
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>
-                                    <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip>
+                                    <v-chip small class="text-capitalize white--text" v-if="order.status=='new'" color="info">{{ order.status }}</v-chip>
+                                    <v-chip small class="text-capitalize white--text" v-else-if="order.status=='accepted'" color="success">{{ order.status }}</v-chip>
+                                    <v-chip small class="text-capitalize white--text" v-else-if="order.status=='completed'" color="info">{{ order.status }}</v-chip>
+                                    <v-chip small class="text-capitalize white--text" v-else-if="order.status=='rejected'" color="error">{{ order.status }}</v-chip>
+                                    <!-- <v-chip small class="text-capitalize" color="primary">{{ order.status }}</v-chip> -->
                                 </div>
                                 <!-- <div>
                                     <v-btn fab small color="primary" @click="viewDetailPage(order)"><v-icon>{{icon_right}}</v-icon></v-btn>
@@ -83,7 +87,7 @@ export default {
             content:'no content',
              tab:0,
             dialogOrderDetail:false,
-            status:'new',
+            status:'recent-orders',
             iconChat:mdiChat,
             orderItem:{},
             // vendor_id:3,
@@ -92,12 +96,13 @@ export default {
             orders:[],
             pickup_date: new Date().toISOString().substr(0, 10), 
             orderTypes: [
-                {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'new'},
-                {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
+                {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'recent-orders'},
+                {name:'Old Orders',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'past-orders'},
+                // {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
                 // {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
-                {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
-                {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
-                {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
+                // {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
+                // {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
+                // {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
             refresh_time:10000,
         }

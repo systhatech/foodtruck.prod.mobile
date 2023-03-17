@@ -18,8 +18,8 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <div @click="handleRouteCart"
-            v-if="currentUser && cartItems && cartItems.length && (currentUser.table == 'clients')" class="pt-3 pr-4">
-            <v-badge small color="error" :content="Object.keys(cartItems).length">
+            v-if="currentUser && carts && carts.length && (currentUser.table == 'clients')" class="pt-3 pr-4">
+            <v-badge small color="error" :content="Object.keys(carts).length">
                 <v-icon color="white">{{ iconCart }}</v-icon>
             </v-badge>
         </div>
@@ -62,7 +62,7 @@ export default {
     computed: {
         ...mapGetters({
             currentUser:'auth/user',
-            cartItems: 'truck/cartItems',
+            carts: 'truck/getCarts',
             authenticated:'auth/authenticated',
         })
     },

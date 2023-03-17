@@ -5,6 +5,10 @@
 			<span>Home</span>
 			<v-icon>{{ iconHome }}</v-icon>
 		</v-btn>
+        <v-btn to="/client-request-truck" >
+			<span>Request</span>
+			<v-icon>mdi-truck</v-icon>
+		</v-btn>
 		<v-btn to="/client-orders">
 			<span>Orders</span>
 			<v-icon>{{ iconFood }}</v-icon>
@@ -31,6 +35,7 @@
                 <v-icon>{{ iconChat }}</v-icon>
             </div>
 		</v-btn>
+      
         <v-btn to="/client-profile" >
 			<span>Account</span>
 			<v-icon>{{ iconProfile }}</v-icon>

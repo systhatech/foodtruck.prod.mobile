@@ -2,7 +2,7 @@
   <div>
       <v-row justify="center">
           <v-dialog v-model="dialogScheduleEdit" persistent scrollable fullscreen>
-              <v-card style="padding-top: 56px !important;">
+              <v-card style="margin-top: 56px !important;">
                   <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
                       <v-toolbar-title class="pl-0 text-capitalize">Update Schedule</v-toolbar-title>
                       <v-spacer></v-spacer>
@@ -16,9 +16,30 @@
                       <div class="background-image">
                         <div>
                             <div class="pa-4 custom-bs pt-6 mt-14">
-    
+
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
+                                    <v-col
+                                        cols="12"
+                                        class="pb-0"
+                                        md="12">
+                                        <div style="height:200px; margin:0 auto;" class="pt-5">
+                                            <InputUpload 
+                                            :src="base_url+'/image-show/'+ (address.banner ? address.banner :'noimage.png')" 
+                                            type="vendor_schedule" 
+                                            :max-height="maxHeight"
+                                            label="select"
+                                            :remove="remove"
+                                            @changeImage="changeImage"/>
+                                        </div>
+                                    </v-col>
+
+                                    <v-col
+                                        cols="12"
+                                        class="pb-0"
+                                        md="12">
+                                        <v-text-field label="Location/Event" v-model="address.name"></v-text-field>
+                                    </v-col>
                                     <v-col
                                         cols="12"
                                         class="pb-0"
@@ -165,6 +186,7 @@ import moment from 'moment'
 import { ApiService } from "@/core/services/api.service";
 import DialogConfirm from "@/components/layout/DialogConfirm";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
+import InputUpload from '@/components/form-element/InputUpload'
 import { base_url } from '@/core/services/config'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -181,39 +203,47 @@ export default {
     DatePicker,
     InputAddress:()=>import('@/components/form-element/InputGoogleAddress'),
     DialogConfirm,
+    InputUpload,
   },
   data() {
       return {
+        indexValue:0,
+        maxHeight:300,
         valid:true,
-            dialogConfirm:false,
-            moment,
-            start_date:  new Date(),
-            end_date:  new Date(),
-            title:'',
-            base_url,
-            schedules:[],
-            requiredRules: [
-                v => !!v || 'Required',
-            ],
-            defaultValue:'',
-            address: {
-                id:'',
-                add1:'',
-                city:'',
-                state:'',
-                zip:'',
-                country:'',
-                country_code:'',
-                lat:'',
-                lon:'',
-            },
-            selectedData:'',
+        dialogConfirm:false,
+        moment,
+        start_date:  new Date(),
+        end_date:  new Date(),
+        title:'',
+        base_url,
+        schedules:[],
+        requiredRules: [
+            v => !!v || 'Required',
+        ],
+        defaultValue:'',
+        address: {
+            id:'',
+            name:'',
+            banner:'',
+            add1:'',
+            city:'',
+            state:'',
+            zip:'',
+            country:'',
+            country_code:'',
+            lat:'',
+            lon:'',
+        },
+        selectedData:'',
+        remove:false,
       }
   },
   watch:{
     dialogScheduleEdit(newval){
       if(newval){
         this.address.id = this.location.id;
+        this.address.name = this.location.name;
+        this.address.banner = this.location.banner;
         this.address.add1 = this.location.add1;
         this.address.city = this.location.city;
         this.address.state = this.location.state;
@@ -234,6 +264,20 @@ export default {
     ...mapActions({
         fetchProfile:'auth/fetchProfile'
     }),
+    changeImage(file){
+        this.loaderShow();
+        let formData = new FormData();
+        formData.append("file",file.file);
+        ApiService.post('/store-image', formData)
+        .then((resp) => {
+            this.loaderHide();
+            this.address.banner = resp.file_name;
+        })
+        .catch(() => {
+            this.messageError("Failed ! choose image less than size 2mb");
+            this.loaderHide();
+        });
+    },
     handleClose() {
         this.$emit('close')
     },

@@ -75,7 +75,7 @@ export default {
         formatTimeOnly(date){
             if(moment(date).isValid()) {
                 // return moment(date).format('ll');
-                return date ? moment(date,'YYYY-MM-DD HH:mm:ss').format('h:mm a'):'n/a';
+                return date ? moment(date,'YYYY-MM-DD HH:mm:ss').format('h:mm A'):'n/a';
                 // return moment(date).format('MMM');
             }else{
                 return "";
@@ -85,7 +85,7 @@ export default {
             if(moment(date).isValid()) {
                 // return moment(date).format('hh:mm:ss');
                 // return date ? moment(date,'hh:mm:ss').format('hh:mm a'):'n/a';
-                return moment(date).format('hh:mm a');
+                return moment(date).format('hh:mm A');
             }else{
                 return "-";
             }
@@ -152,7 +152,7 @@ export default {
         formatDateToDay(date){
              if(moment(date).isValid()) {
                 // return moment(date).format('ll');
-                return moment(date).format('ddd MMM Do')
+                return moment(date).format('dddd, do MMMM')
             }else{
                 return "";
             }

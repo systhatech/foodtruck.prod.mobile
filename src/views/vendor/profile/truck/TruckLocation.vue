@@ -5,7 +5,6 @@
                 <li v-for="(location, index) in truckProfile.locations" :key="index">
                  
                     <!-- <v-chip color="warning">{{ formatDateToDay(index) }}</v-chip> -->
-                
                     <div class="d-flex justify-space-between align-center custom-bs mt-4 pa-4">
                     
                         <div>

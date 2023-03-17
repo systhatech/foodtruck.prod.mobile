@@ -3,28 +3,38 @@
         <div v-if="truckProfile && truckProfile.locations && Object.keys(truckProfile.locations).length">
             <ul class="location-list mt-6">
                 <li class="" v-for="(location, index) in truckProfile.locations" :key="index">
-                    <div class="pa-4 custom-bs p-relative">
-                        <div class="d-flex">
+                    <div class="custom-bs p-relative">
+         
+                        <div v-if="location.banner">
+                            <v-img 
+                                height="150"
+                                contain
+                                :src="base_url+'/image-show/'+ (location.banner ? location.banner :'noimage.png')" >
+                            </v-img>
+                        </div>
+                        <div>
                             <div class="d-flex">
-                                <v-icon color="primary" class="mr-2">{{ iconTime }}</v-icon>
-                                <p class="ma-0"> {{ formatTimeOnly(location.start_time)}} - {{ formatTimeOnly(location.end_time)}}</p>
+                                <div class="d-flex">
+                                    <v-icon color="primary" class="mr-2">{{ iconTime }}</v-icon>
+                                    <p class="ma-0"> {{ formatTimeOnly(location.start_time)}} - {{ formatTimeOnly(location.end_time)}}</p>
+                                </div>
+                                <v-btn link @click="handleRoute(location.id)" small tile text color="warning" class="btn-edit"><v-icon>mdi-pencil</v-icon></v-btn>
                             </div>
-                            <v-btn link @click="handleRoute(location.id)" small tile text color="warning" class="btn-edit"><v-icon>mdi-pencil</v-icon></v-btn>
-                        </div>
-                        <div class="d-flex">
-                            <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon>
-                            <div>
-                                <p class="ma-0">
-                                    {{location.add1 ? location.add1:''}}
-                                    {{location.city?location.city:''}}
-                                    {{location.state?location.state:''}}
-                                    {{location.zip?location.zip:''}}
-                                </p>
+                            <div class="d-flex">
+                                <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon>
+                                <div>
+                                    <p class="ma-0">
+                                        {{location.add1 ? location.add1:''}}
+                                        {{location.city?location.city:''}}
+                                        {{location.state?location.state:''}}
+                                        {{location.zip?location.zip:''}}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex align-center"> 
-                             <v-icon color="primary" class="mr-2">{{ iconAccount }}</v-icon> 
-                             Nearby Client - {{ location.clients_count }}
+                            <div class="d-flex align-center"> 
+                                 <v-icon color="primary" class="mr-2">{{ iconAccount }}</v-icon> 
+                                 Nearby Client - {{ location.clients_count }}
+                            </div>
                         </div>
                     </div>
                 </li>

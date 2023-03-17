@@ -747,6 +747,12 @@ const routes = [
 		meta: { requiresAuth: true }
 	},
 	{
+		path: '/cart/:cartId',
+		name: 'CartCheckoutPage',
+		component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/cart/CartCheckoutPage.vue'),
+		meta: { requiresAuth: true }
+	},
+	{
 		path: '/cart-payment',
 		name: 'CartPaymentDetail',
 		component: () => import(/* webpackChunkName: "HomePage" */ '../views/cart/CartPayment.vue'),

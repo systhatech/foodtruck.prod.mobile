@@ -3,23 +3,36 @@
         <div v-if="truckProfile && truckProfile.locations && Object.keys(truckProfile.locations).length">
             <ul class="location-list mt-6">
                 <li class="mb-3" v-for="(location, index) in truckProfile.locations" :key="index">
-                    <div class="pa-4 custom-bs p-relative">
-                        <div>
-                            <h5 class="text-uppercase primary--text">date</h5>
-                            <p class="mb-1 fs15"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>
-                            <p class="mb-4 fs15"> {{ formatTimeOnly(location.start_date)}} - {{ formatTimeOnly(location.end_date)}}</p>
+
+                    <div class="custom-bs p-relative">
+                        <div v-if="location.banner">
+                            <v-img 
+                                height="150"
+                                contain
+                                :src="base_url+'/image-show/'+ (location.banner ? location.banner :'noimage.png')" >
+                            </v-img>
                         </div>
-                        <div>
-                            <!-- <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon> -->
-                            <h5 class="text-uppercase primary--text">Location</h5>
+                        <div class="pa-4">
                             <div>
-                                <p class="ma-0 fs15">
-                                    {{location.add1 ? location.add1:''}}
-                                    {{location.city?location.city:''}}<br>
-                                    {{location.state?location.state:''}}
-                                    {{location.zip?location.zip:''}}
-                                    {{location.country_code?location.country_code:''}}
-                                </p>
+                                <h5 class="text-uppercase primary--text">date</h5>
+                                <p class="mb-1 fs15"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>
+                                <p class="mb-4 fs15"> {{ formatTimeOnly(location.start_date)}} - {{ formatTimeOnly(location.end_date)}}</p>
+                            </div>
+                            <div>
+                                <!-- <v-icon color="primary" class="mr-2">{{ iconLocation }}</v-icon> -->
+                                <h5 class="text-uppercase primary--text">Location</h5>
+                                <div>
+                                    <p class="ma-0 fs15">
+                                        {{location.add1 ? location.add1:''}}
+                                        {{location.city?location.city:''}}<br>
+                                        {{location.state?location.state:''}}
+                                        {{location.zip?location.zip:''}}
+                                        {{location.country_code?location.country_code:''}}
+                                    </p>
+                                </div>
+                                <div class="pt-4">
+                                    <v-btn rounded large color="primary" @click="handlePreorder(location)">pre order</v-btn>
+                                </div>
                             </div>
                         </div>
                         <!-- <div class="d-flex align-center"> 
@@ -56,6 +69,11 @@
                     </div>
                 </li>
             </ul> -->
+            <TruckPreorder 
+                :scheduleDate="selected_schedule"
+                :dialog_preorder="modal_preorder" 
+                @close="handleClose()" 
+                :truckProfile="truckProfile"/>
         </div>
         <div v-else class="unavailable">
             <p>No schedule</p>
@@ -76,9 +94,22 @@ export default {
             iconLocation:mdiMapMarker,
             iconDate:mdiCalendar,
             iconTime:mdiClock,
+            modal_preorder:false,
+            selected_schedule:null,
         }
     },
+    components:{
+        TruckPreorder:()=>import('@/views/profile/truck/TruckPreorder.vue')
+    },
     methods:{
+        handleClose(){
+            this.modal_preorder = false;
+        },
+        handlePreorder(param){
+            console.log({param});
+            this.selected_schedule = param;
+            this.modal_preorder = true;
+        },
         handleDate(date){
             console.log({date});
             localStorage.setItem('o_date',date);

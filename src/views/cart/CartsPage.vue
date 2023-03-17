@@ -2,99 +2,43 @@
     <v-container class="pa-0 ma-0 page-container background-image h-100"> 
         <Topnavbar title="" @back="handeBack"/>
         <v-container class="mg56" style="padding-bottom:40px !important">
-            <v-row v-if="cartItems && cartItems.length">
+            <v-row v-if="carts && carts.length">
                 <v-col cols="12">
-                    <div v-if="cartItems && cartItems.length>0">
-                        <!-- <div v-if="cart && cart.location" class="d-flex">
-                            <div class="mr-2">
-                                <v-icon color="primary">{{iconAddress}}</v-icon>
-                            </div>
-                            <div>
-                                <h3>{{cart && cart.location ? cart.location.add1 : ''}}</h3>
-                                <div class="pt-2">
-                                    <p class="mb-0 f8">{{formatDateToDay(cart.location.start_date)}}</p>
-                                    <p class="f8"> {{formatTimeOnly(cart.location.start_time)}} - {{formatTimeOnly(cart.location.end_time)}} </p>
+                    <div v-if="carts && carts.length>0">
+                        <h3>Your Cart</h3>
+                        <div v-for="(cart,i) in carts" :key="i">
+                            <div class="mt-4">
+                                <!-- <div v-if="cart.pickup_date">
+                                    <h4 class="mt-8 mb-2 primary--text">Your order for : {{ formatDateToDay(cart.pickup_date) }}</h4>
+                                </div> -->
+                                <div class="custom-bs pa-4">
+                                    <v-row>
+                                        <v-col cols="12" md="12" lg="12" xl="12">
+                                            <h2 class="mb-2 primary--text">{{ cart.vendor.name }}</h2>
+                                            <div class="d-flex">
+                                                <!-- <div>
+                                                    <v-img width="60" :src="base_url+'/image-show/'+cart.vendor.profile_pic"></v-img>
+                                                </div> -->
+                                                <div class="">
+                                                    <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Date</p>
+                                                    <p style="font-weight:600">{{ formatDateToDay(cart.pickup_date) }}</p>
+                                                    <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Location </p>
+                                                    <div v-if="cart.address">
+                                                        <p class="mb-0">{{ cart.address.add1 }}, {{ cart.address.city }}</p>
+                                                        <p class="mb-2">{{ cart.address.state }}, {{ cart.address.zip }}</p>
+                                                    </div>
+                                                    <p class="mb-4">{{ cart.items.length }} items in cart</p>
+                                                    <!-- <v-btn rounded large color="primary" @click="handleCheckout(cart)">checkout now</v-btn> -->
+                                                    <v-btn rounded large color="primary" :to="'/cart/'+cart.id">checkout now</v-btn>
+                                                </div>
+                                                    
+                                           
+                                            </div>
+                                        </v-col>
+                                    </v-row>
                                 </div>
                             </div>
                         </div>
-                        <v-divider class="mb-2 mt-4"></v-divider> -->
-                        <v-row>
-                            <!-- <v-col class="pa-0" cols="12" md="12" lg="12" xl="12" v-for="(vendor, index) in cart.items" :key="index"> -->
-                            <v-col class="pa-0" cols="12" md="12" lg="12" xl="12">
-                                <div class="h-100 f-flex justify-space-between flex-column align-center">
-                                    <!-- <h3 class="text-capitalize">{{ index }}</h3> -->
-                                        <ul class="cart-items pt-4">
-                                            <li v-for="(product,i) in cart.items" 
-                                                class="mb-4 cart-item-single custom-bs pa-4"
-                                                :key="i">
-                                                <div class="pb-4">
-                                                    <div class="d-flex" @click="viewModal(product)">
-                                                        
-                                                        <div style="width:80px">
-                                                            <v-img width="80" :src="base_url+'/image-show/'+product.food_menu_item.profile_pic"></v-img>
-                                                        </div>
-                                                        <div class="pl-4">
-                                                            <div>
-                                                                <h5 class="text-uppercase pb-2 primary--text">{{ product.food_menu_item.name }} ({{ product.quantity }})</h5>
-                                                            </div>
-                                                            <div> 
-                                                                <p class="text-primary amount-text"></p>
-                                                                <h5 class="text-uppercase">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</h5>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <ul class="varient_items" v-if="product.varients && product.varients.length">
-                                                        <li v-for="(item, i) in product.varients" :key="i">
-                                                            <div class="d-flex align-center">
-                                                                <p class="mb-0">{{item.variant_item.name}}</p>
-                                                                <v-icon @click="handleRemoveVarient(item)" small color="error" class="ml-4">mdi-close</v-icon>
-                                                            </div>
-                                                            <span class="text-primary">{{formatAmount(item.variant_item.value * product.quantity)}}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!-- <v-divider></v-divider> -->
-                                                <div class="d-flex align-center justify-space-between">
-                                                    <p class="item-remove" @click="handleRemoveItem(product)">Remove</p>
-                                                    <div class="d-flex align-center justify-space-around text-center" style="width:120px">
-                                                        <v-btn @click="handlePlus(product)" fab small color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
-                                                        <h4  class="pb-0 mb-0 pl-1 pr-1">{{product.quantity}}</h4>
-                                                        <v-btn @click="handleMinus(product)" fab small color="error"><v-icon>{{ iconMinus }}</v-icon></v-btn>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    <!-- <div>
-                                        <table class="w-100 mt-5">
-                                            <tr>
-                                                <td class="text-right">Sub Total</td>
-                                                <td class="text-right">{{ formatAmount(cartAmount.sub_total) }}</td>
-                                            </tr>
-                                            <tr v-if="cartAmount.tax_percent">
-                                                <td class="text-right">Tax {{ cartAmount.tax}} %</td>
-                                                <td class="text-right">{{ formatAmount(cartAmount.tax_amount) }}</td>
-                                            </tr>
-                                            <tr v-if="cartAmount.tip_amount">
-                                                <td class="text-right">Tips</td>
-                                                <td class="text-right">{{ formatAmount(cartAmount.tip_amount) }}</td>
-                                            </tr>
-                                            <tr v-if="cartAmount.transaction_fee">
-                                                <td class="text-right">Transaction Fee</td>
-                                                <td class="text-right">{{ formatAmount(cartAmount.transaction_fee) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right">Grand Total</td>
-                                                <td class="text-right">{{ formatAmount(cartAmount.total) }}</td>
-                                            </tr>
-                                        </table>
-                                    </div> -->
-                                    <!-- <div class="text-right pt-4" v-if="showButton">
-                                        <v-btn color="primary" tile @click="checkoutNow(vendor)">Checkout</v-btn>
-                                    </div> -->
-                                </div>
-                            </v-col>
-                        </v-row>
-
                     </div>
                 </v-col>
             </v-row>
@@ -109,15 +53,7 @@
                 </v-col>
             </v-row>
         </v-container>
-        <div class="custom-bottom-nav" v-if="cartItems && cartItems.length">
-            <div>
-                <h2 class="primary--text">{{ formatAmount(cartAmount.sub_total) }}</h2>
-            </div>
-            <v-btn rounded link to="/cart-payment" large color="primary"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
-        </div>
-        <div v-else>
-            <Bottomnavbar/>
-        </div>
+        <!-- <CartCheckoutModal :dialogModalCheckout="modal_checkout" :cart="selected_cart" @close="handleCloseCheckout"/> -->
          <ModalConfirm 
             :dialogConfirm="modal_confirm" 
             @close="handleCloseConfirm" 
@@ -129,7 +65,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import { base_url } from '@/core/services/config'
 import Topnavbar from "@/components/layout/TopnavbarBackCustom";
-import Bottomnavbar from "@/components/layout/NavbarBottomFixed";
+// import Bottomnavbar from "@/components/layout/NavbarBottomFixed";
 import ModalConfirm from '@/components/layout/DialogConfirm'
 import { mdiCart, mdiMapMarker, mdiMinus, mdiPlus } from '@mdi/js';
 import { mdiArrowLeft } from '@mdi/js';
@@ -137,6 +73,7 @@ export default {
     data() {
         return {
             base_url,
+            modal_checkout:false,
             iconAddress: mdiMapMarker,
             iconArrowBack:mdiArrowLeft,
             iconCart: mdiCart,
@@ -158,17 +95,19 @@ export default {
             itemDelete:{},
             varient:{},
             confirmSource:'',
+            selected_cart:{},
         }
     },
     components: {
         Topnavbar,
-        Bottomnavbar,
-        ModalConfirm
+        // Bottomnavbar,
+        ModalConfirm,
+        // CartCheckoutModal:()=>import('@/views/cart/CartCheckoutModal.vue'),
     },
     computed: {
         ...mapGetters({
             cart:'truck/cart',
-            cartItems:'truck/cartItems',
+            carts:'truck/getCarts',
             cartAmount:'truck/cartAmount',
         }),
     },
@@ -176,17 +115,24 @@ export default {
         ...mapActions({
             fetchCarts:'truck/fetchCarts'
         }),
+        handleCloseCheckout(){
+            this.modal_checkout = false;
+        },
         handeBack(){
             this.$router.back();
+        },
+        handleCheckout(cart){
+            this.selected_cart = cart;
+            this.modal_checkout = true;
         },
         // mapActions
         handleClose(){
             // deleteCookie('foodtruck_carts');
             this.dialog = false;
         },
-        handleCheckout(){
-             this.$router.push("/checkout");
-        },
+        // handleCheckout(){
+        //     //  this.$router.push("/checkout");
+        // },
         varientSub(param) {
            let qty = param.qty+1;
            this.updateQuantity(param.id, qty);

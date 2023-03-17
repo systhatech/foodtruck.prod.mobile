@@ -4,17 +4,15 @@
         <div class="mb80">
             <div class="p-relative background-image">
                 <div class="pa-4 text-center pt-6">
-                    <!-- <v-btn color="primary" rounded outlined block to="/vendor-menu-item-add">add new menu item</v-btn> -->
                     <v-btn color="primary" rounded large block @click="handleMenuAdd()">add new menu item</v-btn>
                 </div>
-                <!-- {{ menu.itemsGroup }} -->
                 <div class="pa-4" v-if="menu && menu.categoryGroup && Object.keys(menu.categoryGroup).length">
                     <v-row>
                         <v-col cols="12" sm="6" md="6" v-for="(m, i) in menu.categoryGroup" :key="i">
                             <h5 class="mb-2 text-uppercase">{{ i ? i:'no category' }}</h5>
                             <div v-for="(item,index) in m" :key="index">
                                 <div class="mb-4">
-                                    <div class="d-flex align-center custom-bs pa-3 pl-0" style="min-height:114px" @click="viewMenu(item.id)">  
+                                    <div class="d-flex align-center custom-bs pa-3 pl-0" style="min-height:114px" >  
                                         <v-img
                                         lazy-src="https://picsum.photos/id/11/10/6"
                                         max-width="90"
@@ -22,8 +20,8 @@
                                         contain
                                         :src="item.profile_pic? base_url+'/image-show/'+item.profile_pic:'usericon'"
                                         ></v-img>
-                                        <div class="pl-3 w-100 h-100">
-                                            <div class="d-flex justify-space-between flex-column h-100">
+                                        <div class="pl-3 w-100 h-100" >
+                                            <div class="d-flex justify-space-between flex-column h-100" @click="viewMenu(item.id)">
                                                 <div>
                                                     <h5 class="text-uppercase primary--text">{{item.name}}</h5>
                                                     <div class="d-flex text-capitalize">
@@ -35,6 +33,15 @@
                                                     </div>
                                                     <p>{{  item.description ? shortText(item.description,55) :'n/a' }}</p>
                                                 </div>
+                                            </div>
+                                            <div>
+                                                <v-switch
+                                                    v-model="item.is_special"
+                                                    hide-details
+                                                    inset
+                                                    @change="handleChange(item)"
+                                                    :label="item.is_special?'Remove as special':'Make special'"
+                                                ></v-switch>
                                             </div>
                                         </div>
                                     </div>
@@ -55,6 +62,10 @@
             <DialogMenuItemAdd 
             @close="handleClose"
             :dialogMenuItemAdd="modal_menu_add"/>
+            <DialogConfirm 
+            :dialogConfirm="modal_confirm" 
+            @handleConfirm="confirmChange"
+            @close="handleClose"/>
         </div>
         <Bottomnavbar/>
     </v-container>
@@ -66,7 +77,7 @@ import { base_url } from '@/core/services/config'
 import { mdiChevronRight } from '@mdi/js'
 import { mapGetters } from 'vuex'
 export default {
-    name:'vendorMenuList',
+    name:'vendorMenuDetailPage',
     data() {
         return {
             icon_right: mdiChevronRight,
@@ -79,13 +90,32 @@ export default {
             cuisine_types:[],
             menu_data:{},
             menu:{},
+            modal_confirm:false,
             loading: false,
+            selected_item:null,
         }
     },
     mounted() {
         this.profileData();
     },
     methods: {
+        handleChange(param){
+            this.selected_item = param;
+            this.modal_confirm = true;
+        },
+        confirmChange(){
+            this.selected_item.is_special = this.selected_item.is_special ?1:0;
+            ApiService.post('/menuitem/create/only',this.selected_item)
+            .then(() => {
+                this.loading = false;
+                this.loaderHide();
+                this.handleClose();
+            })
+            .catch(() => {
+                this.loading = false;
+                this.loaderHide();
+            })
+        },
         handleMenuAdd(){
             this.cuisine_types = this.profile.cuisine_types;
             this.modal_menu_add = true;
@@ -95,6 +125,7 @@ export default {
         },
         handleClose(){
             this.modal_menu_add = false;
+            this.modal_confirm = false;
             this.profileData();
         },
         handleBack(){
@@ -119,6 +150,7 @@ export default {
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         Topnavbar:()=>import('@/components/layout/TopnavbarBackCustom'),
         DialogMenuItemAdd: ()=> import('@/views/vendor/profile/modal/ModalMenuItemAdd'),
+        DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     computed: {
         ...mapGetters({

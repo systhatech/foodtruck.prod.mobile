@@ -24,7 +24,7 @@ export default {
         trucks: state => {
             return state.trucks;
         },
-        cart: state => {
+        getCarts: state => {
             return state.cart;
         },
         cartVendor: state => {
@@ -145,31 +145,29 @@ export default {
 
         async fetchCarts({ commit }) {
             // if()
-            let cartId = localStorage.getItem('pcid') ? localStorage.getItem('pcid'):'';
-            if(!cartId){
-                commit("SET_CART", null);
-                commit("SET_CART_VENDOR", null);
-                commit("SET_CART_AMOUNT", null);
-                commit("SET_VENDOR_CREDIENTIALS", null);
-                return;
-            }
+            // let cartId = localStorage.getItem('pcid') ? localStorage.getItem('pcid'):'';
+            // if(!cartId){
+            //     commit("SET_CART", null);
+            //     commit("SET_CART_VENDOR", null);
+            //     commit("SET_CART_AMOUNT", null);
+            //     commit("SET_VENDOR_CREDIENTIALS", null);
+            //     return;
+            // }
             try {
-                await ApiService.post("/carts",{
-                    cart_id: localStorage.getItem('pcid') ? localStorage.getItem('pcid') :''
-                })
+                await ApiService.post("/carts")
                 .then((resp) => {
                     commit("SET_CART", resp.data);
-                    commit("SET_CART_VENDOR", resp.data.vendor);
-                    commit("SET_CART_AMOUNT", resp.total);
-                    commit("SET_VENDOR_CREDIENTIALS", resp.gateway);
+                    // commit("SET_CART_VENDOR", resp.data.vendor);
+                    // commit("SET_CART_AMOUNT", resp.total);
+                    // commit("SET_VENDOR_CREDIENTIALS", resp.gateway);
                 })
             } catch (error) {
                 console.log(error);
                 localStorage.removeItem('pcid');
                 commit("SET_CART", null);
-                commit("SET_CART_VENDOR", null);
-                commit("SET_CART_AMOUNT", null);
-                commit("SET_VENDOR_CREDIENTIALS", null);
+                // commit("SET_CART_VENDOR", null);
+                // commit("SET_CART_AMOUNT", null);
+                // commit("SET_VENDOR_CREDIENTIALS", null);
             }
         },
         
