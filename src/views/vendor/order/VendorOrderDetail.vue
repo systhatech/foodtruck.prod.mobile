@@ -204,7 +204,11 @@
                 </v-card>
             </v-dialog>
         </v-row>
-        <DialogConfirm :dialog-confirm="dialogConfirm" @handleConfirm="handleSubmit" @close="handleCloseConfirm" />
+        <DialogConfirm 
+            :dialog-confirm="dialogConfirm" 
+            :message="message_text"
+            @handleConfirm="handleSubmit" 
+            @close="handleCloseConfirm" />
     </div>
 </template>
 <script>
@@ -269,6 +273,7 @@ export default {
             totalData: {},
             loading: false,
             message: 'Loading...',
+            message_text:'Do you want to continue?'
         }
     },
     methods: {
@@ -290,6 +295,11 @@ export default {
         },
         // handleConfirm
         onClick(status) {
+            if(status == 'accepted'){
+                this.message_text  = 'Do you want to accept this order? Once you accepted, customer credit card will be charged';
+            }else{
+                this.message_text  = 'Do you want to continue?';
+            }
             this.orderStatus = status;
             this.dialogConfirm = true;
         },

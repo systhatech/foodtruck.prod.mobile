@@ -4,6 +4,7 @@
             <GmapAutocomplete class="custom-autocomplete w-100" 
             :value="address.add1"
             @blur="handleBlur"
+            placeholder=""
             @place_changed="setPlace" />
         </div>
     </div>
@@ -65,5 +66,8 @@ export default {
     border-right-width: 0px !important;
     border-bottom-width: 0px !important;
     border-left-width: 0px !important;
+}
+.custom-autocomplete{
+    border-bottom: 1px solid #dadada;
 }
 </style>

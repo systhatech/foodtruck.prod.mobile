@@ -47,6 +47,7 @@
     "vue-social-sharing": "^3.0.9",
     "vue-socialmedia-share": "^1.0.1",
     "vue2-google-maps": "^0.10.7",
+    "vue2-timepicker": "^1.1.6",
     "vuejs-datetimepicker": "^1.1.13",
     "vuetify": "^2.4.0",
     "vuetify-google-autocomplete": "^2.0.4",

@@ -166,6 +166,38 @@ const routes = [
 			}
 		}
 	},
+	{
+		path: '/client-truck-request',
+		name: 'clientTruckRequestPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/TruckRequestPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			// if (store.getters['auth/user']) {
+			// 	next();
+			// }else{
+			// 	next({
+			// 		name: 'loginPage'
+			// 	});
+			// }
+			next();
+		}
+	},
+	{
+		path: '/client-truck-request-form',
+		name: 'clientTruckRequestFormPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/TruckRequestFormPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			// if (store.getters['auth/user']) {
+			// 	next();
+			// }else{
+			// 	next({
+			// 		name: 'loginPage'
+			// 	});
+			// }
+			next();
+		}
+	},
 
 
 	// new routes ends

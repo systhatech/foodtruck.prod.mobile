@@ -5,7 +5,7 @@
 			<span>Home</span>
 			<v-icon>{{ iconHome }}</v-icon>
 		</v-btn>
-        <v-btn to="/client-request-truck" >
+        <v-btn to="/client-truck-request" >
 			<span>Request</span>
 			<v-icon>mdi-truck</v-icon>
 		</v-btn>

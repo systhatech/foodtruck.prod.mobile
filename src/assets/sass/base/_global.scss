@@ -454,3 +454,61 @@ scroll-behavior: smooth;
         color:#debfa2 !important;
     }
 }
+// .vue__time-picker {
+// }
+.vue__time-picker {
+    display: inline-block;
+    position: relative;
+    font-size: 1em;
+    width: auto;
+    font-family: sans-serif;
+    vertical-align: middle;
+    .input.display-time {
+        border-bottom: 1px solid #d2d2d2;
+        width: auto !important;
+        height: 2.2em;
+        padding: 0.3em 0.5em;
+        font-size: 1.2em;
+        text-align: center;
+    }
+}
+.display__time{
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    font-size: 20px;
+    border: none;
+    border-bottom: 1px solid #a5a3a3;
+}
+#formEvent,
+#formRegularEvent,
+#formCatering{
+    .v-text-field input {
+        flex: 1 1 auto;
+        line-height: 20px;
+        padding: 8px 0 8px;
+        max-width: 100%;
+        min-width: 0px;
+        width: 100%;
+        font-size: 18px;
+        text-align: center;
+        font-weight: 500;
+    }
+    .vue__time-picker {
+        &:focus-visible {
+            outline: none !important;
+        }
+        input.display-time {
+            border: none;
+            width: auto;
+            height: 2.2em;
+            padding: 0.3em 0.5em;
+            font-size: 1.2em;
+            text-align: center;
+            border-bottom: 1px solid #a3a3a3;
+            &:focus-visible{
+                outline: none;
+            }
+        }
+    }
+}

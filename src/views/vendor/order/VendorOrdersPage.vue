@@ -6,6 +6,9 @@
                 <div>
                     <OrderStatus :items="orderTypes" @selectedStatus="handleActive"/>
                 </div>
+                <div>
+                    <DatePicker label="Date Filter" @selectedDate="dateStart"/>
+                </div>
             </div>
             <div v-if="orders && Object.keys(orders).length" class="mt-3">
                 <div v-for="(dateWiseOrders, date) in orders" :key="date">
@@ -44,6 +47,7 @@
 <script>
 import Topnavbar from '@/components/layout/Topnavbar'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
+import DatePicker from '@/components/form-element/InputDatePicker';
 import { ApiService } from '@/core/services/api.service'
 import OrderDetail from '@/views/vendor/order/VendorOrderDetail'
 import { mdiChat, mdiChevronRight } from '@mdi/js'
@@ -57,6 +61,7 @@ export default {
             indexValue:1,
             moment,
             valid:true,
+            
             content:'no content',
              tab:0,
             dialogOrderDetail:false,
@@ -78,6 +83,7 @@ export default {
                 {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
             refresh_time:10000,
+            selected_date:'',
         }
     },
     mounted() {
@@ -88,11 +94,19 @@ export default {
         handleBack(){
             this.$router.back();
         },
+        dateStart(param) {
+            this.selected_date = this.formatStandardDate(param.date);
+            console.log(this.selected_date);
+            if(this.status == 'new'){
+                this.fetchOrders();
+            }
+        },
         async fetchOrders() {
             this.orders = [];
             this.loading = true;
             await ApiService.post("/order-list",{
-                'status': this.status
+                'status': this.status,
+                'date': this.selected_date,
             })
             .then((resp) => {
                 this.loading = false;
@@ -148,6 +162,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        DatePicker,
         OrderDetail,
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         OrderStatus: ()=> import('@/components/OrdersStatusSlider.vue')

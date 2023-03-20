@@ -117,6 +117,7 @@ export default {
                 {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},
                 {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
                 {name:'Reports',icon:'mdi-file-document-multiple',route:'reports'},
+                {name:'Sales Summary',icon:'mdi-file-document-multiple',route:'sales-summary'},
                 {name:'Change Password',icon:'mdi-key',route:'change-password'},
                 {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
                 {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
