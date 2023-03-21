@@ -116,6 +116,7 @@ export default {
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
                 {name:'Change Password',icon:'mdi-cog',route:'change-password'},
+                {name:'Truck Request',icon:'mdi-account-reactivate',route:'client-truck-request-list'},
                 {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
                 {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},

@@ -89,9 +89,9 @@
  
                 <v-col cols="12">
                     <div class="d-flex align-center" :class="step==1?'justify-space-around':'justify-space-between'">
-                        <v-btn color="primary" v-if="step>1" text large rounded @click="handlePrevious()">previous</v-btn>
-                        <v-btn color="primary" v-if="step==9" text large rounded @click="handleSubmit()">submit</v-btn>
-                        <v-btn color="primary" text v-else large rounded @click="handleNext()">next</v-btn>
+                        <v-btn color="primary" v-if="step>1" large  rounded @click="handlePrevious()">previous</v-btn>
+                        <v-btn color="primary" v-if="step==9" large  rounded @click="handleSubmit()">submit</v-btn>
+                        <v-btn color="primary" v-else large  rounded @click="handleNext()">next</v-btn>
                     </div>
                 </v-col>
             </v-row>

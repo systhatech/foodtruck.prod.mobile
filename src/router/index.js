@@ -198,6 +198,38 @@ const routes = [
 			next();
 		}
 	},
+	{
+		path: '/client-truck-request-list',
+		name: 'clientTruckRequestListPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckRequestListPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			// if (store.getters['auth/user']) {
+			// 	next();
+			// }else{
+			// 	next({
+			// 		name: 'loginPage'
+			// 	});
+			// }
+			next();
+		}
+	},
+	{
+		path: '/client-truck-request/:requestId',
+		name: 'ClientTruckRequestDetail',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckRequestDetail.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			// if (store.getters['auth/user']) {
+			// 	next();
+			// }else{
+			// 	next({
+			// 		name: 'loginPage'
+			// 	});
+			// }
+			next();
+		}
+	},
 
 
 	// new routes ends
@@ -208,6 +240,34 @@ const routes = [
 		path: '/vendor-profile',
 		name: 'vendorProfilePage',
 		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/profile/VendorProfilePage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-truck-request-list',
+		name: 'vendorTruckRequestList',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/truck_request/RequestListPage.vue'),
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-truck-request/:requestId',
+		name: 'vendorTruckRequestDetail',
+		component: () => import(/* webpackChunkName: "signupCustomer" */ '../views/vendor/truck_request/TruckRequestDetail.vue'),
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {
 				next();

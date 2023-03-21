@@ -37,17 +37,18 @@
                                                 sign in
                                             </v-btn>
                                         </v-col>
-                                        <v-col cols="12">
-                                            <div class="text-center ma-2">
-                                                <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;"></p>
-                                                <div>
-                                                    <v-btn to="/signup-customer" class="mb-4" outlined color="primary">Sign up as Customer</v-btn>
-                                                    <v-btn to="/signup-truck" outlined color="primary">Sign up as Truck</v-btn>
-                                                </div>
-                                            </div>
-                                        </v-col>
+                                       
                                     </v-row>
                                 </v-form>
+                            </div>
+                            <div>
+                                <div class="text-center ma-2">
+                                    <p class="f8-bold" style="color:#4a4a4a;text-transform: uppercase;"></p>
+                                    <div>
+                                        <v-btn to="/signup-customer" class="mb-2" text color="primary">Sign up as Customer</v-btn>
+                                        <v-btn to="/signup-truck" text color="primary">Sign up as Truck</v-btn>
+                                    </div>
+                                </div>
                             </div>
                         </v-col>
                     </v-row>
