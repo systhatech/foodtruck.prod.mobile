@@ -26,6 +26,7 @@ let socketHandler = {
     activeStatus: $(".chat--active--status"),
     dropzone: $("#chat---dropzone"),
     dropFiles: $(".attachments--chat"),
+    conversation_id: null,
     table_from: null,
     table_from_id: null,
     table_to: null,
@@ -39,7 +40,7 @@ let socketHandler = {
         }
     },
 
-    initChat({table_from, table_from_id, table_to, table_to_id}) {
+    initChat({table_from, table_from_id, table_to, table_to_id, conversation_id, seen_client=0, seen_vendor=0}) {
         if(!this.initiated) {
             this.init()
         }
@@ -53,6 +54,9 @@ let socketHandler = {
         this.table_from_id = table_from_id;
         this.table_to = table_to;
         this.table_to_id = table_to_id;
+        this.conversation_id = conversation_id;
+        this.seen_client = seen_client;
+        this.seen_vendor = seen_vendor;
         this.handleTextBox();
         this.scrollToBottom();
         this.onlineStatus();
@@ -187,18 +191,22 @@ let socketHandler = {
         );
     },
     handleMessageSend() {
-        // console.log({
-        //     table_from: this.table_from,
-        //     table_from_id: this.table_from_id,
-        //     table_to: this.table_to,
-        //     table_to_id: this.table_to_id,
-        //     message: this.textbox.val().trim(),
-        // });
+        console.log({
+            table_from: this.table_from,
+            table_from_id: this.table_from_id,
+            table_to: this.table_to,
+            table_to_id: this.table_to_id,
+            conversation_id: this.conversation_id,
+            message: this.textbox.val().trim(),
+        });
         this.socket.emit(this.channelOne, {
             table_from: this.table_from,
             table_from_id: this.table_from_id,
             table_to: this.table_to,
             table_to_id: this.table_to_id,
+            conversation_id: this.conversation_id,
+            seen_client: this.seen_client,
+            seen_vendor: this.seen_vendor,
             message: this.textbox.val().trim(),
             files: $(".attachments--chat input")
                 .get()

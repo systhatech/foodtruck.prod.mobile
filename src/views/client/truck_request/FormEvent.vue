@@ -3,99 +3,112 @@
         <div>
             <h4 class="mb-4">Food Truck Request</h4>
         </div>
-        <v-form ref="formEvent" id="formEvent">
-            <v-row>
-                <v-col cols="12" v-if="step==1">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('event_name') ?'error--text':'primary--text'">Event Name</label>
-                        <v-text-field class="mt-6 pt-0" :rules="rulesRequired" v-model="event.event_name"></v-text-field>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==2">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('event_type') ?'error--text':'primary--text'">Select your event type</label>
-                        <div class="mt-6 pl-12">
-                            <!-- <InputAutocomplete :items="event_types" @selected="selectedEventType"/> -->
-                            <v-radio-group class="pt-0 mt-0" v-model="event.event_type" :rules="ruleEventType">
-                                <v-radio :value="type.value" v-for="(type, t) in event_types" :key="t">
-                                    <template v-slot:label>
-                                        <div class="pa-3"><h4>{{  type.name  }}</h4></div>
-                                    </template>
-                                </v-radio>
-                            </v-radio-group>
+        <div v-if="success" class="text-center custom-bs pa-8">
+            <h4 class="mb-4 primary--text">Thank you!</h4>
+            <p>Your request has been successfully submitted</p>
+            <v-btn rounded large color="primary" to="/">back to home</v-btn>
+        </div>
+        <div class="" v-else>  
+            <v-form ref="formEvent" id="formEvent">
+                <v-row>
+                    <v-col cols="12" v-if="step==1">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('event_name') ?'error--text':'primary--text'">Event Name</label>
+                            <v-text-field class="mt-6 pt-0" :rules="rulesRequired" v-model="event.event_name"></v-text-field>
                         </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==3">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('people_expected') ?'error--text':'primary--text'">How many Minimum people are you expecting ?</label>
-                        <v-text-field class="mt-6 pt-0" min="1" type="number" :rules="rulesRequiredNumber" v-model="event.people_expected"></v-text-field>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==4">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('address') ?'error--text':'primary--text'">Address</label>
-                        <div class="mt-6">
-                            <GoogleAddress 
-                                :defaultValue="defaultValue" 
-                                @selectedAddr="addressSelected"/>
+                    </v-col>
+                    <v-col cols="12" v-if="step==2">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('event_type') ?'error--text':'primary--text'">Select your event type</label>
+                            <div class="mt-6 pl-12">
+                                <!-- <InputAutocomplete :items="event_types" @selected="selectedEventType"/> -->
+                                <v-radio-group class="pt-0 mt-0" v-model="event.event_type" :rules="ruleEventType">
+                                    <v-radio :value="type.value" v-for="(type, t) in event_types" :key="t">
+                                        <template v-slot:label>
+                                            <div class="pa-3"><h4>{{  type.name  }}</h4></div>
+                                        </template>
+                                    </v-radio>
+                                </v-radio-group>
+                            </div>
                         </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==5">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('additional_details') ?'error--text':'primary--text'">Additional Details</label>
-                       <v-textarea class="pt-0 mt-6" v-model="event.additional_details"></v-textarea>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==6">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('event_date') ?'error--text':'primary--text'">Event Date</label>
-                        <div class="mt-6">
-                            <DatePicker label=""  @selectedDate="eventDateSelected" :minDate="minDate"/>
+                    </v-col>
+                    <v-col cols="12" v-if="step==3">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('people_expected') ?'error--text':'primary--text'">How many Minimum people are you expecting ?</label>
+                            <v-text-field class="mt-6 pt-0" min="1" type="number" :rules="rulesRequiredNumber" v-model="event.people_expected"></v-text-field>
                         </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==7">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('start_time') ?'error--text':'primary--text'">Start Time</label>
-                        <div class="mt-6">
-                            <vue-timepicker format="hh:mm A" placeholder="" v-model="event.start_time" manual-input></vue-timepicker>
+                    </v-col>
+                    <v-col cols="12" v-if="step==4">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('address') ?'error--text':'primary--text'">Address</label>
+                            <div class="mt-6">
+                                <GoogleAddress 
+                                    :defaultValue="defaultValue" 
+                                    @selectedAddr="addressSelected"/>
+                            </div>
                         </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==8">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('end_time') ?'error--text':'primary--text'">End Time</label>
-                        <div class="mt-6">
-                            <vue-timepicker format="hh:mm A" placeholder="" v-model="event.end_time" manual-input></vue-timepicker>
+                    </v-col>
+                    <!-- <v-col cols="12" v-if="step==5"> -->
+                        <!-- <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('additional_info') ?'error--text':'primary--text'">Additional Details</label>
+                           <v-textarea class="pt-0 mt-6" v-model="event.additional_info"></v-textarea>
+                        </div> -->
+                    <!-- </v-col> -->
+                    <v-col cols="12" v-if="step==5">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('event_date') ?'error--text':'primary--text'">Event Date</label>
+                            <div class="mt-6">
+                                <DatePicker label=""  @selectedDate="eventDateSelected" :minDate="minDate"/>
+                            </div>
                         </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" v-if="step==9">
-                    <div class="custom-bs pa-4 w-100 text-center pt-6">
-                        <label for="" class="text-center mb-6" :class="errors.includes('sales_guerantee') ?'error--text':'primary--text'">Minimum sales guerantee</label>
-                        <div class="mt-6">
-                            <v-radio-group class="pt-0 mt-0" v-model="event.sales_guerantee" :rules="ruleSalesGuerantee">
-                                <v-radio :value="type.value" v-for="(type, t) in sales_guerantee" :key="t">
-                                    <template v-slot:label>
-                                        <div class="pa-2">{{  type.name  }}</div>
-                                    </template>
-                                </v-radio>
-                            </v-radio-group>
+                    </v-col>
+                    <v-col cols="12" v-if="step==6">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('start_time') ?'error--text':'primary--text'">Start Time</label>
+                            <div class="mt-6">
+                                <vue-timepicker format="hh:mm A" placeholder="" v-model="event.start_time" manual-input></vue-timepicker>
+                            </div>
                         </div>
-                    </div>
-                </v-col>
- 
-                <v-col cols="12">
-                    <div class="d-flex align-center" :class="step==1?'justify-space-around':'justify-space-between'">
-                        <v-btn color="primary" v-if="step>1" large  rounded @click="handlePrevious()">previous</v-btn>
-                        <v-btn color="primary" v-if="step==9" large  rounded @click="handleSubmit()">submit</v-btn>
-                        <v-btn color="primary" v-else large  rounded @click="handleNext()">next</v-btn>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-form>
+                    </v-col>
+                    <v-col cols="12" v-if="step==7">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('end_time') ?'error--text':'primary--text'">End Time</label>
+                            <div class="mt-6">
+                                <vue-timepicker format="hh:mm A" placeholder="" v-model="event.end_time" manual-input></vue-timepicker>
+                            </div>
+                        </div>
+                    </v-col>
+                    <v-col cols="12" v-if="step==8">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('sales_guerantee') ?'error--text':'primary--text'">Minimum sales guerantee</label>
+                            <div class="mt-6">
+                                <v-radio-group class="pt-0 mt-0" v-model="event.min_guerantee_sales" :rules="ruleSalesGuerantee">
+                                    <v-radio :value="type.value" v-for="(type, t) in sales_guerantee" :key="t">
+                                        <template v-slot:label>
+                                            <div class="pa-2">{{  type.name  }}</div>
+                                        </template>
+                                    </v-radio>
+                                </v-radio-group>
+                            </div>
+                        </div>
+                    </v-col>
+                    <v-col cols="12" v-if="step==9">
+                        <div class="custom-bs pa-4 w-100 text-center pt-6">
+                            <label for="" class="text-center mb-6" :class="errors.includes('additional_info') ?'error--text':'primary--text'">Additional Details</label>
+                           <v-textarea class="pt-0 mt-6" v-model="event.additional_info"></v-textarea>
+                        </div>
+                    </v-col>
+     
+                    <v-col cols="12">
+                        <div class="d-flex align-center" :class="step==1?'justify-space-around':'justify-space-between'">
+                            <v-btn color="primary" v-if="step>1" large  rounded @click="handlePrevious()">previous</v-btn>
+                            <v-btn color="primary" v-if="step==9" large  rounded @click="handleSubmit()">submit</v-btn>
+                            <v-btn color="primary" v-else large  rounded @click="handleNext()">next</v-btn>
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-form>
+        </div>
     </div>
 </template>
 <script>
@@ -104,6 +117,7 @@ import DatePicker from '@/components/form-element/InputDatePicker1';
 // import InputAutocomplete from '@/components/form-element/InputAutocomplete';
 import GoogleAddress from '@/components/form-element/InputGoogleAddress'
 import moment from 'moment'
+import {ApiService} from '@/core/services/api.service'
 
 // time picker
 import VueTimepicker from 'vue2-timepicker'
@@ -112,6 +126,7 @@ export default {
     data() {
         return {
             moment,
+            success:false,
             step:1,
             minDate: new Date().toISOString().substr(0, 10),
             defaultValue:'',
@@ -131,11 +146,12 @@ export default {
                 event_type:'',
                 people_expected:'',
                 address:'',
-                additional_details:'',
+                additional_info:'',
                 event_date:'',
                 start_time:'',
                 end_time:'',
-                sales_guerantee:'',
+                min_guerantee_sales:'',
+                type:'event',
             },
             event_types:[
                 {name:'Conference','value':'conference'},
@@ -161,7 +177,7 @@ export default {
             return [this.event.event_type.length > 0 || "Select at least one!"]
         },
         ruleSalesGuerantee () {
-            return [this.event.sales_guerantee.length > 0 || "Select at least one!"]
+            return [this.event.min_guerantee_sales.length > 0 || "Select at least one!"]
         }
     },
     created() {
@@ -208,15 +224,15 @@ export default {
                         this.step+=1;
                     }
                     break;
+                // case 5:
+                //     if(!this.event.additional_info){
+                //         this.errors.push('additional_info');
+                //     }else{
+                //         this.errors = this.errors.filter((item) => item !=='additional_info');
+                //         this.step+=1;
+                //     }
+                //     break;
                 case 5:
-                    if(!this.event.additional_details){
-                        this.errors.push('additional_details');
-                    }else{
-                        this.errors = this.errors.filter((item) => item !=='additional_details');
-                        this.step+=1;
-                    }
-                    break;
-                case 6:
                     if(!this.event.event_date){
                         this.errors.push('event_date');
                     }else{
@@ -224,7 +240,7 @@ export default {
                         this.step+=1;
                     }
                     break;
-                case 7:
+                case 6:
                     if(!this.event.start_time){
                         this.errors.push('start_time');
                     }else{
@@ -232,7 +248,7 @@ export default {
                         this.step+=1;
                     }
                     break;
-                case 8:
+                case 7:
                     if(!this.event.end_time){
                         this.errors.push('end_time');
                     }else{
@@ -240,12 +256,21 @@ export default {
                         this.step+=1;
                     }
                     break;
-                case 9:
-                    if(!this.event.sales_guerantee){
+                case 8:
+                    if(!this.event.min_guerantee_sales){
                         this.errors.push('sales_guerantee');
                     }else{
                         this.errors = this.errors.filter((item) => item !=='sales_guerantee');
+                        this.step+=1;
                         console.log('submit');
+                    }
+                    break;
+                case 9:
+                    if(!this.event.additional_info){
+                        this.errors.push('additional_info');
+                    }else{
+                        this.errors = this.errors.filter((item) => item !=='additional_info');
+                        this.step+=1;
                     }
                     break;
                 default:
@@ -281,7 +306,17 @@ export default {
             }
             if(!this.$refs.formEvent.validate()) return;
 
-            console.log(this.event);
+            this.loaderShow();
+            ApiService.post('/event_request', this.event)
+            .then((resp) =>{
+                this.loaderHide();
+                this.success = true;
+                console.log(resp);
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                console.log(error);
+            })
 
         }
     },

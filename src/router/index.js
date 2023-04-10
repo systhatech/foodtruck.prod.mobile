@@ -152,7 +152,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/client/conversation/:type/:id',
+		path: '/client/conversation/:type/:id/:conv_id',
 		name: 'ClientChatConversationPage',
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/chat/ClientChatConversationPage.vue'),
 		meta: { requiresAuth: true },
@@ -167,19 +167,52 @@ const routes = [
 		}
 	},
 	{
+		// path: '/client/truck/conversation/:vendor_id/:event_request_id',
+		path: '/client/truck/conversation/:to/:to_id/:conv_id/:event_req_id',
+		name: 'ClientChatConversationPage',
+		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckChatConversationPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	// {
+	// 	// path: '/client/truck/conversation/:vendor_id/:event_request_id',
+	// 	path: '/client/truck/conversation/:type/:id/:conv_id/:event_req_id',
+	// 	name: 'ClientChatConversationPage',
+	// 	component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckChatConversationPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
+	
+	{
 		path: '/client-truck-request',
 		name: 'clientTruckRequestPage',
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/TruckRequestPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
-			// if (store.getters['auth/user']) {
-			// 	next();
-			// }else{
-			// 	next({
-			// 		name: 'loginPage'
-			// 	});
-			// }
-			next();
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+			// next();
 		}
 	},
 	{
@@ -188,14 +221,14 @@ const routes = [
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/TruckRequestFormPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
-			// if (store.getters['auth/user']) {
-			// 	next();
-			// }else{
-			// 	next({
-			// 		name: 'loginPage'
-			// 	});
-			// }
-			next();
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+			// next();
 		}
 	},
 	{
@@ -204,14 +237,14 @@ const routes = [
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckRequestListPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
-			// if (store.getters['auth/user']) {
-			// 	next();
-			// }else{
-			// 	next({
-			// 		name: 'loginPage'
-			// 	});
-			// }
-			next();
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+			// next();
 		}
 	},
 	{
@@ -220,14 +253,14 @@ const routes = [
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckRequestDetail.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
-			// if (store.getters['auth/user']) {
-			// 	next();
-			// }else{
-			// 	next({
-			// 		name: 'loginPage'
-			// 	});
-			// }
-			next();
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+			// next();
 		}
 	},
 
@@ -459,7 +492,7 @@ const routes = [
 		}
 	},
 	{
-		path: '/vendor/conversation/:type/:id',
+		path: '/vendor/conversation/:type/:id/:conv_id',
 		name: 'vendorChatConversationPage',
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/vendor/chat/VendorChatConversationPage.vue'),
 		meta: { requiresAuth: true },
@@ -473,6 +506,21 @@ const routes = [
 			}
 		}
 	},
+	// {
+	// 	path: '/vendor/truck/conversation/:type/:id/:conv_id/:event_req_id',
+	// 	name: 'convPage',
+	// 	component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/vendor/truck_request/VendorTruckChatConversationPage.vue'),
+	// 	meta: { requiresAuth: true },
+	// 	beforeEnter: (to, from, next) => {
+	// 		if (store.getters['auth/user']) {
+	// 			next();
+	// 		}else{
+	// 			next({
+	// 				name: 'loginPage'
+	// 			});
+	// 		}
+	// 	}
+	// },
 
 
 
@@ -805,6 +853,21 @@ const routes = [
 		path: '/vendor-orders',
 		name: 'VendorOrdersPage',
 		component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/vendor/order/VendorOrdersPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
+		path: '/vendor-credit-packages',
+		name: 'creditPackages',
+		component: () => import(/* webpackChunkName: "OrdersPage" */ '../views/vendor/truck_request/CreditPackages.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
 			if (store.getters['auth/user']) {

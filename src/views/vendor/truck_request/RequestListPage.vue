@@ -3,6 +3,35 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
             <div>
+                <div class="pa-6">
+                    <p class="text-center" style="text-decoration: underline;" @click="handleClick('tutorial_vendor_truck_request')">Video tutorial</p>
+                    <div>
+                        <div class="d-flex align-center justify-space-around">
+                            <div class="share-icon">
+                                <ShareNetwork
+                                    network="facebook"
+                                    :url="link_url"
+                                    :title="post_title"
+                                    description=""
+                                    quote=""
+                                    hashtags=""
+                                >
+                                    <v-btn fab text color="blue"><v-icon large>mdi-facebook</v-icon></v-btn>
+                                </ShareNetwork>
+                                <ShareNetwork
+                                    network="twitter"
+                                    :url="link_url"
+                                    :title="post_title"
+                                    description=""
+                                    quote=""
+                                    hashtags=""
+                                >
+                                    <v-btn fab text color="primary"><v-icon large>mdi-twitter</v-icon></v-btn>
+                                </ShareNetwork>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div>
                     <v-tabs v-model="active_tab">
                         <v-tab v-for="(t,i) in tabs" :key="i">{{ t.name }}</v-tab>
@@ -10,56 +39,42 @@
                 </div>
                 <div class="mt-4">
                     <div v-if="active_tab==0">
-                        <div class="pa-4 custom-bs mt-4">
-                            <p class="mb-1">Austin TX</p>
-                            <p class="mb-1">No of attendies 100</p>
-                            <p class="">Minimum Guerantee sale</p>
-                            <v-btn rounded large color="primary" to="/vendor-truck-request/1">contact</v-btn>
-                        </div>
-                        <div class="pa-4 custom-bs mt-4">
-                            <p class="mb-1">Austin TX</p>
-                            <p class="mb-1">No of attendies 100</p>
-                            <p class="">Minimum Guerantee sale</p>
-                            <v-btn rounded large color="primary" to="/vendor-truck-request/2">contact</v-btn>
-                        </div>
-                    </div>
-                    <div v-else-if="active_tab==1">
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis, earum!</p>
-                        <p>Lorem.</p>
-                    </div>
-                    <div v-if="active_tab==2">
-                        <div class="custom-bs pa-4 mb-4">
-                            <p class="mb-1">Available Credits</p>
-                            <p class="green--text mb-0">60 Credits</p>
-                        </div>
-                        <div class="custom-bs pa-4 mb-4">
-                            <p class="mb-1">Credit Credits</p>
-                            <p class="green--text">60 Credits</p>
-                            <v-btn rounded large color="primary">buy credit</v-btn>
-                        </div>
-                        <div>
-                            <p>Transaction Log</p>
-                            <div class="custom-bs pa-4">
-                                <div class="">
-                                    <p>300 Credits</p>
-                                    <p class="mb-0">Transaction ID</p>
-                                    <p>2342342342342342323423</p>
-                                    <div class="d-flex align-center justify-space-between">
-                                        <p>VISA 111******</p>
-                                        <p>Jan 12, 2023</p>
+                        <div v-if="leads && Object.keys(leads).length">
+                            <!-- <TabLead :leads="leads" :availableCredit="available_credit"/> -->
+                            <div v-for="(item,index) in leads" :key="index">
+                                <div v-if="item.type =='catering'">
+                                    <div class="custom-bs pa-4 mb-4">
+                                        <ItemCatering :item="item" :availableCredit="available_credit"/>
                                     </div>
-                                    <v-divider class="mb-4"></v-divider>
-                                    <p>300 Credits</p>
-                                    <p class="mb-0">Transaction ID</p>
-                                    <p>2342342342342342323423</p>
-                                    <div class="d-flex align-center justify-space-between">
-                                        <p>VISA 111******</p>
-                                        <p>Jan 12, 2023</p>
+                                </div>
+                                <div v-if="item.type == 'event'">
+                                    <div class="custom-bs pa-4 mb-4">
+                                        <ItemEvent :item="item" :availableCredit="available_credit"/>
+                                    </div>
+                                </div>
+                                <div v-if="item.type =='regular_event'">
+                                    <div class="custom-bs pa-4 mb-4">
+                                        <ItemRegularEvent :item="item" :availableCredit="available_credit"/>
                                     </div>
                                 </div>
                             </div>
+                            <div v-if="this.last_page >= this.next_page" class="pa-4 text-center">
+                                <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
+                            </div>
+                        </div>
+                        <div v-else class="unavailable">
+                            <p>No event found</p>
                         </div>
                     </div>
+                    <div v-else-if="active_tab==1">
+                        <TabResponse/>
+                    </div>
+                    <div v-if="active_tab==2">
+                        <TabPayment/>
+                    </div>
+                    <ModalBuy @refreshData="fetchRequestList()" :available_credit="available_credit"/>
+                    <ModalBuyCredit/>
+                    <ModalVideoPlayer/>
                 </div>
             </div>
         </v-container>
@@ -79,6 +94,8 @@ export default {
     data() {
         return {
             title:'',
+            link_url:'',
+            post_title:'',
             base_url,
             active_tab:0,
             iconNavigate: mdiChevronRight,
@@ -86,7 +103,7 @@ export default {
             indexValue:3,
             usericon:'',
             tabs:[
-                {"name":"Lead","value":'lead'},
+                {"name":"Events","value":'lead'},
                 {"name":"Response","value":'response'},
                 {"name":"Payments","value":'Payments'},
             ],
@@ -102,48 +119,79 @@ export default {
                     credits: 237,
                 }
                 ],
-            items: [
-                // {name:'Support',icon:'mdi-headphones',route:'support'},
-                {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
-                {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
-                {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
-                {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
-                {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
-                {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                {name:'Leads',icon:'mdi-food-variant',route:'vendor-truck-request-list'},
-                // {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
-                {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
-                {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},
-                {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
-                {name:'Reports',icon:'mdi-file-document-multiple',route:'reports'},
-                {name:'Sales Summary',icon:'mdi-file-document-multiple',route:'sales-summary'},
-                {name:'Change Password',icon:'mdi-key',route:'change-password'},
-                {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
-                {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
-                // {name:'Social Media Account',icon:'mdi-facebook',route:'vendor-social-media-account'},
-                // {name:'Logout',icon:'mdi-logout',route:'logout'},
-             ],
+           
             utype:'',
             general:{},
             others:{},
             contact:{},
             message:'Loading...',
             render:false,
+            leads:[],
+            active_component:'',
+            available_credit:0,
+
+            next_page:1,
+            last_page:0,
+            fetching_data: false,
         }
     },
     components: {
         Topnavbar,
-        Bottomnavbar
+        Bottomnavbar,
+        // TabLead:() => import('@/views/vendor/truck_request/TabLeads.vue'),
+        TabPayment:() => import('@/views/vendor/truck_request/TabPayments.vue'),
+        TabResponse:() => import('@/views/vendor/truck_request/TabResponse.vue'),
+        ModalBuy:()=>import("@/views/vendor/truck_request/ModalBuy.vue"),
+        ModalBuyCredit:()=>import("@/views/vendor/truck_request/ModalBuyCredit.vue"),
+        ModalVideoPlayer:()=>import('@/views/vendor/profile/modal/ModalVideoPlayer.vue'),
+
+        ItemCatering:() => import('@/views/vendor/truck_request/ItemCatering.vue'),
+        ItemEvent:() => import('@/views/vendor/truck_request/ItemEvent.vue'),
+        ItemRegularEvent:() => import('@/views/vendor/truck_request/ItemRegularEvent.vue'),
     },
     mounted() {
-        console.log("test");
         this.fetchSetting();
+        this.fetchRequestList();
     },
     methods: {
         ...mapActions({
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
         }),
+        loadMore(){
+            if(this.last_page >= this.next_page){
+                if(!this.fetching_data)
+                this.fetchRequestList();
+            }
+        },
+        handleClick(param){
+            this.$bus.$emit('MODAL_VIDEO_PLAYER_OPEN',{param});
+        },
+        fetchRequestList(){
+            ApiService.post("/event_leads?page="+this.next_page)
+            .then((resp) =>{
+                // this.leads = resp.data;
+                this.available_credit = resp.credit_available;
+
+                resp.data.data.forEach(element => {
+                    this.leads.push(element);
+                });
+ 
+                this.last_page  = resp.data.last_page;
+				if(this.next_page <= this.last_page){
+					this.next_page += 1
+				}
+  
+                if(!this.leads.length) {
+                    this.message="No items";
+                }
+                this.loaderHide();
+                this.fetching_data = false;
+            })
+            .catch((error) =>{
+                console.log({error});
+            })
+        },
         fetchSetting() {
             // show_spot_booking
             ApiService.post("/site-setting-video-link",{'code':'show_spot_booking'})
@@ -196,36 +244,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.mb50{
-    margin-bottom: 50px;
-}
-.name-wrapper{
-    align-items: unset;
+.share-icon{
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-.setting-list{
-    ul{
-        list-style: none;
-        // margin-top:25px;
-        padding:0;
-        li{
-            // background: #fff;
-            // color:#fff;
-            padding: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0;
-            &:not(:last-child) {
-                border-bottom:1px solid #d2d5d4
-            }
-            span{
-                font-size: 0.9rem;
-                font-weight: 400;
-            }
-        }
+    a{
+        text-decoration: none;
     }
 }
 </style>

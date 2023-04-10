@@ -26,17 +26,6 @@
                             >
                                 <v-btn fab text color="blue"><v-icon large>mdi-facebook</v-icon></v-btn>
                             </ShareNetwork>
-                         
-                            <!-- <ShareNetwork
-                                network=""
-                                url=""
-                                title=""
-                                description=""
-                                quote=""
-                                hashtags=""
-                            >
-                                <v-btn fab text color="primary"><v-icon large>mdi-instagram</v-icon></v-btn>
-                            </ShareNetwork> -->
                             <ShareNetwork
                                 network="twitter"
                                 :url="link_url"
@@ -47,8 +36,6 @@
                             >
                                 <v-btn fab text color="primary"><v-icon large>mdi-twitter</v-icon></v-btn>
                             </ShareNetwork>
-                               <!-- <Facebook :url="link_url" scale="2"/>
-                            <Twitter :url="link_url" scale="2"/> -->
                         </div>
                     </div>
                     <VendorMenuList :truckProfile="profile" @fetch="profileData"/>

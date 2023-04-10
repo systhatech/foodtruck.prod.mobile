@@ -3,9 +3,15 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
             <div>
-                <div class="d-flex align-center pb-4 justify-space-between">
+                <!-- <div class="d-flex align-center pb-4 justify-space-between">
                     <h4>Request Truck for Event & Parties</h4>
                     <v-btn color="primary" fab small> <v-icon>mdi-plus</v-icon></v-btn>
+                </div> -->
+                <div class="custom-bs text-center pt-8 pb-8 mb-4">
+                    <h4 class="primary--text">Need Food Trucks for your Event?</h4>
+                    <div class="pt-6">
+                        <v-btn large color="primary" rounded to="/client-truck-request"> Request Now</v-btn>
+                    </div>
                 </div>
                 <div>
                     <v-tabs v-model="active_tab">
@@ -14,49 +20,19 @@
                 </div>
                 <div class="mt-4">
                     <div v-if="active_tab==0">
-                        <div class="pa-4 custom-bs mt-4">
-                            <div class="w-100">
-                                <div class="">
-                                    <div class="d-flex align-center justify-space-between">
-                                        <h4 class="mb-1 primary--text">Birthday Party</h4>
-                                        <div>
-                                            <v-btn
-                                            id="menu-activator"
-                                            fab small text
-                                            color="primary"
-                                            >
-                                            <v-icon>mdi-dots-vertical</v-icon>
-                                            </v-btn>
-                                            <div class="text-right">
-                                                <v-menu transition="slide-y-transition" location="bottom" activator="#menu-activator">
-                                                    <v-list>
-                                                        <v-list-item>
-                                                            <v-list-item-title><v-icon color="error">mdi-close</v-icon> Close Request</v-list-item-title>
-                                                        </v-list-item>
-                                                        <v-list-item>
-                                                            <v-list-item-title><v-icon color="error">mdi-close</v-icon> Cancel Request</v-list-item-title>
-                                                        </v-list-item>
-                                                    </v-list>
-                                                </v-menu>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="mb-1">June 17th, 2023</p>
-                                <p class="mb-1">Austin TX</p>
-                                <p class="mb-1">No of attendies 100</p>
-                                <p class="">Minimum Guerantee sale</p>
+                        <div class="pa-4 custom-bs mt-4" v-for="(item,index) in request_list" :key="index">
+                            <div v-if="item.type =='catering'">
+                                <ItemCatering :item="item"/>
                             </div>
-                            <v-divider></v-divider>
-                            <div class="pt-4 pb-4">
-                                <p class="mb-0 green--text">2 Truck Responded</p>
-                                <h5>3 Unread message</h5>
+                            <div v-if="item.type == 'event'">
+                                <ItemEvent :item="item"/>
                             </div>
-                            <div class="d-flex align-center justify-space-between">
-                                <v-btn rounded  large color="primary" to="/client-truck-request/1">view</v-btn>
-                                <!-- <v-btn rounded large to="#">close</v-btn>
-                                <v-btn rounded large to="#">cancel</v-btn> -->
+                            <div v-if="item.type =='regular_event'">
+                                <ItemRegularEvent :item="item"/>
                             </div>
+                        </div>
+                        <div v-if="this.last_page >= this.next_page" class="pa-4 text-center">
+                            <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
                         </div>
                     </div>
                     <div v-else-if="active_tab==1">
@@ -103,13 +79,12 @@
     </v-container>
 </template>
 <script>
-import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-import Bottomnavbar from '@/components/layout/NavbarBottomClient'
+// import Topnavbar from '@/components/layout/TopnavbarBackCustom'
+// import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import { mapGetters, mapActions } from 'vuex';
 import { base_url } from '@/core/services/config'
 import { mdiAccount, mdiChevronRight } from '@mdi/js'
-import {socketHandler} from '@/core/services/socketio/socket';
-import { ApiService } from "@/core/services/api.service";
+import { ApiService } from '@/core/services/api.service'
 export default {
     name:'RequestListPage',
     data() {
@@ -145,7 +120,6 @@ export default {
                 }
                 ],
             items: [
-                // {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
                 {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
@@ -162,70 +136,67 @@ export default {
                 {name:'Change Password',icon:'mdi-key',route:'change-password'},
                 {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
                 {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
-                // {name:'Social Media Account',icon:'mdi-facebook',route:'vendor-social-media-account'},
-                // {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],
             utype:'',
             general:{},
             others:{},
             contact:{},
-            // message:'Loading...',
             render:false,
 
             fav: true,
             menu: false,
             message: false,
             hints: true,
+            request_list:[],
+
+            next_page:1,
+            last_page:0,
+            fetching_data: false,
         }
     },
     components: {
-        Topnavbar,
-        Bottomnavbar
+        Bottomnavbar:() => import('@/components/layout/NavbarBottomClient'),
+        Topnavbar:() => import('@/components/layout/TopnavbarBackCustom'),
+        ItemCatering:() => import('@/views/client/truck_request/ItemCatering.vue'),
+        ItemEvent:() => import('@/views/client/truck_request/ItemEvent.vue'),
+        ItemRegularEvent:() => import('@/views/client/truck_request/ItemRegularEvent.vue'),
     },
     mounted() {
-        console.log("test");
-        this.fetchSetting();
+        this.fetchRequestList();
     },
     methods: {
         ...mapActions({
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
         }),
-        fetchSetting() {
-            // show_spot_booking
-            ApiService.post("/site-setting-video-link",{'code':'show_spot_booking'})
-            .then((resp)=>{
-                // this.video = resp.data.value;
-                // this.video_description = resp.data.description;
-                if(parseInt(resp.data.value)){
-                    // console.log("here", resp.data.value);
-                    this.menusVendor.push({name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'});
-                }else{
-                    console.log("failed", resp.data.value);
+        loadMore(){
+            if(this.last_page >= this.next_page){
+                if(!this.fetching_data)
+                this.fetchRequestList();
+            }
+        },
+        fetchRequestList(){
+            ApiService.post("/event_request_list?page="+this.next_page)
+            .then((resp) =>{
+                resp.data.data.forEach(element => {
+                    this.request_list.push(element);
+                });
+ 
+                this.last_page  = resp.data.last_page;
+				if(this.next_page <= this.last_page){
+					this.next_page += 1
+				}
+  
+                if(!this.request_list.length) {
+                    this.message="No items";
                 }
-                // console.log({resp});
-            })            
-            .catch((error)=>{
-                console.log({error});
-            })
-        },
-        signOut() {
-            this.loaderShow();
-            this.signOutAction()
-            .then(() => {
-                console.log("here");
                 this.loaderHide();
-                socketHandler.disconnect();
-                this.$router.replace({
-                    name:'loginPage',
-                })
+                this.fetching_data = false;
             })
-            .catch((error)=>{
+            .catch((error) =>{
                 console.log({error});
             })
         },
-     
-
         handleBack() {
             this.$router.back();
         },

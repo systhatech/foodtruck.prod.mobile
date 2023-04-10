@@ -57,7 +57,9 @@ export default {
         }
     },
     mounted() {
-        this.dispatchCarts();
+        if(this.currentUser){
+            this.dispatchCarts();
+        }
     },
     computed: {
         ...mapGetters({

@@ -3,48 +3,54 @@
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
            <div v-if="type=='c'">
-            
-                <FormCatering/>
+                <FormCatering :cuisineTypes="cuisine_types"/>
            </div>
            <div v-else-if="type=='e'">
-                <FormEvent/>
+                <FormEvent :cuisineTypes="cuisine_types"/>
            </div>
            <div v-else-if="type=='re'">
-                <FormRegularEvent/>
+                <FormRegularEvent :cuisineTypes="cuisine_types"/>
            </div>
         </v-container>
-         <Bottomnavbar/>
+        <Bottomnavbar/>
     </v-container>
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
-// import { ApiService } from '@/core/services/api.service'
-// import OrderDetail from '@/views/vendor/order/VendorOrderDetail'
-
-// import moment from 'moment'
+import {ApiService} from '@/core/services/api.service'
 import { mapGetters } from 'vuex'
 export default {
-    name:'OrdersPage',
+    name:'TruckRequestFormPage',
     data() {
         return {
             title:'',
             start_request:false,
-            type:''
+            type:'',
+            cuisine_types:[],
         }
     },
     mounted() {
         this.type =  this.$router.currentRoute.query.type;
-        console.log(this.type);
+        this.fetchCuines();
     },
     methods: {
-
         handleBack(){
             this.$router.back();
         },
         handleClick(param){
             console.log(param);
             this.$router.push("/test");
+        },
+        fetchCuines(){
+            ApiService.post("/vendor-lookup-all")
+            .then((resp) =>{
+                console.log({resp})
+                this.cuisine_types = resp.data;
+            })
+            .catch((error) =>{
+                console.log({error});
+            })
         }
     },
     components: {

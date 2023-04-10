@@ -4,7 +4,7 @@
         <v-container class="mg56 pa-0">
             <div v-if="currentUser && members && members.length">
                 <ul class="chat-lists custom-bs pt-2">
-                    <li v-for="(member, index) in members" :key="index" @click="handleRoute(member.id)" class="d-flex align-center justify-space-between pa-2 pt-4">
+                    <li v-for="(member, index) in members" :key="index" @click="handleRoute(member)" class="d-flex align-center justify-space-between pa-2 pt-4">
                         <div class="d-flex align-center justify-space-between pl-3 pr-3">
                             <div class="d-flex">
                                 <!-- <v-avatar color="primary">
@@ -201,9 +201,9 @@ export default {
         handleBack() {
             this.$router.back();
         },
-        handleRoute(id) {
+        handleRoute(conv) {
             // this.$router.push("/conversation/clients/" + id);
-            this.$router.push("/vendor/conversation/clients/" + id);
+            this.$router.push("/vendor/conversation/clients/" + conv.client_id+'/'+conv.id);
         },
         fetchTrucks() {
             this.loading = true;
@@ -212,7 +212,19 @@ export default {
                 .then((resp) => {
                     this.loading = false;
                     this.$bus.$emit("HIDE_PAGE_LOADER");
-                    this.members = resp;
+                    this.members = [];
+                    resp.data.forEach((item) => {
+                        if(this.currentUser.table =='vendors'){
+                            item['profile_pic'] = item.client.contact.profile_pic;
+                            item['name'] = item.client.fullName;
+                            item['unread_messages_count'] = item.unread_vendor_messages_count;
+                        }else if(this.currentUser.table =='clients'){
+                            item['profile_pic'] = item.vendor.profile_pic;
+                            item['name'] = item.vendor.name;
+                            item['unread_messages_count'] = item.unread_client_messages_count;
+                        }
+                        this.members.push(item);
+                    })
                 })
                 .catch(() => {
                     this.loading = false;

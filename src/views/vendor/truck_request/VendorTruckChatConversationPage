@@ -86,60 +86,67 @@ export default {
                 name:'',
                 profile_pic:'',
             },
+            event_request_id:'',
+            vendor_id:'',
             conversation_id:'',
+            event_req_id:'',
         }
     },
     mounted() {
-        let plugin = this;
-        this.table_to = this.$router.currentRoute.params.type;
-        this.table_to_id = this.$router.currentRoute.params.id;
-        this.conversation_id = this.$router.currentRoute.params.conv_id;
-        socketHandler.on('timezone', function(tz) {
-            plugin.tz = tz;
-        });
+        // let plugin = this;
+       
+        // this.table_to = this.$router.currentRoute.params.type;
+        // this.table_to_id = this.$router.currentRoute.params.id;
+        // this.conversation_id = this.$router.currentRoute.params.conv_id;
+        // this.event_req_id = this.$router.currentRoute.params.event_req_id;
+
+        // console.log("table_to ",this.table_to);
+        // console.log("conv_id ",this.conversation_id);
+
+        // socketHandler.on('timezone', function(tz) {
+        //     plugin.tz = tz;
+        // });
     
-        socketHandler.initChat({
-            table_from: this.currentUser.table,
-            table_from_id: this.currentUser.table_id,
-            table_to: this.table_to,
-            table_to_id: this.table_to_id,
-            conversation_id: this.conversation_id,
-            seen_client: 1,
-            seen_vendor: 0,
-        });
+        // socketHandler.initChat({
+        //     table_from: this.currentUser.table,
+        //     table_from_id: this.currentUser.table_id,
+        //     table_to: this.table_to,
+        //     table_to_id: this.table_to_id,
+        //     conversation_id: this.conversation_id,
+        // });
 
-        socketHandler.on('appendMyMessage', function (message) {
-            plugin.message = '';
-            plugin.messages.push({
-                message,
-                created_at: moment().tz(plugin.tz).format('YYYY-MM-DD HH:mm:ss'),
-                table_from: plugin.currentUser.table,
-                table_from_id: plugin.currentUser.table_id
-            });
+        // socketHandler.on('appendMyMessage', function (message) {
+        //     plugin.message = '';
+        //     plugin.messages.push({
+        //         message,
+        //         created_at: moment().tz(plugin.tz).format('YYYY-MM-DD HH:mm:ss'),
+        //         table_from: plugin.currentUser.table,
+        //         table_from_id: plugin.currentUser.table_id
+        //     });
 
-            ApiService.post('/firebase/offline/notification', {
-                table_to : this.table_to,
-                table_to_id : this.table_to_id,
-                message
-            })
-        });
-        socketHandler.on('messageReceived', function (message) {
-            plugin.messages.push({...message, created_at : moment().tz(plugin.tz).format('YYYY-MM-DD HH:mm:ss')})
+        //     ApiService.post('/firebase/offline/notification', {
+        //         table_to : this.table_to,
+        //         table_to_id : this.table_to_id,
+        //         message
+        //     })
+        // });
+        // socketHandler.on('messageReceived', function (message) {
+        //     plugin.messages.push({...message, created_at : moment().tz(plugin.tz).format('YYYY-MM-DD HH:mm:ss')})
             
-        });
-        socketHandler.on('scrollToBottom', function () {
-            // setTimeout(() => {
-            //     plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
-            // },500);
+        // });
+        // socketHandler.on('scrollToBottom', function () {
+        //     // setTimeout(() => {
+        //     //     plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
+        //     // },500);
 
-            if(plugin.$refs.messageContainer){
-                setTimeout(() => {
-                    plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
-                },500);
-            }
-        });
-        // this.customheight = this.$refs.messageContainer.scrollHeight - 00;
-        this.fetchMessage();
+        //     if(plugin.$refs.messageContainer){
+        //         setTimeout(() => {
+        //             plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
+        //         },500);
+        //     }
+        // });
+        // // this.customheight = this.$refs.messageContainer.scrollHeight - 00;
+        // this.fetchMessage();
     },
     watch : {
         messages() {
@@ -171,26 +178,70 @@ export default {
             return this.messages[index - 1].created_at;
         },
         fetchMessage() {
-            // this.loaderShow();
+            this.loaderShow();
             this.loading = true;
-            ApiService.post('/chat-messages', {
-                table_from: this.currentUser.table,
-                table_from_id: this.currentUser.table_id,
-                table_to: this.table_to,
-                table_to_id: this.table_to_id,
-                page: this.pageNo,
+
+            // ApiService.post('/chat-messages', {
+            //     table_from: this.currentUser.table,
+            //     table_from_id: this.currentUser.table_id,
+            //     table_to: this.table_to,
+            //     table_to_id: this.table_to_id,
+            //     page: this.pageNo,
+            //     'table_name':'event_requests',
+            // })
+            // .then((resp) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     this.messages = resp.data;
+            //     this.receiver =  resp.meta;
+            // })
+            // .catch((error) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     console.log(error);
+            // })
+        //     this.table_to = this.$router.currentRoute.params.type;
+        // this.table_to_id = this.$router.currentRoute.params.id;
+        // this.conversation_id = this.$router.currentRoute.params.conv_id;
+            ApiService.post('/truck-requestchat-messages', {
+                vendor_id: this.table_to_id,
+                client_id: this.currentUser.table_id,
+                event_request_id: this.event_req_id,
             })
-                .then((resp) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    this.messages = resp.data;
-                    this.receiver =  resp.meta;
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    console.log(error);
-                })
+            .then((resp) => {
+                this.loading = false;
+                this.loaderHide();
+                this.messages = resp.data;
+                this.receiver =  resp.meta;
+                this.conversation_id = resp.conversation_id;
+                console.log(this.conversation_id);
+            })
+            .catch((error) => {
+                this.loading = false;
+                this.loaderHide();
+                console.log(error);
+            })
+
+
+            // this.loading = true;
+            // ApiService.post('/truck-requestchat-messages', {
+            //     table_from: this.currentUser.table,
+            //     table_from_id: this.currentUser.table_id,
+            //     table_to: this.table_to,
+            //     table_to_id: this.table_to_id,
+            //     page: this.pageNo,
+            // })
+            // .then((resp) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     this.messages = resp.data;
+            //     this.receiver =  resp.meta;
+            // })
+            // .catch((error) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     console.log(error);
+            // })
 
         },
         handleBack() {

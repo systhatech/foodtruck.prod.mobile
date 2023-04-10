@@ -178,7 +178,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
-import CardStripe from './CardStripe'
+import CardStripe from '@/views/cart/CardStripe'
 export default {
     data() {
         return {

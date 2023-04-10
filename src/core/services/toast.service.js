@@ -141,6 +141,13 @@ export default {
                 return "-";
             }
         },
+        formatT(time){
+            if(time){
+                return moment(time,'HH:mm:ss').format('hh:mm A');
+            }else{
+                return '';
+            }
+        },
         formatDateTime(date){
              if(moment(date).isValid()) {
                 // return moment(date).format('ll');

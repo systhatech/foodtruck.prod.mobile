@@ -112,7 +112,7 @@ export default {
                 {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
                 {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
                 {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                {name:'Leads',icon:'mdi-food-variant',route:'vendor-truck-request-list'},
+                // {name:'Leads',icon:'mdi-food-variant',route:'vendor-truck-request-list'},
                 // {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
                 {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
                 {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},

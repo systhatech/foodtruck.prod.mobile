@@ -47,7 +47,7 @@
                                         
                                         fab
                                         link
-                                        :to="'/client/conversation/vendors/'+truck.id"
+                                        :to="'/client/conversation/vendors/'+truck.id+'/'+conversation_id"
                                         color="primary"
                                         >
                                         <v-icon large>mdi-chat</v-icon>
@@ -149,6 +149,7 @@ export default {
             truckProfile:{},
             orderDate:'',
             item:{},
+            conversation_id:null,
         }
     },
     mounted() {
@@ -200,8 +201,10 @@ export default {
         },
         async profileData() {
             // this.loaderShow();
-            await ApiService.get('/truck/profile/'+ this.truckId)
+            await ApiService.post('/truck/profile/'+ this.truckId)
             .then((resp) => {
+                this.conversation_id = resp.conversation_id;
+                console.log(this.conversation_id);
                 this.render = true;
                 this.truckProfile = resp;
                 this.truck.id = resp.general.id;

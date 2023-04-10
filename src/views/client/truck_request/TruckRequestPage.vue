@@ -2,13 +2,13 @@
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
-            <div class="custom-bs text-center pt-8 pb-8" v-if="!start_request">
+            <!-- <div class="custom-bs text-center pt-8 pb-8" v-if="!start_request">
                 <h4 class="primary--text">Need Food Trucks for your Event?</h4>
                 <div class="pt-6">
                     <v-btn large color="primary" rounded @click="start_request=true"> Request Now</v-btn>
                 </div>
-            </div>
-            <div class="" v-else>
+            </div> -->
+            <div class="">
                 <h3 class="primary--text">Food Truck Request</h3>
                 <p>Select Event Type</p>
                 <div class="custom-bs pa-8 text-center mb-6" >

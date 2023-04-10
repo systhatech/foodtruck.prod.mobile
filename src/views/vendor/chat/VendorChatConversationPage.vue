@@ -94,6 +94,7 @@ export default {
       
         this.table_to = this.$router.currentRoute.params.type;
         this.table_to_id = this.$router.currentRoute.params.id;
+        this.conversation_id = this.$router.currentRoute.params.conv_id;
 
         socketHandler.on('timezone', function(tz) {
             plugin.tz = tz;
@@ -104,6 +105,9 @@ export default {
             table_from_id: this.currentUser.table_id,
             table_to: this.table_to,
             table_to_id: this.table_to_id,
+            conversation_id: this.conversation_id,
+            seen_client: 1,
+            seen_vendor: 0,
         });
 
         socketHandler.on('appendMyMessage', function (message) {
@@ -126,9 +130,6 @@ export default {
             
         });
         socketHandler.on('scrollToBottom', function () {
-            // setTimeout(() => {
-            //     plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;
-            // },500);
             if(plugin.$refs.messageContainer){
                 setTimeout(() => {
                     plugin.$refs.messageContainer.scrollTop = plugin.$refs.messageContainer.scrollHeight;

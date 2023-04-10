@@ -86,14 +86,32 @@ export default {
                 name:'',
                 profile_pic:'',
             },
+            event_request_id:'',
+            vendor_id:'',
             conversation_id:'',
+            event_req_id:'',
         }
     },
     mounted() {
         let plugin = this;
-        this.table_to = this.$router.currentRoute.params.type;
-        this.table_to_id = this.$router.currentRoute.params.id;
+       console.log(this.$router.currentRoute);
+        this.table_to = this.$router.currentRoute.params.to;
+        this.table_to_id = this.$router.currentRoute.params.to_id;
         this.conversation_id = this.$router.currentRoute.params.conv_id;
+        this.event_req_id = this.$router.currentRoute.params.event_req_id;
+
+        if(this.currentUser.table =='vendors'){
+            this.vendor_id = this.currentUser.table_id;
+            this.client_id = this.table_to_id;
+        }else{
+            this.vendor_id = this.table_to_id;
+            this.client_id = this.currentUser.table_id;
+        }
+
+        console.log(this.vendor_id, this.client_id);
+
+
+
         socketHandler.on('timezone', function(tz) {
             plugin.tz = tz;
         });
@@ -104,8 +122,8 @@ export default {
             table_to: this.table_to,
             table_to_id: this.table_to_id,
             conversation_id: this.conversation_id,
-            seen_client: 1,
-            seen_vendor: 0,
+            seen_vendor: this.currentUser.table =='vendors'?1:0,
+            seen_client: this.currentUser.table =='clients'?1:0,
         });
 
         socketHandler.on('appendMyMessage', function (message) {
@@ -171,26 +189,70 @@ export default {
             return this.messages[index - 1].created_at;
         },
         fetchMessage() {
-            // this.loaderShow();
+            this.loaderShow();
             this.loading = true;
-            ApiService.post('/chat-messages', {
-                table_from: this.currentUser.table,
-                table_from_id: this.currentUser.table_id,
-                table_to: this.table_to,
-                table_to_id: this.table_to_id,
-                page: this.pageNo,
+
+            // ApiService.post('/chat-messages', {
+            //     table_from: this.currentUser.table,
+            //     table_from_id: this.currentUser.table_id,
+            //     table_to: this.table_to,
+            //     table_to_id: this.table_to_id,
+            //     page: this.pageNo,
+            //     'table_name':'event_requests',
+            // })
+            // .then((resp) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     this.messages = resp.data;
+            //     this.receiver =  resp.meta;
+            // })
+            // .catch((error) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     console.log(error);
+            // })
+        //     this.table_to = this.$router.currentRoute.params.type;
+        // this.table_to_id = this.$router.currentRoute.params.id;
+        // this.conversation_id = this.$router.currentRoute.params.conv_id;
+            ApiService.post('/truck-requestchat-messages', {
+                vendor_id: this.vendor_id,
+                client_id: this.client_id,
+                event_request_id: this.event_req_id,
             })
-                .then((resp) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    this.messages = resp.data;
-                    this.receiver =  resp.meta;
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    console.log(error);
-                })
+            .then((resp) => {
+                this.loading = false;
+                this.loaderHide();
+                this.messages = resp.data;
+                this.receiver =  resp.meta;
+                this.conversation_id = resp.conversation_id;
+                console.log(this.conversation_id);
+            })
+            .catch((error) => {
+                this.loading = false;
+                this.loaderHide();
+                console.log(error);
+            })
+
+
+            // this.loading = true;
+            // ApiService.post('/truck-requestchat-messages', {
+            //     table_from: this.currentUser.table,
+            //     table_from_id: this.currentUser.table_id,
+            //     table_to: this.table_to,
+            //     table_to_id: this.table_to_id,
+            //     page: this.pageNo,
+            // })
+            // .then((resp) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     this.messages = resp.data;
+            //     this.receiver =  resp.meta;
+            // })
+            // .catch((error) => {
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     console.log(error);
+            // })
 
         },
         handleBack() {

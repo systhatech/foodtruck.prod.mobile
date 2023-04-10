@@ -1,0 +1,102 @@
+<template>
+    <div class="">
+        <div class="">  
+            <div class="w-100">
+                <div class="">
+                    <div class="">
+                        <div class="mb-4">
+                            <h4 class="mb-0 text-capitalize">{{item.event_name}}</h4>
+                            <!-- <v-chip v-if="item.event_type" small class="text-capitalize" color="primary">{{ item.event_type }}</v-chip> -->
+                        </div>
+                        <v-divider></v-divider>
+                        <div class="mt-4" v-if="item.event_type">
+                            <p class="primary--text mb-1">Event Type</p>
+                            <p class="text-capitalize mb-0">{{item.event_type}}</p>
+                        </div> 
+                        <div class="d-flex justify-space-between">
+                            <div class="pt-4">
+                                <p class="primary--text mb-1">Date and Time</p>
+                                <p class="mb-0">{{ formatStandardUSDate(item.event_date) }} </p>
+                                <p>{{ formatT(item.start_time) }} - {{ formatT(item.end_time) }}</p>
+                            </div>
+                            <div class="pt-4">
+                                <p class="error--text mb-1">{{ item.credit }} Credits</p>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <p class="primary--text mb-1">Address</p>
+                            <p class="mb-1">{{item.address}}</p>
+                        </div> 
+                        <div class="d-flex justify-space-between">
+                            <div>
+                                <p class="primary--text mb-1">Budget</p>
+                                <p>{{ formatAmount(item.budget)}}</p>
+                            </div>
+                            <div>
+                                <p class="primary--text mb-1">Expected</p>
+                                <p>{{ item.people_expected}} People</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div v-if="item.status!='new'">
+                <v-divider></v-divider>
+                <div class="pt-4 pb-4">
+                    <p class="mb-0 green--text">2 Truck Responded</p>
+                    <h5>3 Unread message</h5>
+                </div>
+            </div>
+            <div class="d-flex align-center justify-space-between">
+                <v-btn v-if="item.is_responded" rounded  large color="primary" :to="'/vendor-truck-request/'+item.id">view</v-btn>
+                <v-btn v-else rounded  large color="primary" @click="handleClick(item)">buy</v-btn>
+            </div>
+            <!-- <ModalBuy/> -->
+        </div>
+        <!-- <ModalBuy/> -->
+    </div>
+</template>
+<script>
+import {mapGetters} from'vuex'
+import moment from 'moment'
+
+export default {
+    props:{
+        item:{},
+        availableCredit:{}
+    },
+    data() {
+        return {
+            moment,
+        }
+    },
+    computed: {
+        ...mapGetters({
+            currentUser:'auth/user',
+        }),
+    },
+    created() {
+
+    },
+    mounted() {
+      
+    },
+    methods: {
+        handleClick(item){
+            if(this.availableCredit==0 || (item.credit > this.availableCredit)){
+                this.$router.push("/vendor-credit-packages");
+            }else{
+                this.$bus.$emit('MODAL_OPEN',{item});
+            }
+        }
+    },
+
+    components: {
+        // ModalBuy:()=>import("@/views/vendor/truck_request/ModalBuy.vue")
+    }
+}
+</script>
+<style scoped lang="scss">
+
+</style>
