@@ -98,24 +98,16 @@ export default {
             orderTypes: [
                 {name:'New',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'recent-orders'},
                 {name:'Old Orders',active_type:true,icon:'mdi-cart-arrow-down',component:'order-new',status:'past-orders'},
-                // {name:'Accepted',active_type:false,icon:'mdi-refresh',component:'order-processing',status:'accepted'},
-                // {name:'Preparing',active_type:false,icon:'mdi-refresh',component:'order-preparing',status:'preparing'},
-                // {name:'Ready',active_type:false,icon:'mdi-cart-minus',component:'order-ready',status:'ready'},
-                // {name:'Completed',active_type:false,icon:'mdi-cart-minus',component:'order-completed',status:'completed'},
-                // {name:'Cancel',active_type:false,icon:'mdi-cart-minus',component:'order-cancelled',status:'cancelled'},
             ],
             refresh_time:10000,
+            next_day:'',
+            date:'',
         }
     },
     mounted() {
-        // if(this.currentUser){
-        //     if(this.currentUser.table == 'clients'){
-        //         this.orderTypes = this.otClient;
-        //         this.status = "recent-orders";
-        //     }else{
-        //         this.orderTypes = this.otVendor;
-        //     }
-        // }
+        const tomorrow = moment().add(1, 'days');
+        this.next_day = tomorrow.format('YYYY-MM-DD');
+        this.date = moment().format('YYYY-MM-DD');
         this.fetchOrders();
     },
     methods: {
@@ -129,7 +121,9 @@ export default {
             this.orders = [];
             this.loading = true;
             await ApiService.post("/order-list",{
-                'status': this.status
+                'status': this.status,
+                'date': this.date,
+                'end': this.next_day,
             })
             .then((resp) => {
                 this.loading = false;
@@ -145,7 +139,8 @@ export default {
         async refetchOrders() {
             this.loaderShow();
             await ApiService.post("/order-list",{
-                'status': this.status
+                'status': this.status,
+                'date': moment().format('yy-mm-dd'),
             })
             .then((resp) => {
                 this.loaderHide();
@@ -160,8 +155,18 @@ export default {
             this.$router.push("/"+route);
         },
         handleActive(item, index){
+            
+            
             this.activeType = index;
             this.status = item.status.status;
+            if(this.status == 'past-orders'){
+                const tomorrow = moment().add(-1, 'days');
+                this.next_day = tomorrow.format('YYYY-MM-DD');
+                this.date='';
+            }else if(this.status=='recent-orders'){
+                this.date = moment().format('YYYY-MM-DD');
+                this.next_day='';
+            }
             this.fetchOrders();
         },
         handleView(order){

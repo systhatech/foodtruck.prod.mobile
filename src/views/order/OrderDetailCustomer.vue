@@ -27,7 +27,7 @@
                                                 <div class="mt-4">
                                                     <!-- this.$router.push("/client/conversation/vendors/" + id); -->
                                                     <v-btn fab color="primary" class="mr-2" link :href="`tel:${orderDetail.vendor.contact.phone_no ?orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`" small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
-                                                    <v-btn fab color="primary" link :to="'/client/conversation/vendors/'+orderDetail.vendor_id" small><v-icon>{{ iconChat }}</v-icon> </v-btn>
+                                                    <v-btn fab color="primary" link :to="'/client/conversation/vendors/'+orderDetail.vendor_id+'/'+orderDetail.conversation_id" small><v-icon>{{ iconChat }}</v-icon> </v-btn>
                                                 </div>
                                             </div>
                                         </div>

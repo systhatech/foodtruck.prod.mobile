@@ -100,11 +100,11 @@
                                                             <td class="text-right">{{formatAmount(cart.service_charge)}}</td>
                                                         </tr>
                                                         <tr v-if="cart.tax_percent">
-                                                            <td>Taxe</td>
+                                                            <td>Tax</td>
                                                             <td class="text-right">{{formatAmount(cart.tax_amount)}}</td>
                                                         </tr>
                                                         <tr v-if="cart.tips_amount">
-                                                            <td>Tips</td>
+                                                            <td>Tip</td>
                                                             <td class="text-right">{{formatAmount(cart.tips_amount)}}</td>
                                                         </tr>
                                                         <tr v-if="cart.convenience_amount && (cart.payment_method=='card')">

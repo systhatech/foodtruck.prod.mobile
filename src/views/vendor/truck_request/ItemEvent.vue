@@ -41,14 +41,21 @@
                             <p class="primary--text mb-1">Additional Info</p>
                             <p>{{ item.additional_info}}</p>
                         </div>
+                       
                     </div>
                 </div>
             </div>
-            <div v-if="item.status!='new'">
-                <v-divider></v-divider>
+            <v-divider class="mb-4"></v-divider>
+            <div v-if="item.email && item.phone">
+                <div>
+                    <p class="primary--text mb-1">Contact</p>
+                    <p class="mb-1"><v-icon color="primary">mdi-email</v-icon> {{ item.email}}</p>
+                    <p> <v-icon color="primary">mdi-phone</v-icon> {{ item.phone}}</p>
+                </div>
+            </div>
+            <div v-if="item.status!='pending'">
                 <div class="pt-4 pb-4">
-                    <p class="mb-0 green--text">2 Truck Responded</p>
-                    <h5>3 Unread message</h5>
+                    <p class="mb-0 green--text" v-if="item.response_count">{{item.response_count}} Truck Responded</p>
                 </div>
             </div>
             <div class="d-flex align-center justify-space-between">
@@ -88,7 +95,8 @@ export default {
             if(this.availableCredit==0 || (item.credit > this.availableCredit)){
                 this.$router.push("/vendor-credit-packages");
             }else{
-                this.$bus.$emit('MODAL_OPEN',{item});
+                // this.$bus.$emit('MODAL_OPEN',{item});
+                this.$emit("buyEvent",{item});
             }
         }
     },

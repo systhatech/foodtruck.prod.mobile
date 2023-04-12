@@ -1,5 +1,5 @@
 <template>
-    <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
+    <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image" fluid>
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
             <div class="custom-bs pa-4 mb-4">
@@ -18,11 +18,35 @@
                 
                 <div class="mb-4" v-if="detail.event_type">
                     <p class="primary--text mb-1">Event Type</p>
-                    <p>{{ detail.event_type}}</p>
+                    <p class="text-capitalize">{{ detail.event_type}}</p>
                 </div>
                 <div class="mb-4">
                     <p class="primary--text mb-1">Address</p>
                     <p class="mb-1">{{detail.address}}</p>
+                </div> 
+                <div class="mb-4">
+                    <p class="primary--text mb-0">Current Status</p>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-select
+                            v-model="selected_status"
+                            :items="items"
+                            class="mt-0 pt-0"
+                            density="compact"
+                            >
+                            <template v-slot:selection="data">
+                                    <span class="text-capitalize">{{ data.item }}</span>
+                                </template>
+                                <template v-slot:item="data">
+                                    <template>
+                                    <v-list-item-content>
+                                        <v-list-item-title v-html="data.item" class="text-capitalize"></v-list-item-title>
+                                    </v-list-item-content>
+                                    </template>
+                                </template>   
+                            </v-select>
+                        </v-col>
+                    </v-row>
                 </div> 
            </div>
            <div class="custom-bs pa-4 mb-4">
@@ -88,13 +112,13 @@
                     <div class="d-flex justify-space-between align-center">
                         <div>
                             <h4 class="primary--text text-capitalize">{{vendor.name}}</h4>
-                            <p class="success--text">{{vendor.unread_messages.length}} unread message</p>
+                            <p class="error--text mb-0" v-if="vendor.unread_messages.length">{{vendor.unread_messages.length}} unread message</p>
                         </div>
                         <div>
                             <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
                         </div>
                     </div>
-                    <v-divider v-if="index<detail.vendors.length-1" class="mb-4"></v-divider>
+                    <v-divider v-if="index<detail.vendors.length-1" class="mb-4 mt-4"></v-divider>
                 </div>
            </div>
         </v-container>
@@ -115,13 +139,33 @@ export default {
             start_request:false,
             detail:{},
             event_request_id:'',
+            selected_status : "pending",
+            items: ['pending', 'hired', 'archived'],
         }
     },
     mounted(){
         this.fetchData();
         this.event_request_id = this.$router.currentRoute.params.requestId;
     },
+    watch:{
+        selected_status(val) {
+            this.updateStatus(val);
+        }   
+    },
     methods: {
+        updateStatus(param){
+            ApiService.post("/event_request_update",{
+                'id': this.$router.currentRoute.params.requestId,
+                "status": param,
+            })
+            .then((resp) =>{
+                console.log(resp);
+                
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+        },
         fetchData(){
             ApiService.post("/event_request_detail",{
                 'id': this.$router.currentRoute.params.requestId
@@ -129,6 +173,7 @@ export default {
             .then((resp) =>{
                 console.log(resp);
                 this.detail = resp.data;
+                this.selected_status = this.detail.status;
             })
             .catch((error) =>{
                 console.log(error);

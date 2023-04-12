@@ -6,7 +6,7 @@
 			<v-icon>{{ iconHome }}</v-icon>
 		</v-btn>
 		<v-btn link to="/vendor-truck-request-list">
-			<span>Leads</span>
+			<span>Request</span>
 			<v-icon>{{ iconLeads }}</v-icon>
 		</v-btn>
 		<v-btn link to="/vendor-orders">

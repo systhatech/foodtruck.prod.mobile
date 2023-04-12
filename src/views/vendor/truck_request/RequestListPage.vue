@@ -44,17 +44,24 @@
                             <div v-for="(item,index) in leads" :key="index">
                                 <div v-if="item.type =='catering'">
                                     <div class="custom-bs pa-4 mb-4">
-                                        <ItemCatering :item="item" :availableCredit="available_credit"/>
+                                        <ItemCatering :item="item" 
+                                            :availableCredit="available_credit" 
+                                            @buyEvent="handleBuyEvent"
+                                            />
                                     </div>
                                 </div>
                                 <div v-if="item.type == 'event'">
                                     <div class="custom-bs pa-4 mb-4">
-                                        <ItemEvent :item="item" :availableCredit="available_credit"/>
+                                        <ItemEvent :item="item" 
+                                        @buyEvent="handleBuyEvent"
+                                        :availableCredit="available_credit"/>
                                     </div>
                                 </div>
                                 <div v-if="item.type =='regular_event'">
                                     <div class="custom-bs pa-4 mb-4">
-                                        <ItemRegularEvent :item="item" :availableCredit="available_credit"/>
+                                        <ItemRegularEvent :item="item" 
+                                        @buyEvent="handleBuyEvent"
+                                        :availableCredit="available_credit"/>
                                     </div>
                                 </div>
                             </div>
@@ -164,15 +171,30 @@ export default {
                 this.fetchRequestList();
             }
         },
+        handleBuyEvent(param){
+            this.loaderShow();
+            ApiService.post("/event_buy",{
+                "id": param.item.id
+            })
+            .then((response) =>{
+                this.loaderHide();
+                this.next_page = 1;
+                this.fetchRequestList();
+                console.log({response});
+            })
+            .catch((error)=>{
+                this.loaderHide();
+                console.log(error);
+            })
+        },
         handleClick(param){
             this.$bus.$emit('MODAL_VIDEO_PLAYER_OPEN',{param});
         },
         fetchRequestList(){
             ApiService.post("/event_leads?page="+this.next_page)
             .then((resp) =>{
-                // this.leads = resp.data;
                 this.available_credit = resp.credit_available;
-
+                this.leads = [];
                 resp.data.data.forEach(element => {
                     this.leads.push(element);
                 });

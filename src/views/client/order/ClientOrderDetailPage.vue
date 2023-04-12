@@ -37,7 +37,8 @@
                                                         :href="`tel:${orderDetail.vendor.contact.phone_no ? orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`"
                                                         small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
                                                     <v-btn fab color="primary"
-                                                        :to="'/client/conversation/vendors/' + orderDetail.vendor_id"
+                                      
+                                                        :to="'/client/conversation/vendors/' + orderDetail.vendor_id+'/'+orderDetail.conversation_id"
                                                         small><v-icon>{{ iconChat }}</v-icon> </v-btn>
                                                 </div>
                                             </div>
@@ -241,21 +242,21 @@ export default {
                 order_id: this.orderId,
                 vendor_id: this.currentUser.owner.vendor_id
             })
-                .then((response) => {
-                    this.loading = false;
-                    this.orderDetail = response.data;
-                    this.totalData = response.totalData;
-                    if (this.orderDetail) {
-                        this.message = "Data not found";
-                    }
-                    this.render = true;
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
-                })
-                .catch(() => {
-                    this.loading = false;
+            .then((response) => {
+                this.loading = false;
+                this.orderDetail = response.data;
+                this.totalData = response.totalData;
+                if (this.orderDetail) {
                     this.message = "Data not found";
-                    this.$bus.$emit('HIDE_PAGE_LOADER');
-                });
+                }
+                this.render = true;
+                this.$bus.$emit('HIDE_PAGE_LOADER');
+            })
+            .catch(() => {
+                this.loading = false;
+                this.message = "Data not found";
+                this.$bus.$emit('HIDE_PAGE_LOADER');
+            });
         },
         // handleConfirm
         onClick(status) {

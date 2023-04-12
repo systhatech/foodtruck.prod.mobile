@@ -21,11 +21,15 @@
                 
                 <div class="mb-4" v-if="detail.event_type">
                     <p class="primary--text mb-1">Event Type</p>
-                    <p>{{ detail.event_type}}</p>
+                    <p class="text-capitalize">{{ detail.event_type}}</p>
                 </div>
                 <div class="mb-4">
                     <p class="primary--text mb-1">Address</p>
                     <p class="mb-1">{{detail.address}}</p>
+                </div> 
+                <div class="mb-4">
+                    <p class="primary--text mb-1">Status</p>
+                    <p class="mb-1 text-capitalize">{{detail.status}}</p>
                 </div> 
            </div>
            <div class="custom-bs pa-4 mb-4">
@@ -91,7 +95,7 @@
                 <div class="d-flex justify-space-between align-center">
                     <div>
                         <h4 class="primary--text">{{ detail.conversation && detail.conversation.client ? detail.conversation.client.fullName :''}}</h4>
-                        <p v-if="detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length">{{(detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length) ==0 ?'No response yet': detail.conversation.unread_vendor_messages.length+' unread message'}}</p>
+                        <p class="error--text" v-if="detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length">{{(detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length) ==0 ?'No response yet': detail.conversation.unread_vendor_messages.length+' unread message'}}</p>
                         <p v-else>No response</p>
                     </div>
                     <div v-if="detail.conversation && detail.conversation.client">
@@ -127,7 +131,6 @@ export default {
                 'id': this.$router.currentRoute.params.requestId
             })
             .then((resp) =>{
-                console.log(resp);
                 this.detail = resp.data;
             })
             .catch((error) =>{

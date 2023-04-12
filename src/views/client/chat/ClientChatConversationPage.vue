@@ -3,7 +3,7 @@
         <Topnavbar :receiver="receiver" @back="handleBack"/>
         <v-container class="pt-0 content-cs">
             <main class="msger-chat" :style="{ height: customheight + 'px' }" id="chatMessages" ref="messageContainer">
-                <div v-if="messages && messages.length">
+                <div v-if="messages">
                     <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
                          v-for="(message,index) in messages" :key="index">
                         <div class="msg-bubble">
@@ -179,18 +179,29 @@ export default {
                 table_to: this.table_to,
                 table_to_id: this.table_to_id,
                 page: this.pageNo,
+                conversation_id: this.conversation_id,
             })
-                .then((resp) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    this.messages = resp.data;
-                    this.receiver =  resp.meta;
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    this.loaderHide();
-                    console.log(error);
-                })
+            .then((resp) => {
+                this.loading = false;
+                this.loaderHide();
+                this.messages = resp.data;
+                this.receiver =  resp.meta;
+                this.conversation_id = this.conversation_id !='null' ? this.conversation_id: resp.conversation_id;
+                socketHandler.initChat({
+                    table_from: this.currentUser.table,
+                    table_from_id: this.currentUser.table_id,
+                    table_to: this.table_to,
+                    table_to_id: this.table_to_id,
+                    conversation_id: this.conversation_id,
+                    seen_client: 1,
+                    seen_vendor: 0,
+                });
+            })
+            .catch((error) => {
+                this.loading = false;
+                this.loaderHide();
+                console.log(error);
+            })
 
         },
         handleBack() {

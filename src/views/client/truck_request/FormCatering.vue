@@ -12,97 +12,137 @@
             <v-form ref="formCatering" id="formCatering">
                 <v-row>
                     <v-col cols="12" v-if="step==1">
-                        <div class="custom-bs pa-4 w-100 text-center pt-6">
-                            <label for="" class="text-center mb-6" :class="errors.includes('event_name') ?'error--text':'primary--text'">Event Name</label>
-                            <v-text-field class="mt-6 pt-0" :rules="rulesRequired" v-model="catering.event_name"></v-text-field>
-                        </div>
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 w-100 text-center pt-6">
+                                <label for="" class="text-center mb-6" :class="errors.includes('event_name') ?'error--text':'primary--text'">Event Name</label>
+                                <v-text-field class="mt-6 pt-0" :rules="rulesRequired" v-model="catering.event_name"></v-text-field>
+                            </div>
+                        </KeepAlive>
                     </v-col>
                     <v-col cols="12" v-if="step==2">
-                        <div class="custom-bs pa-4 w-100 text-center pt-6">
-                            <label for="" class="text-center mb-6" :class="errors.includes('event_type') ?'error--text':'primary--text'">Select your Event Type</label>
-                            <div class="mt-6 pl-12">
-                                <!-- <InputAutocomplete :items="event_types" @selected="selectedEventType"/> -->
-                                <v-radio-group class="pt-0 mt-0" v-model="catering.event_type" :rules="ruleEventType">
-                                    <v-radio :value="type.value" v-for="(type, t) in event_types" :key="t">
-                                        <template v-slot:label>
-                                            <div class="pa-3"><h4>{{  type.name  }}</h4></div>
-                                        </template>
-                                    </v-radio>
-                                </v-radio-group>
-                            </div>
-                        </div>
-                    </v-col>
-                     <v-col cols="12" v-if="step==3">
-                        <div class="custom-bs pa-4 w-100 text-center pt-6">
-                            <label for="" class="text-center mb-6" :class="errors.includes('people_expected') ?'error--text':'primary--text'">How many Minimum people are you expecting?</label>
-                            <v-text-field class="mt-6" min="1" type="number" :rules="rulesRequiredNumber" v-model="catering.people_expected"></v-text-field>
-                        </div>
-                    </v-col>
-                     <v-col cols="12" v-if="step==4">
-                        <div class="custom-bs pa-4 w-100 text-center pt-6">
-                            <label for="" class="text-center mb-6" :class="errors.includes('budget') ?'error--text':'primary--text'">Minimum Budget ?</label>
-                            <v-text-field class="mt-6" min="1" type="number" :rules="rulesRequiredNumber" v-model="catering.budget"></v-text-field>
-                        </div>
-                        
-                    </v-col>
-                     <v-col cols="12" v-if="step==5">
-                        <div class="custom-bs pa-4 pb-8 pt-6 w-100 text-center">
-                            <label for="" class="text-center mb-6" :class="errors.includes('address') ?'error--text':'primary--text'">Address</label>
-                            <div class="mt-6">
-                                <GoogleAddress 
-                                    :defaultValue="defaultValue" 
-                                    label=""
-                                    @selectedAddr="addressSelected"/>
-                            </div>
-                        </div>
-                    </v-col>
-                     <v-col cols="12" v-if="step==6">
-                        <div class="custom-bs pa-4 w-100 text-center pt-6">
-                            <label for="" class="text-center mb-6" :class="errors.includes('event_date') ?'error--text':'primary--text'">Event Date</label>
-                            <div class="mt-6">
-                                <DatePicker label=""  @selectedDate="dateStart" :minDate="minDate"/>
-                            </div>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" v-if="step==7">
-                        <div class="text-center custom-bs pa-6">
-                            <label for="" :class="errors.includes('start_time') ?'error--text':'primary--text'">Start Time</label>
-                            <div class="mt-6 mb-4">
-                                <vue-timepicker format="hh:mm A" placeholder="" v-model="catering.start_time" manual-input></vue-timepicker>
-                            </div>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" v-if="step==8">
-                        <div class="text-center custom-bs pa-6 w-100">
-                            <label for="" :class="errors.includes('end_time') ?'error--text':'primary--text'">End Time</label>
-                            <div class="mt-6 mb-4">
-                                <vue-timepicker format="hh:mm A" placeholder="" v-model="catering.end_time" manual-input></vue-timepicker>
-                            </div>
-                        </div>
-                    </v-col>
-                     <v-col cols="12" v-if="step==9">
-                        <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
-                            <div class="text-center">
-                                <label for="" :class="errors.includes('cuisines') ?'error--text':'primary--text'">Preferred Cuisine Type</label>
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 w-100 text-center pt-6">
+                                <label for="" class="text-center mb-6" :class="errors.includes('event_type') ?'error--text':'primary--text'">Select your Event Type</label>
                                 <div class="mt-6 pl-12">
-                                    <v-checkbox v-for="(cuisine, index) in cuisineTypes" :key="index"
-                                    v-model="catering.cuisines"
-                                    class="pt-0 mt-1"
-                                    :rules="validateCheckbox"
-                                    :value="cuisine.value"
-                                    >
-                                        <template v-slot:label>
-                                            <div class="text-capitalize">{{  cuisine.name  }}</div>
-                                        </template>
-                                    </v-checkbox>
+                                    <v-radio-group class="pt-0 mt-0" v-model="catering.event_type" :rules="ruleEventType">
+                                        <v-radio :value="type.value" v-for="(type, t) in event_types" :key="t">
+                                            <template v-slot:label>
+                                                <div class="pa-3"><h4>{{  type.name  }}</h4></div>
+                                            </template>
+                                        </v-radio>
+                                    </v-radio-group>
                                 </div>
                             </div>
-                        </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==3">
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 w-100 text-center pt-6">
+                                <label for="" class="text-center mb-6" :class="errors.includes('people_expected') ?'error--text':'primary--text'">How many Minimum people are you expecting?</label>
+                                <v-text-field class="mt-6" min="1" type="number" :rules="rulesRequiredNumber" v-model="catering.people_expected"></v-text-field>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==4">
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 w-100 text-center pt-6">
+                                <label for="" class="text-center mb-6" :class="errors.includes('budget') ?'error--text':'primary--text'">Minimum Budget ?</label>
+                                <v-text-field class="mt-6" min="1" type="number" :rules="rulesRequiredNumber" v-model="catering.budget"></v-text-field>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==5">
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 pb-8 pt-6 w-100 text-center">
+                                <label for="" class="text-center mb-6" :class="errors.includes('address') ?'error--text':'primary--text'">Address</label>
+                                <div class="mt-6">
+                                    <GoogleAddress 
+                                        :defaultValue="defaultValue" 
+                                        label=""
+                                        @selectedAddr="addressSelected"/>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==6">
+                        <KeepAlive>
+                            <div class="custom-bs pa-4 w-100 text-center pt-6">
+                                <label for="" class="text-center mb-6" :class="errors.includes('event_date') ?'error--text':'primary--text'">Event Date</label>
+                                <div class="mt-6">
+                                    <DatePicker label=""  @selectedDate="dateStart" :minDate="minDate"/>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                    <v-col cols="12" v-if="step==7">
+                        <KeepAlive>
+                            <div class="text-center custom-bs pa-6">
+                                <label for="" :class="errors.includes('start_time') ?'error--text':'primary--text'">Start Time</label>
+                                <div class="mt-6 mb-4">
+                                    <vue-timepicker format="hh:mm A" placeholder="" v-model="catering.start_time" manual-input></vue-timepicker>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                    <v-col cols="12" v-if="step==8">
+                        <KeepAlive>
+                            <div class="text-center custom-bs pa-6 w-100">
+                                <label for="" :class="errors.includes('end_time') ?'error--text':'primary--text'">End Time</label>
+                                <div class="mt-6 mb-4">
+                                    <vue-timepicker format="hh:mm A" placeholder="" v-model="catering.end_time" manual-input></vue-timepicker>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==9">
+                        <KeepAlive>
+                            <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
+                                <div class="text-center">
+                                    <label for="" :class="errors.includes('cuisines') ?'error--text':'primary--text'">Preferred Cuisine Type</label>
+                                    <div class="mt-6 pl-12">
+                                        <v-checkbox v-for="(cuisine, index) in cuisineTypes" :key="index"
+                                        v-model="catering.cuisines"
+                                        class="pt-0 mt-1"
+                                        :rules="validateCheckbox"
+                                        :value="cuisine.value"
+                                        >
+                                            <template v-slot:label>
+                                                <div class="text-capitalize">{{  cuisine.name  }}</div>
+                                            </template>
+                                        </v-checkbox>
+                                    </div>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==10">
+                        <KeepAlive>
+                            <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
+                                <div class="text-center">
+                                    <label for="" :class="errors.includes('email') ?'error--text':'primary--text'">Contact Email</label>
+                                    <div>
+                                        <v-text-field v-model="catering.email"></v-text-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==11">
+                
+                            <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
+                                <div class="text-center">
+                                    <label for="" :class="errors.includes('phone') ?'error--text':'primary--text'">Phone</label>
+                                    <div>
+                                        <v-text-field v-mask="'(###)-###-####'" v-model="catering.phone"></v-text-field>
+                                    </div>
+                                </div>
+                            </div>
+              
                     </v-col>
                      <v-col cols="12">
                         <div class="d-flex align-center" :class="step==1?'justify-space-around':'justify-space-between'">
                             <v-btn color="primary" v-if="step>1" large rounded @click="handlePrevious()">previous</v-btn>
-                            <v-btn color="primary" v-if="step==8" large rounded @click="handleSubmit()">submit</v-btn>
+                            <v-btn color="primary" v-if="step==11" large rounded @click="handleSubmit()">submit</v-btn>
                             <v-btn color="primary" v-else large rounded @click="handleNext()">next</v-btn>
                         </div>
                     </v-col>
@@ -151,6 +191,8 @@ export default {
                 start_time:'',
                 end_time:'',
                 cuisines:[],
+                phone:'',
+                email:'',
             },
             event_types:[
                 {name:'Event','value':'event'},
@@ -179,7 +221,9 @@ export default {
 
     },
     mounted() {
-      
+        if(this.currentUser){
+            this.catering.email = this.currentUser.email;
+        }
     },
     methods: {
         handlePrevious(){
@@ -256,6 +300,22 @@ export default {
                         this.errors.push('cuisines');
                     }else{
                         this.errors = this.errors.filter((item) => item !=='cuisines');
+                         this.step+=1;
+                    }
+                    break;
+                case 10:
+                    if(!this.catering.email){
+                        this.errors.push('email');
+                    }else{
+                        this.errors = this.errors.filter((item) => item !=='email');
+                         this.step+=1;
+                    }
+                    break;
+                case 11:
+                    if(!this.catering.phone){
+                        this.errors.push('phone');
+                    }else{
+                        this.errors = this.errors.filter((item) => item !=='phone');
                         console.log('submit');
                     }
                     break;

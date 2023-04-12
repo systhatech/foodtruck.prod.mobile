@@ -19,7 +19,7 @@
                     </v-tabs>
                 </div>
                 <div class="mt-4">
-                    <div v-if="active_tab==0">
+                    <div v-if="request_list && request_list.length">
                         <div class="pa-4 custom-bs mt-4" v-for="(item,index) in request_list" :key="index">
                             <div v-if="item.type =='catering'">
                                 <ItemCatering :item="item"/>
@@ -35,43 +35,16 @@
                             <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
                         </div>
                     </div>
-                    <div v-else-if="active_tab==1">
+                    <div v-else class="unavailable">
+                        <p>No data found</p>
+                    </div>
+                    <!-- <div v-else-if="active_tab==1">
                         <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis, earum!</p>
                         <p>Lorem.</p>
                     </div>
                     <div v-if="active_tab==2">
-                        <div class="custom-bs pa-4 mb-4">
-                            <p class="mb-1">Available Credits</p>
-                            <p class="green--text mb-0">60 Credits</p>
-                        </div>
-                        <div class="custom-bs pa-4 mb-4">
-                            <p class="mb-1">Credit Credits</p>
-                            <p class="green--text">60 Credits</p>
-                            <v-btn rounded large color="primary">buy credit</v-btn>
-                        </div>
-                        <div>
-                            <p>Transaction Log</p>
-                            <div class="custom-bs pa-4">
-                                <div class="">
-                                    <p>300 Credits</p>
-                                    <p class="mb-0">Transaction ID</p>
-                                    <p>2342342342342342323423</p>
-                                    <div class="d-flex align-center justify-space-between">
-                                        <p>VISA 111******</p>
-                                        <p>Jan 12, 2023</p>
-                                    </div>
-                                    <v-divider class="mb-4"></v-divider>
-                                    <p>300 Credits</p>
-                                    <p class="mb-0">Transaction ID</p>
-                                    <p>2342342342342342323423</p>
-                                    <div class="d-flex align-center justify-space-between">
-                                        <p>VISA 111******</p>
-                                        <p>Jan 12, 2023</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, laborum.</p>
+                    </div> -->
                 </div>
             </div>
         </v-container>
@@ -94,57 +67,12 @@ export default {
             active_tab:0,
             iconNavigate: mdiChevronRight,
             icon_account: mdiAccount,
-            indexValue:3,
-            usericon:'',
-            menu_items: [
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me' },
-                { title: 'Click Me 2' },
-            ],
             tabs:[
-                {"name":"Live","value":'lead'},
-                {"name":"Close","value":'response'},
-                // {"name":"Payments","value":'Payments'},
+                {"name":"Live","value":'pending'},
+                {"name":"Hired","value":'hired'},
+                {"name":"Archived","value":'archived'},
             ],
-            desserts: [
-                {
-                    name: '2/22/23',
-                    requested_id: 159,
-                    credits: 159,
-                },
-                {
-                    name: '2/22/23',
-                    requested_id: 237,
-                    credits: 237,
-                }
-                ],
-            items: [
-                {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
-                {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
-                {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
-                {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
-                {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
-                {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                {name:'Leads',icon:'mdi-food-variant',route:'vendor-truck-request-list'},
-                // {name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'},
-                {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
-                {name:'Payment Credientials',icon:'mdi-shield-key',route:'payments'},
-                {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
-                {name:'Reports',icon:'mdi-file-document-multiple',route:'reports'},
-                {name:'Sales Summary',icon:'mdi-file-document-multiple',route:'sales-summary'},
-                {name:'Change Password',icon:'mdi-key',route:'change-password'},
-                {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
-                {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
-             ],
-            utype:'',
-            general:{},
-            others:{},
-            contact:{},
-            render:false,
 
-            fav: true,
-            menu: false,
             message: false,
             hints: true,
             request_list:[],
@@ -152,6 +80,7 @@ export default {
             next_page:1,
             last_page:0,
             fetching_data: false,
+            status:'pending',
         }
     },
     components: {
@@ -163,6 +92,14 @@ export default {
     },
     mounted() {
         this.fetchRequestList();
+    },
+    watch:{
+        active_tab(val){
+            this.status = this.tabs[val].value;
+            this.next_page = 1;
+            this.request_list = [];
+            this.fetchRequestList();
+        },
     },
     methods: {
         ...mapActions({
@@ -176,8 +113,9 @@ export default {
             }
         },
         fetchRequestList(){
-            ApiService.post("/event_request_list?page="+this.next_page)
+            ApiService.post("/event_request_list?page="+this.next_page+'&status='+this.status)
             .then((resp) =>{
+                
                 resp.data.data.forEach(element => {
                     this.request_list.push(element);
                 });

@@ -98,11 +98,33 @@
                            <v-textarea class="pt-0 mt-6" v-model="event.additional_info"></v-textarea>
                         </div>
                     </v-col>
+                    <v-col cols="12" v-if="step==10">
+                        <KeepAlive>
+                            <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
+                                <div class="text-center">
+                                    <label for="" :class="errors.includes('email') ?'error--text':'primary--text'">Email</label>
+                                    <div>
+                                        <v-text-field v-model="event.email"></v-text-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </KeepAlive>
+                    </v-col>
+                     <v-col cols="12" v-if="step==11">
+                        <div class="custom-bs w-100 text-centerm-bs pa-4 pt-6"> 
+                            <div class="text-center">
+                                <label for="" :class="errors.includes('phone') ?'error--text':'primary--text'">Phone</label>
+                                <div>
+                                    <v-text-field v-mask="'(###)-###-####'" v-model="event.phone"></v-text-field>
+                                </div>
+                            </div>
+                        </div>
+                    </v-col>
      
                     <v-col cols="12">
                         <div class="d-flex align-center" :class="step==1?'justify-space-around':'justify-space-between'">
                             <v-btn color="primary" v-if="step>1" large  rounded @click="handlePrevious()">previous</v-btn>
-                            <v-btn color="primary" v-if="step==9" large  rounded @click="handleSubmit()">submit</v-btn>
+                            <v-btn color="primary" v-if="step==11" large  rounded @click="handleSubmit()">submit</v-btn>
                             <v-btn color="primary" v-else large  rounded @click="handleNext()">next</v-btn>
                         </div>
                     </v-col>
@@ -150,6 +172,8 @@ export default {
                 event_date:'',
                 start_time:'',
                 end_time:'',
+                email:'',
+                phone:'',
                 min_guerantee_sales:'',
                 type:'event',
             },
@@ -184,7 +208,9 @@ export default {
 
     },
     mounted() {
-      
+        if(this.currentUser){
+            this.event.email = this.currentUser.email;
+        }
     },
     methods: {
         handlePrevious(){
@@ -271,6 +297,22 @@ export default {
                     }else{
                         this.errors = this.errors.filter((item) => item !=='additional_info');
                         this.step+=1;
+                    }
+                    break;
+                case 10:
+                    if(!this.event.email){
+                        this.errors.push('email');
+                    }else{
+                        this.errors = this.errors.filter((item) => item !=='email');
+                         this.step+=1;
+                    }
+                    break;
+                case 11:
+                    if(!this.event.phone){
+                        this.errors.push('phone');
+                    }else{
+                        this.errors = this.errors.filter((item) => item !=='phone');
+                        console.log('submit');
                     }
                     break;
                 default:

@@ -39,8 +39,15 @@
                 </div>
             </div>
             <v-divider class="mb-4"></v-divider>
+            <div v-if="item.email && item.phone">
+                <div>
+                    <p class="primary--text mb-1">Contact</p>
+                    <p class="mb-1"><v-icon color="primary">mdi-email</v-icon> {{ item.email}}</p>
+                    <p> <v-icon color="primary">mdi-phone</v-icon> {{ item.phone}}</p>
+                </div>
+            </div>
             <div class="pb-4" v-if="item.response_count">
-                <p class="mb-0 green--text">{{ item.response_count }} Truck Responded</p>
+                <p class="mb-0 error--text">{{ item.response_count }} Truck Responded</p>
                 <!-- <h5>3 Unread message</h5> -->
             </div>
             <div class="d-flex align-center justify-space-between">
