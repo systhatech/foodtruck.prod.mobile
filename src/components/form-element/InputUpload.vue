@@ -72,7 +72,7 @@ input[type="file"] {
     margin: 0;
 }
 .file-wrapper{
-    border: 1px solid #c0c0c0;
+    border: none;
     border-radius:10px;
     display: flex;
     align-items: center;

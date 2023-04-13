@@ -6,6 +6,9 @@
                     <div class="">
                         <div class="mb-4">
                             <h4 class="mb-0 text-capitalize">{{item.event_name}}</h4>
+                            <div class="" v-if="item.response_count">
+                                <p class="mb-0 error--text">{{ item.response_count }} Truck Responded</p>
+                            </div>
                             <!-- <v-chip v-if="item.event_type" small class="text-capitalize" color="primary">{{ item.event_type }}</v-chip> -->
                         </div>
                         <v-divider></v-divider>
@@ -47,10 +50,7 @@
                     <p> <v-icon color="primary">mdi-phone</v-icon> {{ item.phone}}</p>
                 </div>
             </div>
-            <div class="pb-4" v-if="item.response_count">
-                <p class="mb-0 error--text">{{ item.response_count }} Truck Responded</p>
-                <!-- <h5>3 Unread message</h5> -->
-            </div>
+           
             <div class="d-flex align-center justify-space-between">
                 <!-- <v-btn rounded  large color="primary" to="/client-truck-request/1">view</v-btn> -->
                 <v-btn rounded  large color="primary" :to="'/client-truck-request/'+item.id">view</v-btn>

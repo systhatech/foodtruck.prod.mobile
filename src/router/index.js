@@ -342,6 +342,21 @@ const routes = [
 		}
 	},
 	{
+		path: '/vendor-profile-list',
+		name: 'vendorProfileUpdatePage',
+		component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/vendor/profile/VendorProfileListPage.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
+	{
 		path: '/vendor-profile-address',
 		name: 'vendorProfileAddressPage',
 		component: () => import(/* webpackChunkName: "ProfileAddressPage" */ '../views/vendor/profile/VendorProfileAddressPage.vue'),

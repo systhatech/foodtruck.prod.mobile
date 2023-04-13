@@ -81,7 +81,7 @@
                     <v-col cols="12" v-if="step==8">
                         <div class="custom-bs pa-4 w-100 text-center pt-6">
                             <label for="" class="text-center mb-6" :class="errors.includes('sales_guerantee') ?'error--text':'primary--text'">Minimum sales guerantee</label>
-                            <div class="mt-6">
+                            <!-- <div class="mt-6">
                                 <v-radio-group class="pt-0 mt-0" v-model="event.min_guerantee_sales" :rules="ruleSalesGuerantee">
                                     <v-radio :value="type.value" v-for="(type, t) in sales_guerantee" :key="t">
                                         <template v-slot:label>
@@ -89,7 +89,12 @@
                                         </template>
                                     </v-radio>
                                 </v-radio-group>
-                            </div>
+                            </div> -->
+                            <v-checkbox v-model="event.min_guerantee_sales" value="$1000">
+                                <template v-slot:label>
+                                    <div>I agree $1000 minimum guerantee, if the truck does not make $100, you will need to convert difference</div>
+                                </template>
+                            </v-checkbox>
                         </div>
                     </v-col>
                     <v-col cols="12" v-if="step==9">
@@ -130,6 +135,11 @@
                     </v-col>
                 </v-row>
             </v-form>
+            <DialogPhoneVerify 
+            :resp="resp"
+            @close="handleClose()"
+            @handleConfirm="handleVerify"
+            :dialog_verify_phone="modal_verify_phone"/>
         </div>
     </div>
 </template>
@@ -148,7 +158,9 @@ export default {
     data() {
         return {
             moment,
+            checkbox:'',
             success:false,
+            modal_verify_phone:false,
             step:1,
             minDate: new Date().toISOString().substr(0, 10),
             defaultValue:'',
@@ -188,8 +200,9 @@ export default {
             ],
             sales_guerantee:[
                 {name:'$700 pre-order sales not meet 48 hours prior to start time, truck may cancel the event','value':'$700'},
-                {name:'$1000 minimum guerantee, if the truck does not make $100, you will need to convert difference','value':'$1000'},
+                {name:'I agree $1000 minimum guerantee, if the truck does not make $100, you will need to convert difference','value':'$1000'},
             ],
+            resp:{},
         }
     },
     computed: {
@@ -213,6 +226,27 @@ export default {
         }
     },
     methods: {
+        handleClose(){
+            this.modal_verify_phone = false;
+        },
+        handleVerify(param){
+            this.loaderShow();
+            ApiService.post('/event_request_verify', {
+                "id": this.resp.id,
+                "code": param.code,
+            })
+            .then(() =>{
+                this.loaderHide();
+                this.success = true;
+                this.handleClose();
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                this.messageError(error.response.data.error);
+                console.log({error});
+            })
+        },
+
         handlePrevious(){
             this.step -=1;
         },
@@ -352,13 +386,15 @@ export default {
             ApiService.post('/event_request', this.event)
             .then((resp) =>{
                 this.loaderHide();
-                this.success = true;
-                console.log(resp);
+                this.event.id = resp.data.id;
+                this.resp = resp.data;
+                this.modal_verify_phone = true;
             })
             .catch((error) =>{
                 this.loaderHide();
                 console.log(error);
             })
+            console.log(this.event);
 
         }
     },
@@ -368,6 +404,7 @@ export default {
         GoogleAddress,
         // InputAutocomplete,
         VueTimepicker,
+        DialogPhoneVerify: ()=> import('@/views/client/truck_request/ModalVerifyPhone.vue'),
     }
 }
 </script>

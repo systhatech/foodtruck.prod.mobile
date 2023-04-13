@@ -15,11 +15,11 @@
                     <p class="">My Guests will be paying their own meals</p>
                     <v-btn large rounded color="primary" block @click="handleClick('e')">Select</v-btn>
                 </div>
-                <div class="custom-bs pa-8 text-center" >
+                <!-- <div class="custom-bs pa-8 text-center" >
                     <h2 class="mb-4 primary--text">Regular Event</h2>
                     <p class="">I would like to book truck daily, weekly or monthly basis</p>
                     <v-btn large rounded color="primary" block @click="handleClick('re')">Select</v-btn>
-                </div>
+                </div> -->
             </div>
         </v-container>
          <Bottomnavbar/>

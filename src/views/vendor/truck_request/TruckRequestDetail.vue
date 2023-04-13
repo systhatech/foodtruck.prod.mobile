@@ -2,10 +2,40 @@
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
+            <div class="custom-bs pa-4 mb-4" v-if="detail.conversation">
+
+                <div class="d-flex justify-space-between align-center">
+                    <div>
+                        <h4 class="primary--text">{{ detail.conversation && detail.conversation.client ? detail.conversation.client.fullName :''}}</h4>
+                        <p class="mb-0">{{detail.email}}</p>
+                        <p class="mb-0">{{detail.phone}}</p>
+                    </div>
+                    <div v-if="detail.conversation && detail.conversation.client">
+                        <div v-if="detail.conversation.unread_vendor_messages.length" class="mr-4">
+                            <v-badge
+                                small
+                                color="error"
+                                :content="detail.conversation.unread_vendor_messages.length">
+                                <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                            </v-badge>
+                        </div>
+                        <div v-else>
+                            <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div v-if="event_response && Object.keys(event_response).length && event_response.status=='confirmed'">
+                        <v-btn block rounded color="error" large @click="cancelConfirmation()">Cancel Confirmation</v-btn>
+                    </div>
+                    <div v-else>
+                        <v-btn block rounded color="primary" large @click="sendConfirmation()">Send confirmation</v-btn>
+                    </div>
+                </div>
+           </div>
             <div class="custom-bs pa-4 mb-4">
                 <div class="mb-2">
                     <h5 class="text-uppercase">{{ detail.event_name }}</h5>
-                    <!-- <v-chip small color="primary">Event</v-chip> -->
                 </div>
                 <v-divider></v-divider>
                 <div class="mb-4 mt-4">
@@ -91,18 +121,16 @@
                     <p>{{ detail.description}}</p>
                 </div>
            </div>
-           <div class="custom-bs pa-4 mb-4" v-if="detail.conversation">
-                <div class="d-flex justify-space-between align-center">
-                    <div>
-                        <h4 class="primary--text">{{ detail.conversation && detail.conversation.client ? detail.conversation.client.fullName :''}}</h4>
-                        <p class="error--text" v-if="detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length">{{(detail.conversation && detail.conversation.unread_vendor_messages && detail.conversation.unread_vendor_messages.length) ==0 ?'No response yet': detail.conversation.unread_vendor_messages.length+' unread message'}}</p>
-                        <p v-else>No response</p>
-                    </div>
-                    <div v-if="detail.conversation && detail.conversation.client">
-                        <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
-                    </div>
-                </div>
-           </div>
+           <DialogConfirm 
+            @close="closeConfirmation"
+            @handleConfirm="handleSendConfirmation"
+            :dialogConfirm="modal_confirm"/>
+          
+            <DialogConfirm 
+            @close="closeCancelConfirmation"
+            @handleConfirm="handleSendConfirmationCancel"
+            :dialogConfirm="modal_confirm_cancel"/>
+          
         </v-container>
          <Bottomnavbar/>
     </v-container>
@@ -120,6 +148,9 @@ export default {
             title:'',
             start_request:false,
             detail:{},
+            modal_confirm:false,
+            modal_confirm_cancel:false,
+            event_response:{},
         }
     },
     mounted(){
@@ -132,6 +163,7 @@ export default {
             })
             .then((resp) =>{
                 this.detail = resp.data;
+                this.event_response = resp.event_response;
             })
             .catch((error) =>{
                 console.log(error);
@@ -142,11 +174,59 @@ export default {
         },
         handleClick(param){
             this.$router.push({ 'name':'clientTruckRequestFormPage', 'query': { type: param}});
-        }
+        },
+        sendConfirmation(){
+            this.modal_confirm = true;
+        },
+        cancelConfirmation(){
+            this.modal_confirm_cancel = true;
+        },
+        closeConfirmation(){
+            this.modal_confirm = false;
+        },
+        closeCancelConfirmation(){
+            this.modal_confirm_cancel = false;
+        },
+        handleCancelConfirmation(){
+            console.log("test");
+        },
+        handleSendConfirmation(){
+            this.loaderShow();
+            ApiService.post("/event_request_confirmation",{ 
+                'id': this.detail.id,
+            })
+            .then((resp)=>{
+                this.loaderHide();
+                this.closeConfirmation();
+                this.fetchData();
+                this.messageSuccess(resp.message);
+            })
+            .catch((error)=>{
+                this.loaderHide();
+                this.messageError(error.response.data.message);
+            })
+        },
+        handleSendConfirmationCancel(){
+            this.loaderShow();
+            ApiService.post("/event_request_cancel_confirmation",{ 
+                'id': this.detail.id,
+            })
+            .then((resp)=>{
+                this.loaderHide();
+                this.closeCancelConfirmation();
+                this.fetchData();
+                this.messageSuccess(resp.message);
+            })
+            .catch((error)=>{
+                this.loaderHide();
+                this.messageError(error.response.data.message);
+            })
+        },
     },
     components: {
         Topnavbar,
         Bottomnavbar,
+        DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     computed: {
         ...mapGetters({currentUser:'auth/user'}),

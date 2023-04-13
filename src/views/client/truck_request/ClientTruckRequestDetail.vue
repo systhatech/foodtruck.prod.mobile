@@ -2,10 +2,29 @@
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image" fluid>
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56">
+            <div class="custom-bs pa-4 mb-4" v-if="detail.vendors && detail.vendors.length">
+                <div class="mb-2">
+                    <p class="mb-0">Truck Responses</p>
+                </div>
+                <v-divider></v-divider>
+                <div class="mt-4">
+                    <div  v-for="(vendor,index) in detail.vendors" :key="index">
+                        <div class="d-flex justify-space-between align-center">
+                            <div>
+                                <h4 class="primary--text text-capitalize">{{vendor.name}}</h4>
+                                <p class="error--text mb-0" v-if="vendor.unread_messages.length">{{vendor.unread_messages.length}} unread message</p>
+                            </div>
+                            <div>
+                                <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                            </div>
+                        </div>
+                        <v-divider v-if="index<detail.vendors.length-1" class="mb-4 mt-4"></v-divider>
+                    </div>
+                </div>
+           </div>
             <div class="custom-bs pa-4 mb-4">
                 <div class="mb-2">
                     <h5 class="text-uppercase">{{ detail.event_name }}</h5>
-                    <!-- <v-chip small color="primary">Event</v-chip> -->
                 </div>
                 <v-divider></v-divider>
                 <div class="mb-4 mt-4">
@@ -107,20 +126,7 @@
                     <p>{{ detail.description}}</p>
                 </div>
            </div>
-           <div class="custom-bs pa-4 mb-4" v-if="detail.vendors && detail.vendors.length">
-                <div  v-for="(vendor,index) in detail.vendors" :key="index">
-                    <div class="d-flex justify-space-between align-center">
-                        <div>
-                            <h4 class="primary--text text-capitalize">{{vendor.name}}</h4>
-                            <p class="error--text mb-0" v-if="vendor.unread_messages.length">{{vendor.unread_messages.length}} unread message</p>
-                        </div>
-                        <div>
-                            <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
-                        </div>
-                    </div>
-                    <v-divider v-if="index<detail.vendors.length-1" class="mb-4 mt-4"></v-divider>
-                </div>
-           </div>
+           
         </v-container>
          <Bottomnavbar/>
     </v-container>

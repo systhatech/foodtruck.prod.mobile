@@ -3,10 +3,6 @@
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
             <div>
-                <!-- <div class="d-flex align-center pb-4 justify-space-between">
-                    <h4>Request Truck for Event & Parties</h4>
-                    <v-btn color="primary" fab small> <v-icon>mdi-plus</v-icon></v-btn>
-                </div> -->
                 <div class="custom-bs text-center pt-8 pb-8 mb-4">
                     <h4 class="primary--text">Need Food Trucks for your Event?</h4>
                     <div class="pt-6">

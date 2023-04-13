@@ -133,7 +133,7 @@
                                 <div class="text-center">
                                     <label for="" :class="errors.includes('phone') ?'error--text':'primary--text'">Phone</label>
                                     <div>
-                                        <v-text-field v-mask="'(###)-###-####'" v-model="catering.phone"></v-text-field>
+                                        <v-text-field v-mask="'(###)-###-####'" :rules="rulesRequired" v-model="catering.phone"></v-text-field>
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +148,11 @@
                     </v-col>
                 </v-row>
             </v-form>
+            <DialogPhoneVerify 
+            :resp="resp"
+            @close="handleClose()"
+            @handleConfirm="handleVerify"
+            :dialog_verify_phone="modal_verify_phone"/>
         </div>
     </div>
 </template>
@@ -169,6 +174,7 @@ export default {
     data() {
         return {
             moment,
+            modal_verify_phone:false,
             success:false,
             minDate: new Date().toISOString().substr(0, 10),
             defaultValue:'',
@@ -204,6 +210,7 @@ export default {
                 {name:'Other','value':'others'},
             ],
             step:1,
+            resp:{},
         }
     },
     computed: {
@@ -351,13 +358,16 @@ export default {
                 }
             }
             if(!this.$refs.formCatering.validate()) return;
-
+            // this.modal_verify_phone = true;
             this.loaderShow();
             this.catering.type = "catering";
             ApiService.post('/event_request', this.catering)
             .then((resp) =>{
                 this.loaderHide();
-                this.success = true;
+                // this.success = true;
+                this.catering.id = resp.data.id;
+                this.resp = resp.data;
+                this.modal_verify_phone = true;
                 console.log(resp);
             })
             .catch((error) =>{
@@ -365,6 +375,26 @@ export default {
                 console.log(error);
             })
             console.log(this.catering);
+        },
+        handleClose(){
+            this.modal_verify_phone = false;
+        },
+        handleVerify(param){
+            this.loaderShow();
+            ApiService.post('/event_request_verify', {
+                "id": this.resp.id,
+                "code": param.code,
+            })
+            .then(() =>{
+                this.loaderHide();
+                this.success = true;
+                this.handleClose();
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                this.messageError(error.response.data.error);
+                console.log({error});
+            })
         }
     },
 
@@ -373,6 +403,7 @@ export default {
         // InputAutocomplete,
         GoogleAddress,
         VueTimepicker,
+        DialogPhoneVerify: ()=> import('@/views/client/truck_request/ModalVerifyPhone.vue'),
     }
 }
 </script>

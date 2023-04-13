@@ -8,9 +8,9 @@
            <div v-else-if="type=='e'">
                 <FormEvent :cuisineTypes="cuisine_types"/>
            </div>
-           <div v-else-if="type=='re'">
+           <!-- <div v-else-if="type=='re'">
                 <FormRegularEvent :cuisineTypes="cuisine_types"/>
-           </div>
+           </div> -->
         </v-container>
         <Bottomnavbar/>
     </v-container>
@@ -58,7 +58,7 @@ export default {
         Bottomnavbar,
         FormCatering:()=> import('@/views/client/truck_request/FormCatering.vue'),
         FormEvent:()=> import('@/views/client/truck_request/FormEvent.vue'),
-        FormRegularEvent:()=> import('@/views/client/truck_request/FormRegularEvent.vue'),
+        // FormRegularEvent:()=> import('@/views/client/truck_request/FormRegularEvent.vue'),
     },
     computed: {
         ...mapGetters({currentUser:'auth/user'}),
