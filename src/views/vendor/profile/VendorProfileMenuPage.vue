@@ -112,7 +112,7 @@ export default {
         },
         async profileData() {
             this.loading = true;
-            await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
+            await ApiService.post('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loading = false;
                 this.profile = resp;
             })

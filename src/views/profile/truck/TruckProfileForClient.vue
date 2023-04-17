@@ -10,7 +10,7 @@
                                 <div class="pt-4">
                                     <v-avatar size="60">
                                     <img
-                                        :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+truckProfile.general.profile_pic:base_url+'/image-show/usericon'"
+                                        :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+truckProfile.general.profile_pic:base_url+'/image-show/default.jpg'"
                                         alt="Profile Pic"
                                         >
                                     </v-avatar>
@@ -35,7 +35,6 @@
                                     <div class="w-100">
                                         <v-btn
                                         v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
-                                        
                                         class="mr-3"
                                         fab
                                         color="primary"
@@ -44,10 +43,10 @@
                                         <v-icon large>mdi-phone</v-icon>
                                         </v-btn>
                                         <v-btn
-                                        
                                         fab
                                         link
-                                        :to="'/client/conversation/vendors/'+truck.id+'/'+conversation_id"
+                                        
+                                        @click="handleChat(truck)"
                                         color="primary"
                                         >
                                         <v-icon large>mdi-chat</v-icon>
@@ -92,7 +91,7 @@
 </template>
 <script>
 import { base_url } from '@/core/services/config'
-import Topnavbar from '@/components/layout/TopnavbarBackCustom'
+import Topnavbar from '@/components/layout/Topnavbar'
 import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
@@ -106,7 +105,7 @@ import TruckSchedules from './TruckSchedules';
 // import ModalMenu from './menu/ModalMenu'
 import { mapGetters } from 'vuex'
 export default {
-    name:'EditProfile',
+    name:'VendorProfile',
     data() {
         return {
             dialog:false,
@@ -171,6 +170,15 @@ export default {
         }
     },
     methods: {
+        handleChat(truck){
+            if(this.currentUser && Object.keys(this.currentUser).length){
+                this.$router.push(`/client/conversation/vendors/${truck.id}/${this.conversation_id}`)
+            }else{
+                this.$router.push({
+                    name:'loginPage'
+                });
+            }
+        },
         handleClose(){
             this.dialog = false;
         },
@@ -204,7 +212,6 @@ export default {
             await ApiService.post('/truck/profile/'+ this.truckId)
             .then((resp) => {
                 this.conversation_id = resp.conversation_id;
-                console.log(this.conversation_id);
                 this.render = true;
                 this.truckProfile = resp;
                 this.truck.id = resp.general.id;

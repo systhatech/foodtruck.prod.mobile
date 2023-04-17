@@ -71,12 +71,12 @@
                             
                         </div>
                     </v-col>
-                    <v-col cols="6" v-if="detail.cuisines">
+                    <!-- <v-col cols="6" v-if="detail.cuisines">
                         <div>
                             <h4 class="primary--text">Cuisine Type</h4>
                             <p>{{detail.cuisines?detail.cuisines:'n/a'}}</p>
                         </div>
-                    </v-col>
+                    </v-col> -->
                     <v-col cols="6" v-if="detail.event_frequency">
                         <div>
                             <h4 class="primary--text">Event Frequency</h4>

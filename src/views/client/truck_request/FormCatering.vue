@@ -46,7 +46,7 @@
                      <v-col cols="12" v-if="step==4">
                         <KeepAlive>
                             <div class="custom-bs pa-4 w-100 text-center pt-6">
-                                <label for="" class="text-center mb-6" :class="errors.includes('budget') ?'error--text':'primary--text'">Minimum Budget ?</label>
+                                <label for="" class="text-center mb-6" :class="errors.includes('budget') ?'error--text':'primary--text'">Minimum Budget ($)?</label>
                                 <v-text-field class="mt-6" min="1" type="number" :rules="rulesRequiredNumber" v-model="catering.budget"></v-text-field>
                             </div>
                         </KeepAlive>

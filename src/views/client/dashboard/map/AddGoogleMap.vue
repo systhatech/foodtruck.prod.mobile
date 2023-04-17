@@ -25,7 +25,7 @@
 					</div>
 					
 				</div>
-				<div class="pb-2 pt-4" v-if="type == 'clients'">
+				<!-- <div class="pb-2 pt-4" v-if="type == 'clients'">
 					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'" class="mr-2"
 						:to="'/truck-profile/' + infoContent.table_id"><v-icon large>mdi-food</v-icon> </v-btn>
 					<v-btn fab color="primary"
@@ -33,7 +33,7 @@
 						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon large>mdi-phone</v-icon> </v-btn>
 					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'"
 						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon large>mdi-chat</v-icon> </v-btn>
-				</div>
+				</div> -->
 			</gmap-info-window>
 			<div>
 				<gmap-marker v-for="(m, index) in locationMarkers" :icon="{

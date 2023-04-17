@@ -159,7 +159,7 @@ export default {
                 {name:'Change Password',icon:'mdi-key',route:'change-password'},
                 // {name:'Setting',icon:'mdi-cog',route:'change-password'},
                 {name:'Terms & Conditions',icon:'mdi-notebook-check',route:'terms-condition'},
-                {name:'About Us',icon:'mdi-clipboard-list',route:'about-us'},
+                {name:'About',icon:'mdi-clipboard-list',route:'about-us'},
                 // {name:'Other',icon:'mdi-segment',route:'profile-update'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],

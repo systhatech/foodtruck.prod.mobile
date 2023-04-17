@@ -8,10 +8,12 @@
                         <div v-if="cart_checkout && cart_checkout.vendor">
                             <div class="">
                                 <h2 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h2>
-                                <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
-                                <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
-                                <p style="font-weight:600">{{ formatTimeOnly(cart_checkout.pickup_start_date) }} - {{ formatTimeOnly(cart_checkout.pickup_end_date) }}</p>
-                                <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Location </p>
+                                <div v-if="cart_checkout.pickup_date">
+                                    <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
+                                    <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
+                                    <p style="font-weight:600">{{ formatTimeOnly(cart_checkout.pickup_start_date) }} - {{ formatTimeOnly(cart_checkout.pickup_end_date) }}</p>
+                                </div>
+                                <p class="mb-0 error--text">Pickup Location </p>
                                 <div v-if="cart_checkout.address">
                                     <p class="mb-0">{{ cart_checkout.address.add1 }}, {{ cart_checkout.address.city }}</p>
                                     <p class="mb-2">{{ cart_checkout.address.state }}, {{ cart_checkout.address.zip }}</p>

@@ -3,7 +3,7 @@
         <!-- <Topnavbar/> -->
         <div class="pa-4 pt-2 pb-2">
             <div class="d-flex align-center justify-space-between">
-                <v-text-field label="Search" :loading="search_loading" small v-model="search"></v-text-field>
+                <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
                 <v-btn class="ml-4" fab color="primary" @click="handleFilterModalOpen">
                     <v-icon large>{{icon_filter}}</v-icon>
                 </v-btn>

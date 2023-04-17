@@ -280,7 +280,7 @@ export default {
         async fetchOrderDetail() {
             this.loading = true;
             if (!this.order || this.order.order_id == undefined) return;
-            await ApiService.post('/order/detail', { order_id: this.order.order_id, vendor_id: this.currentUser.vendor_id })
+            await ApiService.post('/order/detail', { order_id: this.order.order_id, vendor_id: this.currentUser.table_id })
                 .then((response) => {
                     this.loading = false;
                     this.orderDetail = response.data;

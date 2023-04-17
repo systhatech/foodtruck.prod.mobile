@@ -14,15 +14,16 @@
         <template v-slot:chip="{ props, item }">
         <v-chip
             v-bind="props"
+            class="text-capitalize"
             :prepend-avatar="item.raw.avatar"
             :text="item.raw.name"
         ></v-chip>
         </template>
         <template v-slot:item="data">
             <template>
-            <v-list-item-content>
-                <v-list-item-title v-html="data.item.value" class="text-capitalize"></v-list-item-title>
-            </v-list-item-content>
+                <v-list-item-content>
+                    <v-list-item-title v-html="data.item.value" class="text-capitalize"></v-list-item-title>
+                </v-list-item-content>
             </template>
         </template>   
     </v-autocomplete>

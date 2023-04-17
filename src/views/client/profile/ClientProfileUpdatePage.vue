@@ -9,7 +9,7 @@
                         cols="12"
                         >
                         <div style="height:100px; width:120px; margin:0 auto;">
-                            <InputUpload :src="base_url+'/image-show/'+customer.profile_pic" 
+                            <InputUpload :src="base_url+'/image-show/'+(customer.profile_pic ? customer.profile_pic:'default.jpg')" 
                             :update_input_file="update_input_file" 
                             type="menu_image" 
                             :max-height="maxHeight"
@@ -130,7 +130,7 @@ export default {
             ApiService.post('/store-image', formData)
             .then((resp) => {
                  this.loaderHide();
-                 this.customer.profile_pic = resp.file_name;
+                 this.customer.profile_pic = resp.file_name ? resp.file_name:'';
                  this.hasFile = true;
             })
             .catch(() => {
