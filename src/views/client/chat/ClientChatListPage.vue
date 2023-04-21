@@ -7,14 +7,11 @@
                     <li v-for="(member, index) in members" :key="index" class="d-flex align-center justify-space-between pa-2 pt-4" @click="handleRoute(member)">
                         <div class="d-flex align-center justify-space-between pt-0 pb-2 pl-3 pr-3">
                             <div class="d-flex">
-                                <v-avatar tile>
-                                    <v-img alt="avatar" contain :src="base_url + '/image-show/' + member.profile_pic"
-                                        v-if="member.profile_pic" tile></v-img>
-                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + member.contact.profile_pic"
-                                        v-else-if="member.contact && member.contact.profile_pic"></v-img>
-                                    <v-icon dark v-else>
+                                <v-avatar class="mt-2">
+                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + (member.contact && member.contact.profile_pic ? member.contact.profile_pic:'default.jpg')" rounded></v-img>
+                                    <!-- <v-icon dark v-else>
                                         {{ iconAccount }}
-                                    </v-icon>
+                                    </v-icon> -->
                                 </v-avatar>
                                 <div class="pl-4">
                                     <div v-if="member.unread_messages_count">
@@ -130,7 +127,7 @@ export default {
             if (message.table_from_id == this.currentUser.table_id && message.table_from == this.currentUser.table) {
                 text = 'You: ' + text;
             }
-            return text.substr(0, 25);
+            return text.substr(0, 18);
         },
         async initTimezone() {
             let timezone_offset_minutes = new Date().getTimezoneOffset();
@@ -190,7 +187,9 @@ export default {
                             item['name'] = item.vendor.name;
                             item['unread_messages_count'] = item.unread_client_messages_count;
                         }
-                        this.members.push(item);
+                        if(item.last_message){
+                            this.members.push(item);
+                        }
                     })
                     console.log(this.members);
                 })

@@ -8,11 +8,11 @@
                         <h5 class="text-uppercase primary--text">Add image in your gallery</h5>
                     </div>
                     <v-divider></v-divider>
-                   <div style="height:200px; margin:0 auto;" class="pt-5">
+                   <div style="height:200px; margin:0 auto;border:1px solid #dadada" class="pt-5">
                         <InputUpload 
                         type="menu_image" 
                         :max-height="maxHeight"
-                        label="select"
+                        label="Select Image"
                         :remove="remove"
                         @changeImage="changeImage"/>
                     </div>

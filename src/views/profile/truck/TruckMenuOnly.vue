@@ -67,7 +67,12 @@
                     <p>Menu not available</p>
                 </div> -->
             </div>
-            <ModalMenu :dialog="dialog" :vendorId="vendorId" :item="item" @close="handleClose"/>   
+            <ModalMenu 
+                :dialog="dialog" 
+                :vendorId="vendorId" 
+                :item="item" 
+                :truckProfile="truckProfile"
+                @close="handleClose"/>   
         </div>
         <div v-else class="unavailable">
             <p>Menu not available</p>

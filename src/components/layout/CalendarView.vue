@@ -8,8 +8,7 @@
                 :disabled-dates="datesDisabled"
                 disable-page-swipe
                 @dayclick="onDayClick"
-                is-expanded
-                >
+                is-expanded>
             </vc-calendar>
     </v-container>
 </template>

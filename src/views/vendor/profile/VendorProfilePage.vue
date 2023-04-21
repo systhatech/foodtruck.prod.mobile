@@ -36,7 +36,7 @@
                                 <v-icon color="primary f9">mdi-phone</v-icon>
                             </div>
                             <div>
-                                <p class="mb-2">{{currentUser.phone_no? currentUser.phone_no:'n/a'}} </p>
+                                <p class="mb-2">{{currentUser.phone_no? formatPhoneNumber(currentUser.phone_no):'n/a'}} </p>
                             </div>
                         </div>
                         <div class="d-flex">

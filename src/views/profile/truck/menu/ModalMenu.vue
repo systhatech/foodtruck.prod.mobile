@@ -17,17 +17,16 @@
             </v-toolbar>
             <!-- <v-container> -->
                 <div class="pa-4 pb82 background-white pb-16 mt-14" v-if="item && Object.keys(item).length">
-                    <div class="d-flex">
+                    <div class="">
                         <div>
                             <v-img
+                                contain
                                 :src="base_url+'/image-show/'+item.profile_pic"
                                 lazy-src="https://picsum.photos/id/11/10/6"
-                                
-                                height="100"
-                                width="100">
+                                height="200">
                             </v-img>
                         </div>
-                        <div class="pl-4">
+                        <div class="pt-2">
                             <h5 class="text-uppercase primary--text">{{item.name}}</h5>
                             <p v-if="item.category" class="text-capitalize mb-2">({{ item.category }})</p>
                             <div class="d-flex">
@@ -65,7 +64,7 @@
                     </div>
                 </div>
                 <div class="pa-4 custom-bs pb-8" style="position: fixed;bottom: 0;width: 100%;z-index: 1;">
-                    <div class="d-flex align-center justify-space-between">
+                    <div class="d-flex align-center justify-space-between" v-if="truckProfile && truckProfile.general && truckProfile.general.is_active">
                         <div class="d-flex align-center">
                             <v-btn
                                 fab
@@ -88,6 +87,9 @@
                         </div>
                         <v-btn color="primary" large rounded @click="addToCart(item)">Add to cart</v-btn>
                     </div>
+                    <div v-else class="text-center">
+                        <p class="error--text mb-0">Truck is offline</p>
+                    </div>
                 </div>
             <!-- </v-container> -->
         </v-card>
@@ -105,6 +107,9 @@ export default {
     props:{
         dialog: {
             required:true,
+        },
+        truckProfile:{
+
         },
         item:{
             required:true,
@@ -171,18 +176,18 @@ export default {
             let ids = this.itemSelected.map((x) => {
                return x.id;
             });
-            console.log({
-                menu_item_id: item.id,
-                varients : ids,
-                quantity : this.quantity,
-                vendor_id: this.vendorId,
-                pickup_date: this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):'',
-                pickup_start_date: this.pickup_start_date?this.pickup_start_date:'',
-                pickup_end_date: this.pickup_end_date?this.pickup_end_date:'',
-                is_preorder: this.pickup_date?1:0,
-                location_id: this.locationId? this.locationId:'',
-                client_id: this.currentUser.owner.id,
-            });
+            // console.log({
+            //     menu_item_id: item.id,
+            //     varients : ids,
+            //     quantity : this.quantity,
+            //     vendor_id: this.vendorId,
+            //     pickup_date: this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):'',
+            //     pickup_start_date: this.pickup_start_date?this.pickup_start_date:'',
+            //     pickup_end_date: this.pickup_end_date?this.pickup_end_date:'',
+            //     is_preorder: this.pickup_date?1:0,
+            //     location_id: this.locationId? this.locationId:'',
+            //     client_id: this.currentUser.owner.id,
+            // });
 
             ApiService.post("/cart-create",{
                 menu_item_id: item.id,

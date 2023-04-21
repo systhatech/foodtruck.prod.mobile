@@ -12,10 +12,10 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-container>
+                    <v-container class="pa-0">
                         <div class="background-image">
                             <div>
-                                <div class="pa-4 custom-bs mt-14">
+                                <div class="pa-4 custom-bs mt-14 ma-4 mb-14">
 
                                     <v-form v-model="valid" ref="formLocation">
                                         <v-row>

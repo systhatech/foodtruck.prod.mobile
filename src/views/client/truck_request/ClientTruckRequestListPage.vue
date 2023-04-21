@@ -64,8 +64,8 @@ export default {
             iconNavigate: mdiChevronRight,
             icon_account: mdiAccount,
             tabs:[
-                {"name":"Live","value":'pending'},
-                {"name":"Hired","value":'hired'},
+                {"name":"Pending","value":'pending'},
+                {"name":"Responded","value":'hired'},
                 {"name":"Archived","value":'archived'},
             ],
 

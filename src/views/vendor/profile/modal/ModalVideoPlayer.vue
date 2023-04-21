@@ -63,7 +63,7 @@ export default {
             .then((resp)=>{
                 this.video = resp.data.value;
                 this.video_description = resp.data.description;
-                console.log({resp});
+                // console.log({resp});
             })            
             .catch((error)=>{
                 console.log({error});

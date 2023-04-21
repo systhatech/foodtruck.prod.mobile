@@ -12,10 +12,7 @@
                                         <div class="mb-4">
                                             <h5 class="name-address mb-2 text-uppercase primary--text">{{ orderDetail &&
                                                 orderDetail.vendor ? orderDetail.vendor.name : '' }}</h5>
-                                            <p class="mb-0"> <v-icon color="primary" class="w-18">{{ iconPhone }}</v-icon> {{
-                                                orderDetail && orderDetail.vendor.contact &&
-                                                orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone :
-                                                orderDetail.vendor.contact.phone_no }}</p>
+                                            <p class="mb-0"> <v-icon color="primary" class="w-18">{{ iconPhone }}</v-icon> {{orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? formatPhoneNumber(orderDetail.vendor.contact.phone) : formatPhoneNumber(orderDetail.vendor.contact.phone_no) }}</p>
                                             <p class="mb-0"> <v-icon color="primary" class="w-18">{{ iconEmail }}</v-icon> {{
                                                 orderDetail && orderDetail.vendor &&
                                                 orderDetail.vendor.contact ? orderDetail.vendor.contact.email : 'unavailable' }}

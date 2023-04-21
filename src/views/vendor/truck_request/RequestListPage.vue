@@ -176,11 +176,11 @@ export default {
             ApiService.post("/event_buy",{
                 "id": param.item.id
             })
-            .then((response) =>{
+            .then(() =>{
                 this.loaderHide();
                 this.next_page = 1;
                 this.fetchRequestList();
-                console.log({response});
+                // console.log({response});
             })
             .catch((error)=>{
                 this.loaderHide();
@@ -236,7 +236,7 @@ export default {
             this.loaderShow();
             this.signOutAction()
             .then(() => {
-                console.log("here");
+                // console.log("here");
                 this.loaderHide();
                 socketHandler.disconnect();
                 this.$router.replace({

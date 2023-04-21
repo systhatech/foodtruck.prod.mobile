@@ -19,7 +19,7 @@
                                 <div>
                                     <p class="mb-0 primary--text" style="font-size:13px; font-weight: 600;">{{ order.order_no }}</p>
                                     <p class="mb-0 text-capitalize">{{ order.customer_name }}</p>
-                                    <p class="mb-0" style="font-size:13px; font-weight: 500;">{{ order.phone }}</p>
+                                    <p class="mb-0" style="font-size:13px; font-weight: 500;">{{ formatPhoneNumber(order.phone) }}</p>
                                 </div>
                                 <div class="text-right">
                                     <h4 class="primary--text">{{ formatAmount(order.total_amount) }}</h4>

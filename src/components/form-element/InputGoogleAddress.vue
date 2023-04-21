@@ -4,7 +4,7 @@
             <GmapAutocomplete class="custom-autocomplete w-100" 
             :value="address.add1"
             @blur="handleBlur"
-            placeholder=""
+            :placeholder="label"
             @place_changed="setPlace" />
         </div>
     </div>
@@ -12,7 +12,8 @@
 <script>
 export default {
     props:{
-        defaultValue:{}
+        defaultValue:{},
+        label:{},
     },
     watch:{
         defaultValue(newval) {

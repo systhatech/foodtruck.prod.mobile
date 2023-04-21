@@ -24,11 +24,11 @@
                                         class="pb-0"
                                         md="12"
                                         >
-                                        <div style="height:200px; margin:0 auto;" class="pt-5">
+                                        <div style="height:200px; margin:0 auto;border:1px solid #dadada;" class="pt-5">
                                             <InputUpload 
                                             type="menu_image" 
                                             :max-height="maxHeight"
-                                            label="select"
+                                            label="upload event image"
                                             :remove="remove"
                                             @changeImage="changeImage"/>
                                         </div>
@@ -47,6 +47,7 @@
                                         >
                                         <InputAddress 
                                             :defaultValue="defaultValue" 
+                                            label="Address"
                                             @selectedAddr="addressSelected"/>
                                     </v-col>
                                     <v-col

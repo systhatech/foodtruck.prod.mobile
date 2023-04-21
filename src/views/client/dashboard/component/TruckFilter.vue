@@ -129,7 +129,7 @@ import { ApiService } from '@/core/services/api.service'
 			}else{
 				this.selectedItems.push(value);
 			}
-			console.log(this.selectedItems);
+			// console.log(this.selectedItems);
 		},
         fetchCategories() {
            ApiService.get("/self/menus")

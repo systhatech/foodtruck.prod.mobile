@@ -13,7 +13,7 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container class="bg-white">
-                        <div class="background-image">
+                        <div class="">
                           <div>
                             <div class="pt-6 mt-14">
                                 <div v-if="scheduleDate">
@@ -53,9 +53,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <div v-else class="unavailable">
-                                            <p>Menu not available</p>
-                                        </div> -->
                                     </div>
                                 </div>
                                        
@@ -108,42 +105,40 @@
             console.log(this.vendorId);
             if (newval) {
               this.defaultValue = "";
-              console.log("test", this.defaultValue);
-              //   this.fetchOrderDetail();
-              //   this.disableButton = false;
           } else {
-              // this.render = false;
-                  setTimeout(() => {
-                      this.defaultValue = "";
-                  }, 500);
-                  this.address = {
-                      add1:'',
-                      city:'',
-                      state:'',
-                      zip:'',
-                      country:'',
-                      country_code:'',
-                      lat:'',
-                      lon:'',
-                  }
+                setTimeout(() => {
+                    this.defaultValue = "";
+                }, 500);
+                this.address = {
+                    add1:'',
+                    city:'',
+                    state:'',
+                    zip:'',
+                    country:'',
+                    country_code:'',
+                    lat:'',
+                    lon:'',
+                }
             }
         }
     },
     components: {
     //   DatePicker,
       // datetime,
-    //   InputAddress:()=>import('@/components/form-element/InputGoogleAddress'),
+      InputAddress:()=>import('@/components/layout/InputDatePicker'),
       DialogConfirm,
       ModalMenu,
     //   InputUpload,
     },
     data() {
         return {
-          valid:true,
+            valid:true,
             dialogConfirm:false,
             modal_menu_item:false,
             item:{},
             moment,
+            // selectedData:'',
+            selected_date:'',
             start_date:  new Date(),
             end_date:  new Date(),
             title:'',
@@ -176,64 +171,64 @@
         }
     },
     methods: {
-      ...mapActions({
-          fetchProfile:'auth/fetchProfile'
-      }),
-      handleRoute(item){
-        this.item = item;
-        this.modal_menu_item = true;
-      },
-      handleCloseItem(){
-        this.modal_menu_item = false;
-      },
-      changeImage(file){
-          this.loaderShow();
-          let formData = new FormData();
-          formData.append("file",file.file);
-          ApiService.post('/store-image', formData)
-          .then((resp) => {
-                  this.loaderHide();
-                  this.address.banner = resp.file_name;
-          })
-          .catch(() => {
-              this.messageError("Failed ! choose image less than size 2mb");
-              this.loaderHide();
-          });
-      },
-      handleClose() {
-          this.address = {
-              name:'',
-              banner:'',
-              add1:'',
-              city:'',
-              state:'',
-              zip:'',
-              country:'',
-              country_code:'',
-              lat:'',
-              lon:'',
-          }
-          this.defaultValue = "";
-          this.$emit('close')
-      },
-      confirmDelete() {
-          this.dialogConfirm = true;
-      },
-      async handleDelete() {
-          this.loaderShow();
-          this.locationId = this.$router.currentRoute.params.locationId;
-          await ApiService.post("/vendor/location-delete", {
-              location_id: this.locationId,
-          })
-          .then((resp) => {
-              this.loaderHide();
-              this.messageSuccess(resp.message);
-              this.fetchProfile();
-          })
-          .catch(() => {
-              this.loaderHide();
-              this.messageError("Failed to update address");
-          });
+        ...mapActions({
+            fetchProfile:'auth/fetchProfile'
+        }),
+        handleRoute(item){
+            this.item = item;
+            this.modal_menu_item = true;
+        },
+        handleCloseItem(){
+            this.modal_menu_item = false;
+        },
+        changeImage(file){
+            this.loaderShow();
+            let formData = new FormData();
+            formData.append("file",file.file);
+            ApiService.post('/store-image', formData)
+            .then((resp) => {
+                    this.loaderHide();
+                    this.address.banner = resp.file_name;
+            })
+            .catch(() => {
+                this.messageError("Failed ! choose image less than size 2mb");
+                this.loaderHide();
+            });
+        },
+        handleClose() {
+            this.address = {
+                name:'',
+                banner:'',
+                add1:'',
+                city:'',
+                state:'',
+                zip:'',
+                country:'',
+                country_code:'',
+                lat:'',
+                lon:'',
+            }
+            this.defaultValue = "";
+            this.$emit('close')
+        },
+        confirmDelete() {
+            this.dialogConfirm = true;
+        },
+        async handleDelete() {
+            this.loaderShow();
+            this.locationId = this.$router.currentRoute.params.locationId;
+            await ApiService.post("/vendor/location-delete", {
+                location_id: this.locationId,
+            })
+            .then((resp) => {
+                this.loaderHide();
+                this.messageSuccess(resp.message);
+                this.fetchProfile();
+            })
+            .catch(() => {
+                this.loaderHide();
+                this.messageError("Failed to update address");
+            });
       },
       handleBack() {
           this.$router.back();

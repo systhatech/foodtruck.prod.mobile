@@ -8,20 +8,20 @@
                         <div class="d-flex align-center justify-space-between">
                             <div class="d-flex">
                                 <v-avatar color="primary">
-                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ member.profile_pic" v-if="member.profile_pic"></v-img>
-                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ member.contact.profile_pic" v-else-if="member.contact && member.contact.profile_pic"></v-img>
+                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ (member.profile_pic || member.profile_pic!='null'?member.profile_pic:'default.jpg')" v-if="member.profile_pic"></v-img>
+                                    <v-img alt="avatar" contain :src="base_url +'/image-show/'+ (member.contact.profile_pic || member.profile_pic!='null'?member.contact.profile_pic:'default.jpg')" v-else-if="member.contact && member.contact.profile_pic"></v-img>
                                     <v-icon dark v-else>
                                         {{iconAccount}}
                                     </v-icon>
                                 </v-avatar>
                                 <div class="pl-4">
-                                    <h4 class="text-capitalize" :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? '' : 'font-weight-light'">
+                                    <h4 class="text-capitalize" :class="!member.last_message.is_client && currentUser.table != member.last_message.table_from ? '' : 'font-weight-light'">
                                         {{ member.name }}
                                         <i class="color-secondary font-weight-light badge" v-if="member.unread_messages_count">{{ member.unread_messages_count }} New Message</i>
                                     </h4>
                                     <div
                                         class="last_msg"
-                                        :class="!member.last_message.is_seen && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
+                                        :class="!member.last_message.is_client && currentUser.table != member.last_message.table_from ? 'f8-bold' : ''">
                                         <div v-html="messageText(member.last_message)">
                                         <!-- {{ }} -->
                                         </div>

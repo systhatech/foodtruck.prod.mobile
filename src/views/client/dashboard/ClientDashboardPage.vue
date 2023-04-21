@@ -20,6 +20,9 @@
            <div>
                <div v-if="locations && locations.length">
                     <TruckList :trucks="locations"/>
+                    <div class="text-center pt-4" v-if="!last_page">
+                        <v-btn color="primary" :disabled="loading" @click="loadMore()" large rounded outlined>{{ loading ? 'Loading...':'Load More'}}</v-btn>
+                    </div>
                </div>
                <div v-else class="text-center">
                     <div v-if="loading">
@@ -101,8 +104,9 @@ export default {
             map_view:false,
             loading:false,
             searchTimer:null,
-  
-            // locations:'',
+            next_page:1,
+            last_page:0,
+            locations:[],
         }
     },
     components: {
@@ -127,12 +131,12 @@ export default {
     },
     watch:{
         search(newval){
-            
             if(newval.length >=3 || newval.length ==0){
                 // this.fetchData();
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {
                     this.search_loading = true;
+                    this.locations = [];
                     this.fetchAllTrucks();
                 }, 800);
             }
@@ -140,7 +144,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            fetchTrucks:'truck/fetchTrucks',
+            // fetchTrucks:'truck/fetchTrucks',
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
         handleFilterModalOpen(){
@@ -153,21 +157,58 @@ export default {
         },
         handleFilter(params) {
             this.loaderShow();
-            params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
-            params.available =  1;
-            params.unit = "mile";
-            this.fetchTrucksSearch(params)
-            .then(()=>{
-                this.loading = false;
+            this.next_page = 1;
+            ApiService.post("/location/all",{
+                available: 1,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+                unit:'mile',
+                page:this.next_page,
+                ...params,
+            })
+            .then((resp) => {
                 this.loaderHide();
-                this.search_loading = false; 
                 this.handleCloseFilter();
-            })
-            .catch((error)=>{
-                this.loaderHide();
                 this.loading = false;
-                console.log(error)
+                this.search_loading = false;
+                this.locations = [];
+                if(resp.data.length){
+                    this.trucks = resp.data.map((loc) => ({
+                        ...loc, position: {
+                            lat: Number(loc.lat),
+                            lng: Number(loc.lng)
+                        }
+                    }));
+                    if(resp.per_page > resp.data.length){
+                        this.last_page = 1;
+                    }
+                    this.locations = this.locations.concat(this.trucks);
+                }
+                // this.locations = this.trucks;
+            }) 
+            .catch((error) => {
+                this.loaderHide();
+                this.handleCloseFilter();
+                this.search_loading = false;
+                this.loading = false;
+                console.log(error);
             })
+            // this.loaderShow();
+            // params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
+            // params.available =  1;
+            // params.unit = "mile";
+            // this.fetchTrucksSearch(params)
+            // .then(()=>{
+            //     this.loading = false;
+            //     this.loaderHide();
+            //     this.search_loading = false; 
+            //     this.handleCloseFilter();
+            // })
+            // .catch((error)=>{
+            //     this.loaderHide();
+            //     this.loading = false;
+            //     console.log(error)
+            // })
             // ApiService.post('/search',params)
             // .then((resp) => {
             //     this.loaderHide();
@@ -314,7 +355,7 @@ export default {
                         lng: Number(location.lng)
                     }
                 }));
-                console.log(this.trucks);
+                // console.log(this.trucks);
                 this.zoomLevel = 12;
             })
             .catch((error) => {
@@ -413,23 +454,97 @@ export default {
         },
         fetchAllTrucks() {
             this.loading = true;
-            this.fetchTrucks({ 
+            
+            // this.fetchTrucks({ 
+            //     available: 1,
+            //     name: this.search,
+            //     guest: localStorage.getItem('g_token'),
+            //     unit:'mile',
+            //     page:this.next_page,
+            // })
+            // .then(()=>{
+            //     this.loading = false;
+            //     this.search_loading = false;
+            // })
+    
+            ApiService.post("/location/all",{
                 available: 1,
                 name: this.search,
                 guest: localStorage.getItem('g_token'),
-                unit:'mile'
+                unit:'mile',
+                page:this.next_page,
             })
-            .then(()=>{
+            .then((resp) => {
                 this.loading = false;
                 this.search_loading = false;
+                this.trucks = resp.data.map((loc) => ({
+                    ...loc, position: {
+                        lat: Number(loc.lat),
+                        lng: Number(loc.lng)
+                    }
+                }));
+                if(resp.per_page > resp.data.length){
+                    this.last_page = 1;
+                }
+                this.locations = this.locations.concat(this.trucks);
+                // this.locations = this.trucks;
+            }) 
+            .catch((error) => {
+                this.search_loading = false;
+                this.loading = false;
+                console.log(error);
             })
+        },
+        fetchAllTrucksSearch() {
+            this.loading = true;
+            // this.fetchTrucks({ 
+            //     available: 1,
+            //     name: this.search,
+            //     guest: localStorage.getItem('g_token'),
+            //     unit:'mile',
+            //     page:this.next_page,
+            // })
+            // .then(()=>{
+            //     this.loading = false;
+            //     this.search_loading = false;
+            // })
+    
+            ApiService.post("/location/all",{
+                available: 1,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+                unit:'mile',
+                page:this.next_page,
+            })
+            .then((resp) => {
+                this.loading = false;
+                this.trucks = resp.data.map((loc) => ({
+                    ...loc, position: {
+                        lat: Number(loc.lat),
+                        lng: Number(loc.lng)
+                    }
+                }));
+                if(resp.per_page > resp.data.length){
+                    this.last_page = 1;
+                }
+                this.locations = this.locations.concat(this.trucks);
+                // this.locations = this.trucks;
+            }) 
+            .catch((error) => {
+                this.loading = false;
+                console.log(error);
+            })
+        },
+        loadMore(){
+            this.next_page +=1;
+            this.fetchAllTrucks();
         }
           
     },
     computed: {
         ...mapGetters({
             currentUser:'auth/user',
-            locations:'truck/trucks'
+            // locations:'truck/trucks'
         })
     }
 

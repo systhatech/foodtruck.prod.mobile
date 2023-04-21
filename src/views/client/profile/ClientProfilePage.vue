@@ -17,10 +17,11 @@
                 </div> -->
                 <div class="custom-bs pa-4 pt-8">
                     <div class="text-center">
-                        <v-avatar color="primary" size="90" tile v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
-                            <v-icon dark>
-                                {{ icon_account}}
-                            </v-icon>
+                        <v-avatar size="90" tile v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
+                            <img
+                            rounded
+                            :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                            alt="Profile Pic">
                         </v-avatar>
                         <v-avatar size="90" v-else tile>
                             <img
@@ -41,7 +42,7 @@
                                 <v-icon color="primary f9">mdi-phone</v-icon>
                             </div>
                             <div>
-                                <p class="mb-2">{{currentUser.phone_no? currentUser.phone_no:'n/a'}} </p>
+                                <p class="mb-2">{{currentUser.phone_no? formatPhoneNumber(currentUser.phone_no):'n/a'}} </p>
                             </div>
                         </div>
                         <div class="d-flex">

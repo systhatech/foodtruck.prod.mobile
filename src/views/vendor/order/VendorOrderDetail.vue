@@ -4,9 +4,6 @@
             <v-dialog v-model="dialogOrderDetail" persistent scrollable fullscreen>
                 <v-card class="background-image" style="padding-top: 56px !important;">
                     <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
-                        <!-- <v-btn icon @click="handleClose">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn> -->
                         <v-toolbar-title>{{ orderDetail ? orderDetail.order_no : '' }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
@@ -23,8 +20,8 @@
                                         ? orderDetail.fullName : (orderDetail && orderDetail.client
                                             ? orderDetail.client.fullName : '') }}</h5>
                                     <p class="mb-1"> <v-icon color="primary">mdi-phone</v-icon> {{ orderDetail &&
-                                        orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no
-                                        : orderDetail.client.contact.phone_no }}</p>
+                                        orderDetail.client.contact.phone_no ? formatPhoneNumber(orderDetail.client.contact.phone_no)
+                                        : formatPhoneNumber(orderDetail.client.contact.phone_no) }}</p>
                                     <p class="mb-1"> <v-icon color="primary">mdi-email</v-icon> {{
                                         orderDetail.client.contact.email }}</p>
                                     <div class="d-flex flex-start" v-if="orderDetail.pickup_addr">

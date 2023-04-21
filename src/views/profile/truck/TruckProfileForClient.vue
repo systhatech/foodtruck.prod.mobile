@@ -10,7 +10,7 @@
                                 <div class="pt-4">
                                     <v-avatar size="60">
                                     <img
-                                        :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+truckProfile.general.profile_pic:base_url+'/image-show/default.jpg'"
+                                        :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+(truckProfile.general.profile_pic !='null'?truckProfile.general.profile_pic:'default.jpg'):base_url+'/image-show/default.jpg'"
                                         alt="Profile Pic"
                                         >
                                     </v-avatar>

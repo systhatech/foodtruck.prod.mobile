@@ -233,7 +233,7 @@ export default {
             fetchProfile:'auth/fetchProfile',
         }),
         handleSendNotification(){
-            console.log("send notification");
+            // console.log("send notification");
             let clients = this.availableLocations.filter((item)=>item.table_name =='clients');
             // return clients.length;
             this.$bus.$emit('MODAL_NEARBY_NOTIFICATION',{ clients });
@@ -243,7 +243,7 @@ export default {
             .then((resp)=>{
                 this.video = resp.data.value;
                 this.video_description = resp.data.description;
-                console.log({resp});
+                // console.log({resp});
             })            
             .catch((error)=>{
                 console.log({error});

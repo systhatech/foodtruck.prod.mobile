@@ -5,25 +5,26 @@
 			:center="center"
 			class="map-height">
 			<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
-				<div>
-				<div class="mb-4">
-					<div v-if="infoContent.table_name=='vendors'">
-					<h3 class="color-secondary text-capitalize">{{ infoContent.locate?infoContent.locate.name:'' }}</h3>
-					<!-- {{infoContent.table_id == currentUser.table_id ?'My Truck' :''}} -->
+				<div >
+					<div class="mb-4" >
+						<div v-if="infoContent.table_name=='vendors'">
+						<h3 class="color-secondary text-capitalize">{{ infoContent.locate?infoContent.locate.name:'' }}</h3>
+						<!-- {{infoContent.table_id == currentUser.table_id ?'My Truck' :''}} -->
+						</div>
+						<div v-if="infoContent.table_name=='clients'">
+							<h3 class="color-secondary text-capitalize" >{{ infoContent.locate?infoContent.locate.fullName:'' }}</h3>
+						</div>
 					</div>
-					<div v-if="infoContent.table_name=='clients'">
-						<h3 class="color-secondary text-capitalize" >{{ infoContent.locate?infoContent.locate.fullName:'' }}</h3>
+					<div class="d-flex" @click="handleTruckProfile(infoContent)">
+						<v-icon color="primary">{{iconLocation}}</v-icon>
+						<div class="f8-bold">  
+							{{infoContent.add1 ? infoContent.add1:''}}
+							{{infoContent.city ? infoContent.city :''}}
+							{{infoContent.state ? infoContent.state:''}}
+							{{infoContent.zip_code ? infoContent.zip_code:''}}
+						</div>
+						<v-btn @click="handleTruckProfile(infoContent)">view</v-btn>
 					</div>
-				</div>
-				<div class="d-flex">
-					<v-icon color="primary">{{iconLocation}}</v-icon>
-					<div class="f8-bold">  
-					{{infoContent.add1 ? infoContent.add1:''}}
-					{{infoContent.city ? infoContent.city :''}}
-					{{infoContent.state ? infoContent.state:''}}
-					{{infoContent.zip_code ? infoContent.zip_code:''}}
-					</div>
-				</div>
 				</div>
 				<div class="pb-2 pt-4" v-if="type=='clients'">
 				<v-btn v-if="infoContent.table_name=='vendors'" :ripple="false" class="mr-2" fab outlined color="primarylight" link :to="'/truck-profile/'+infoContent.table_id" small><v-icon>mdi-food</v-icon> </v-btn>
@@ -167,6 +168,10 @@ methods: {
 	},
 	initMarker(loc) {
 	this.existingPlace = loc;
+	},
+	handleTruckProfile(truck){
+		console.log(truck);
+		// this.$router.push("/truck-profile/"+truck.id);
 	},
 	addLocationMarker() {
 	if (this.existingPlace) {

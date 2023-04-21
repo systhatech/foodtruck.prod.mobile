@@ -8,7 +8,7 @@
                     <!-- <span class="ml-1">{{truck.add1}}</span> -->
                 </div>
             </div> 
-             <div class="d-flex align-center" @click="viewTruck(truck)">
+             <div class="d-flex" @click="viewTruck(truck)">
                 <v-img
                 lazy-src="https://picsum.photos/id/11/10/6"
                 max-width="100"
@@ -17,37 +17,28 @@
                 :src="base_url+'/image-show/'+(truck.locate.profile_pic?truck.locate.profile_pic:'noimage.png')"
                 ></v-img>
                 <div class="pl-2 d-flex">
-                    <!-- <div>
-                        <v-icon class="f18" color="primary">{{iconAddress}}</v-icon>
-                    </div> -->
                     <div class="">
                         <div class="mb-2 d-flex">
                             <v-icon class="" color="primary">{{iconAddress}}</v-icon>
                             <span class="pl-1">{{truck.add1}}</span>
                         </div>
                         <div class="mb-2 " v-if="truck && truck.cuisines && truck.cuisines.length">
-                            <div class="d-flex">
-                                <v-chip small color="primary" class="mr-2 text-capitalize" v-for="(c, index) in truck.cuisines" :key="index">{{c.value}}</v-chip>
+                            <div class="d-flex flex-wrap">
+                                <v-chip small color="primary" class="mr-2 mb-2 text-capitalize" v-for="(c, index) in truck.cuisines.slice(0,4)" :key="index">{{c.value}}</v-chip>
                             </div>
                         </div>
                         <div>
-                            <!-- <v-icon class="f18" color="primary">{{iconClock}}</v-icon> -->
                             <span class="pl-2">{{ formatDateTime(truck.date)}}</span>
                         </div>
                         <div>
-                            <!-- <v-icon class="f18" color="primary">{{iconDistance}}</v-icon> -->
                             <span class="pl-2">{{ truck.distance? truck.distance : 0 }}</span>
                         </div>
-                        <!-- <div class="mt-2" v-if="truck.categories">
-                            <v-chip color="primary" 
-                                v-for="(cat,index) in truck.categories.slice(0,2)"
-                                :key="index"
-                                class="text-capitalize mr-2 mb-1" outlined small>{{ cat }}</v-chip>
-                        </div> -->
+                      
                     </div>
                 </div>
              </div>
         </div>
+        
     </div>
 </template>
 <script>
@@ -67,7 +58,6 @@ export default {
     },
     methods: {
         viewTruck(truck){
-            // console.log(truck);
             this.$router.push("/truck-profile/"+truck.table_id);
         }
     }

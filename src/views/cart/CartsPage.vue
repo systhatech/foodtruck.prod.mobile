@@ -8,28 +8,27 @@
                         <h3>Your Cart</h3>
                         <div v-for="(cart,i) in carts" :key="i">
                             <div class="mt-4">
-                                <!-- <div v-if="cart.pickup_date">
-                                    <h4 class="mt-8 mb-2 primary--text">Your order for : {{ formatDateToDay(cart.pickup_date) }}</h4>
-                                </div> -->
+                            
                                 <div class="custom-bs pa-4">
                                     <v-row>
                                         <v-col cols="12" md="12" lg="12" xl="12">
                                             <h2 class="mb-2 primary--text">{{ cart.vendor.name }}</h2>
-                                            <div class="d-flex">
-                                                <!-- <div>
-                                                    <v-img width="60" :src="base_url+'/image-show/'+cart.vendor.profile_pic"></v-img>
-                                                </div> -->
-                                                <div class="">
+                                            <div class="d-flex w-100">
+                                                <div class="w-100">
                                                     <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Date</p>
                                                     <p style="font-weight:600">{{ formatDateToDay(cart.pickup_date) }}</p>
-                                                    <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Location </p>
+                                                    <p class="mb-0 error--text">Pickup Location </p>
                                                     <div v-if="cart.address">
                                                         <p class="mb-0">{{ cart.address.add1 }}, {{ cart.address.city }}</p>
                                                         <p class="mb-2">{{ cart.address.state }}, {{ cart.address.zip }}</p>
                                                     </div>
                                                     <p class="mb-4">{{ cart.items.length }} items in cart</p>
-                                                    <!-- <v-btn rounded large color="primary" @click="handleCheckout(cart)">checkout now</v-btn> -->
-                                                    <v-btn rounded large color="primary" :to="'/cart/'+cart.id">checkout now</v-btn>
+                                                    <div class="w-100 text-center">
+                                                        <v-btn :disabled="!cart.vendor.is_active" rounded large color="primary" :to="'/cart/'+cart.id">checkout now</v-btn>
+                                                        <div class="text-center w-100" v-if="!cart.vendor.is_active">
+                                                            <p class="mt-2 mb-0 error--text w-100">Sorry, Truck is offline</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                     
                                            
@@ -110,6 +109,9 @@ export default {
             carts:'truck/getCarts',
             cartAmount:'truck/cartAmount',
         }),
+    },
+    mounted(){
+        this.fetchCarts();
     },
     methods: {
         ...mapActions({

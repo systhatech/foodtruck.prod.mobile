@@ -3,9 +3,9 @@
 		<gmap-map :zoom="zoom" :center="center" class="map-height">
 			<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen"
 				@closeclick="infoWinOpen = false">
-				<div>
+				<div @click="handleTruckProfile(infoContent)">
 					<div class="mb-4">
-						<div v-if="infoContent.table_name == 'vendors'">
+						<div v-if="infoContent.table_name == 'vendors'" >
 							<h2 class="primary--text text-capitalize">{{infoContent.locate ? infoContent.locate.name : ''}}</h2>
 						</div>
 					</div>
@@ -19,7 +19,7 @@
 								{{ infoContent.zip_code ? infoContent.zip_code : '' }}
 							</p>
 							<div class="d-flex pt-4">
-								<v-chip outlined color="primary" class="mr-2 text-capitalize" v-for="(c, index) in infoContent.cuisines" :key="index">{{c.value}}</v-chip>
+								<v-chip small color="primary" class="mr-2 text-capitalize" v-for="(c, index) in infoContent.cuisines" :key="index">{{c.value}}</v-chip>
 							</div>
 						</div>
 					</div>
@@ -136,6 +136,10 @@ export default {
 	},
 
 	methods: {
+		handleTruckProfile(truck){
+			// console.log(truck);
+			this.$router.push("/truck-profile/"+truck.locate.id);
+		},
 		toggleInfoWindow: function (marker, idx) {
 			this.infoWindowPos = marker.position;
 			this.infoContent = marker;
