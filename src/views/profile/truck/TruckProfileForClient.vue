@@ -73,6 +73,7 @@
                             v-if="truckProfile && Object.keys(truckProfile).length"
                             :is="activeComponent" 
                             :truck="truck"
+                            @fetchProfile="profileData"
                             @changeComponent="changeComponent"
                             :truck-profile="truckProfile"></component>
                         </div>

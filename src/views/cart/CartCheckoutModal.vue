@@ -13,7 +13,7 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container style="background-color: #fff;">
-                        <div class="background-image">
+                        <div>
                             <div class="pt-14">
                                 <div v-if="cart && cart.items && cart.items.length">
                                     <div v-if="cart.vendor">

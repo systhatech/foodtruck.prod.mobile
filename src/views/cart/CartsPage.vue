@@ -15,8 +15,11 @@
                                             <h2 class="mb-2 primary--text">{{ cart.vendor.name }}</h2>
                                             <div class="d-flex w-100">
                                                 <div class="w-100">
-                                                    <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Date</p>
-                                                    <p style="font-weight:600">{{ formatDateToDay(cart.pickup_date) }}</p>
+                                                    <div v-if="cart.pickup_date">
+                                                        <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Date</p>
+                                                        <!-- {{ cart.pickup_date }} -->
+                                                        <p style="font-weight:600">{{ formatDateToDay(cart.pickup_date) }}</p>
+                                                    </div>
                                                     <p class="mb-0 error--text">Pickup Location </p>
                                                     <div v-if="cart.address">
                                                         <p class="mb-0">{{ cart.address.add1 }}, {{ cart.address.city }}</p>
@@ -30,8 +33,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                    
-                                           
                                             </div>
                                         </v-col>
                                     </v-row>

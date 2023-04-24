@@ -48,9 +48,12 @@
                                     </div>
                                 </div>
                                 <div class="custom-bs pa-4 mt-4">
-                                    <div class="d-flex align-center justify-space-between pb-4">
+                                    <div class="d-flex align-center justify-space-between">
                                         <h5 class="ma-0 primary--text">ORDER: {{ orderDetail.order_no }} </h5>
                                         <v-chip class="text-capitalize" :color="orderDetail.status=='cancelled'?'error':'accent'" small>{{orderDetail.status }}</v-chip>
+                                    </div>
+                                    <div>
+                                        <span>Pickup Date: {{formatDateToDay(orderDetail.pickup_date) }}</span>
                                     </div>
                                     <v-divider class="pt-4"></v-divider>
                                     <div class="order-item-wrapper">
@@ -178,7 +181,7 @@
                                     <v-btn rounded :disabled="disableButton" color="error" text large
                                         @click="onClick('cancelled')">Cancel</v-btn>
                                     <v-btn v-if="order && order.status == 'new'" rounded :disabled="disableButton" large
-                                        color="primary" @click="onClick('accepted')">Accept</v-btn>
+                                             color="primary" @click="onClick('accepted')">Accept</v-btn>
                                 </div>
                                 <div v-if="order && order.status == 'accepted'"
                                     class="d-flex align-center justify-space-between w-100">
@@ -270,8 +273,13 @@ export default {
             totalData: {},
             loading: false,
             message: 'Loading...',
-            message_text:'Do you want to continue?'
+            message_text:'Do you want to continue?',
+            today: '',
         }
+    },
+    mounted() {
+        this.today = moment().format('YYYY-MM-DD');
+       
     },
     methods: {
         async fetchOrderDetail() {
@@ -281,7 +289,17 @@ export default {
                 .then((response) => {
                     this.loading = false;
                     this.orderDetail = response.data;
+                    this.orderDetail.pickup_date = moment(this.orderDetail.pickup_date).format('YYYY-MM-DD');
                     this.totalData = response.total;
+                    
+                    if(this.today >= this.orderDetail.pickup_date){
+                        this.disableButton = false;
+                    }else{
+                        this.disableButton = true;
+                    }
+
+                    console.log("today",this.today, this.orderDetail.pickup_date, this.disableButton);
+
                     this.$bus.$emit('HIDE_PAGE_LOADER');
                 })
                 .catch(() => {

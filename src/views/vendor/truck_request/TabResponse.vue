@@ -22,8 +22,13 @@
                 <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
             </div>
         </div>
-        <div v-else class="unavailable">
-            <p>No response found</p>
+        <div v-else class="mt-10 text-center">
+            <div v-if="loading">
+                <ComponentLoadingVue/>
+            </div>
+            <div v-else class="unavailable">
+                <p>No orders</p>
+            </div>
         </div>
     </div>
 </template>
@@ -38,7 +43,7 @@ export default {
         return {
             moment,
             leads:[],
-
+            loading:false,
             next_page:1,
             last_page:0,
             fetching_data: false,
@@ -63,24 +68,25 @@ export default {
             }
         },
         fetchResponse(){
+            this.loading = true;
             ApiService.post("/event_response?page="+this.next_page)
             .then((resp) =>{
                 // this.leads = resp.data;
-
                 resp.data.data.forEach(element => {
                     this.leads.push(element);
                 });
- 
+                
                 this.last_page  = resp.data.last_page;
 				if(this.next_page <= this.last_page){
-					this.next_page += 1
+                    this.next_page += 1
 				}
-  
+                
                 if(!this.leads.length) {
                     this.message="No items";
                 }
                 this.loaderHide();
                 this.fetching_data = false;
+                this.loading = false;
             })
             .catch((error)=>{
                 console.log(error);
@@ -92,6 +98,7 @@ export default {
         ItemCatering:() => import('@/views/vendor/truck_request/ItemCatering.vue'),
         ItemEvent:() => import('@/views/vendor/truck_request/ItemEvent.vue'),
         ItemRegularEvent:() => import('@/views/vendor/truck_request/ItemRegularEvent.vue'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     }
 }
 </script>

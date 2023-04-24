@@ -1,112 +1,121 @@
 <template>
     <v-container class="pa-0 ma-0 page-container background-image h-100"> 
         <Topnavbar title="" @back="handeBack"/>
-        <v-container class="mg56" style="padding-bottom:40px !important">
-            <v-row v-if="carts && carts.length">
-                <v-col cols="12">
-                    <div class="custom-bs pa-4 mb-4">
-                        <div v-if="cart_checkout && cart_checkout.vendor">
-                            <div class="">
-                                <h2 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h2>
-                                <div v-if="cart_checkout.pickup_date">
-                                    <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
-                                    <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
-                                    <p style="font-weight:600">{{ formatTimeOnly(cart_checkout.pickup_start_date) }} - {{ formatTimeOnly(cart_checkout.pickup_end_date) }}</p>
-                                </div>
-                                <p class="mb-0 error--text">Pickup Location </p>
-                                <div v-if="cart_checkout.address">
-                                    <p class="mb-0">{{ cart_checkout.address.add1 }}, {{ cart_checkout.address.city }}</p>
-                                    <p class="mb-2">{{ cart_checkout.address.state }}, {{ cart_checkout.address.zip }}</p>
+        <div v-if="cart_checkout && Object.keys(cart_checkout).length">
+            <v-container class="mg56" style="padding-bottom:60px !important">
+                <v-row v-if="carts && carts.length">
+                    <v-col cols="12">
+                        <div class="custom-bs pa-4 mb-4">
+                            <div v-if="cart_checkout && cart_checkout.vendor">
+                                <div class="">
+                                    <h2 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h2>
+                                    <div v-if="cart_checkout.pickup_date">
+                                        <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
+                                        <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
+                                        <p style="font-weight:600">{{ formatTimeOnly(cart_checkout.pickup_start_date) }} - {{ formatTimeOnly(cart_checkout.pickup_end_date) }}</p>
+                                    </div>
+                                    <p class="mb-0 error--text">Pickup Location </p>
+                                    <div v-if="cart_checkout.address">
+                                        <p class="mb-0">{{ cart_checkout.address.add1 }}, {{ cart_checkout.address.city }}</p>
+                                        <p class="mb-2">{{ cart_checkout.address.state }}, {{ cart_checkout.address.zip }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="custom-bs pa-4">
-                        <v-row>
-                            <v-col cols="12" md="12" lg="12" xl="12">
-                                <div class="pt-4">
-                                    <h4>Order Items</h4>
-                                </div>
-                                <div class="f-flex justify-space-between flex-column align-center">
-                        
-                                        <ul class="cart-items pt-4">
-                                            <li v-for="(product,i) in cart_checkout.items" 
-                                                class="mb-4 cart-item-single"
-                                                :key="i">
-                                                <div class="pb-4">
-                                                    <div class="d-flex" @click="viewModal(product)">
-                                                        
-                                                        <div style="width:80px">
-                                                            <v-img width="80" :src="base_url+'/image-show/'+product.food_menu_item.profile_pic"></v-img>
-                                                        </div>
-                                                        <div class="pl-4">
-                                                            <div>
-                                                                <p class="text-capitalize mb-1 primary--text">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
-                                                            </div>
-                                                            <div> 
+                        <div class="custom-bs pa-4">
+                            <v-row>
+                                <v-col cols="12" md="12" lg="12" xl="12">
+                                    <div class="pt-4">
+                                        <h4>Order Items</h4>
+                                    </div>
+                                    <div class="f-flex justify-space-between flex-column align-center">
+                            
+                                            <ul class="cart-items pt-4">
+                                                <li v-for="(product,i) in cart_checkout.items" 
+                                                    class="mb-4 cart-item-single"
+                                                    :key="i">
+                                                    <div class="pb-4">
+                                                        <div class="d-flex" @click="viewModal(product)">
                                                             
-                                                                <p class="text-uppercase">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</p>
+                                                            <div style="width:80px">
+                                                                <v-img width="80" :src="base_url+'/image-show/'+product.food_menu_item.profile_pic"></v-img>
+                                                            </div>
+                                                            <div class="pl-4">
+                                                                <div>
+                                                                    <p class="text-capitalize mb-1 primary--text">{{ product.food_menu_item.name }} ({{ product.quantity }})</p>
+                                                                </div>
+                                                                <div> 
+                                                                
+                                                                    <p class="text-uppercase">{{ formatAmount(product.food_menu_item.price * product.quantity) }}</p>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <ul class="varient_items" v-if="product.varients && product.varients.length">
+                                                            <li v-for="(item, i) in product.varients" :key="i">
+                                                                <div class="d-flex align-center">
+                                                                    <p class="mb-0">{{item.variant_item.name}}</p>
+                                                                    <v-icon :disabled="!cart_checkout.vendor.is_active" @click="handleRemoveVarient(item)" small color="error" class="ml-4">mdi-close</v-icon>
+                                                                </div>
+                                                                <span class="text-primary">{{formatAmount(item.variant_item.value * product.quantity)}}</span>
+                                                            </li>
+                                                        </ul>
                                                     </div>
-                                                    <ul class="varient_items" v-if="product.varients && product.varients.length">
-                                                        <li v-for="(item, i) in product.varients" :key="i">
-                                                            <div class="d-flex align-center">
-                                                                <p class="mb-0">{{item.variant_item.name}}</p>
-                                                                <v-icon @click="handleRemoveVarient(item)" small color="error" class="ml-4">mdi-close</v-icon>
-                                                            </div>
-                                                            <span class="text-primary">{{formatAmount(item.variant_item.value * product.quantity)}}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            
-                                                <div class="d-flex align-center justify-space-between">
-                                                    <!-- <p class="" >Remove</p> -->
-                                                    <v-btn text small color="error" @click="handleRemoveItem(product)" tile>remove</v-btn>
-                                                    <div class="d-flex align-center justify-space-around text-center" style="width:120px">
-                                                        <v-btn @click="handlePlus(product)" fab small color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
-                                                        <h4  class="pb-0 mb-0 pl-1 pr-1">{{product.quantity}}</h4>
-                                                        <v-btn @click="handleMinus(product)" fab small color="error"><v-icon>{{ iconMinus }}</v-icon></v-btn>
-                                                    </div>
-                                                </div>
                                                 
-                                            </li>
-                                        </ul>
-                                
-                                </div>
-                            </v-col>
-                        </v-row>
-                    </div>
-                </v-col>
-            </v-row>
-            <v-row v-else>
-                <v-col cols="12">
-                    <div class="unavailable">
-                        <div>
-                            <h3 class="mb-6">Your cart is empty!</h3>
-                            <v-btn block large color="primary" rounded :to="{ name: 'home' }"><v-icon>{{iconArrowBack}}</v-icon>shop now</v-btn>
+                                                    <div class="d-flex align-center justify-space-between">
+                                                        <!-- <p class="" >Remove</p> -->
+                                                        <v-btn :disabled="!cart_checkout.vendor.is_active" text small color="error" @click="handleRemoveItem(product)" tile>remove</v-btn>
+                                                        <div class="d-flex align-center justify-space-around text-center" style="width:120px">
+                                                            <v-btn :disabled="!cart_checkout.vendor.is_active" @click="handlePlus(product)" fab small color="primary"><v-icon>{{ iconPlus }}</v-icon></v-btn> 
+                                                            <h4  class="pb-0 mb-0 pl-1 pr-1">{{product.quantity}}</h4>
+                                                            <v-btn :disabled="!cart_checkout.vendor.is_active" @click="handleMinus(product)" fab small color="error"><v-icon>{{ iconMinus }}</v-icon></v-btn>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </li>
+                                            </ul>
+                                    
+                                    </div>
+                                </v-col>
+                            </v-row>
                         </div>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-container>
-        <div class="custom-bottom-nav" v-if="cart_checkout">
-            <div>
-                <!-- <h2 v-if="cart_checkout.payment_method=='card'" class="primary--text">{{ formatAmount(cart_checkout.card_total) }}</h2>
-                <h2 v-if="cart_checkout.payment_method=='cash'" class="primary--text">{{ formatAmount(cart_checkout.cash_total) }}</h2> -->
-                <h2  class="primary--text">{{ formatAmount(cart_checkout.sub_total) }}</h2> 
+                    </v-col>
+                </v-row>
+                <v-row v-else>
+                    <v-col cols="12">
+                        <div class="unavailable">
+                            <div>
+                                <h3 class="mb-6">Your cart is empty!</h3>
+                                <v-btn block large color="primary" rounded :to="{ name: 'home' }"><v-icon>{{iconArrowBack}}</v-icon>shop now</v-btn>
+                            </div>
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-container>
+            <div class="custom-bottom-nav" v-if="cart_checkout">
+                <div v-if="cart_checkout.vendor.is_active">
+                    <h2  class="primary--text">{{ formatAmount(cart_checkout.sub_total) }}</h2> 
+                </div>
+                <div v-if="cart_checkout.vendor.is_active">
+                    <v-btn rounded link large color="primary" @click="handleCheckout()"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
+                </div>
+                <div v-else class="text-center w-100">
+                    <span class="error--text">Sorry, Truck is offline</span>
+                </div>
             </div>
-            <v-btn rounded link large color="primary" @click="handleCheckout()"><v-icon>{{iconCart}}</v-icon>checkout</v-btn>
+            <CartCheckoutModal/>
+            <ModalConfirm 
+                :dialogConfirm="modal_confirm" 
+                @close="handleCloseConfirm" 
+                @handleConfirm="handleConfirm"/>
         </div>
-        <!-- <div v-else>
-            <Bottomnavbar/>
-        </div> -->
-        <!-- <CartCheckoutModal :dialogModalCheckout="modal_checkout" :cart="cart_checkout" @close="handleCloseCheckout"/> -->
-        <CartCheckoutModal/>
-         <ModalConfirm 
-            :dialogConfirm="modal_confirm" 
-            @close="handleCloseConfirm" 
-            @handleConfirm="handleConfirm"/>
+        <div v-else class="mt-10 text-center">
+            <div v-if="loading">
+                <ComponentLoadingVue/>
+            </div>
+            <div v-else class="unavailable">
+                <p>No orders</p>
+            </div>
+        </div>
     </v-container>
 </template>
 <script>
@@ -155,6 +164,7 @@ export default {
         Topnavbar,
         ModalConfirm,
         CartCheckoutModal:()=>import('@/views/cart/CartCheckoutModal.vue'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     mounted() {
         this.fetchCartDetail(this.$router.currentRoute.params.cartId);
@@ -172,9 +182,11 @@ export default {
         }),
         fetchCartDetail(id){
             if(id){
+                this.loading = true;
                 ApiService.get('/cart/'+id)
                 .then((resp) =>{
                     this.cart_checkout = resp.data;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -311,12 +323,15 @@ export default {
             ApiService.post('carts-item-delete',{
                 cart_id: this.itemDelete.id,
             })
-            .then(() => {
+            .then((resp) => {
                 // this.messageSuccess(resp.message);
                 this.fetchCarts();
                 this.fetchCartDetail(this.$router.currentRoute.params.cartId);
                 this.handleCloseConfirm();
                 this.loaderHide();
+                if(resp.back){
+                    this.handeBack();
+                }
             })
             .catch((error) => {
                 this.loaderHide();

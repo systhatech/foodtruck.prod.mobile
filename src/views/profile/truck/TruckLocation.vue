@@ -72,6 +72,7 @@
             <TruckPreorder 
                 :scheduleDate="selected_schedule"
                 :dialog_preorder="modal_preorder" 
+                @fetchProfile="fetchProfile"
                 @close="handleClose()" 
                 :truckProfile="truckProfile"/>
         </div>
@@ -102,11 +103,14 @@ export default {
         TruckPreorder:()=>import('@/views/profile/truck/TruckPreorder.vue')
     },
     methods:{
+        fetchProfile(){
+            //test
+            this.$emit("fetchProfile")
+        },
         handleClose(){
             this.modal_preorder = false;
         },
         handlePreorder(param){
-            console.log({param});
             this.selected_schedule = param;
             this.modal_preorder = true;
         },

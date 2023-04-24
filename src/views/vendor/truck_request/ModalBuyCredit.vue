@@ -31,7 +31,12 @@
                             <v-btn color="warning" rounded large @click="handleStartTrial()">Start Trial</v-btn>
                         </div>
                         <div v-else>
-                            <CardStripe @proceed="handleProceedCard" :publishablekey="key"/>
+                            <div v-if="key">
+                                <CardStripe @proceed="handleProceedCard" :publishablekey="key"/>
+                            </div>
+                            <div v-else>
+                                <p class="error--text">Please! setup payment credientials</p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -113,6 +113,7 @@ export default {
     methods: {
         handleRoute(item){
             this.item = item;
+            this.$emit('fetchProfile');
             this.dialog = true;
         },
         handleEdit(id){

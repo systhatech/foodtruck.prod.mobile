@@ -34,7 +34,13 @@
                 </div>
                 <div>
                     <v-tabs v-model="active_tab">
-                        <v-tab v-for="(t,i) in tabs" :key="i">{{ t.name }}</v-tab>
+                        <!-- <v-tab v-for="(t,i) in tabs" :key="i">{{ t.name }}</v-tab> -->
+                        <v-tab v-for="(t,i) in tabs" :key="i">
+                            <div v-if="t.count">
+                                <v-badge color="error" :content="t.count">{{ t.name }}</v-badge>
+                            </div>
+                            <div v-else>{{ t.name }}</div>
+                        </v-tab>
                     </v-tabs>
                 </div>
                 <div class="mt-4">
@@ -69,8 +75,13 @@
                                 <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
                             </div>
                         </div>
-                        <div v-else class="unavailable">
-                            <p>No event found</p>
+                        <div v-else class="mt-10 text-center">
+                            <div v-if="loading">
+                                <ComponentLoadingVue/>
+                            </div>
+                            <div v-else class="unavailable">
+                                <p>No orders</p>
+                            </div>
                         </div>
                     </div>
                     <div v-else-if="active_tab==1">
@@ -102,6 +113,7 @@ export default {
         return {
             title:'',
             link_url:'',
+            loading:false,
             post_title:'',
             base_url,
             active_tab:0,
@@ -111,7 +123,7 @@ export default {
             usericon:'',
             tabs:[
                 {"name":"Events","value":'lead'},
-                {"name":"Response","value":'response'},
+                {"name":"Response","value":'response','count':0},
                 {"name":"Payments","value":'Payments'},
             ],
             desserts: [
@@ -145,6 +157,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // TabLead:() => import('@/views/vendor/truck_request/TabLeads.vue'),
         TabPayment:() => import('@/views/vendor/truck_request/TabPayments.vue'),
         TabResponse:() => import('@/views/vendor/truck_request/TabResponse.vue'),
@@ -191,8 +204,10 @@ export default {
             this.$bus.$emit('MODAL_VIDEO_PLAYER_OPEN',{param});
         },
         fetchRequestList(){
+            this.loading= true;
             ApiService.post("/event_leads?page="+this.next_page)
             .then((resp) =>{
+                this.tabs[1].count = resp.responded_count;
                 this.available_credit = resp.credit_available;
                 this.leads = [];
                 resp.data.data.forEach(element => {
@@ -209,6 +224,7 @@ export default {
                 }
                 this.loaderHide();
                 this.fetching_data = false;
+                this.loading = false;
             })
             .catch((error) =>{
                 console.log({error});

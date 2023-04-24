@@ -16,13 +16,14 @@
                         <div class="">
                           <div>
                             <div class="pt-6 mt-14">
-                                <div v-if="scheduleDate">
-                                    <h4 class="primary--text">You are ordering for: {{ formatStandardUSDate(scheduleDate.start_date) }}</h4>
+                                <div v-if="scheduleDate" class="d-flex align-center justify-space-between">
+                                    <h4 class="primary--text">You are ordering for</h4>
+                                    <InputAddress :minDate="min_date" :maxDate="max_date" @selectedDate="dateSelected"/>
                                 </div>
                                 <div v-if="truckProfile && truckProfile.menus && truckProfile.menus.length">
                                     <div v-for="(menu,index) in truckProfile.menus" :key="index">
                                         <div v-if="menu && menu.categoryGroup && Object.keys(menu.categoryGroup).length">
-                                            <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
+                                            <h5 class="pb-0 mb-0 text-uppercase">{{ menu.name }}</h5>
                                             <div>
                                                 <div v-for="(groupItem, index) in menu.categoryGroup" :key="index">
                                                     <h4 class="pb-0 mb-0 mt-2 text-capitalize primary--text">{{ index  }}</h4>
@@ -69,6 +70,8 @@
                             :dialog="modal_menu_item" 
                             :vendorId="vendorId" 
                             :item="item" 
+                            :truckProfile="truckProfile"
+                            :pickup_date="pickup_date"
                             :pickup_start_date="scheduleDate.start_date"
                             :pickup_end_date="scheduleDate.end_date"
                             :locationId="scheduleDate.id"
@@ -101,8 +104,15 @@
     },
     watch: {
           dialog_preorder(newval) {
+            let min_date = moment(this.start_date).format('YYYY-MM-DD HH:mm:ss');
+            if(min_date > this.scheduleDate.start_date){
+                this.min_date = moment(min_date).format('YYYY-MM-DD');
+                this.pickup_date = this.min_date;
+            }else{
+                this.min_date = moment(this.scheduleDate.start_date).format('YYYY-MM-DD');
+                this.pickup_date = this.min_date;
+            }
             this.vendorId = this.$router.currentRoute.params.truckId;
-            console.log(this.vendorId);
             if (newval) {
               this.defaultValue = "";
           } else {
@@ -123,12 +133,9 @@
         }
     },
     components: {
-    //   DatePicker,
-      // datetime,
       InputAddress:()=>import('@/components/layout/InputDatePicker'),
       DialogConfirm,
       ModalMenu,
-    //   InputUpload,
     },
     data() {
         return {
@@ -138,9 +145,7 @@
             item:{},
             moment,
             // selectedData:'',
-            selected_date:'',
-            start_date:  new Date(),
-            end_date:  new Date(),
+           
             title:'',
             base_url,
             schedules:[],
@@ -168,14 +173,28 @@
             remove:false,
             maxHeight:300,
             vendorId:null,
+
+            selected_date:'',
+            start_date:  new Date(),
+            end_date:  new Date(),
+            min_date:'',
+            max_date:'',
+            pickup_date:'',
         }
+    },
+    mounted() {
+      
     },
     methods: {
         ...mapActions({
             fetchProfile:'auth/fetchProfile'
         }),
+        dateSelected(param){
+            this.pickup_date = moment(param.date,'MM/DD/YYYY').format('YYYY-MM-DD');
+        },
         handleRoute(item){
             this.item = item;
+            this.$emit('fetchProfile');
             this.modal_menu_item = true;
         },
         handleCloseItem(){

@@ -98,7 +98,6 @@
 </template>
 <script>
 import { mdiPlus, mdiMinus, mdiClose } from '@mdi/js'
-// import { setCookie, getCookie } from '../../../utils/cookie.js'
 import { base_url } from '@/core/services/config'
 import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
@@ -108,9 +107,7 @@ export default {
         dialog: {
             required:true,
         },
-        truckProfile:{
-
-        },
+        truckProfile:{},
         item:{
             required:true,
             type:Object,
@@ -176,25 +173,25 @@ export default {
             let ids = this.itemSelected.map((x) => {
                return x.id;
             });
-            // console.log({
-            //     menu_item_id: item.id,
-            //     varients : ids,
-            //     quantity : this.quantity,
-            //     vendor_id: this.vendorId,
-            //     pickup_date: this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):'',
-            //     pickup_start_date: this.pickup_start_date?this.pickup_start_date:'',
-            //     pickup_end_date: this.pickup_end_date?this.pickup_end_date:'',
-            //     is_preorder: this.pickup_date?1:0,
-            //     location_id: this.locationId? this.locationId:'',
-            //     client_id: this.currentUser.owner.id,
-            // });
+            console.log({
+                menu_item_id: item.id,
+                varients : ids,
+                quantity : this.quantity,
+                vendor_id: this.vendorId,
+                pickup_date: this.pickup_date ? this.pickup_date: (this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):''),
+                pickup_start_date: this.pickup_start_date?this.pickup_start_date:'',
+                pickup_end_date: this.pickup_end_date?this.pickup_end_date:'',
+                is_preorder: this.pickup_date?1:0,
+                location_id: this.locationId? this.locationId:'',
+                client_id: this.currentUser.owner.id,
+            });
 
             ApiService.post("/cart-create",{
                 menu_item_id: item.id,
                 varients : ids,
                 quantity : this.quantity,
                 vendor_id: this.vendorId,
-                pickup_date: this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):'',
+                pickup_date: this.pickup_date ? this.pickup_date: (this.pickup_start_date?moment(this.pickup_start_date).format('YYYY-MM-DD'):''),
                 pickup_start_date: this.pickup_start_date?this.pickup_start_date:'',
                 pickup_end_date: this.pickup_end_date?this.pickup_end_date:'',
                 is_preorder: this.pickup_date?1:0,

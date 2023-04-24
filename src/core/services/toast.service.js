@@ -158,8 +158,8 @@ export default {
         },
         formatDateToDay(date){
              if(moment(date).isValid()) {
-                // return moment(date).format('ll');
-                return moment(date).format('dddd, do MMMM')
+                return moment(date).format('dddd, Do MMMM');
+                // return moment(date).format('dddd, d MMMM')
             }else{
                 return "";
             }

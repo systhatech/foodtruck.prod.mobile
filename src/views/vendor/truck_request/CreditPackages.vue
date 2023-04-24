@@ -21,8 +21,13 @@
                 </div>
                 <ModalBuyCredit/>
             </div>
-            <div v-else class="unavailable">
-                <p>No packages found</p>
+            <div v-else class="mt-10 text-center">
+                <div v-if="loading">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No orders</p>
+                </div>
             </div>
         </v-container>
         <Bottomnavbar/>
@@ -43,11 +48,13 @@ export default {
             message:'Loading...',
             packages:[],
             stripe_key:'',
+            loading:false,
         }
     },
     components: {
         Topnavbar,
         Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         ModalBuyCredit: () => import("@/views/vendor/truck_request/ModalBuyCredit.vue"),
 
     },
@@ -60,9 +67,11 @@ export default {
             fetchCarts: 'truck/fetchCarts',
         }),
         fetchPackages(){
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             ApiService.post("/credit_packages")
             .then((resp) =>{
+                this.loading = false;
                 this.loaderHide();
                 this.packages = resp.data;
                 this.stripe_key = resp.payment_credientials;

@@ -51,7 +51,7 @@
                 <div>
                     <p class="primary--text mb-1">Contact</p>
                     <p class="mb-1"><v-icon color="primary">mdi-email</v-icon> {{ item.email}}</p>
-                    <p> <v-icon color="primary">mdi-phone</v-icon> {{ item.phone}}</p>
+                    <p> <v-icon color="primary">mdi-phone</v-icon> {{ formatPhoneNumber(item.phone)}}</p>
                 </div>
             </div>
            
