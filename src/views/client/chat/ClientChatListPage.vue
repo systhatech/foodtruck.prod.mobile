@@ -191,7 +191,6 @@ export default {
                             this.members.push(item);
                         }
                     })
-                    console.log(this.members);
                 })
                 .catch(() => {
                     this.loading = false;

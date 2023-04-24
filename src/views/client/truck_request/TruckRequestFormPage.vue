@@ -38,14 +38,9 @@ export default {
         handleBack(){
             this.$router.back();
         },
-        handleClick(param){
-            console.log(param);
-            this.$router.push("/test");
-        },
         fetchCuines(){
             ApiService.post("/vendor-lookup-all")
             .then((resp) =>{
-                console.log({resp})
                 this.cuisine_types = resp.data;
             })
             .catch((error) =>{

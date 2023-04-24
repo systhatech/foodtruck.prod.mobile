@@ -11,7 +11,12 @@
                 </div>
                 <div>
                     <v-tabs v-model="active_tab">
-                        <v-tab v-for="(t,i) in tabs" :key="i">{{ t.name }}</v-tab>
+                        <v-tab v-for="(t,i) in tabs" :key="i">
+                            <div v-if="t.count">
+                                <v-badge color="error" :content="t.count">{{ t.name }}</v-badge>
+                            </div>
+                            <div v-else>{{ t.name }}</div>
+                        </v-tab>
                     </v-tabs>
                 </div>
                 <div class="mt-4">
@@ -31,16 +36,15 @@
                             <v-btn :disabled="fetching_data" outlined large color="primary" rounded @click="loadMore()">{{fetching_data ?'Loading...':'load more'}}</v-btn>
                         </div>
                     </div>
-                    <div v-else class="unavailable">
-                        <p>No data found</p>
+                    <div v-else class="mt-10 text-center">
+                        <div v-if="loading">
+                            <ComponentLoadingVue/>
+                        </div>
+                        <div v-else class="unavailable">
+                            <p>No orders</p>
+                        </div>
                     </div>
-                    <!-- <div v-else-if="active_tab==1">
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis, earum!</p>
-                        <p>Lorem.</p>
-                    </div>
-                    <div v-if="active_tab==2">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, laborum.</p>
-                    </div> -->
+
                 </div>
             </div>
         </v-container>
@@ -65,7 +69,7 @@ export default {
             icon_account: mdiAccount,
             tabs:[
                 {"name":"Pending","value":'pending'},
-                {"name":"Responded","value":'hired'},
+                {"name":"Response","value":'hired',"count":0},
                 {"name":"Archived","value":'archived'},
             ],
 
@@ -77,6 +81,7 @@ export default {
             last_page:0,
             fetching_data: false,
             status:'pending',
+            loading:false,
         }
     },
     components: {
@@ -85,6 +90,7 @@ export default {
         ItemCatering:() => import('@/views/client/truck_request/ItemCatering.vue'),
         ItemEvent:() => import('@/views/client/truck_request/ItemEvent.vue'),
         ItemRegularEvent:() => import('@/views/client/truck_request/ItemRegularEvent.vue'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     mounted() {
         this.fetchRequestList();
@@ -109,9 +115,11 @@ export default {
             }
         },
         fetchRequestList(){
+            this.loading = true;
             ApiService.post("/event_request_list?page="+this.next_page+'&status='+this.status)
             .then((resp) =>{
-                
+                this.loading = false;
+                this.tabs[1].count = resp.responsed;
                 resp.data.data.forEach(element => {
                     this.request_list.push(element);
                 });
