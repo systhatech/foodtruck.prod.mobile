@@ -3,24 +3,33 @@
 		<gmap-map :zoom="zoom" :center="center" class="map-height">
 			<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen"
 				@closeclick="infoWinOpen = false">
-				<div @click="handleTruckProfile(infoContent)">
-					<div class="mb-4">
-						<div v-if="infoContent.table_name == 'vendors'" >
-							<h2 class="primary--text text-capitalize">{{infoContent.locate ? infoContent.locate.name : ''}}</h2>
-						</div>
+				<div class="pa-2">
+					<div class="text-center">
+						<v-avatar size="50">
+							<v-img
+								lazy-src="https://picsum.photos/id/11/10/6"
+								contain
+								:src="base_url+'/image-show/'+(infoContent && infoContent.locate && infoContent.locate.profile_pic?infoContent.locate.profile_pic:'default.jpg')"
+								></v-img>
+						</v-avatar>
+						<h3 class="primary--text mt-1 text-capitalize mb-2">{{infoContent && infoContent.locate ? infoContent.locate.name : ''}}</h3>
 					</div>
-					<div class="d-flex w-100">
-						<!-- <v-icon color="primary">{{ iconLocation }}</v-icon> -->
-						<div class="">
-							<p class="mb-0 f8">
-								{{ infoContent.add1 ? infoContent.add1 : '' }}
-								{{ infoContent.city ? infoContent.city : '' }}
-								{{ infoContent.state ? infoContent.state : '' }}
-								{{ infoContent.zip_code ? infoContent.zip_code : '' }}
-							</p>
-							<div class="d-flex pt-4">
-								<v-chip small color="primary" class="mr-2 text-capitalize" v-for="(c, index) in infoContent.cuisines" :key="index">{{c.value}}</v-chip>
+					<div class="text-center">
+						<div class="d-flex w-100">
+							<!-- <v-icon color="primary">{{ iconLocation }}</v-icon> -->
+							<div class="">
+								<h3 class="mb-0" style="font-weight:400" v-if="infoContent">
+									{{ infoContent.add1 ? infoContent.add1 : '' }}
+									{{ infoContent.city ? infoContent.city : '' }}<br>
+									{{ infoContent.state ? infoContent.state : '' }}
+									{{ infoContent.zip_code ? infoContent.zip_code : '' }}<br>
+									{{ infoContent.country_code ? infoContent.country_code : '' }}
+								</h3>
+								<h3 v-else>n/a</h3>
 							</div>
+						</div>
+						<div class="mt-3 pb-2">
+							<v-btn outlined block color="primary" rounded @click="handleTruckProfile(infoContent)">view</v-btn>
 						</div>
 					</div>
 					

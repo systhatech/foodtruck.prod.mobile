@@ -176,15 +176,23 @@ export default {
                 page: this.pageNo,
                 conversation_id: this.conversation_id,
             })
-                .then((resp) => {
-                    this.loaderHide();
-                    this.messages = resp.data;
-                    this.receiver =  resp.meta;
-                })
-                .catch((error) => {
-                    this.loaderHide();
-                    console.log(error);
-                })
+            .then((resp) => {
+                this.loaderHide();
+                this.messages = resp.data;
+                this.receiver =  resp.meta;
+                let self =this;
+                setTimeout(() => {
+                    const btn = document.querySelector('.order');
+                    btn.addEventListener('touchstart', function(){
+                        console.log('Button Clicked');
+                        self.$router.push("/order/"+btn.getAttribute('data-order'));
+                    },false);
+                }, 1000);
+            })
+            .catch((error) => {
+                this.loaderHide();
+                console.log(error);
+            })
 
         },
         handleBack() {

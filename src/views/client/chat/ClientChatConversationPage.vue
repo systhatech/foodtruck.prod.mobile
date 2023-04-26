@@ -197,11 +197,12 @@ export default {
                     seen_client: 1,
                     seen_vendor: 0,
                 });
+                let self =this;
                 setTimeout(() => {
-                    // let items = document.getElementsByClassName('order');
                     const btn = document.querySelector('.order');
                     btn.addEventListener('touchstart', function(){
                         console.log('Button Clicked');
+                        self.$router.push("/order/"+btn.getAttribute('data-order'));
                     },false);
                 }, 1000);
             })

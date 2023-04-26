@@ -6,14 +6,24 @@
 			class="map-height">
 			<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
 				<div >
-					<div class="mb-4" >
+					<!-- <div class="mb-4" >
 						<div v-if="infoContent.table_name=='vendors'">
 						<h3 class="color-secondary text-capitalize">{{ infoContent.locate?infoContent.locate.name:'' }}</h3>
-						<!-- {{infoContent.table_id == currentUser.table_id ?'My Truck' :''}} -->
+		
 						</div>
 						<div v-if="infoContent.table_name=='clients'">
 							<h3 class="color-secondary text-capitalize" >{{ infoContent.locate?infoContent.locate.fullName:'' }}</h3>
 						</div>
+					</div> -->
+					<div class="text-center">
+						<v-avatar size="50">
+							<v-img
+								lazy-src="https://picsum.photos/id/11/10/6"
+								contain
+								:src="base_url+'/image-show/'+(infoContent.locate.profile_pic?infoContent.locate.profile_pic:'default.jpg')"
+								></v-img>
+						</v-avatar>
+						<h3 class="primary--text mt-1 text-capitalize mb-2">{{infoContent && infoContent.locate ? infoContent.locate.name : ''}}</h3>
 					</div>
 					<div class="d-flex" @click="handleTruckProfile(infoContent)">
 						<v-icon color="primary">{{iconLocation}}</v-icon>

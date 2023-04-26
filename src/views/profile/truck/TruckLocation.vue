@@ -13,6 +13,7 @@
                             </v-img>
                         </div>
                         <div class="pa-4">
+                            <h4 v-if="location.name">{{ location.name ? location.name:'' }}</h4>
                             <div>
                                 <h5 class="text-uppercase primary--text">date</h5>
                                 <p class="mb-1 fs15"> {{ formatStandardUSDate(location.start_date)}} - {{ formatStandardUSDate(location.end_date)}}</p>

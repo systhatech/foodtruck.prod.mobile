@@ -16,9 +16,13 @@
                         <div class="">
                           <div>
                             <div class="pt-6 mt-14">
-                                <div v-if="scheduleDate" class="d-flex align-center justify-space-between">
-                                    <h4 class="primary--text">You are ordering for</h4>
-                                    <InputAddress :minDate="min_date" :maxDate="max_date" @selectedDate="dateSelected"/>
+                                <div v-if="scheduleDate" class="">
+                                    <h4 class="primary--text">You are ordering for {{ scheduleDate.name ? scheduleDate.name:'' }}</h4>
+                                    <v-row>
+                                        <v-col cols="6" md="3" lg="2">
+                                            <InputAddress :minDate="min_date" label="Select Date" :maxDate="max_date" @selectedDate="dateSelected"/>
+                                        </v-col>
+                                    </v-row>
                                 </div>
                                 <div v-if="truckProfile && truckProfile.menus && truckProfile.menus.length">
                                     <div v-for="(menu,index) in truckProfile.menus" :key="index">
