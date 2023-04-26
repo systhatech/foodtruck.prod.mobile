@@ -46,7 +46,6 @@
                 </div>
             </div>
             <div class="d-flex align-center justify-space-between">
-                <!-- <v-btn rounded  large color="primary" to="/client-truck-request/1">view</v-btn> -->
                 <v-btn rounded  large color="primary" :to="'/client-truck-request/'+item.id">view</v-btn>
             </div>
         </div>

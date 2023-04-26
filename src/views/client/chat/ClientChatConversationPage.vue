@@ -90,6 +90,7 @@ export default {
         }
     },
     mounted() {
+        
         let plugin = this;
         this.table_to = this.$router.currentRoute.params.type;
         this.table_to_id = this.$router.currentRoute.params.id;
@@ -196,6 +197,13 @@ export default {
                     seen_client: 1,
                     seen_vendor: 0,
                 });
+                setTimeout(() => {
+                    // let items = document.getElementsByClassName('order');
+                    const btn = document.querySelector('.order');
+                    btn.addEventListener('touchstart', function(){
+                        console.log('Button Clicked');
+                    },false);
+                }, 1000);
             })
             .catch((error) => {
                 this.loading = false;

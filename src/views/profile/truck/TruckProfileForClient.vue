@@ -17,6 +17,20 @@
                                 </div>
                                 <div class="pa-4">
                                     <h3 class="text-capitalize ma-0 primary--text">{{ truck.name}}</h3>
+                                    <div class="rating-wrapper mb-2">
+                                        <div class="d-flex align-center">
+                                            <v-rating
+                                                small
+                                                readonly
+                                                :value="truckProfile.review"
+                                                bg-color="orange-lighten-1"
+                                                color="success"
+                                            ></v-rating>
+                                            <div class="pt-1 pl-1">
+                                                <pre>({{ truckProfile.review }})</pre>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div>
                                         <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
                                             {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }},
@@ -77,9 +91,9 @@
                             @changeComponent="changeComponent"
                             :truck-profile="truckProfile"></component>
                         </div>
-                        <div class="pt-4" v-if="activeComponent == 'review'">
+                        <!-- <div class="pt-4" v-if="activeComponent == 'review'">
                             <p>Coming soon</p>
-                        </div>
+                        </div> -->
                     </div>
                 </v-container>
             </div>
@@ -97,6 +111,7 @@ import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'
 import Banner from '@/components/layout/ComponentBanner'
+import TruckReview from './TruckReviews';
 import TruckAbout from './TruckAbout';
 import TruckLocation from './TruckLocation';
 import TruckGallery from './TruckGallery';
@@ -140,8 +155,8 @@ export default {
                 {name:'menu',component:'menus'},
                 {name:'Schedules',component:'location'},
                 {name:'Gallery',component:'gallery'},
-                {name:'about',component:'about'},
-                // {name:'Schedules',component:'schedule'},
+                {name:'Review',component:'review'},
+                // {name:'about',component:'about'},
             ],
             activeItem:0,
             activeComponent:'menus',
@@ -258,6 +273,7 @@ export default {
         Carousel,
         Banner,
         'about': TruckAbout,
+        'review': TruckReview,
         'menus': TruckMenu,
         'location': TruckLocation,
         'gallery': TruckGallery,

@@ -1,8 +1,6 @@
 <template>
     <div class="pt-4 ">
-        <!-- {{  truckProfile.menus }} -->
-
-        <div v-if="truckProfile && truckProfile.menus">
+        <div v-if="truckProfile && truckProfile.menus && truckProfile.menus.length">
             <div v-for="(menu,index) in truckProfile.menus" :key="index">
                 <div v-if="menu && menu.categoryGroup && Object.keys(menu.categoryGroup).length">
                     <h5 class="pb-0 mb-0 mt-8 text-uppercase">{{ menu.name }}</h5>
@@ -47,25 +45,14 @@
                                                 <v-chip small color="success" v-if="item.is_special" class="mb-1">{{ item.is_special? 'Todays Special':'' }}</v-chip>
                                                 <p v-if="item.description">{{ shortText(item.description,40) }}</p>
                                             </div>
-                                            <!-- <div>
-                                                
-                                                <p class="ma-0"><span class="unittype">({{ item.unit_type}})</span></p>
-                                                <p class="ma-0"><span class="unittype">{{ item.unit}} item</span></p>
-                                            </div> -->
+
                                         </div>
-                                    </div>
-                                    <div>
-                                        <!-- <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> -->
-                                        <!-- <v-btn fab small color="primary" @click="handleRoute(item)"><v-icon>{{ icon_right }}</v-icon></v-btn> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div v-else class="unavailable">
-                    <p>Menu not available</p>
-                </div> -->
             </div>
             <ModalMenu 
                 :dialog="dialog" 

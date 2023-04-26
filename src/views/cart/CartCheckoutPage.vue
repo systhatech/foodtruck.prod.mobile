@@ -265,7 +265,6 @@ export default {
             })
         },
         handleMinus(cart){
-            console.log(cart);
             if(cart.quantity ==1 ){
                 this.messageError('Cannot update quantity');
                 return;

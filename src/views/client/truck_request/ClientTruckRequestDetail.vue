@@ -10,13 +10,28 @@
                     <v-divider></v-divider>
                     <div class="mt-4">
                         <div  v-for="(vendor,index) in detail.vendors" :key="index">
+                            <!-- {{ vendor }} -->
                             <div class="d-flex justify-space-between align-center">
                                 <div>
-                                    <h4 class="primary--text text-capitalize">{{vendor.name}}</h4>
-                                    <p class="error--text mb-0" v-if="vendor.unread_messages.length">{{vendor.unread_messages.length}} unread message</p>
+                                    <h4 class="primary--text text-capitalize" style="text-decoration: underline;" @click="handleProfile(vendor)">{{vendor.name}}</h4>
+                                    <!-- <p class="error--text mb-0" v-if="vendor.unread_messages.length">{{vendor.unread_messages.length}} unread message</p> -->
+                                    <p class="mb-0">{{vendor.email}}</p>
+                                    <p>{{ formatPhoneNumber(vendor.phone_no)}}</p>
                                 </div>
                                 <div>
-                                    <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                                    <div v-if="vendor.unread_messages.length" class="mr-4">
+                                        <v-badge
+                                            small
+                                            color="error"
+                                            :content="vendor.unread_messages.length">
+                                            <!-- <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn> -->
+                                            <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                                        </v-badge>
+                                    </div>
+                                    <div v-else>
+                                        <!-- <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn> -->
+                                        <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                                    </div>
                                 </div>
                             </div>
                             <v-divider v-if="index<detail.vendors.length-1" class="mb-4 mt-4"></v-divider>
@@ -80,7 +95,7 @@
                         <v-col cols="6" v-if="detail.cuisines">
                             <div>
                                 <h4 class="primary--text">Cuisine Type</h4>
-                                <p>{{detail.cuisines?detail.cuisines:'n/a'}}</p>
+                                <p class="text-capitalize">{{detail.cuisines?detail.cuisines:'n/a'}}</p>
                             </div>
                         </v-col>
                         <v-col cols="6" v-if="detail.event_frequency">
@@ -170,6 +185,9 @@ export default {
         }   
     },
     methods: {
+        handleProfile(truck){
+            this.$router.push("/truck-profile/"+truck.id);
+        },
         updateStatus(param){
             ApiService.post("/event_request_update",{
                 'id': this.$router.currentRoute.params.requestId,

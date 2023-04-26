@@ -130,14 +130,16 @@
                                     </div>
                                     <div class="custom-bs pa-3">
                                         <div class="d-flex align-center flex-wrap">
-                                            <div class="ma-1"><v-btn small outlined text @click="updateTipAmount(0)">No Tip </v-btn></div>
-                                            <div class="ma-1" v-for="(tip,index) in cart.tips" :key="index"><v-btn small outlined text @click="updateTipAmount(tip)">{{formatAmount(tip)}}</v-btn></div>
+                                            <div class="ma-1" style="width: 90px;"><v-btn  color="primary" @click="updateTipAmount(0)" block>No Tip </v-btn></div>
+                                            <div class="ma-1" style="width: 90px;" v-for="(tip,index) in cart.tips" :key="index"><v-btn block  color="primary" @click="updateTipAmount(tip)">{{formatAmount(tip)}}</v-btn></div>
 
                                             <div class="d-flex align-center" :class="!other?'':''">
-                                                <v-btn small outlined text @click="updateTipAmount('other')" class="mr-6">Other</v-btn>
-                                                <div class="d-flex align-center" v-if="other">
+                                                <div style="width:90px;" class="pl-1">
+                                                    <v-btn color="primary"  block @click="updateTipAmount('other')" class="mr-6">Other</v-btn>
+                                                </div>
+                                                <div class="d-flex align-center pl-2" v-if="other">
                                                     <v-text-field type="number" x-small label="Tip amount" v-model="tipAmount"></v-text-field>
-                                                    <v-btn small color="primary" outlined  class="ml-4" @click="addTip">Add tip</v-btn>
+                                                    <v-btn color="primary"  class="ml-4" @click="addTip">Add tip</v-btn>
                                                 </div>
                                             </div> 
                                         </div>

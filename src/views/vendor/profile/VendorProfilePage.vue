@@ -107,6 +107,7 @@ export default {
             menusVendor: [
                 {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
                 {name:'User List',icon:'mdi-account',route:'vendor-profile-list'},
+                {name:'Reviews',icon:'mdi-star',route:'vendor-profile-review'},
                 // {name:'User Profile',icon:'mdi-account',route:'vendor-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'vendor-profile-address'},
                 {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},

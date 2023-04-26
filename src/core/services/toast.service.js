@@ -164,6 +164,14 @@ export default {
                 return "";
             }
         },
+        formatDate(date){
+             if(moment(date).isValid()) {
+                return moment(date).format('Do MMMM, YYYY');
+                // return moment(date).format('dddd, d MMMM')
+            }else{
+                return "";
+            }
+        },
         formatStandardUSDate(date){
              if(moment(date).isValid()) {
                 // return moment(date).format('ll');

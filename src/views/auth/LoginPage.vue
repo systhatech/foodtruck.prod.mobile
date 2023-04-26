@@ -99,6 +99,8 @@ export default {
 
     mounted() {
         // this.locateGeoLocation();
+        // let route = this.$router.currentRoute.query;
+        // console.log(route);
 
     },
     computed: {

@@ -515,3 +515,10 @@ scroll-behavior: smooth;
 #input_code{
     text-align: center !important;
 }
+.rating-wrapper{
+    .v-rating{
+        button{
+            padding: 0 !important;
+        }
+    }
+}

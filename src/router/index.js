@@ -462,6 +462,21 @@ const routes = [
 			}
 		}
 	},
+	{
+		path: '/vendor-profile-review',
+		name: 'profileReviews',
+		component: () => import(/* webpackChunkName: "profileSchedulePage" */ '../views/vendor/profile/VendorProfileReview.vue'),
+		meta: { requiresAuth: true },
+		beforeEnter: (to, from, next) => {
+			if (store.getters['auth/user']) {
+				next();
+			}else{
+				next({
+					name: 'loginPage'
+				});
+			}
+		}
+	},
 	// {
 	// 	path: '/menu-edit/:menuId',
 	// 	name: 'TruckMenuEditPage',
