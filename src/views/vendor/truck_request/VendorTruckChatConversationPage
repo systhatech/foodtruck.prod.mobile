@@ -310,7 +310,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100vh - 126px);
+    height: calc(100vh - 60px);
     padding-bottom: 0 !important;
 }
 :root {
