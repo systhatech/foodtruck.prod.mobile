@@ -8,10 +8,7 @@
                         <div class="d-flex align-center justify-space-between pt-0 pb-2 pl-3 pr-3">
                             <div class="d-flex">
                                 <v-avatar class="mt-2">
-                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + (member.contact && member.contact.profile_pic ? member.contact.profile_pic:'default.jpg')" rounded></v-img>
-                                    <!-- <v-icon dark v-else>
-                                        {{ iconAccount }}
-                                    </v-icon> -->
+                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + (member && member.profile_pic ? member.profile_pic:'default.jpg')" rounded></v-img>
                                 </v-avatar>
                                 <div class="pl-4">
                                     <div v-if="member.unread_messages_count">
