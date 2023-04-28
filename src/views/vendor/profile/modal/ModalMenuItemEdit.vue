@@ -206,6 +206,9 @@ export default {
         ...mapActions({
             fetchProfile: 'auth/fetchProfile'
         }),
+        handleCloseCuisineType(){
+            this.modal_vendor_lookup = false;
+        },
         fetchVendorLookups(param){
             if(param.code =='menu_item_category'){
                 this.fetchCategory();

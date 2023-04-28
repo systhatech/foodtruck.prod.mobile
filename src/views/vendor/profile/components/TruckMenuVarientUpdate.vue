@@ -69,24 +69,6 @@
 								</v-col>
 							</v-row>
 						</v-container>
-						<!-- </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="secondary"
-            text
-            @click="handleClose"
-          >
-            cancel
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="handleUpdate"
-          >
-            Update
-          </v-btn>
-        </v-card-actions> -->
 					</div>
 				</v-card>
 			</v-dialog>

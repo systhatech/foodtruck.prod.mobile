@@ -257,7 +257,6 @@ export default {
         },
         handleCloseCuisineType(){
             this.modal_vendor_lookup = false;
-            // this.fetchCuisineTypes();
         },
         selectedType(data) {
             this.menu.unit_type = data.selected_data;
