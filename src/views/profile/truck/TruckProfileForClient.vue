@@ -6,16 +6,16 @@
                 <v-container class="pa-0">
                     <div class="pa-4">
                         <div class="d-flex justify-space-between">
-                            <div class="d-flex">
+                            <div class="w-100  pa-4 custom-bs">
                                 <div class="pt-4">
-                                    <v-avatar size="60">
+                                  
                                     <img
                                         :src="truckProfile && truckProfile.general && truckProfile.general.profile_pic ? base_url+'/image-show/'+(truckProfile.general.profile_pic !='null'?truckProfile.general.profile_pic:'default.jpg'):base_url+'/image-show/default.jpg'"
                                         alt="Profile Pic"
+                                        height="100"
                                         >
-                                    </v-avatar>
                                 </div>
-                                <div class="pa-4">
+                                <div class="">
                                     <h3 class="text-capitalize ma-0 primary--text">{{ truck.name}}</h3>
                                     <div class="rating-wrapper mb-2">
                                         <div class="d-flex align-center">
@@ -31,20 +31,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
-                                            {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }},
-                                            {{  truckProfile && truckProfile.active_location && truckProfile.active_location.city ? truckProfile.active_location.city:'' }},<br>
-                                            {{ truckProfile && truckProfile.active_location && truckProfile.active_location.state ? truckProfile.active_location.state:'' }} 
-                                            {{  truckProfile && truckProfile.active_location && truckProfile.active_location.zip ? truckProfile.active_location.zip:'' }},
-                                        </p>
-                                        <p class="mb-2" v-else-if="truckProfile && truckProfile.address">
-                                            {{  truckProfile && truckProfile.address && truckProfile.address.add1 ? truckProfile.address.add1:'' }},
-                                            {{  truckProfile && truckProfile.address && truckProfile.address.city ? truckProfile.address.city:'' }},<br>
-                                            {{ truckProfile && truckProfile.address && truckProfile.address.state ? truckProfile.address.state:'' }} 
-                                            {{  truckProfile && truckProfile.address && truckProfile.address.zip ? truckProfile.address.zip:'' }},
-                                        </p>
-                                        <p v-else>Address Not available</p>
+                                    <div class="pb-4 d-flex">
+                                        <div>
+                                            <v-icon color="error">mdi-map-marker-radius</v-icon>
+                                        </div>
+                                        <div class="pl-1">
+                                            <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
+                                                {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }}
+                                                {{  truckProfile && truckProfile.active_location && truckProfile.active_location.city ? truckProfile.active_location.city:'' }}<br>
+                                                {{ truckProfile && truckProfile.active_location && truckProfile.active_location.state ? truckProfile.active_location.state:'' }} 
+                                                {{  truckProfile && truckProfile.active_location && truckProfile.active_location.zip_code ? truckProfile.active_location.zip_code:'' }}
+                                            </p>
+                                            <p class="mb-2" v-else-if="truckProfile && truckProfile.address">
+                                                {{  truckProfile && truckProfile.address && truckProfile.address.add1 ? truckProfile.address.add1:'' }},
+                                                {{  truckProfile && truckProfile.address && truckProfile.address.city ? truckProfile.address.city:'' }},<br>
+                                                {{ truckProfile && truckProfile.address && truckProfile.address.state ? truckProfile.address.state:'' }} 
+                                                {{  truckProfile && truckProfile.address && truckProfile.address.zip ? truckProfile.address.zip:'' }},
+                                            </p>
+                                            <p v-else>Address Not available</p>
+                                        </div>
                                     </div>
                                     <div class="w-100">
                                         <v-btn
@@ -106,7 +111,7 @@
 </template>
 <script>
 import { base_url } from '@/core/services/config'
-import Topnavbar from '@/components/layout/Topnavbar'
+import Topnavbar from '@/components/layout/TopnavbarBackCustom'
 import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomClient'
 import Carousel from '@/components/layout/ComponentCarousel'

@@ -16,7 +16,7 @@
                 </v-toolbar-items>
             </v-toolbar>
             <!-- <v-container> -->
-                <div class="pa-4 pb82 background-white pb-16 mt-14" v-if="item && Object.keys(item).length">
+                <div class="pb82 background-white mt-14" v-if="item && Object.keys(item).length">
                     <div class="">
                         <div>
                             <v-img
@@ -37,10 +37,10 @@
                     </div>
                     <div id="menu-modal" v-if="item.variants.length">
                         <div class="pt-5 pl-4">
-                            <p>Add Extra</p>
+                            <h4>Add Extra</h4>
                             <div v-for="(varient,i) in item.variants"
                                 :key="i" class="mb-6">
-                                <h5 class="text-uppercase">{{ varient.variant.name }}</h5>
+                                <h5 class="text-uppercase primary--text">{{ varient.variant.name }}</h5>
                                 <ul class="flavour-list">
                                     <li v-for="(single,index) in varient.variant.items" :key="index">
                                             <v-checkbox
@@ -52,7 +52,7 @@
                                         >
                                         <template v-slot:label>
                                             <div>
-                                                <p class="mb-0">{{ single.name }}</p>
+                                                <p class="mb-0 primary--text">{{ single.name }}</p>
                                                 <p class="mb-0">{{ formatAmount(single.value)}} </p>
                                             </div>
                                         </template>

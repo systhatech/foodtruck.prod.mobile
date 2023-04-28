@@ -2,7 +2,7 @@
     <div>
          <div class="custom-bs pa-3 mb-4 dashboard-icons" v-for="(truck, index) in trucks" :key="index"> 
             <div class="mb-2">
-                <p class=" ma-0 text-capitalize f8-bold text-uppercase">{{ truck.locate.name }}</p>
+                <p class=" ma-0 text-capitalize f8-bold text-uppercase mb-2">{{ truck.locate.name }}</p>
                 <div>
                     <v-icon color="primary">{{iconAddress}}</v-icon>
                     <span class="f8 ml-1">{{truck.add1}}</span>
