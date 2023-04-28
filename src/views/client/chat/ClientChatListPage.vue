@@ -8,10 +8,7 @@
                         <div class="d-flex align-center justify-space-between pt-0 pb-2 pl-3 pr-3">
                             <div class="d-flex">
                                 <v-avatar class="mt-2">
-                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + (member.contact && member.contact.profile_pic ? member.contact.profile_pic:'default.jpg')" rounded></v-img>
-                                    <!-- <v-icon dark v-else>
-                                        {{ iconAccount }}
-                                    </v-icon> -->
+                                    <v-img alt="avatar" contain tile :src="base_url + '/image-show/' + (member && member.profile_pic ? member.profile_pic:'default.jpg')" rounded></v-img>
                                 </v-avatar>
                                 <div class="pl-4">
                                     <div v-if="member.unread_messages_count">
@@ -36,19 +33,6 @@
                         <div>
                             <v-btn fab text small><v-icon color="primary">mdi-chevron-right</v-icon></v-btn>
                         </div>
-                        <!-- <div class="text-right pt-3">
-                            <v-btn fab small color="primary" class="mr-3" @click="handleRoute(member.id)">
-                                <v-icon>{{ iconChat }}</v-icon>
-                            </v-btn>
-                            <v-btn fab small color="primary" link :href="
-                                `tel:${member.contact.phone_no ? member.contact.phone_no.replace(/[^\d]/g, '') : member.contact.mobile_no.replace(/[^\d]/g, '')}`
-                            " class="mr-3">
-                                <v-icon>{{ iconPhone }}</v-icon>
-                            </v-btn>
-                            <v-btn fab small color="error" @click="handleOpenArkive(member.contact)">
-                                <v-icon>{{ iconArchive }}</v-icon>
-                            </v-btn>
-                        </div> -->
                     </li>
                 </ul>
             </div>
