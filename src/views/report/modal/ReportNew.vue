@@ -12,7 +12,7 @@
                     </v-toolbar-items>
                 </v-toolbar>
                 <v-container>
-                    <div class="custom-bs mt-14 pa-4">
+                    <div class="custom-bs pa-4">
                         <v-form ref="formReport">
                             <v-row>
                                 <v-col cols="12" md="12" lg="6" xl="6">

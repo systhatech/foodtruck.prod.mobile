@@ -2,7 +2,7 @@
     <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack()"/>
         <v-container class="mg56 pa-0">
-            <div class="pa-4">
+            <div class="pa-4 pb-10">
                 <div v-if="currentUser && reviews && reviews.length" class="">
                     <div v-for="(review,index) in reviews" :key="index" class="mb-4 custom-bs pa-4">
                         <div>

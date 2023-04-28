@@ -13,7 +13,7 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <div class="">
-                        <div class="pa-6 pt-16 mt-4">
+                        <div class="pa-6 mt-4">
                             <v-form ref="formCuisineType" class="custom-bs pa-4 pt-6">
                                 <v-row>
                                     <v-col cols="12" md="6" class="ma-0 pt-0 pb-0">

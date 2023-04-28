@@ -15,7 +15,7 @@
                   <v-container>
                       <div class="background-image">
                         <div>
-                            <div class="pa-4 custom-bs pt-6 mt-14">
+                            <div class="pa-4 custom-bs pt-6">
 
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
@@ -69,18 +69,20 @@
                                         :rules="requiredRules"
                                         label="State"
                                         required
+                                        class="pa-0"
                                     ></v-text-field>
                                     </v-col>
     
                                 <v-col
                                     cols="6"
                                     sm="6"
-                                    class="pb-0 pt-0"
+                                    class="pb-0 pt-0 "
                                     >
                                     <v-text-field
                                         v-model="address.zip"
                                         v-mask="'#########'"
                                         label="ZIP"
+                                        class="pa-0"
                                         required
                                     ></v-text-field>
                                     </v-col>
@@ -138,29 +140,13 @@
                                         </template>
                                     </DatePicker>
                                     </v-col>
-                                    <!-- <v-col
-                                    cols="12"
-                                    sm="12"
-                                    >
-                                    <div>
-                                        <p class="ma-0 cl">Date</p>
-                                        <DatePicker v-model="start_date" mode="date">
-                                            <template v-slot="{ inputValue, inputEvents }">
-                                                <input
-                                                class="custom-input"
-                                                :value="moment(inputValue).format('M/D/YY h:mm a')"
-                                                v-on="inputEvents"
-                                                />
-                                            </template>
-                                        </DatePicker>
-                                    </div>
-                                    </v-col> -->
+                                  
                                     <v-col cols="12" class="text-center">
                                         <div class="pt-4 pb-4">
                                             <v-btn color="primary" block  
                                             rounded 
                                             large
-                                            @click="handleSubmit">Submit</v-btn>
+                                            @click="handleSubmit">update</v-btn>
                                         </div>
                                     </v-col>
                                 

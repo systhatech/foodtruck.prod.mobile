@@ -94,7 +94,6 @@ export default {
     },
     mounted() {
         let plugin = this;
-       console.log(this.$router.currentRoute);
         this.table_to = this.$router.currentRoute.params.to;
         this.table_to_id = this.$router.currentRoute.params.to_id;
         this.conversation_id = this.$router.currentRoute.params.conv_id;
@@ -107,10 +106,6 @@ export default {
             this.vendor_id = this.table_to_id;
             this.client_id = this.currentUser.table_id;
         }
-
-        console.log(this.vendor_id, this.client_id);
-
-
 
         socketHandler.on('timezone', function(tz) {
             plugin.tz = tz;
@@ -168,12 +163,6 @@ export default {
 
         handleOrder(message) {
             if(!message.includes('href'))return;
-
-            // let href = message.match(/\/order\/[\d]+/);
-            // if(!(0 in href)) return;
-            // let  orderId = href[0].replace(/[^\d]/g, '')
-            // console.log(orderId);
-            // this.$router.replace({name:'clientOrderDetailPage',params: { orderId: orderId}});
         },
         scrollToBottom(){
             setTimeout(() => {
@@ -191,29 +180,6 @@ export default {
         fetchMessage() {
             this.loaderShow();
             this.loading = true;
-
-            // ApiService.post('/chat-messages', {
-            //     table_from: this.currentUser.table,
-            //     table_from_id: this.currentUser.table_id,
-            //     table_to: this.table_to,
-            //     table_to_id: this.table_to_id,
-            //     page: this.pageNo,
-            //     'table_name':'event_requests',
-            // })
-            // .then((resp) => {
-            //     this.loading = false;
-            //     this.loaderHide();
-            //     this.messages = resp.data;
-            //     this.receiver =  resp.meta;
-            // })
-            // .catch((error) => {
-            //     this.loading = false;
-            //     this.loaderHide();
-            //     console.log(error);
-            // })
-        //     this.table_to = this.$router.currentRoute.params.type;
-        // this.table_to_id = this.$router.currentRoute.params.id;
-        // this.conversation_id = this.$router.currentRoute.params.conv_id;
             ApiService.post('/truck-requestchat-messages', {
                 vendor_id: this.vendor_id,
                 client_id: this.client_id,
@@ -225,35 +191,12 @@ export default {
                 this.messages = resp.data;
                 this.receiver =  resp.meta;
                 this.conversation_id = resp.conversation_id;
-                console.log(this.conversation_id);
             })
             .catch((error) => {
                 this.loading = false;
                 this.loaderHide();
                 console.log(error);
             })
-
-
-            // this.loading = true;
-            // ApiService.post('/truck-requestchat-messages', {
-            //     table_from: this.currentUser.table,
-            //     table_from_id: this.currentUser.table_id,
-            //     table_to: this.table_to,
-            //     table_to_id: this.table_to_id,
-            //     page: this.pageNo,
-            // })
-            // .then((resp) => {
-            //     this.loading = false;
-            //     this.loaderHide();
-            //     this.messages = resp.data;
-            //     this.receiver =  resp.meta;
-            // })
-            // .catch((error) => {
-            //     this.loading = false;
-            //     this.loaderHide();
-            //     console.log(error);
-            // })
-
         },
         handleBack() {
             this.$router.back();

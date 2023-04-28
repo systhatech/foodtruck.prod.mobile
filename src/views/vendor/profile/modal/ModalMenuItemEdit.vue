@@ -15,7 +15,7 @@
                     <v-container class="pa-0">
                         <div class="background-image">
                             <div>
-                                <div class="pa-4 custom-bs mt-14 ma-4 mb-14">
+                                <div class="pa-4 custom-bs ma-4 mb-14">
 
                                     <v-form v-model="valid" ref="formLocation">
                                         <v-row>
@@ -206,6 +206,9 @@ export default {
         ...mapActions({
             fetchProfile: 'auth/fetchProfile'
         }),
+        handleCloseCuisineType(){
+            this.modal_vendor_lookup = false;
+        },
         fetchVendorLookups(param){
             if(param.code =='menu_item_category'){
                 this.fetchCategory();

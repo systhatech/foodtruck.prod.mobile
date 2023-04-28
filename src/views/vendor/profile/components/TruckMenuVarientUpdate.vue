@@ -13,80 +13,64 @@
 						</v-toolbar-items>
 					</v-toolbar>
 					<div class="">
-						<v-container class="custom-bs pt-16">
-							<v-row>
-								<v-col cols="12" sm="8" offset-sm="2" md="6" offset-md="3">
-									<div>
-										<v-form class="mt-4" ref="formVarient">
-											<div class="d-flex align-center">
-												<v-text-field label="Group Name" :rules="rulesRequired"
-													v-model="varient.name">
-												</v-text-field>
-											</div>
-											<div>
-												<div class="d-flex align-center justify-space-between mb-3">
-													<div>
-														<p class="ma-0 pa-0">Items</p>
-														<v-checkbox v-model="varient.select_single"
-															label="Select Single"></v-checkbox>
-													</div>
-													<v-btn fab small color="accent"
-														@click="addItem()"><v-icon>mdi-plus</v-icon></v-btn>
+						<v-container class=" pa-4">
+							<div class="custom-bs pa-6">
+								<v-row>
+									<v-col cols="12" sm="8" offset-sm="2" md="6" offset-md="3">
+										<div>
+											<v-form class="mt-4" ref="formVarient">
+												<div class="d-flex align-center">
+													<v-text-field label="Group Name" :rules="rulesRequired"
+														v-model="varient.name">
+													</v-text-field>
 												</div>
 												<div>
-
-													<v-row class="mb-0 mt-0 pt-0 pb-0"
-														v-for="(item, i) in varient.items" :key="i">
-														<v-col cols="6" class="mb-0 mt-0 pt-0 pb-0"><v-text-field
-																v-model="item.name" label="Name"></v-text-field></v-col>
-														<v-col cols="4" class="mb-0 mt-0 pt-0 pb-0"> <v-text-field
-																v-model="item.value" type="number"
-																label="Price"></v-text-field></v-col>
-														<v-col cols="2" class="text-center">
-															<!-- <v-btn fab small color="accent" @click="addItem(i)" v-if="i==0"><v-icon>mdi-plus</v-icon></v-btn> -->
-															<v-btn fab small color="error"
-																:disabled="varient.items.length == 1"
-																@click="removeItem(item, i)"><v-icon>mdi-minus</v-icon></v-btn>
-														</v-col>
-													</v-row>
-													<DialogConfirm :message="message" @handleConfirm="handleDelete"
-														@close="close" :dialogConfirm="modalConfirm" />
+													<div class="d-flex align-center justify-space-between mb-3">
+														<div>
+															<p class="ma-0 pa-0">Items</p>
+															<v-checkbox v-model="varient.select_single"
+																label="Select Single"></v-checkbox>
+														</div>
+														<v-btn fab small color="accent"
+															@click="addItem()"><v-icon>mdi-plus</v-icon></v-btn>
+													</div>
+													<div>
+	
+														<v-row class="mb-0 mt-0 pt-0 pb-0"
+															v-for="(item, i) in varient.items" :key="i">
+															<v-col cols="6" class="mb-0 mt-0 pt-0 pb-0"><v-text-field
+																	v-model="item.name" label="Name"></v-text-field></v-col>
+															<v-col cols="4" class="mb-0 mt-0 pt-0 pb-0"> <v-text-field
+																	v-model="item.value" type="number"
+																	label="Price"></v-text-field></v-col>
+															<v-col cols="2" class="text-center">
+																<!-- <v-btn fab small color="accent" @click="addItem(i)" v-if="i==0"><v-icon>mdi-plus</v-icon></v-btn> -->
+																<v-btn fab small color="error"
+																	:disabled="varient.items.length == 1"
+																	@click="removeItem(item, i)"><v-icon>mdi-minus</v-icon></v-btn>
+															</v-col>
+														</v-row>
+														<DialogConfirm :message="message" @handleConfirm="handleDelete"
+															@close="close" :dialogConfirm="modalConfirm" />
+													</div>
 												</div>
+											</v-form>
+											<div class="text-center pt-4">
+												<v-btn
+													color="primary"
+													rounded
+													block
+													large
+													@click="handleUpdate"
+												>
+													Update
+												</v-btn>
 											</div>
-										</v-form>
-										<div class="text-center pt-4">
-											<v-btn
-												color="primary"
-												rounded
-												block
-												large
-												@click="handleUpdate"
-											>
-												Update
-											</v-btn>
 										</div>
-									</div>
-								</v-col>
-							</v-row>
+									</v-col>
+								</v-row>
+							</div>
 						</v-container>
-						<!-- </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="secondary"
-            text
-            @click="handleClose"
-          >
-            cancel
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="handleUpdate"
-          >
-            Update
-          </v-btn>
-        </v-card-actions> -->
 					</div>
 				</v-card>
 			</v-dialog>

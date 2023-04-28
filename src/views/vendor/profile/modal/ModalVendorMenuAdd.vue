@@ -12,9 +12,9 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <div class="">
-                        <div class="pa-6 pt-16 mt-4">
-                            <v-form ref="formMenu">
+                    <div class="custom-bs">
+                        <div class="pa-4">
+                            <v-form ref="formMenu" class="custom-bs pa-4">
                                 <v-row>
                                     <v-col cols="12" md="6">
                                         <div style="height:200px; width:200px; margin: 0 auto;">

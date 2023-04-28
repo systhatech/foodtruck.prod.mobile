@@ -16,7 +16,7 @@
                 </v-toolbar-items>
             </v-toolbar>
             <!-- <v-container> -->
-                <div class="pb82 background-white mt-14" v-if="item && Object.keys(item).length">
+                <div class="pb82 background-white" v-if="item && Object.keys(item).length">
                     <div class="">
                         <div>
                             <v-img

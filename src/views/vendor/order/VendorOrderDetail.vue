@@ -12,8 +12,8 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <div class="pb82 p-relative background-image pt-16">
-                        <div class="pt-4">
+                    <div class="pb82 p-relative background-image">
+                        <div class="">
                             <template v-if="!loading && orderDetail && Object.keys(orderDetail).length">
                                 <div class="custom-bs pa-4">
                                     <h5 class="text-uppercase primary--text">{{ orderDetail && orderDetail.fname

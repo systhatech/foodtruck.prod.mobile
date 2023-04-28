@@ -12,8 +12,8 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <div class="pa-6 pt-16">
-                        <div class=" mt-4 pa-4 custom-bs">
+                    <div class="pa-6">
+                        <div class="pa-4 custom-bs">
                             <v-form ref="formSignupCustomer">
                                 <v-row>
                                     <v-col

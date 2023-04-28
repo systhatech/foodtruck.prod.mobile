@@ -14,7 +14,7 @@
                     </v-toolbar>
                     <v-container style="background-color: #fff;">
                         <div>
-                            <div class="pt-14">
+                            <div class="">
                                 <div v-if="cart && cart.items && cart.items.length">
                                     <div v-if="cart.vendor">
                                         <div class="d-flex align-center mb-2">

@@ -43,12 +43,12 @@
       }
   
       function onDeviceReady() {
-          cordova.plugins.firebase.messaging.requestPermission().then(function () {
-        });
+        //   cordova.plugins.firebase.messaging.requestPermission().then(function () {
+        // });
   
-        cordova.plugins.firebase.messaging.getToken().then(function (token) {
-          localStorage.setItem("d_token", token);
-        });
+        // cordova.plugins.firebase.messaging.getToken().then(function (token) {
+        //   localStorage.setItem("d_token", token);
+        // });
         navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
       }
       </script>

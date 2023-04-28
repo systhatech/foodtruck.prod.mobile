@@ -61,7 +61,7 @@ export default {
         async handleUpdate() {
             let valid = this.$refs.formPassword.validate();
             if(!valid) {
-                this.messageError('Field is empty');
+                // this.messageError('Field is empty');
                 return;
             }
             this.loaderShow();

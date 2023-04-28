@@ -15,7 +15,7 @@
                     <v-container class="custom-bs h-100">
                         <div class="">
                             <div>
-                                <div class="custom-bs mt-14 pa-4">
+                                <div class="custom-bs pa-4">
                                     <v-form ref="formSocialMedia">
                                         <v-row>
                                             <v-col cols="12" class="pb-0">

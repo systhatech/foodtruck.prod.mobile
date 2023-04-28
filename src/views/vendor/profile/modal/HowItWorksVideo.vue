@@ -15,7 +15,7 @@
                     <v-container class="custom-bs h-100">
                         <div class="">
                             <div>
-                                <div class="custom-bs mt-14">
+                                <div class="custom-bs">
 
                                     <video autoplay width="100%" controls :src="video"></video>
                                     <div class="pa-4">

@@ -16,7 +16,7 @@
                 </v-toolbar-items>
             </v-toolbar>
      
-                <div class="pa-4 pb82 background-white pb-16 mt-14">
+                <div class="pa-4 pb82 background-white">
                     <div class="pa-6 custom-bs">
                         <div class="mb-4">
                             <div v-if="trial" class="mb-4 text-center">

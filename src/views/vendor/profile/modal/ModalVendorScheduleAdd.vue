@@ -15,7 +15,7 @@
                   <v-container>
                       <div class="background-image">
                         <div>
-                          <div class="pa-4 custom-bs pt-6 mt-14">
+                          <div class="pa-4 custom-bs pt-6">
     
                             <v-form v-model="valid" ref="formLocation">
                                 <v-row>
@@ -66,6 +66,7 @@
                                     class="pb-0 pt-0"
                                     >
                                     <v-text-field
+                                    class="pa-0"
                                         v-model="address.state"
                                         :rules="requiredRules"
                                         label="State"
@@ -79,6 +80,7 @@
                                     class="pb-0 pt-0"
                                     >
                                     <v-text-field
+                                        class="pa-0"
                                         v-model="address.zip"
                                         v-mask="'#########'"
                                         label="ZIP"
