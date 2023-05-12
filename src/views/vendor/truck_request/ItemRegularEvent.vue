@@ -28,9 +28,10 @@
                                 <p class="error--text mb-1">{{ item.credit }} Credits</p>
                             </div>
                         </div>
+                        <!-- {{ item }} -->
                         <div class="mb-4" v-if="item.cuisines">
                             <p class="primary--text mb-1">Cuisine Types</p>
-                            <p class="mb-1 text-capitalize">{{item.cuisines}}</p>
+                            <p class="mb-1 text-capitalize">{{item.cuisines.split(",").join(", ")}}</p>
                         </div> 
                         <div class="mb-4">
                             <p class="primary--text mb-1">Address</p>

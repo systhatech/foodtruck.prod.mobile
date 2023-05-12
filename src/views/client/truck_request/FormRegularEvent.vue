@@ -117,7 +117,7 @@
                     <v-col cols="12" v-if="step==10">
                         <div class="custom-bs pa-4 w-100 text-center pt-6">
                             <label for="" class="text-center mb-6" :class="errors.includes('additional_details') ?'error--text':'primary--text'">Additional Details</label>
-                        <v-textarea class="pt-0 mt-6" v-model="event.additional_details"></v-textarea>
+                            <v-textarea outlined auto-grow class="pt-0 mt-6" v-model="event.additional_details"></v-textarea>
                         </div>
                     </v-col>
                     <v-col cols="12" v-if="step==11">

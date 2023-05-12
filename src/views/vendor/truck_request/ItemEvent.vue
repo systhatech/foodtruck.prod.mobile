@@ -35,7 +35,7 @@
                         <div class="d-flex justify-space-between">
                             <div>
                                 <p class="primary--text mb-1">Expected</p>
-                                <p>{{ item.people_expected}} People</p>
+                                <p>{{ numberWithCommas(item.people_expected)}} People</p>
                             </div>
                             <div>
                                 <p class="primary--text mb-1">Guaranteed Sales</p>

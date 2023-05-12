@@ -27,9 +27,10 @@
                             <p class="primary--text mb-1">Address</p>
                             <p class="mb-1">{{item.address}}</p>
                         </div> 
+                 
                         <div class="mb-4" v-if="item.cuisines">
                             <p class="primary--text mb-1">Cuisine Types</p>
-                            <p class="mb-1 text-capitalize">{{item.cuisines}}</p>
+                            <p class="mb-1 text-capitalize">{{item.cuisines.split(",").join(", ")}}</p>
                         </div> 
                         <div class="mb-4">
                             <p class="primary--text mb-1">Who Pays?</p>

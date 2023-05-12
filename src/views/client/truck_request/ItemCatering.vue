@@ -31,9 +31,9 @@
                         <p class="primary--text mb-1">Budget</p>
                         <p>{{ formatAmount(item.budget)}}</p>
                     </div>
-                    <div>
+                    <div v-if="item.people_minimum">
                         <p class="primary--text mb-1">Minimum</p>
-                        <p>{{ item.people_minimum}} People</p>
+                        <p>{{ numberWithCommas(item.people_minimum)}} People</p>
                     </div>
                 </div>
             </div>

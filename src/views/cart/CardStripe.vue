@@ -15,7 +15,9 @@
                     <div id="card-cvc"></div>
                 </v-col>
             </v-row>
-            <v-btn block color="primary" large rounded class="mt-10" @click="handleProceed">Proceed</v-btn>
+            <div class="pt-2">
+                <v-btn block color="primary" large rounded class="mt-10" @click="handleProceed">Proceed</v-btn>
+            </div>
         </v-form>
     </div>
 </template>
