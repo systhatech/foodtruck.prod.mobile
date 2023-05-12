@@ -95,7 +95,7 @@
                         <v-col cols="6" v-if="detail.cuisines">
                             <div>
                                 <h4 class="primary--text">Cuisine Type</h4>
-                                <p class="text-capitalize">{{detail.cuisines?detail.cuisines:'n/a'}}</p>
+                                <p class="text-capitalize">{{detail.cuisines?detail.cuisines.split(",").join(", "):'n/a'}}</p>
                             </div>
                         </v-col>
                         <v-col cols="6" v-if="detail.event_frequency">
@@ -107,13 +107,13 @@
                         <v-col cols="6" v-if="detail.people_expected">
                             <div>
                                 <h4 class="primary--text">Expected</h4>
-                                <p>{{ detail.people_expected}} People</p>
+                                <p>{{ numberWithCommas(detail.people_expected)}} People</p>
                             </div>
                         </v-col>
                         <v-col cols="6" v-if="detail.people_minimum">
                             <div>
                                 <h4 class="primary--text">Minimum</h4>
-                                <p>{{ detail.people_minimum}} People</p>
+                                <p>{{ numberWithCommas(detail.people_minimum)}} People</p>
                             </div>
                         </v-col>
                         <v-col cols="6" v-if="detail.min_guerantee_sales">
@@ -122,12 +122,7 @@
                                 <p>{{ detail.min_guerantee_sales}}</p>
                             </div>
                         </v-col>
-                        <!-- <v-col cols="6" v-if="detail.cuisines">
-                            <div>
-                                <h4 class="primary--text">Preferred Cuisines</h4>
-                                <p class="text-capitalize">{{ detail.cuisines}}</p>
-                            </div>
-                        </v-col> -->
+                      
                         <v-col cols="12" v-if="detail.event_payer">
                             <div>
                                 <h4 class="primary--text">Who will pay?</h4>
