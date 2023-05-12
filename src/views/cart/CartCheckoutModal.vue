@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="background-image">
         <v-row justify="center">
-            <v-dialog v-model="dialogModalCheckout" persistent scrollable fullscreen>
-                <v-card style="margin-top: 56px !important;">
+            <v-dialog v-model="dialogModalCheckout" persistent scrollable fullscreen class="background-image">
+                <v-card style="margin-top: 56px !important;" class="background-image">
                     <v-toolbar dark color="primary" style="position: fixed;top: 0;width: 100%;z-index: 1;">
                         <v-toolbar-title class="pl-0 text-capitalize">Checkout</v-toolbar-title>
                         <v-spacer></v-spacer>
@@ -12,7 +12,7 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-container style="background-color: #fff;">
+                    <v-container>
                         <div>
                             <div class="">
                                 <div v-if="cart && cart.items && cart.items.length">
