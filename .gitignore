@@ -59,3 +59,8 @@ src/core/services/config.js
 /src-cordova/platforms
 /src-cordova/plugins
 /public/cordova.js
+
+# Cordova
+/src-cordova/platforms
+/src-cordova/plugins
+/public/cordova.js
