@@ -75,7 +75,7 @@
                                             <v-icon color="primary mr-2">mdi-notebook-check</v-icon>
                                             <h4 class="ml-2 text-capitalize primary--text">Cart Items</h4>
                                         </div>
-                                        <div class="no-border-radius custom-bs pa-4">
+                                        <div class="custom-bs pa-4">
                                             <div>
                                                 <div v-for="(product,index) in cart.items" :key="index" class="abc">
                                                     <div class="product-item">
