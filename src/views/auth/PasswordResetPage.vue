@@ -1,40 +1,42 @@
 <template>
     <v-container class="ma-0 pa-0 h-100 background-image">
-        <v-container>
-            <div class="mt-10">
-                <v-btn icon text color="primary" :to="{
-                    name: 'loginPage'
-                }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
-            </div>
-            <div>
-                <v-row>
-                    <v-col cols="12">
-                        <div class="text-center mb-4">
-                            <img :src="base_url + '/default-company/logo'" width="200" />
-                        </div>
-                    </v-col>
-                </v-row>
-            </div>
-            <div class="pa-6 custom-bs">
-                <v-form v-model="valid" ref="resetPassword">
+        <v-container class="d-flex align-center" style="height:700px">
+            <div class="w-100">
+                <div class="pt-14">
                     <v-row>
-                        <v-col cols="12" class="pt-0">
-                            <v-text-field label="Your Email" :rules="emailRules" v-model="email"></v-text-field>
-                        </v-col>
                         <v-col cols="12">
-                            <v-btn rounded large color="primary" block @click="submit">
-                                Submit
-                            </v-btn>
+                            <div class="">
+                                <v-btn icon text color="primary" :to="{
+                                    name: 'home'
+                                }"><v-icon class="mr-0 pr-0">{{ icon_back }}</v-icon></v-btn>
+                            </div>
+                            <div class="text-center mb-0 mt-6">
+                                <img :src="base_url+'/default-company/logo'" width="200" />
+                            </div>
+                        </v-col>
+                        <v-col cols="12" md="6" offset-md="3" lg="4" offset-lg="4">                
+                            <div class="pa-6 custom-bs">
+                                <v-form v-model="valid" ref="resetPassword">
+                                    <v-row>
+                                        <v-col cols="12" class="pt-0">
+                                            <v-text-field label="Your Email" :rules="emailRules" v-model="email"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-btn rounded large color="primary" block @click="submit">
+                                                Submit
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </div>
+                            <div class="text-center pa-6 ma-4">
+                                <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
+                            </div>
                         </v-col>
                     </v-row>
-                </v-form>
+                </div>
             </div>
-            <div class="text-center pa-6 ma-4">
-                <v-btn text large to="/Login" color="primary"><v-icon>{{ iconBack }}</v-icon>Login</v-btn>
-            </div>
-
         </v-container>
-
     </v-container>
 </template>
 <script>
