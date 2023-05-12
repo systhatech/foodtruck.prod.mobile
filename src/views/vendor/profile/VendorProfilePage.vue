@@ -105,6 +105,7 @@ export default {
             indexValue:3,
             usericon:'',
             menusVendor: [
+                {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Truck Profile',icon:'mdi-truck-check',route:'vendor-profile-truck'},
                 {name:'User List',icon:'mdi-account',route:'vendor-profile-list'},
                 {name:'Reviews',icon:'mdi-star',route:'vendor-profile-review'},
