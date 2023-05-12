@@ -21,16 +21,15 @@
                                 <div>
                                     <div v-if="vendor.unread_messages.length" class="mr-4">
                                         <v-badge
-                                            small
                                             color="error"
                                             :content="vendor.unread_messages.length">
                                             <!-- <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn> -->
-                                            <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                                            <v-btn fab color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon large>mdi-chat</v-icon></v-btn>
                                         </v-badge>
                                     </div>
                                     <div v-else>
                                         <!-- <v-btn fab small color="primary" :to="'/client/truck/conversation/clients/'+detail.conversation.client.id+'/'+detail.conversation.id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn> -->
-                                        <v-btn fab small color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon>mdi-chat</v-icon></v-btn>
+                                        <v-btn fab  color="primary" :to="'/client/truck/conversation/vendors/'+vendor.id+'/'+vendor.conversation_id+'/'+detail.id"><v-icon large>mdi-chat</v-icon></v-btn>
                                     </div>
                                 </div>
                             </div>

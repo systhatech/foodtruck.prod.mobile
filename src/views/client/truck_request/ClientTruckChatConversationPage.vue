@@ -178,7 +178,7 @@ export default {
             return this.messages[index - 1].created_at;
         },
         fetchMessage() {
-            this.loaderShow();
+            // this.loaderShow();
             this.loading = true;
             ApiService.post('/truck-requestchat-messages', {
                 vendor_id: this.vendor_id,
