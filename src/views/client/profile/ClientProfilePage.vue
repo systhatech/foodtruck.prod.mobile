@@ -50,7 +50,7 @@
                                 <v-icon color="primary f9">mdi-email</v-icon>
                             </div>
                             <div>
-                                <p class="mb-2">{{currentUser.email ? currentUser.email:'n/a'}}</p>
+                                <p class="mb-2 text-lowercase">{{currentUser.email ? currentUser.email:'n/a'}}</p>
                             </div>
                         </div>
                         <div class="mt-4">
