@@ -202,7 +202,7 @@ export default {
                     const btn = document.querySelector('.order');
                     btn.addEventListener('touchstart', function(){
                         console.log('Button Clicked');
-                        self.$router.push("/order/"+btn.getAttribute('data-order'));
+                        self.$router.push("/client-order/"+btn.getAttribute('data-order'));
                     },false);
                 }, 1000);
             })

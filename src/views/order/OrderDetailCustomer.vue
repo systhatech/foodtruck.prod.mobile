@@ -143,7 +143,10 @@
                     </v-row>
                 </v-col>
                 <v-col cols="12" sm="12" md="12" lg="12" xl="12" v-else>
-                    <div class="unavailable">
+                    <div v-if="loading" class="text-center w-100">
+                        <ComponentLoadingVue/>
+                    </div>
+                    <div v-else class="unavailable">
                         <p>{{ message }}</p>
                     </div>
                 </v-col>
@@ -197,7 +200,8 @@ export default {
             orderStatus:'',
             orderId:'',
             totalData:{},
-            message:'Loading...'
+            message:'Loading...',
+            loading:false,
         }
     },
     mounted() {
@@ -208,18 +212,20 @@ export default {
         Topnavbar,
         BottomnavbarClient,
         BottomnavbarVendor,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // OrderDetail
         // InputUpload
     },
     methods: {
         async fetchOrderDetail(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+           this.loading = true;
             if(!this.orderId) return;
             await ApiService.post('/order/detail', { 
                 order_id: this.orderId, 
                 vendor_id: this.currentUser.owner.vendor_id
             })
             .then((response) => {
+                this.loading = false;
                 this.orderDetail = response.data;
                 this.totalData = response.totalData;
                 if(this.orderDetail){
@@ -229,6 +235,7 @@ export default {
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             })
             .catch(() => {
+                this.loading = false;
                 this.message = "Data not found";
                 this.$bus.$emit('HIDE_PAGE_LOADER');
             });
