@@ -72,16 +72,7 @@ export default {
             this.fetchContent();
         },
         handleView(item) {
-            // this.viewItem = item;
-            // this.modalView = true;
             this.$router.push("/support/"+item.id);
-        },
-        messageText(message) {
-            let text = message;
-            if (message.table_from_id == this.currentUser.table_id && message.table_from == this.currentUser.table) {
-                text = 'You: ' + text;
-            }
-            return text.substr(0, 25);
         },
         async handleSubmit() {
             let valid = this.$refs.formSupport.validate();
