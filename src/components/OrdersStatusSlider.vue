@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="background-image">
         <v-sheet
             class="mx-auto">
             <v-slide-group
             v-model="model"
-            class="pr-1"
+            class="pr-1 background-image"
             center-active
             >
             <v-slide-item

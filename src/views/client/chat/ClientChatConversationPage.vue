@@ -1,8 +1,8 @@
 <template>
     <v-container class="ma-0 pa-0 h-100">
         <Topnavbar :receiver="receiver" @back="handleBack"/>
-        <v-container class="pt-0 content-cs">
-            <main class="msger-chat" :style="{ height: customheight + 'px' }" id="chatMessages" ref="messageContainer">
+        <v-container class="pt-0 content-cs background-image">
+            <main class="msger-chat  pa-4" :style="{ height: customheight + 'px' }" id="chatMessages" ref="messageContainer">
                 <div v-if="messages">
                     <div class="chat--message--item msg" :class="sentByMe(message)?'right-msg':'left-msg abc'"
                          v-for="(message,index) in messages" :key="index">
@@ -24,7 +24,7 @@
                     <ComponentLoadingVue/>
                 </div>
             </main>
-            <div class="chat-box d-flex justify-space-between" ref="chatbox">
+            <div class="chat-box d-flex justify-space-between pl-4 pr-4" ref="chatbox">
                 <v-textarea
                     id="messagetosend"
                     v-model='message'
@@ -281,6 +281,8 @@ export default {
     justify-content: space-between;
     height: calc(100vh - 60px);
     padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 :root {
     //   --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -390,7 +392,7 @@ export default {
 }
 .right-msg .msg-info-time {
     font-size: 0.8em;
-    color: #959595;
+    color: #898989;
 }
 
 .msg-info-time {

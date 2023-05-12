@@ -1,5 +1,5 @@
 <template>
-    <v-container class="ma-0 pa-0 theme-bg h-100"> 
+    <v-container class="ma-0 pa-0 background-image h-100"> 
         <Topnavbar/>
         <div>
             <div v-if="currentUser && currentUser.table=='vendors'">

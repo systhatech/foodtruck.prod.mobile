@@ -8,7 +8,7 @@
                         <div class="custom-bs pa-4 mb-4">
                             <div v-if="cart_checkout && cart_checkout.vendor">
                                 <div class="">
-                                    <h2 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h2>
+                                    <h2 class="mb-2 primary--text text-capitalize">{{ cart_checkout.vendor.name }}</h2>
                                     <div v-if="cart_checkout.pickup_date">
                                         <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
                                         <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
