@@ -43,7 +43,7 @@
                                                     </ShareNetwork> -->
                                                 </div>
                                                 <v-chip small color="success" v-if="item.is_special" class="mb-1">{{ item.is_special? 'Todays Special':'' }}</v-chip>
-                                                <p v-if="item.description">{{ shortText(item.description,40) }}</p>
+                                                <p v-if="item.description" class="mt-2" style="font-size:14px">{{ shortText(item.description,55) }}</p>
                                             </div>
 
                                         </div>
