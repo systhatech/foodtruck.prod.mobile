@@ -193,8 +193,8 @@ export default {
                 'id': this.$router.currentRoute.params.requestId,
                 "status": param,
             })
-            .then((resp) =>{
-                this.messageSuccess(resp.message);
+            .then(() =>{
+                // this.messageSuccess(resp.message);
             })
             .catch((error) =>{
                 console.log(error);

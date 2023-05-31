@@ -12,7 +12,7 @@
                                 <div class="custom-bs pa-4">
                                     <v-row>
                                         <v-col cols="12" md="12" lg="12" xl="12">
-                                            <h2 class="mb-2 primary--text">{{ cart.vendor.name }}</h2>
+                                            <h3 class="mb-2 primary--text">{{ cart.vendor.name }}</h3>
                                             <div class="d-flex w-100">
                                                 <div class="w-100">
                                                     <div v-if="cart.pickup_date">

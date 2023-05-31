@@ -19,7 +19,7 @@
                                     <div v-if="cart.vendor">
                                         <div class="d-flex align-center mb-2">
                                             <v-icon color="primary">mdi-account</v-icon>
-                                            <h5 class="ml-2 text-uppercase primary--text">Pickup location</h5>
+                                            <h4 class="ml-2 text-capitalize primary--text">Pickup location</h4>
                                         </div>
                                         <div class="custom-bs pa-4">
                                             <div class="d-flex w-100">
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="d-flex align-center mt-6 mb-2" v-if="cart && cart.vendor && cart.vendor.address && Object.keys(cart.vendor.address).length">
                                         <v-icon color="primary">mdi-map-marker</v-icon>
-                                        <h5 class="ml-2 text-uppercase primary--text">Pickup Location</h5>
+                                        <h4 class="ml-2 text-capitalize primary--text">Pickup Location</h4>
                                     </div>
                                     <div class="custom-bs pa-4" v-if="cart && cart.vendor && cart.vendor.address && Object.keys(cart.vendor.address).length">
                                         <div v-if="cart && cart.vendor && cart.vendor.address && Object.keys(cart.vendor.address).length">
@@ -73,7 +73,7 @@
                                     <div class="mt-5" v-if="cart && cart.items">
                                         <div class="d-flex align-center mt-6 mb-2">
                                             <v-icon color="primary mr-2">mdi-notebook-check</v-icon>
-                                            <h5 class="ml-2 text-uppercase primary--text">Cart Items</h5>
+                                            <h4 class="ml-2 text-capitalize primary--text">Cart Items</h4>
                                         </div>
                                         <div class="no-border-radius custom-bs pa-4">
                                             <div>
@@ -112,11 +112,11 @@
                                                             <td class="text-right">{{formatAmount(cart.convenience_amount)}}</td>
                                                         </tr>
                                                         <tr v-if ="cart.payment_method=='card'">
-                                                            <td class=""><h5 class="primary--text">TOTAL</h5> </td>
+                                                            <td class=""><h4 class="primary--text">TOTAL</h4> </td>
                                                             <td class=" text-right"> <h4 class="primary--text">{{formatAmount(cart.card_total)}}</h4></td>
                                                         </tr>
                                                         <tr v-if="cart.payment_method=='cash'">
-                                                            <td class=""><h5 class="primary--text">TOTAL</h5> </td>
+                                                            <td class=""><h4 class="primary--text">TOTAL</h4> </td>
                                                             <td class=" text-right"> <h4 class="primary--text">{{formatAmount(cart.cash_total)}}</h4></td>
                                                         </tr>
                                                     </table>
@@ -126,7 +126,7 @@
                                     </div>
                                     <div class="d-flex align-center mt-5 mb-2" v-if="cart.vendor && Object.keys(cart.vendor).length">
                                         <v-icon color="primary">mdi-cash-plus</v-icon>
-                                        <h5 class="ml-2 text-uppercase primary--text">Leave Tip</h5>
+                                        <h4 class="ml-2 text-capitalize primary--text">Leave Tip</h4>
                                     </div>
                                     <div class="custom-bs pa-3">
                                         <div class="d-flex align-center flex-wrap">
@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="d-flex align-center mt-5 mb-2" v-if="cart.vendor && Object.keys(cart.vendor).length">
                                         <v-icon color="primary">mdi-credit-card</v-icon>
-                                        <h5 class="ml-2 text-uppercase primary--text">Payment Method</h5>
+                                        <h4 class="ml-2 text-capitalize primary--text">Payment Method</h4>
                                     </div>
                                     <div class="custom-bs pa-4" v-if="cart.vendor && Object.keys(cart.vendor).length">
                                         <div class="d-flex align-center justify-space-between">
@@ -187,7 +187,7 @@
                                                 <CardStripe @proceed="handleProceedCard" :publishablekey="cart.vendor.payment_credential.val1"/>
                                             </div>
                                             <div v-else>
-                                                <p class="f9 color-primary text-center text-uppercase">Card Payment Not Available</p>
+                                                <p class="f9 color-primary text-center text-capitalize">Card Payment Not Available</p>
                                             </div>
                                         </div>
                                     </div>
