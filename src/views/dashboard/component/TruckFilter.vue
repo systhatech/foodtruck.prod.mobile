@@ -92,7 +92,6 @@ import { ApiService } from '@/core/services/api.service'
     },
     methods:{
 		handleSelectedCuisines(param){
-			console.log(param.selected_data);
 			this.selected_cuisines = param.selected_data;
 		},
 		fetchCuisines(){
