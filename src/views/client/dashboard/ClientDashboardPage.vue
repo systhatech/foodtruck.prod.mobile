@@ -1,6 +1,5 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <!-- <Topnavbar/> -->
         <div class="pa-4 pt-2 pb-2">
             <div class="d-flex align-center justify-space-between">
                 <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
@@ -43,37 +42,17 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-// import Topnavbar from '@/components/layout/Topnavbar'
-import Bottomnavbar from '@/components/layout/NavbarBottomClient'
-import TruckList from '@/views/dashboard/component/TruckList'
-import TruckFilter from '@/views/dashboard/component/TruckFilter'
 import { ApiService } from '@/core/services/api.service'
-import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
-import AddGoogleMap from './map/AddGoogleMap'
-import spinnerImg from './spinner.gif'
-// import {socketHandler} from '@/core/services/socketio/socket'
+import {mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
 export default {
     data() {
         return {
             search:'',
             search_loading:false,
-            spinnerImg,
-            iconHome: mdiHome,
-            iconProfile: mdiAccount,
-            icon_filter: mdiFilter,
             icon_map: mdiMap,
             icon_list: mdiViewList,
-            iconChat: mdiChat,
-            currentItem:0,
-            countMessages:0,
             zoomLevel:14,
-            row:'',
-            dashboardItems: [],
-            // trucks:[],
-            value: 1,
-            
-            // locations:[],
-            locationsList:[],
+            icon_filter: mdiFilter,
             filter:false,
             distance:10,
             available:"available",
@@ -96,10 +75,7 @@ export default {
             refresh:true,
             subscribed:true,
             isLoggedin:false,
-            trucks:[
-                {id:1,name:"cafe de cart", address:'80 kane west hardford'},
-                {id:2,name:"Porters Coffee House", address:'80 kane west hardford 1'}
-            ],
+            trucks:[],
             modelFilter:false,
             map_view:false,
             loading:false,
@@ -110,18 +86,17 @@ export default {
         }
     },
     components: {
-    //    Topnavbar,
-        AddGoogleMap,
-        // DialogFilter,
-       Bottomnavbar,
-       TruckFilter,
-       TruckList,
-       ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
-        // DialogConfirm,
+        AddGoogleMap:()=>import('./map/AddGoogleMap'),
+        Bottomnavbar:()=>import('@/components/layout/NavbarBottomClient'),
+        TruckFilter:()=>import('@/views/dashboard/component/TruckFilter'),
+        TruckList:()=>import('@/views/dashboard/component/TruckList'),
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
     },
     async mounted() {
-        this.fetchAllTrucks();
-        // await this.locateGeoLocation();
+        this.loading = true;
+        setTimeout(() => {
+            this.locateGeoLocation();
+        }, 1000);
         this.fetchDataInterval();
     },
    
@@ -144,16 +119,15 @@ export default {
     },
     methods: {
         ...mapActions({
-            // fetchTrucks:'truck/fetchTrucks',
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
+
         handleFilterModalOpen(){
             this.modelFilter=true
         },
        
         changeView(){
             this.map_view = !this.map_view;
-            // this.fetchData();
         },
         handleFilter(params) {
             this.loaderShow();
@@ -184,7 +158,6 @@ export default {
                     }
                     this.locations = this.locations.concat(this.trucks);
                 }
-                // this.locations = this.trucks;
             }) 
             .catch((error) => {
                 this.loaderHide();
@@ -193,44 +166,6 @@ export default {
                 this.loading = false;
                 console.log(error);
             })
-            // this.loaderShow();
-            // params.guest =  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'';
-            // params.available =  1;
-            // params.unit = "mile";
-            // this.fetchTrucksSearch(params)
-            // .then(()=>{
-            //     this.loading = false;
-            //     this.loaderHide();
-            //     this.search_loading = false; 
-            //     this.handleCloseFilter();
-            // })
-            // .catch((error)=>{
-            //     this.loaderHide();
-            //     this.loading = false;
-            //     console.log(error)
-            // })
-            // ApiService.post('/search',params)
-            // .then((resp) => {
-            //     this.loaderHide();
-            //     this.trucks = resp.map((location) => ({
-            //         ...location, position: {
-            //             lat: Number(location.lat),
-            //             lng: Number(location.lng)
-            //         }
-            //     }));
-            //     this.locations = this.trucks;
-            //     this.handleCloseFilter();
-            //     this.zoomLevel = 12;
-            //     this.loaderHide();
-            // })
-            // .catch((error) => {
-            //     this.loaderHide();
-            //     if(error.response && error.response.data && error.response.data.message){
-            //         this.messageError(error.response.data.message);
-            //     }
-            //     this.messageError(error.response.data.message);
-            //     this.loaderHide();
-            // });
         },
         handleCloseFilter(){
             this.modelFilter = false;
@@ -316,8 +251,6 @@ export default {
                 this.loaderHide();
             });
         },
-      
-        // fetchData(showLoader = true){
         fetchData(){
              let   avai = 1;
             this.loaderShow();
@@ -334,8 +267,6 @@ export default {
                     }
                 }));
                 this.loaderHide();
-           
-                // this.checkPremium();
                 this.zoomLevel = 12;
             })
             .catch(() => {
@@ -355,7 +286,6 @@ export default {
                         lng: Number(location.lng)
                     }
                 }));
-                // console.log(this.trucks);
                 this.zoomLevel = 12;
             })
             .catch((error) => {
@@ -367,8 +297,6 @@ export default {
             this.loaderShow();
             ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
             .then((resp) => {
-                // this.loaderHide();
-                // this.handleClose();
                 this.trucks = resp.map((location) => ({
                     ...location, position: {
                         lat: Number(location.lat),
@@ -386,8 +314,6 @@ export default {
             this.loaderShow();
             ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
             .then((resp) => {
-                // this.loaderHide();
-                // this.handleClose();
                 this.trucks = resp.map((location) => ({
                     ...location, position: {
                         lat: Number(location.lat),
@@ -400,7 +326,6 @@ export default {
             .catch((error) => {
                 this.loaderHide();
                 this.messageError(error.response.data.message);
-                // console.log(error);
             });
         },
 
@@ -410,15 +335,12 @@ export default {
             }, 300000);
         },
         async locateGeoLocation() {
-            this.loading = true;
-            navigator.geolocation.getCurrentPosition(res => {
-                this.current_location.lat = res.coords.latitude;
-                this.current_location.lng = res.coords.longitude;
-            });
+           
+            this.current_location.lat = window.localStorage.geo_latitude?window.localStorage.geo_latitude:0;
+            this.current_location.lng = window.localStorage.geo_longitude?window.localStorage.geo_longitude:0;
             await this.fetchAddress();
         },
         async fetchAddress() {
-            // this.loaderShow();
             ApiService.get('/getapikeys')
                 .then(async (apiKeys) => {
                     let googleApiKey = apiKeys.google;
@@ -454,19 +376,6 @@ export default {
         },
         fetchAllTrucks() {
             this.loading = true;
-            
-            // this.fetchTrucks({ 
-            //     available: 1,
-            //     name: this.search,
-            //     guest: localStorage.getItem('g_token'),
-            //     unit:'mile',
-            //     page:this.next_page,
-            // })
-            // .then(()=>{
-            //     this.loading = false;
-            //     this.search_loading = false;
-            // })
-    
             ApiService.post("/location/all",{
                 available: 1,
                 name: this.search,
@@ -487,7 +396,6 @@ export default {
                     this.last_page = 1;
                 }
                 this.locations = this.locations.concat(this.trucks);
-                // this.locations = this.trucks;
             }) 
             .catch((error) => {
                 this.search_loading = false;
@@ -497,18 +405,6 @@ export default {
         },
         fetchAllTrucksSearch() {
             this.loading = true;
-            // this.fetchTrucks({ 
-            //     available: 1,
-            //     name: this.search,
-            //     guest: localStorage.getItem('g_token'),
-            //     unit:'mile',
-            //     page:this.next_page,
-            // })
-            // .then(()=>{
-            //     this.loading = false;
-            //     this.search_loading = false;
-            // })
-    
             ApiService.post("/location/all",{
                 available: 1,
                 name: this.search,
@@ -528,7 +424,6 @@ export default {
                     this.last_page = 1;
                 }
                 this.locations = this.locations.concat(this.trucks);
-                // this.locations = this.trucks;
             }) 
             .catch((error) => {
                 this.loading = false;
@@ -544,7 +439,6 @@ export default {
     computed: {
         ...mapGetters({
             currentUser:'auth/user',
-            // locations:'truck/trucks'
         })
     }
 
@@ -579,14 +473,6 @@ export default {
         bottom: 114px;
         border-radius:40px;
     }
-    .active-item{
-            // background:#cce3ff !important;
-    }
-    // .custom-bs{
-    //     -webkit-box-shadow: 0px 0px 34px 1px rgba(222,222,222,1) !important;
-    //     -moz-box-shadow: 0px 0px 34px 1px rgba(222,222,222,1) !important;
-    //     box-shadow: 0px 0px 34px 1px rgba(222,222,222,1) !important;
-    // }
     .dashboard-items{
         border-radius: 10px;
         text-align: center;
@@ -616,10 +502,8 @@ export default {
         padding: 14px 16px;
         border-radius: 10px;
         background: #a0cbff91;
-        // border: 1px solid #a0cbff91;
         .icon-wrapper {
             padding: 10px;
-            // background: #19477e26;
             background: #19477ede;
             border-radius: 9px;
             i {
