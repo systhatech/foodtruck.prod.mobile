@@ -22,7 +22,7 @@
                                             <div>
                                                 <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
                                                 <div class="d-flex">
-                                                    <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> <span class="" v-if="item.unit">&nbsp;/{{ item.unit }}</span>
+                                                    <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> <span class="text-lowercase" v-if="item.unit">&nbsp;/{{ item.unit }}</span>
                                                 </div>
                                                 <div v-if="item.is_special">
                                                     <!-- <ShareNetwork
@@ -43,7 +43,7 @@
                                                     </ShareNetwork> -->
                                                 </div>
                                                 <v-chip small color="success" v-if="item.is_special" class="mb-1">{{ item.is_special? 'Todays Special':'' }}</v-chip>
-                                                <p v-if="item.description">{{ shortText(item.description,40) }}</p>
+                                                <p v-if="item.description" class="mt-2" style="font-size:14px">{{ shortText(item.description,55) }}</p>
                                             </div>
 
                                         </div>
