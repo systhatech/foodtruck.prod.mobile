@@ -186,7 +186,7 @@ export default {
             },
             video:'',
             video_description:'',
-            miles:[1, 2,3],
+            miles:[1, 2, 5],
             selected_mile:1,
         }
     },
