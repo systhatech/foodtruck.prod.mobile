@@ -1,8 +1,9 @@
 <template>
-    <v-row justify="center">
+    <v-row justify="center" class="background-image">
         <v-dialog
         v-model="dialog"
         persistent
+        class="background-image"
         scrollable
         fullscreen>
         <v-card class="background-image" style="padding-top: 56px !important;">
@@ -16,7 +17,7 @@
                 </v-toolbar-items>
             </v-toolbar>
             <!-- <v-container> -->
-                <div class="pb82 background-white mt-14" v-if="item && Object.keys(item).length">
+                <div class="pb82 background-image mt-14" v-if="item && Object.keys(item).length">
                     <div class="">
                         <div>
                             <v-img

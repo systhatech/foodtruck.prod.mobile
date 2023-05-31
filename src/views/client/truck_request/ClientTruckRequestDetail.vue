@@ -95,7 +95,7 @@
                         <v-col cols="6" v-if="detail.cuisines">
                             <div>
                                 <h4 class="primary--text">Cuisine Type</h4>
-                                <p class="text-capitalize">{{detail.cuisines?detail.cuisines:'n/a'}}</p>
+                                <p class="text-capitalize">{{detail.cuisines?detail.cuisines.split(",").join(", "):'n/a'}}</p>
                             </div>
                         </v-col>
                         <v-col cols="6" v-if="detail.event_frequency">
@@ -194,8 +194,7 @@ export default {
                 "status": param,
             })
             .then((resp) =>{
-                console.log(resp);
-                
+                this.messageSuccess(resp.message);
             })
             .catch((error) =>{
                 console.log(error);

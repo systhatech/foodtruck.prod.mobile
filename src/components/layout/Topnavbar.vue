@@ -4,7 +4,7 @@
             <!-- <img :src="base_url + '/isw?f=venndors&&fn=' + logo" height="36" /> -->
             <v-avatar size="32" @click="viewProfile" v-if="currentUser && currentUser.profile_pic">
                 <img
-                :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                :src="currentUser.profile_pic? base_url+'/avatar/'+currentUser.profile_pic:base_url+'/avatar/avatar.jpg'"
                 alt="Profile Pic">
                 </v-avatar>
                 <v-avatar v-else size="32">

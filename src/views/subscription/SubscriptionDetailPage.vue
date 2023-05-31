@@ -40,14 +40,9 @@
                             <div class="text-right "><h4 class="ma-0 primary--text">{{formatAmount(plan.total_amount)}}</h4></div>
                         </div>
                         <div v-if="plan.trial_days" class="">
-                            <!-- <div class="">Total Amount</div> -->
                             <div class="text-right success--text"><p class="ma-0">{{plan.trial_days}} Days Free</p></div>
                         </div>
                     </div>
-                    <!-- <h4 class="ma-0 text-uppercase">{{plan.name}}</h4>
-                    <h4 class="ma-0">{{formatAmount(plan.price)}}</h4>
-                    <p class="ma-0 color-secondary text-uppercase">{{plan.plan_type ? plan.plan_type :'No'}} Package</p> -->
-                    
                 </div>
             </div>
             <div  class="pa-4 custom-bs" v-if="initializeCard">
@@ -56,16 +51,7 @@
                     <v-col cols="12">
                         <CardStripe @proceed="handleProceedCard"  :publishablekey="publishableKey"/>
                     </v-col>
-                    <!-- <v-col cols="6">
-                        <label>Card Expiry</label>
-                        <div id="card-expiry"></div>
-                    </v-col>
-                    <v-col cols="6">
-                        <label>CVC</label>
-                        <div id="card-cvc"></div>
-                    </v-col> -->
                 </v-row>
-                <!-- <v-btn color="primary" v-if="personal && Object.keys(personal).length" class="mt-6" block rounded id="custom-button" @click="createToken">Proceed</v-btn> -->
             </div>
         </v-container>
          <Bottomnavbar/>
@@ -73,14 +59,10 @@
 </template>
 <script>
 import Topnavbar from '@/components/layout/TopnavbarBackCustom'
-// import { StripeElementCard } from '@vue-stripe/vue-stripe';
-// import CardStripe from '@/views/cart/CardStripeElements'
 import CardStripe from '@/views/cart/CardStripe'
 import { ApiService } from '@/core/services/api.service'
 import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import { mapGetters } from 'vuex'
-// import InputUpload from '@/components/form-element/InputUpload'
-// import { mapGetters } from 'vuex'
 export default {
     name:'SubscriptionPage',
     data() {
@@ -107,7 +89,7 @@ export default {
         })
     },
     mounted() {
-
+        
         this.packageId = this.$router.currentRoute.params.packageid;
         if(this.packageId !== ''){
             this.fetchPackage();

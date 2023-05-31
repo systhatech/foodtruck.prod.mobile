@@ -29,9 +29,6 @@
                                             <v-chip small color="primary" outlined class="mr-2 mb-2 text-capitalize" v-for="(c, index) in truck.cuisines.slice(0,4)" :key="index">{{c.value}}</v-chip>
                                         </div>
                                     </div>
-                                    <!-- <div>
-                                        <span class="pl-2">{{ formatDateTime(truck.date)}}</span>
-                                    </div> -->
                                     <div>
                                         <h5 class="pl-2">{{ truck.distance? truck.distance+" away" : 0 }}</h5>
                                     </div>

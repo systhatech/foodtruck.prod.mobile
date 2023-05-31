@@ -20,13 +20,13 @@
                         <v-avatar size="90" tile v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">
                             <img
                             rounded
-                            :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                            :src="currentUser.profile_pic? base_url+'/avatar/'+currentUser.profile_pic:base_url+'/avatar/default.jpg'"
                             alt="Profile Pic">
                         </v-avatar>
                         <v-avatar size="90" v-else tile>
                             <img
                             style="object-fit:cover"
-                            :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
+                            :src="currentUser.profile_pic? base_url+'/avatar/'+currentUser.profile_pic:base_url+'/avatar/default.jpg'"
                             alt="Profile Pic">
                         </v-avatar>
                         <div class="pt-2 mb-4">
@@ -117,9 +117,9 @@ export default {
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
                 {name:'Change Password',icon:'mdi-cog',route:'change-password'},
-                // {name:'Truck Request',icon:'mdi-account-reactivate',route:'client-truck-request-list'},
-                {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
-                {name:'About',icon:'mdi-clipboard-list',route:'about-us'},
+                {name:'Truck Request',icon:'mdi-truck',route:'client-truck-request-list'},
+                // {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
+                // {name:'About',icon:'mdi-clipboard-list',route:'about-us'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],
         

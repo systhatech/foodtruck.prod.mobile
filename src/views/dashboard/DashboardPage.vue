@@ -1,7 +1,7 @@
 <template>
-    <v-container class="ma-0 pa-0 theme-bg h-100"> 
+    <v-container class="ma-0 pa-0 theme-bg h-100 background-image"> 
         <Topnavbar/>
-        <div>
+        <div class="background-image">
             <div v-if="currentUser && currentUser.table=='vendors'">
                 <DashboardVendor/>
             </div>

@@ -9,7 +9,7 @@
                         cols="12"
                         >
                         <div style="height:100px; width:120px; margin:0 auto;">
-                            <InputUpload :src="base_url+'/image-show/'+(customer.profile_pic ? customer.profile_pic:'default.jpg')" 
+                            <InputUpload :src="base_url+'/avatar/'+(customer.profile_pic ? customer.profile_pic:'default.jpg')" 
                             :update_input_file="update_input_file" 
                             type="menu_image" 
                             :max-height="maxHeight"
