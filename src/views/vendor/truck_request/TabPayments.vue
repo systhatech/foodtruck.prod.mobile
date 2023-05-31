@@ -4,7 +4,7 @@
             <div class="custom-bs pa-6 mb-4 text-center">
                 <h2 class="success--text">{{total_credit}} Credits</h2>
                 <p>Available</p>
-                <v-btn rounded large color="primary" to="/vendor-credit-packages">buy credit</v-btn>
+                <v-btn rounded large color="primary" to="/vendor-credit-packages">Purchase Event Bid Credits</v-btn>
             </div>
             <div>
                 <p>Transaction Log</p>
@@ -43,8 +43,12 @@
             <div v-if="loading">
                 <ComponentLoadingVue/>
             </div>
-            <div v-else class="unavailable">
-                <p>No orders</p>
+            <div v-else>
+                <div class="custom-bs pa-6 mb-4 text-center">
+                    <h2 class="success--text">{{total_credit}} Credits</h2>
+                    <p>Available</p>
+                    <v-btn rounded large color="primary" to="/vendor-credit-packages">Purchase Event Bid Credits</v-btn>
+                </div>
             </div>
         </div>
     </div>
