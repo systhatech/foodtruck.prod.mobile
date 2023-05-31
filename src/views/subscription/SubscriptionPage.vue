@@ -50,16 +50,14 @@
                         <v-row v-if="subscriptions && subscriptions.length">
                             <v-col cols="6" v-for="(subscription, index) in subscriptions" :key="index">
                                 <div class="package-container mt-4">
-                                    <div>
-                                        <span class="price">{{ subscription.price }}</span><sup>$</sup>
+                                    <div class="mb-2">
+                                        <span class="price">{{ formatAmount(subscription.price) }}</span>
                                     </div>
-                                    <p class="mb-0" v-if="subscription.trial_days">
-                                        {{ formatTrialDays(subscription.trial_days) }}</p>
-                                    <!-- <p class="mb-0" v-if="subscription.trial_days">{{formatTrialDays(32)}}</p> -->
-                                    <div class="pt-6 pb-6">
-                                        <p class="f9-bold ma-0 text-capitalize">{{ subscription.name }}</p>
-                                        <p class="f9 ma-0">{{ subscription.type }}</p>
-                                    </div>
+                                    <p class="mb-2 text-capitalize">{{ subscription.name }}</p>
+                                    <h2 class="mb-2" v-if="subscription.trial_days">
+                                        {{ formatTrialDays(subscription.trial_days) }} FREE
+                                    </h2>
+                                   
                                     <v-btn depressed rounded color="white" large block
                                         :to="'/subscription/' + subscription.id">Upgrade</v-btn>
                                 </div>
