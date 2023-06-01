@@ -129,6 +129,7 @@ export default {
         this.fetchProfile();
     },
     methods: {
+     
         formatTrialDays(days) {
             if (days < 30) {
                 return days + " days";

@@ -68,7 +68,7 @@ export default {
     data() {
         return {
             title:'',
-           loadingProceed:false,
+            loadingProceed:false,
             stripe:null,
             initializeCard:false,
             publishableKey :'',
@@ -104,28 +104,19 @@ export default {
             this.initializeCard = true;
         },
         fetchPackage(){
-            this.$bus.$emit('SHOW_PAGE_LOADER');
+            this.loaderShow();
             ApiService.post('/subscription/plan/'+this.packageId)
             .then((resp) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 this.plan = resp.data;
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+                this.loaderHide();
                 console.log(error);
             })
         },
         // async createToken () {
         async handleProceedCard (param) {
-            // this.$bus.$emit('SHOW_PAGE_LOADER');
-            // const { token, error } = await this.$stripe.createToken(this.cardNumber);
-            // if (error) {
-            //     // handle error here
-            //     this.messageError(error.message);
-            //     // document.getElementById('card-error').innerHTML = error.message;
-                // this.$bus.$emit('HIDE_PAGE_LOADER');
-            //     return;
-            // }
             let data = {
                 'name': this.currentUser.fname + " "+ this.currentUser.lname,
                 'phone':this.currentUser.mobile_no ? this.currentUser.mobile_no : this.currentUser.phone_no,
@@ -134,24 +125,19 @@ export default {
             }
             ApiService.post(`/subscription/plan/${this.packageId}/subscribe`,data)
             .then(() => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+               this.loaderHide();
                 this.messageSuccess('Subscription complete');
-                // this.$router.push({name: 'SubscriptionPage'});
                 this.$router.push("/subscriptions");
             })
             .catch((error) => {
-                this.$bus.$emit('HIDE_PAGE_LOADER');
+               this.loaderHide();
                 this.messageError('Sorry, Failed to subscribe');
                 console.log(error);
             })
         // handle the token
         // send it to your server
         },
-         submit () {
-            // this will trigger the process
-            // this.$refs.elementRef.submit();
-            // console.log()
-        },
+
         tokenCreated (token) {
             console.log(token);
             // handle the token
@@ -160,40 +146,24 @@ export default {
         handleBack(){
             this.$router.back();
         },
-        initializeGateway(){
-        //     this.$bus.$emit('SHOW_PAGE_LOADER');
-        //    ApiService.get('/subscription/key/stripe')
-        //     .then((resp) => {
-        //         this.publishableKey  = resp.data.val1;
-        //         console.log(this.publishableKey);
-        //          this.$bus.$emit('HIDE_PAGE_LOADER');
-        //     })
-        //     .catch((error) => {
-        //          this.$bus.$emit('HIDE_PAGE_LOADER');
-        //          this.messageError({error});
-        //     })
-        },
 
        fetchPersonalData() {
-           this.$bus.$emit('SHOW_PAGE_LOADER');
+           this.loaderShow();
            ApiService.post('/self/profile')
            .then((resp) => {
-               this.$bus.$emit('HIDE_PAGE_LOADER');
-            //    console.log(resp);
+              this.loaderHide();
                this.personal = resp;
            })
            .catch((error) => {
-               this.$bus.$emit('HIDE_PAGE_LOADER');
+              this.loaderHide();
                console.log(error);
            })
        }      
     },
     components: {
         Topnavbar,
-        // StripeElementCard,
         Bottomnavbar,
         CardStripe
-        // InputUpload
     },
 }
 </script>
