@@ -100,9 +100,10 @@ export default {
         },
         async fetchContent() {
             this.loading = true;
+            console.log(this.currentUser);
             // this.loaderShow();
             // "https://support.shubhu.com/tool/tasks/all?username=foodie&relatable_id=100",
-            await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.table_id)
+            await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.id)
             .then((resp) => {
                 this.loading = false;
                 this.loaderHide();

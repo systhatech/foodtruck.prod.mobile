@@ -2,43 +2,52 @@
      <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mg56">
-            <div>
-                <!-- <p class="f8">{{ formatDateTime(enqs.start_date)}}</p> -->
-                <h4 class="text-uppercase">{{enqs.title}}</h4>
-                <div v-html="enqs.desc" class="f9 mt-2"></div>
-            </div>
-            <div class="mb-6 mt-6">
-                <v-form ref="form">
-                    <v-textarea auto-grow outlined   
-                        rows="2"
-                        row-height="20" label="Write comment" v-model="comment"></v-textarea>
-                    <v-btn block color="primary" rounded @click="submitcomment()">submit</v-btn>
-                </v-form>
-            </div>
-            <div class="reply-wrapper">
-                {{ comment.user}}
-                <p class="f8">Comments({{comments.length}})</p>
-                <div v-for="(comment,index) in comments" :key="index" class="mb-4 custom-bs pa-4">
-                    <div class="d-flex">
-                        <v-avatar>
-                            <!-- <img 
-                                src="https://cdn.vuetifyjs.com/images/john.jpg"
-                                alt="John"
-                            > -->
-                            <v-avatar color="indigo" size="38">
-                                <v-icon dark>
-                                    mdi-account-circle
-                                </v-icon>
+            <div v-if="enqs && Object.keys(enqs).length">
+                <div>
+                    <h4 class="text-uppercase">{{enqs.title}}</h4>
+                    <div v-html="enqs.desc" class="f9 mt-2"></div>
+                </div>
+                <div class="mb-6 mt-6">
+                    <v-form ref="form">
+                        <v-textarea auto-grow outlined   
+                            rows="2"
+                            row-height="20" label="Write comment" v-model="comment"></v-textarea>
+                        <v-btn block color="primary" large rounded @click="submitcomment()">submit</v-btn>
+                    </v-form>
+                </div>
+                <div class="reply-wrapper">
+                    {{ comment.user}}
+                    <p class="">Comments({{comments.length}})</p>
+                    <div v-for="(comment,index) in comments" :key="index" class="mb-4 custom-bs pa-4">
+                        <div class="d-flex">
+                            <v-avatar>
+                                <!-- <img 
+                                    src="https://cdn.vuetifyjs.com/images/john.jpg"
+                                    alt="John"
+                                > -->
+                                <v-avatar color="indigo" size="38">
+                                    <v-icon dark>
+                                        mdi-account-circle
+                                    </v-icon>
+                                </v-avatar>
                             </v-avatar>
-                        </v-avatar>
-                        <div class="ml-4">
-                            <p class="ma-0 pa-0 f8-bold">{{comment.user.name == support_client_username ? 'Me': comment.full_name }}</p>
-                            <p class="ma-0 pa-0 f8">{{ formatDateTime(date)}}</p>
+                            <div class="ml-4">
+                                <p class="ma-0 pa-0">{{comment.user.name == support_client_username ? 'Me': comment.full_name }}</p>
+                                <p class="ma-0 pa-0 f8">{{ formatDateTime(date)}}</p>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <p class="mb-0">{{comment.comment}}</p>
                         </div>
                     </div>
-                    <div class="pt-2">
-                        <p class="f8 mb-0">{{comment.comment}}</p>
-                    </div>
+                </div>
+            </div>
+            <div v-else class="text-center">
+                <div v-if="loading">
+                    <ComponentLoadingVue/>
+                </div>
+                <div v-else class="unavailable">
+                    <p>No data</p>
                 </div>
             </div>
         </v-container>
@@ -78,6 +87,7 @@ export default {
             id:null,
             comments:[],
             support_client_username,
+            loading:false,
         }
     },
     mounted() {
@@ -149,27 +159,32 @@ export default {
             this.$router.back();
         },
         async fetchContent() {
-            this.loaderShow();
+            this.loading = true;
+            // this.loaderShow();
             await ApiSupport.get(`/tool/tasks/${this.id}/json`)
             .then((resp) => {
+                // this.loading = false;
                 this.loaderHide();
                 this.enqs = resp;
-                // console.log(resp);
             })
             .catch(() => {
+                // this.loading = false;
                 this.loaderHide();
             })
         },
         async fetchComment() {
-            this.loaderShow();
+            // this.loaderShow();
+            this.loading = true;
             await ApiSupport.get(`/tool/tasks/${this.id}/comments?user=${this.support_client_username}`)
             .then((resp) => {
+                this.loading = false;
                 this.loaderHide();
                 // this.comments = resp;
                    this.comments = resp.comments;
                 console.log({resp});
             })
             .catch(() => {
+                this.loading = false;
                 this.loaderHide();
             })
         },
@@ -177,6 +192,7 @@ export default {
     components: {
         Topnavbar,
         Bottomnavbar,
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         // InputUpload
     },
     computed: {
