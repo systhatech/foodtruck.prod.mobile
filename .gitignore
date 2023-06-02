@@ -2,7 +2,8 @@
 node_modules
 package-lock.json
 /dist
-
+mtrux_keystore.jks
+yummtrux.keystore
 
 # local env files
 .env.local

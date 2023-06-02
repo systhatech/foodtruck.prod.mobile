@@ -338,6 +338,7 @@ export default {
            
             this.current_location.lat = window.localStorage.geo_latitude?window.localStorage.geo_latitude:0;
             this.current_location.lng = window.localStorage.geo_longitude?window.localStorage.geo_longitude:0;
+            console.log("lat lng",this.current_location);
             await this.fetchAddress();
         },
         async fetchAddress() {

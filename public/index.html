@@ -33,6 +33,7 @@
 	document.addEventListener("deviceready", onDeviceReady, false);
 	
 	function geo(res){
+		console.log("geo success");
 		localStorage.setItem('geo_latitude', res.coords.latitude ? res.coords.latitude:0);
 		localStorage.setItem('geo_longitude', res.coords.longitude? res.coords.longitude:0);
 	}
@@ -44,12 +45,12 @@
 
 	function onDeviceReady() {
 		console.log("device is ready");
-		cordova.plugins.firebase.messaging.requestPermission().then(function () {
-		});
+		// cordova.plugins.firebase.messaging.requestPermission().then(function () {
+		// });
 
-		cordova.plugins.firebase.messaging.getToken().then(function (token) {
-		localStorage.setItem("d_token", token);
-		});
+		// cordova.plugins.firebase.messaging.getToken().then(function (token) {
+		// localStorage.setItem("d_token", token);
+		// });
 		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
 	}
 	</script>
