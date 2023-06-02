@@ -7,10 +7,9 @@
             </div>
             <div class="mb-14" v-if="enqs && enqs.length">
                 <div class="support-item custom-bs pa-4" v-for="(item,index) in enqs" :key="index" @click="handleView(item)">
-                    <p class="f8-bold mb-0 text-uppercase">#[{{item.id}}] {{ item.title }}</p>
+                    <h4 class="mb-2 primary--text">#[{{item.id}}] {{ item.title }}</h4>
                     <div class="d-flex justify-space-between">
-                        <p class="f8">{{ formatDateTime(item.created_at)}}</p>
-                        <!-- <v-chip small :color="item.status=='closed'?'error':''" class="text-capitalize">{{ item.status }}</v-chip> -->
+                        <p class="mb-0">{{ formatDateTime(item.created_at)}}</p>
                     </div>
                 </div>
             </div>
@@ -111,7 +110,7 @@ export default {
             this.loading = true;
             // this.loaderShow();
             // "https://support.shubhu.com/tool/tasks/all?username=foodie&relatable_id=100",
-            await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.table_id)
+            await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.id)
             .then((resp) => {
                 this.loading = false;
                 this.loaderHide();
