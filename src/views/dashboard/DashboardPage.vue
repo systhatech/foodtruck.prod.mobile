@@ -49,12 +49,7 @@ export default {
         DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
     },
     mounted() {
-        // this.fetchTrucks({ 
-        //     available: 1,
-        //     name: this.search,
-        //     guest: localStorage.getItem('g_token'),
-        // });
-        // this.locateGeoLocation();
+
         if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
 
         let deviceToken = localStorage.getItem('d_token');
