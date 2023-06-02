@@ -129,6 +129,7 @@ export default {
         this.fetchProfile();
     },
     methods: {
+     
         formatTrialDays(days) {
             if (days < 30) {
                 return days + " days";
@@ -272,7 +273,7 @@ export default {
 }
 
 .price {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     font-weight: 600;
     color: #000000;
 }
