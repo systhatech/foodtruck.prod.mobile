@@ -64,7 +64,7 @@
                                             >
                                                 <v-text-field
                                                     v-model="menu.unit"
-                                                    :rules="requiredRules"
+                               
                                                     label="Quantity"
                                                     v-mask="'####'"
                                                     required

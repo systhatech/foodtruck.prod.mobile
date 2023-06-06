@@ -71,6 +71,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="text-center" v-if="getProfile && getProfile.general && getProfile.general.delete_account">
+                            <v-btn small text color="error" @click="handleDeleteAccount()">delete account</v-btn>
+                        </div>
                     </div>
                 </div>
                 <div class="setting-list custom-bs  pa-4 mt-4">
@@ -89,6 +92,7 @@
             <div v-else class="unavailable">
                 <p>{{message}}</p>
             </div>
+            <DialogConfirm :dialogConfirm="modal_confirm" @close="handleclose()" @handleConfirm="handleConfirm()"/>
         </v-container>
         <Bottomnavbar/>
     </v-container>
@@ -113,13 +117,10 @@ export default {
             indexValue:3,
             usericon:'',
             menusClient: [
-                // {name:'Support',icon:'mdi-headphones',route:'support'},
                 {name:'Update Profile',icon:'mdi-account-reactivate',route:'client-profile-update'},
                 {name:'Address',icon:'mdi-map-marker',route:'client-profile-address'},
                 {name:'Change Password',icon:'mdi-cog',route:'change-password'},
                 {name:'Truck Request',icon:'mdi-truck',route:'client-truck-request-list'},
-                // {name:'Terms & Conditions',icon:'mdi-shield-key',route:'terms-condition'},
-                // {name:'About',icon:'mdi-clipboard-list',route:'about-us'},
                 {name:'Logout',icon:'mdi-logout',route:'logout'},
              ],
         
@@ -129,24 +130,55 @@ export default {
             contact:{},
             message:'Loading...',
             render:false,
+            modal_confirm:false,
+        
         }
     },
     mounted() {
-    //    this.utype = JwtService.getUtype();
-        // this.profileData();
-        // if(this.currentUser){
-            
+        // console.log(this.getProfile);
+        // if(this.getProfile){
+        //     if(this.getProfile.general.delete_account){
+        //         console.log(this.getProfile.delete_account);
+        //     }
+
         // }
     },
     components: {
         Topnavbar,
-        Bottomnavbar
+        Bottomnavbar,
+        DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     methods: {
         ...mapActions({
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
+            fetchProfile: 'auth/fetchProfile',
         }),
+        handleDeleteAccount(){
+            this.modal_confirm = true;
+        },
+        handleConfirm(){
+            console.log("test");
+            this.loaderShow();
+            ApiService.post("/profile/delete")
+            .then((resp) =>{
+                this.loaderHide();
+                this.messageSuccess(resp.message);
+                this.fetchProfile();
+                setTimeout(() => {
+                    this.$router.push({
+                        name:'loginPage',
+                    })
+                }, 500);
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                console.log(error);
+            })
+        },
+        handleclose(){
+            this.modal_confirm = false;
+        },
          signOut() {
              this.loaderShow();
                 this.signOutAction().then(() => {
@@ -204,7 +236,10 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({currentUser:'auth/user'}),
+        ...mapGetters({
+            currentUser:'auth/user',
+            getProfile:'auth/profile'
+        }),
     }
 }
 </script>

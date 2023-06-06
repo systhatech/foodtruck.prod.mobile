@@ -35,8 +35,8 @@
                                                     label="Price" required></v-text-field>
                                             </v-col>
                                             <v-col cols="6" class="pb-0 pt-0" md="6">
-                                                <v-text-field v-model="menu.unit" :rules="requiredRules" label="Quantity"
-                                                    type="number" v-mask="'####'" required></v-text-field>
+                                                <v-text-field v-model="menu.unit" label="Quantity"
+                                                    type="number" v-mask="'####'"></v-text-field>
                                             </v-col>
                                             <!-- <v-col cols="6" class="pb-0 pt-0" md="6">
                                                 <InputAutocomplete @selected="selectedAnswers"
@@ -333,7 +333,7 @@ export default {
         handleSubmit() {
             let valid = this.$refs.formLocation.validate();
             if (!valid) {
-                this.messsageError("Flease fillup form fields");
+                this.messageError("Flease fillup form fields");
                 return;
             }
             this.loaderShow();

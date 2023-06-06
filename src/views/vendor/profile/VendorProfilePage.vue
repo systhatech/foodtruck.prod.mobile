@@ -65,6 +65,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="text-center" v-if="getProfile && getProfile.general && getProfile.general.delete_account">
+                            <v-btn small text color="error" @click="handleDeleteAccount()">delete account</v-btn>
+                        </div>
                     </div>
                 </div>
                 <div class="setting-list custom-bs  pa-4 mt-4">
@@ -76,12 +79,27 @@
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
+                        <li  @click="navigatePage('subscriptions')" v-if="getProfile.general.show_subscription">
+                            <div class="d-flex align-center">
+                                <v-icon class="mr-3" color="primary">mdi-credit-card</v-icon>
+                                <p class="text-capitalize mb-0">Subscriptions</p>
+                            </div>
+                            <v-icon color="primary">{{ iconNavigate }}</v-icon>
+                        </li>
+                        <li @click="navigatePage('payments')" v-if="getProfile.general.show_payment">
+                            <div class="d-flex align-center">
+                                <v-icon class="mr-3" color="primary">mdi-shield-key</v-icon>
+                                <p class="text-capitalize mb-0">Stripe Payment Credientials</p>
+                            </div>
+                            <v-icon color="primary">{{ iconNavigate }}</v-icon>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div v-else class="unavailable">
                 <p>{{message}}</p>
             </div>
+            <DialogConfirm :dialogConfirm="modal_confirm" @close="handleclose()" @handleConfirm="handleConfirm()"/>
         </v-container>
         <Bottomnavbar/>
     </v-container>
@@ -113,8 +131,8 @@ export default {
                 {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
                 {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
                 {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
-                {name:'Stripe Payment Credientials',icon:'mdi-shield-key',route:'payments'},
+                // {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
+                // {name:'Stripe Payment Credientials',icon:'mdi-shield-key',route:'payments'},
                 // {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
                 {name:'Reports',icon:'mdi-file-document-multiple',route:'reports'},
                 {name:'Sales Summary',icon:'mdi-file-document-multiple',route:'sales-summary'},
@@ -128,11 +146,13 @@ export default {
             contact:{},
             message:'Loading...',
             render:false,
+            modal_confirm:false,
         }
     },
     components: {
         Topnavbar,
-        Bottomnavbar
+        Bottomnavbar,
+        DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     mounted() {
         console.log("test");
@@ -142,7 +162,31 @@ export default {
         ...mapActions({
             signOutAction: 'auth/signOut',
             fetchCarts: 'truck/fetchCarts',
+            fetchProfile: 'auth/fetchProfile',
+
         }),
+        handleDeleteAccount(){
+            this.modal_confirm = true;
+        },
+        handleConfirm(){
+            console.log("test");
+            this.loaderShow();
+            ApiService.post("/profile/delete")
+            .then((resp) =>{
+                this.loaderHide();
+                this.messageSuccess(resp.message);
+                this.fetchProfile();
+                setTimeout(() => {
+                    this.$router.push({
+                        name:'loginPage',
+                    })
+                }, 500);
+            })
+            .catch((error) =>{
+                this.loaderHide();
+                console.log(error);
+            })
+        },
         fetchSetting() {
             // show_spot_booking
             ApiService.post("/site-setting-video-link",{'code':'show_spot_booking'})
@@ -190,7 +234,10 @@ export default {
         }
     },
     computed: {
-        ...mapGetters({currentUser:'auth/user'}),
+        ...mapGetters({
+            currentUser:'auth/user',
+            getProfile:'auth/profile'
+        }),
     }
 }
 </script>
