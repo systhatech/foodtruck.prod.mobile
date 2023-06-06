@@ -155,7 +155,7 @@ export default {
         DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     mounted() {
-        console.log("test");
+        // console.log("test");
         this.fetchSetting();
     },
     methods: {

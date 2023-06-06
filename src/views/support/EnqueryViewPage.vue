@@ -4,8 +4,8 @@
         <v-container class="mg56">
             <div v-if="enqs && Object.keys(enqs).length">
                 <div>
-                    <h4 class="text-uppercase">{{enqs.title}}</h4>
-                    <div v-html="enqs.desc" class="f9 mt-2"></div>
+                    <h4 class="">{{enqs.title}}</h4>
+                    <div v-html="enqs.desc" class="mt-2"></div>
                 </div>
                 <div class="mb-6 mt-6">
                     <v-form ref="form">
@@ -93,7 +93,7 @@ export default {
     mounted() {
         this.id = this.$router.currentRoute.params.id;
         this.fetchContent();
-        this.fetchComment();
+       
     },
     methods: {
         async submitcomment() {
@@ -121,7 +121,7 @@ export default {
         handleClose() {
             this.modalView = false;
             this.fetchContent();
-            this.fetchComment();
+            // this.fetchComment();
         },
         handleView(item) {
             this.viewItem = item;
@@ -166,22 +166,20 @@ export default {
                 // this.loading = false;
                 this.loaderHide();
                 this.enqs = resp;
+                this.fetchComment();
             })
             .catch(() => {
-                // this.loading = false;
+                this.loading = false;
                 this.loaderHide();
             })
         },
         async fetchComment() {
-            // this.loaderShow();
             this.loading = true;
             await ApiSupport.get(`/tool/tasks/${this.id}/comments?user=${this.support_client_username}`)
             .then((resp) => {
                 this.loading = false;
                 this.loaderHide();
-                // this.comments = resp;
-                   this.comments = resp.comments;
-                console.log({resp});
+                this.comments = resp.comments;
             })
             .catch(() => {
                 this.loading = false;

@@ -7,7 +7,7 @@
             </div>
             <div class="mb-14" v-if="enqs && enqs.length">
                 <div class="support-item custom-bs pa-4" v-for="(item,index) in enqs" :key="index" @click="handleView(item)">
-                    <p class="f8-bold mb-0 text-uppercase">#[{{item.id}}] {{ item.title }}</p>
+                    <p class="mb-0">#[{{item.id}}] {{ item.title }}</p> 
                     <div class="d-flex justify-space-between">
                         <p class="f8">{{ formatDateTime(item.created_at)}}</p>
                         <!-- <v-chip small :color="item.status=='closed'?'error':''" class="text-capitalize">{{ item.status }}</v-chip> -->
@@ -93,14 +93,14 @@ export default {
               this.loaderHide();
               this.messageError('Failed');  
             })
-            console.log(this.form);
+            // console.log(this.form);
         },
         handleBack(){
             this.$router.back();
         },
         async fetchContent() {
             this.loading = true;
-            console.log(this.currentUser);
+            // console.log(this.currentUser);
             // this.loaderShow();
             // "https://support.shubhu.com/tool/tasks/all?username=foodie&relatable_id=100",
             await ApiSupport.get(`/tool/tasks/all?username=${this.support_client_username}&relatable_id=`+this.currentUser.id)
