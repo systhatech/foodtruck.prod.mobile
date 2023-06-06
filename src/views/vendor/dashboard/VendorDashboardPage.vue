@@ -98,7 +98,7 @@
                                 <div class="pa-4" v-if="video_description">
                                     <h4 class="mb-0">{{ video_description}}</h4>
                                 </div>
-                                <video autoplay width="100%" controls :src="video" type='video/mp4' playsinline></video>
+                                <video autoplay width="100%" controls :src="video" muted type='video/mp4' playsinline></video>
                              
                             </div>
                         </div>
