@@ -98,7 +98,7 @@
                                 <div class="pa-4" v-if="video_description">
                                     <h4 class="mb-0">{{ video_description}}</h4>
                                 </div>
-                                <video autoplay width="100%" controls :src="video" muted type='video/mp4' playsinline></video>
+                                <video autoplay width="100%" controls :src="url_base+'/'+video" muted type='video/mp4' playsinline></video>
                              
                             </div>
                         </div>
@@ -118,10 +118,12 @@ import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
+import { url_base } from '../../../core/services/config'
 
 export default {
     data() {
         return {
+            url_base,
             search:'',
             iconHome: mdiHome,
             iconProfile: mdiAccount,

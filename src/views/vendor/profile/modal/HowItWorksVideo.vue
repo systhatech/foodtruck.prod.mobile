@@ -16,8 +16,7 @@
                         <div class="">
                             <div>
                                 <div class="custom-bs mt-14">
-
-                                    <video autoplay width="100%" controls :src="video"></video>
+                                    <video autoplay width="100%" controls :src="url_base+'/'+video" muted></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>
@@ -34,7 +33,7 @@
 
 import { ApiService } from "@/core/services/api.service";
 // import Bottomnavbar from "@/components/layout/NavbarBottomFixed";
-// import { base_url } from "@/core/services/config";
+import { url_base } from "@/core/services/config";
 
 
 
@@ -48,6 +47,7 @@ export default {
     },
     data() {
         return {
+            url_base,
            dialog_video_player:false,
            video: "",
            video_description:'',
