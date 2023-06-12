@@ -12,7 +12,7 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-container class="custom-bs h-100">
+                    <v-container class="custom-bs h-100 mt-12">
                         <div class="" v-if="video">
                             <div>
                                 <div class="custom-bs">
