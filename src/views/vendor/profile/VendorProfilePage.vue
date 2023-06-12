@@ -168,6 +168,9 @@ export default {
         handleDeleteAccount(){
             this.modal_confirm = true;
         },
+        handleclose(){
+            this.modal_confirm = false;
+        },
         handleConfirm(){
             console.log("test");
             this.loaderShow();
