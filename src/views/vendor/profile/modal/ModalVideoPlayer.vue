@@ -13,14 +13,22 @@
                         </v-toolbar-items>
                     </v-toolbar>
                     <v-container class="custom-bs h-100">
-                        <div class="">
+                        <div class="" v-if="video">
                             <div>
-                                <div class="custom-bs mt-14">
+                                <div class="custom-bs">
                                     <video ref="video" width="100%" webkit-playsinline playsinline class="screen-video" :src="url_base+'/'+video" reload="metadata" autoplay controls></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div v-else class="text-center w-100">
+                            <div v-if="loading" class="center">
+                                <ComponentLoadingVue/>
+                            </div>
+                            <div v-else class="unavailable">
+                                <p>Tutorial video not available!</p>
                             </div>
                         </div>
                     </v-container>
@@ -54,17 +62,21 @@ export default {
            dialog_video_player:false,
            video: "",
            video_description:'',
+           loading:false,
         }
     },
     methods: {
         fetchData(code){    
+            this.loading = true;
             ApiService.post("/site-setting-video-link",{code})
             .then((resp)=>{
+                this.loading = false;
                 this.video = resp.data.value;
                 this.video_description = resp.data.description;
-                // console.log({resp});
             })            
             .catch((error)=>{
+                this.loading=false;
+                this.video = "";
                 console.log({error});
             })
             // this.video = "http://techslides.com/demos/sample-videos/small.mp4";
@@ -74,12 +86,16 @@ export default {
             // this.$refs.videoRef.play();
         },
         handleClose() {
-            this.$refs.video.pause();
+            if(this.$refs.video && this.$refs.video.length){
+                this.$refs.video.pause();
+            }
             this.dialog_video_player = false;
         },
       
     },
-
+    components:{
+        ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
+    },
     computed: {
         ...mapGetters({
             currentUser: 'auth/user',

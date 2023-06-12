@@ -44,7 +44,8 @@
                                         </div>
                                     </v-col>
                                     <v-col cols="12" md="6" class="ma-0 pt-0 pb-0">
-                                        <v-textarea label="Menu Description" v-model="menu.description" :rules="rulesRequired"></v-textarea>
+                                        <v-textarea label="Menu Description" v-model="menu.description" :rules="rulesRequired"  auto-grow
+                                outlined></v-textarea>
                                     </v-col>
                                     <v-col cols="12" class="ma-0 pt-0 pb-0">
                                         <v-checkbox

@@ -99,6 +99,8 @@
 
                                             <v-col cols="12" class="pb-0 pt-0" md="12">
                                                 <v-textarea v-model="menu.description" :rules="requiredRules"
+                                                auto-grow
+                                                outlined
                                                     label="Description" required></v-textarea>
                                             </v-col>
                                             <v-col cols="12">
