@@ -62,7 +62,7 @@
                             </div>
                             <v-btn rounded block large @click="handleSendNotification">Send notification</v-btn> 
                         </div>
-                        <!-- <h2 class="mb-4 pl-4">Complete Following Steps</h2> -->
+                 
                         <div class="custom-bs pa-4 mb-4" v-if="!currentUser.owner.profile_pic">
                             <div class="pt-2 text-center">
                             <p class="error--text">Upload your truck logo</p>
@@ -95,20 +95,11 @@
                         </div>
                         <div class="custom-bs mb-4" v-if="video">
                             <div class="">
-                                
-                                <!-- <p class="error--text">Video tutorial, how it works?</p> -->
                                 <div class="pa-4" v-if="video_description">
                                     <h4 class="mb-0">{{ video_description}}</h4>
                                 </div>
-                                <video autoplay width="100%" controls :src="video" type='video/mp4' playsinline></video>
-                                <!-- <video class="header-background" width="100%" autoplay controls="true" playsinline>
-                                    <source :src="video" type="video/mp4"/>
-                                </video> -->
-                                <div class="w-100">
-                                    <!-- <vue-core-video-player :src="video"></vue-core-video-player> -->
-                                    <!-- <video-player :options="videoOptions"></video-player> -->
-                                </div>
-                                <!-- <iframe width="420" height="315" :src="video"></iframe> -->
+                                <video autoplay width="100%" controls :src="url_base+'/'+video" muted type='video/mp4' playsinline></video>
+                             
                             </div>
                         </div>
                     </v-col>
@@ -127,10 +118,12 @@ import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
+import { url_base } from '../../../core/services/config'
 
 export default {
     data() {
         return {
+            url_base,
             search:'',
             iconHome: mdiHome,
             iconProfile: mdiAccount,
@@ -199,8 +192,9 @@ export default {
         DialogNearbyNotification: () => import('@/views/vendor/dashboard/modal/ModalNearbyNotification'),
     },
     mounted() {
-        // this.locateGeoLocation();
+        this.profileData();
         this.fetchData();
+        this.fetchProfile();
         if(!this.currentUser) return;
         
    
@@ -254,7 +248,7 @@ export default {
         },
         async profileData() {
             this.loading = true;
-            await ApiService.get('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
+            await ApiService.post('/truck/profile/'+ this.currentUser.table_id).then((resp) => {
                 this.loading = false;
                 this.truck_profile = resp;
             })
