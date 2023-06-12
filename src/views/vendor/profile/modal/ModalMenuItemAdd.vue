@@ -64,7 +64,7 @@
                                             >
                                                 <v-text-field
                                                     v-model="menu.unit"
-                                                    :rules="requiredRules"
+                                                
                                                     label="Quantity"
                                                     v-mask="'####'"
                                                     required
@@ -122,6 +122,8 @@
                                                     v-model="menu.description"
                                                     :rules="requiredRules"
                                                     label="Description"
+                                                    auto-grow
+                                                    outlined
                                                     required
                                                 ></v-textarea>
                                             </v-col>

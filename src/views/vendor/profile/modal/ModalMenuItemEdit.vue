@@ -12,7 +12,7 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-container class="pa-0">
+                    <v-container class="pa-0 background-image">
                         <div class="background-image">
                             <div>
                                 <div class="pa-4 custom-bs ma-4 mb-14">
@@ -35,7 +35,7 @@
                                                     label="Price" required></v-text-field>
                                             </v-col>
                                             <v-col cols="6" class="pb-0 pt-0" md="6">
-                                                <v-text-field v-model="menu.unit" :rules="requiredRules" label="Quantity"
+                                                <v-text-field v-model="menu.unit" label="Quantity"
                                                     type="number" v-mask="'####'" required></v-text-field>
                                             </v-col>
                                             <!-- <v-col cols="6" class="pb-0 pt-0" md="6">
@@ -92,6 +92,7 @@
                                                 <v-checkbox
                                                 v-model="menu.is_special"
                                                 label="Today's Special"
+                                             
                                                 ></v-checkbox>
                                             </div>
                                             </v-col>
@@ -99,7 +100,9 @@
 
                                             <v-col cols="12" class="pb-0 pt-0" md="12">
                                                 <v-textarea v-model="menu.description" :rules="requiredRules"
-                                                    label="Description" required></v-textarea>
+                                                auto-grow
+                                                outlined
+                                                label="Description" required></v-textarea>
                                             </v-col>
                                             <v-col cols="12">
                                                 <v-btn color="primary" block class="mb-6" rounded large

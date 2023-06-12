@@ -72,6 +72,7 @@
 					:rules="requiredRules"
 					label="Description"
 					required
+          auto-grow
 				></v-textarea>
 				</v-col>
 				<v-col cols="12">
