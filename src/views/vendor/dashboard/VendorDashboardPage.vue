@@ -42,9 +42,9 @@
                 <ComponentLoadingVue/>
             </div>
             <div v-else>
-                <v-row>
+                <v-row >
                     <v-col cols="12" md="6">
-                        <div class="custom-bs pa-4 mb-4">
+                        <div class="custom-bs pa-4 mb-4" v-if="getProfile && getProfile.general && getProfile.general.show_dashboard_radius_search">
                             <div class="pb-2">
                                 <h4>Clients Nearby You</h4>
                             </div>
@@ -93,13 +93,15 @@
                             <v-btn color="primary" large rounded to="/profile-files">Add Now</v-btn>
                             </div>
                         </div>
-                        <div class="custom-bs mb-4" v-if="video">
-                            <div class="">
-                                <div class="pa-4" v-if="video_description">
-                                    <h4 class="mb-0">{{ video_description}}</h4>
+                        <div v-if="getProfile && getProfile.general && getProfile.general.show_dashboard_video">
+                            <div class="custom-bs mb-4" v-if="video">
+                                <div class="">
+                                    <div class="pa-4" v-if="video_description">
+                                        <h4 class="mb-0">{{ video_description}}</h4>
+                                    </div>
+                                    <video autoplay width="100%" controls :src="url_base+'/'+video" muted type='video/mp4' playsinline></video>
+                                 
                                 </div>
-                                <video autoplay width="100%" controls :src="url_base+'/'+video" muted type='video/mp4' playsinline></video>
-                             
                             </div>
                         </div>
                     </v-col>
@@ -395,6 +397,7 @@ export default {
             availableLocations:'truck/trucks',
             truckMenus:'truck/truckMenus',
             profile:'auth/profile',
+            getProfile:'auth/profile'
         }),
 
         clientLocations(){
