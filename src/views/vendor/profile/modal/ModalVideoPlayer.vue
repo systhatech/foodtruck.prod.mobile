@@ -15,13 +15,8 @@
                     <v-container class="custom-bs h-100">
                         <div class="">
                             <div>
-                                <div class="custom-bs mt-14">
-
-                                    <!-- <video autoplay width="100%" controls :src="video" type='video/mp4' playsinline></video> -->
-                                    <!-- <video class="header-background" width="100%" loop autoplay muted controls="true" playsinline>
-                                        <source :src="video" type="video/mp4"/>
-                                    </video> -->
-                                    <video width="100%" webkit-playsinline playsinline class="screen-video" :src="video" reload="metadata" autoplay controls></video>
+                                <div class="custom-bs">
+                                    <video ref="video" width="100%" webkit-playsinline playsinline class="screen-video" :src="url_base+'/'+video" reload="metadata" autoplay controls></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>
@@ -38,7 +33,7 @@
 
 import { ApiService } from "@/core/services/api.service";
 // import Bottomnavbar from "@/components/layout/NavbarBottomFixed";
-// import { base_url } from "@/core/services/config";
+import { url_base } from "@/core/services/config";
 
 
 
@@ -48,10 +43,14 @@ export default {
         this.$bus.$on("MODAL_VIDEO_PLAYER_OPEN", (data) => {
             this.fetchData(data.param);
             this.dialog_video_player = true;
+            if(this.$refs.video){
+                this.$refs.video.play();
+            }
         });
     },
     data() {
         return {
+            url_base,
            dialog_video_player:false,
            video: "",
            video_description:'',
@@ -75,7 +74,7 @@ export default {
             // this.$refs.videoRef.play();
         },
         handleClose() {
-            // this.$emit('close');
+            this.$refs.video.pause();
             this.dialog_video_player = false;
         },
       
