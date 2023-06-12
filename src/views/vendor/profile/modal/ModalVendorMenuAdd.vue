@@ -54,7 +54,7 @@
                                             ></v-checkbox>
                                     </v-col>
                                     <v-col cols="12">
-                                        <div class="w-100 text-center"><v-btn block  large color="primary" rounded @click="handleSubmit()">submit</v-btn>
+                                        <div class="w-100 text-center"><v-btn block  large color="primary" rounded @click="handleSubmit()">{{isEdit?'update':'submit'}}</v-btn>
                                         </div>
                                     </v-col>
                                 </v-row>
@@ -94,7 +94,7 @@ export default {
             this.fetchCuisineTypes();
             if(newval && this.isEdit){
                 this.menu.id = this.menuData.id;
-                // this.menu.cusine = this.menuData.cusine;
+                this.menu.cusine = this.menuData.cusine;
                 this.menu.name = this.menuData.name;
                 this.menu.description = this.descriptionStripe(this.menuData.description);
                 this.menu.profile_pic = this.menuData.profile_pic;

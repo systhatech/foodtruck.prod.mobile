@@ -71,8 +71,14 @@ export default {
             ApiService.post("/site-setting-video-link",{code})
             .then((resp)=>{
                 this.loading = false;
-                this.video = resp.data.value;
-                this.video_description = resp.data.description;
+                console.log(resp.data.value.length);
+                if(resp.data.value.length < 4){
+                    this.video = "";
+                }else{
+                    this.video = resp.data.value;
+                    this.video_description = resp.data.description;
+                }
+              
             })            
             .catch((error)=>{
                 this.loading=false;

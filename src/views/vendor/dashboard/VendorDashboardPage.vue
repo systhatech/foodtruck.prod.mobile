@@ -75,10 +75,12 @@
                             <v-btn color="primary" large rounded to="/vendor-profile-menu">Add now</v-btn>
                             </div>
                         </div>
-                        <div class="custom-bs pa-4 mb-4" v-if="currentUser && currentUser.owner && !currentUser.owner.payment_credential">
-                            <div class="pt-2 text-center">
-                            <p class="error--text">Add stripe payment credentials</p>
-                            <v-btn color="primary" large rounded to="/payments">Add now</v-btn>
+                        <div  v-if="getProfile && getProfile.general && getProfile.general.show_dashboard_video">
+                            <div class="custom-bs pa-4 mb-4" v-if="currentUser && currentUser.owner && !currentUser.owner.payment_credential">
+                                <div class="pt-2 text-center">
+                                <p class="error--text">Add stripe payment credentials</p>
+                                <v-btn color="primary" large rounded to="/payments">Add now</v-btn>
+                                </div>
                             </div>
                         </div>
                         <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.locations.length">
