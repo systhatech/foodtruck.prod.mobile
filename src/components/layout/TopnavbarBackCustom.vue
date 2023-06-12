@@ -5,15 +5,7 @@
             </v-btn> 
             <v-toolbar-title style="font-size: 0.9rem;font-weight: 500; margin-left:10px; color:#fff;">{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <div @click="handleRouteCart" v-if="currentUser && cartItems && cartItems.length && (currentUser.table == 'clients')" class="pt-3 pr-4">
-                <v-badge
-                    small
-                    color="error"
-                    :content="Object.keys(cartItems).length"
-                    >
-                    <v-icon color="white">{{ iconCart }}</v-icon>
-                </v-badge>
-            </div>
+            <ComponentCartCount/>
             </v-toolbar>
 </template>
 <script>
@@ -109,6 +101,9 @@ export default {
             fetchCarts: 'truck/fetchCarts',
             cartItems: 'truck/cartItems',
         })
+    },
+    components:{
+        ComponentCartCount:()=>import('@/components/layout/ComponentCartCount.vue')
     }
 
 }
