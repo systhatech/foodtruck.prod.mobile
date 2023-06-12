@@ -58,7 +58,7 @@
                     <ComponentLoadingVue/>
                 </div>
                 <div v-else class="unavailable">
-                    <p>No orders</p>
+                    <p>Not Available</p>
                 </div>
         </div>
         <DialogConform 

@@ -2,13 +2,13 @@
      <v-container class="ma-0 pl-0 pr-0 pt-0 h-100 background-image">
         <Topnavbar :title="title" @back="handleBack"/>
         <v-container class="mb80">
+            <div class="mb-4">
+                <p class="mb-0 text-center" style="text-decoration: underline;" @click="handleClick('user_mannual_payment')">Video tutorial, setting up stripe accout</p>
+            </div>
             <div v-if="default_payment">
                 <div v-if="default_payment=='vendor'">
                     <StripeDetail class="mb-6"/>
-                    <div class="pa-4">
-                        <p class="mb-0 text-center" style="text-decoration: underline;" @click="handleClick('user_mannual_payment')">Video tutorial, setting up stripe accout</p>
-                        <ModalVideoPlayer/>
-                    </div>
+                    
                 </div>
                 <div v-else>
                     <BankDetail/>
@@ -17,6 +17,7 @@
             <div v-else class="unavailable">
                 <p>{{ message }}</p>
             </div>
+            <ModalVideoPlayer/>
         </v-container>
          <Bottomnavbar/>
     </v-container>
