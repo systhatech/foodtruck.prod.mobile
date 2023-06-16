@@ -11,11 +11,18 @@
                     <v-icon large v-else>{{icon_map}}</v-icon>
                 </v-btn>
             </div>
+            <div class="custom-bs pa-4">
+                <!-- {{  setting }} -->
+                <p class="mb-0" v-if="setting && setting.show_background_process">Background location service used to find nearest Food Truck</p>
+                <!-- <v-btn text @click="enableBackground()">enabled</v-btn>
+                <v-btn text @click="disableBackground()">disabled</v-btn>
+                <v-btn text @click="backgroundCheck()">check</v-btn> -->
+            </div>
         </div>
         <v-container v-if="map_view" class="ma-0 pa-0">
             <AddGoogleMap :locationMarkers="locations"/>
         </v-container>
-        <v-container v-else class="mg56 pt-4 pb-14">
+        <v-container v-else class="mg56 pt-4 pb-14 pa-4">
            <div>
                <div v-if="locations && locations.length">
                     <TruckList :trucks="locations"/>
@@ -45,6 +52,9 @@ import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import {mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
 export default {
+    props:{
+        setting:{},
+    },
     data() {
         return {
             search:'',
@@ -97,7 +107,7 @@ export default {
         setTimeout(() => {
             this.locateGeoLocation();
         }, 1000);
-        this.fetchDataInterval();
+        // this.fetchDataInterval();
     },
    
     beforeDestroy() {
@@ -121,7 +131,15 @@ export default {
         ...mapActions({
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
-
+        enableBackground(){
+            console.log(window.bgLocationEnable());
+        },
+        disableBackground() {
+            console.log(window.bgLocationDisabled());
+        },
+        backgroundCheck() {
+            console.log(window.bgLocationCheck());
+        },
         handleFilterModalOpen(){
             this.modelFilter=true
         },

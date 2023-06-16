@@ -4,6 +4,13 @@
         <v-container class="mb80 pt-4">
            <v-row>
                 <v-col cols="12" md="6">
+                    <div class="custom-bs pa-4 mb-4">
+                        <!-- {{  setting }} -->
+                        <p class="mb-0" v-if="setting && setting.show_background_process">Background location service used to find nearest Food Truck</p>
+                        <!-- <v-btn text @click="enableBackground()">enabled</v-btn>
+                        <v-btn text @click="disableBackground()">disabled</v-btn>
+                        <v-btn text @click="backgroundCheck()">check</v-btn> -->
+                    </div>
                     <div class="custom-bs pa-4">
                         <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
                     </div>
@@ -125,6 +132,9 @@ import {socketHandler} from '@/core/services/socketio/socket'
 import { url_base } from '../../../core/services/config'
 
 export default {
+    props:{
+        setting:{},
+    },
     data() {
         return {
             url_base,
@@ -211,7 +221,8 @@ export default {
             console.log({error})
         }
         //UPDATE CURRENT LOCATIONS
-        this.fetchDataInterval();
+        // this.fetchDataInterval();
+        this.locateGeoLocation();
     },
    
     beforeDestroy() {
@@ -328,11 +339,11 @@ export default {
         },
 
         // update location
-        fetchDataInterval() {
-            this.dataInterval = setInterval(() => {
-                this.locateGeoLocation(false)
-            }, 300000);
-        },
+        // fetchDataInterval() {
+        //     this.dataInterval = setInterval(() => {
+        //         this.locateGeoLocation(false)
+        //     }, 300000);
+        // },
         async locateGeoLocation() {
             this.loading = true;
             navigator.geolocation.getCurrentPosition(res => {

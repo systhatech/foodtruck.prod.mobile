@@ -3,10 +3,10 @@
         <Topnavbar/>
         <div class="background-image">
             <div v-if="currentUser && currentUser.table=='vendors'">
-                <DashboardVendor/>
+                <DashboardVendor :setting="setting"/>
             </div>
             <div v-else>
-                <DashboardClient/>
+                <DashboardClient :setting="setting"/>
             </div>
         </div>
     </v-container>
@@ -40,7 +40,10 @@ export default {
             },
           
             modelFilter:false,
-            mapView:false
+            mapView:false,
+            setting:{
+                show_background_process:0,
+            }
         }
     },
     components: {
@@ -49,6 +52,8 @@ export default {
         DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
     },
     mounted() {
+        this.fetchSetting();
+        console.log("here");
         if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
@@ -76,6 +81,17 @@ export default {
         ...mapActions({
             fetchTrucks:'truck/fetchTrucks'
         }),
+
+        fetchSetting(){
+            ApiService.post("/getsettings")
+            .then((resp) =>{
+                // console.log({resp});
+                this.setting.show_background_process = resp.show_background_process;
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+        },
        
         changeView(){
             this.mapView = !this.mapView;
