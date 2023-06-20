@@ -98,10 +98,7 @@ export default {
     },
 
     mounted() {
-        // this.locateGeoLocation();
-        // let route = this.$router.currentRoute.query;
-        // console.log(route);
-
+        // 
     },
     computed: {
         ...mapGetters({
@@ -122,7 +119,6 @@ export default {
                     this.locateGeoLocation();
                     this.loaderHide();
                     if(resp && resp.verify){
-                        console.log("here", {resp});
                         this.$router.push({ name:'VerifyEmailPage', query:{ email: resp.email, type:'clients'}});
                     }else{
                         this.fetchAddress();
