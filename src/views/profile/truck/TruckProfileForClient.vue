@@ -36,6 +36,7 @@
                                             <v-icon color="error">mdi-map-marker-radius</v-icon>
                                         </div>
                                         <div class="pl-1">
+
                                             <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
                                                 {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }}
                                                 {{  truckProfile && truckProfile.active_location && truckProfile.active_location.city ? truckProfile.active_location.city:'' }}<br>

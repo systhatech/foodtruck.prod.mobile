@@ -4,13 +4,9 @@
         <v-container class="mb80 pt-4">
            <v-row>
                 <v-col cols="12" md="6">
-                    <div class="custom-bs pa-4 mb-4">
-                        <!-- {{  setting }} -->
-                        <p class="mb-0" v-if="setting && setting.show_background_process">Background location service used to find nearest Food Truck</p>
-                        <!-- <v-btn text @click="enableBackground()">enabled</v-btn>
-                        <v-btn text @click="disableBackground()">disabled</v-btn>
-                        <v-btn text @click="backgroundCheck()">check</v-btn> -->
-                    </div>
+                    <!-- <div class="custom-bs pa-4 mb-4" v-if="setting && setting.show_background_process">
+                        <p class="mb-0">Background location service used to find nearest Food Truck</p>
+                    </div> -->
                     <div class="custom-bs pa-4">
                         <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
                     </div>
@@ -144,16 +140,6 @@ export default {
             iconFilter: mdiFilter,
             iconMap: mdiMap,
             iconChat: mdiChat,
-            currentItem:0,
-            countMessages:0,
-            zoomLevel:14,
-            row:'',
-            dashboardItems: [],
-            // trucks:[],
-            value: 1,
-            
-            // locations:[],
-            locationsList:[],
             filter:false,
             available:1,
             active:1,
@@ -260,6 +246,7 @@ export default {
         },
         handleRefreshLocation(){
             this.fetchAddress();
+            
         },
         async profileData() {
             this.loading = true;
@@ -380,7 +367,8 @@ export default {
             await ApiService.post('/location/save-current', this.current_location)
             .then(() => {
                 this.profileData();
-                this.fetchAllTrucks();
+                // this.fetchAllTrucks();
+                this.fetchProfile();
                 this.loaderHide();
             })
             .catch((error) => {

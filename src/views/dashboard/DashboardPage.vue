@@ -52,7 +52,7 @@ export default {
         DashboardClient: ()=> import('@/views/client/dashboard/ClientDashboardPage'),
     },
     mounted() {
-        this.fetchSetting();
+        // this.fetchSetting();
         console.log("here");
         if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
         let deviceToken = localStorage.getItem('d_token');
@@ -85,7 +85,6 @@ export default {
         fetchSetting(){
             ApiService.post("/getsettings")
             .then((resp) =>{
-                // console.log({resp});
                 this.setting.show_background_process = resp.show_background_process;
             })
             .catch((error) =>{

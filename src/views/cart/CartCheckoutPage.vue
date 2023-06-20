@@ -8,14 +8,23 @@
                         <div class="custom-bs pa-4 mb-4">
                             <div v-if="cart_checkout && cart_checkout.vendor">
                                 <div class="">
-                                    <h3 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h3>
-                                    <div v-if="cart_checkout.pickup_date">
-                                        <p class="mb-0 error--text" v-if="cart_checkout.pickup_date">Pickup Date</p>
+                                    <!-- {{  cart_checkout.vendor.profile_pic }} -->
+                                    <div class="d-flex w-100 align-center">
+                                        <div>
+                                            <v-img width="40" height="40" contain :src="base_url+'/image-show/'+cart_checkout.vendor.profile_pic"></v-img>
+                                        </div>
+                                        <div class="pl-2">
+                                            <h4 class="mb-2 primary--text">{{ cart_checkout.vendor.name }}</h4>
+                                        </div>
+                                        <!-- <p>{{ cart_checkout.vendor }}</p> -->
+                                    </div>
+                                    <div v-if="cart_checkout.pickup_start_date">
+                                        <p class="mb-0 error--text" v-if="cart_checkout.pickup_start_date">Pickup Date</p>
                                         <p class="mb-0" style="font-weight:600">{{ formatDateToDay(cart_checkout.pickup_date) }}</p>
                                         <p style="font-weight:600">{{ formatTimeOnly(cart_checkout.pickup_start_date) }} - {{ formatTimeOnly(cart_checkout.pickup_end_date) }}</p>
                                     </div>
-                                    <p class="mb-0 error--text">Pickup Location </p>
-                                    <div v-if="cart_checkout.address">
+                                    <div v-if="cart_checkout.address" class="pt-2">
+                                        <p class="mb-0 error--text">Pickup Location </p>
                                         <p class="mb-0">{{ cart_checkout.address.add1 }}, {{ cart_checkout.address.city }}</p>
                                         <p class="mb-2">{{ cart_checkout.address.state }}, {{ cart_checkout.address.zip }}</p>
                                     </div>

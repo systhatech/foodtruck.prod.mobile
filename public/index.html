@@ -24,35 +24,6 @@
 	<script>
 
 	window.addEventListener('native.keyboardshow', keyboardShowHandler);
-	window.bgLocationEnable = function() {
-		cordova.plugins.backgroundMode.on('EVENT', function() {
-			console.log("enable :: ", cordova.plugins.backgroundMode.isActive());
-		});
-		// cordova.plugins.backgroundMode.setEnabled(true);
-		// setTimeout(() => {
-		// 	console.log("enable :: ", cordova.plugins.backgroundMode.isActive());
-		// }, 1000);
-	}
-	window.bgLocationDisabled = function() {
-		cordova.plugins.backgroundMode.on('EVENT', function() {
-			console.log("disabled :: ", cordova.plugins.backgroundMode.isActive());
-		});
-		// cordova.plugins.backgroundMode.setEnabled(false);
-		// setTimeout(() => {
-		// 	console.log("disabled :: ", cordova.plugins.backgroundMode.isActive());
-		// }, 1000);
-	}
-	
-	window.bgLocationCheck = function() {
-		if(cordova.plugins.backgroundMode.isActive()){
-			console.log(cordova.plugins.backgroundMode.isActive());
-			return true;
-		}else{
-			console.log(cordova.plugins.backgroundMode.isActive());
-			return false;
-		}
-	}
-
 	function keyboardShowHandler(e){
 		setTimeout(function() {
 			$('html, body').animate({ scrollTop: 0 }, 1000);
@@ -60,6 +31,18 @@
 	}
 	document.addEventListener("deviceready", onDeviceReady, false);
 	
+	
+
+	function onDeviceReady() {
+		console.log("device is ready");
+			cordova.plugins.firebase.messaging.requestPermission().then(function () {
+		});
+
+		cordova.plugins.firebase.messaging.getToken().then(function (token) {
+			localStorage.setItem("d_token", token);
+		});
+		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+	}
 	function geo(res){
 		localStorage.setItem('geo_latitude', res.coords.latitude ? res.coords.latitude:0);
 		localStorage.setItem('geo_longitude', res.coords.longitude? res.coords.longitude:0);
@@ -68,17 +51,6 @@
 	function errorgeo(){
 		localStorage.setItem('geo_latitude', 0)
 		localStorage.setItem('geo_longitude', 0)
-	}
-
-	function onDeviceReady() {
-		console.log("device is ready");
-		cordova.plugins.firebase.messaging.requestPermission().then(function () {
-		});
-
-		cordova.plugins.firebase.messaging.getToken().then(function (token) {
-		localStorage.setItem("d_token", token);
-		});
-		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
 	}
 	</script>
 </body>

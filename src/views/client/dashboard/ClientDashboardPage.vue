@@ -11,13 +11,9 @@
                     <v-icon large v-else>{{icon_map}}</v-icon>
                 </v-btn>
             </div>
-            <div class="custom-bs pa-4">
-                <!-- {{  setting }} -->
-                <p class="mb-0" v-if="setting && setting.show_background_process">Background location service used to find nearest Food Truck</p>
-                <!-- <v-btn text @click="enableBackground()">enabled</v-btn>
-                <v-btn text @click="disableBackground()">disabled</v-btn>
-                <v-btn text @click="backgroundCheck()">check</v-btn> -->
-            </div>
+            <!-- <div class="custom-bs pa-4" v-if="setting && setting.show_background_process">
+                <p class="mb-0" >Background location service used to find nearest Food Truck</p>
+            </div> -->
         </div>
         <v-container v-if="map_view" class="ma-0 pa-0">
             <AddGoogleMap :locationMarkers="locations"/>
@@ -104,10 +100,8 @@ export default {
     },
     async mounted() {
         this.loading = true;
-        setTimeout(() => {
-            this.locateGeoLocation();
-        }, 1000);
-        // this.fetchDataInterval();
+        this.locateGeoLocation();
+      
     },
    
     beforeDestroy() {
@@ -131,15 +125,6 @@ export default {
         ...mapActions({
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
-        enableBackground(){
-            console.log(window.bgLocationEnable());
-        },
-        disableBackground() {
-            console.log(window.bgLocationDisabled());
-        },
-        backgroundCheck() {
-            console.log(window.bgLocationCheck());
-        },
         handleFilterModalOpen(){
             this.modelFilter=true
         },
@@ -348,14 +333,22 @@ export default {
         },
 
         fetchDataInterval() {
-            this.dataInterval = setInterval(() => {
-                this.locateGeoLocation(false)
-            }, 300000);
+            // this.dataInterval = setInterval(() => {
+            //     this.locateGeoLocation(false)
+            // }, 300000);
         },
         async locateGeoLocation() {
-           
+            // let self = this;
+            // navigator.geolocation.getCurrentPosition(function(res) {
+            //     self.current_location.lat = res.coords.latitude ? res.coords.latitude:0;
+            //     self.current_location.lng = res.coords.longitude? res.coords.longitude:0;
+            // }, function(error) {
+            //     console.log({error});
+            // },{enableHighAccuracy: true});
+
             this.current_location.lat = window.localStorage.geo_latitude?window.localStorage.geo_latitude:0;
             this.current_location.lng = window.localStorage.geo_longitude?window.localStorage.geo_longitude:0;
+                // console.log(this.current_location);
             await this.fetchAddress();
         },
         async fetchAddress() {

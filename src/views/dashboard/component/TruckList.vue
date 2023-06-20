@@ -20,8 +20,8 @@
                             </div>
                             <div>
                                 <div>
-                                    <p class="pl-1 mb-0">{{truck.add1 ?truck.add1:''}}</p>
-                                    <p class="pl-1">{{truck.state?truck.state:''}} {{truck.zip_code?truck.zip_code:''}}</p>
+                                    <p class="pl-1 mb-0 text-capitalize">{{truck.add1 ?truck.add1:''}}</p>
+                                    <p class="pl-1 text-capitalize">{{truck.state?truck.state:''}} {{truck.zip_code?truck.zip_code:''}}</p>
                                 </div>
                                 <div>
                                     <div class="mb-2" v-if="truck && truck.cuisines && truck.cuisines.length">

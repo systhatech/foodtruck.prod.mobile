@@ -9,6 +9,7 @@
         :items="items"
         item-text="value"
         item-value="value"
+        clearable
         @change="handleSelected"
         >    
         <template v-slot:chip="{ props, item }">
