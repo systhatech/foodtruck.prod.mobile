@@ -24,7 +24,6 @@
 	<script>
 
 	window.addEventListener('native.keyboardshow', keyboardShowHandler);
-
 	function keyboardShowHandler(e){
 		setTimeout(function() {
 			$('html, body').animate({ scrollTop: 0 }, 1000);
@@ -32,8 +31,21 @@
 	}
 	document.addEventListener("deviceready", onDeviceReady, false);
 	
+	
+	window.updateLatLng = function() {
+		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+	}
+	function onDeviceReady() {
+		console.log("device is ready");
+			cordova.plugins.firebase.messaging.requestPermission().then(function () {
+		});
+
+		cordova.plugins.firebase.messaging.getToken().then(function (token) {
+			localStorage.setItem("d_token", token);
+		});
+		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+	}
 	function geo(res){
-		console.log("geo success");
 		localStorage.setItem('geo_latitude', res.coords.latitude ? res.coords.latitude:0);
 		localStorage.setItem('geo_longitude', res.coords.longitude? res.coords.longitude:0);
 	}
@@ -41,17 +53,6 @@
 	function errorgeo(){
 		localStorage.setItem('geo_latitude', 0)
 		localStorage.setItem('geo_longitude', 0)
-	}
-
-	function onDeviceReady() {
-		console.log("device is ready");
-		// cordova.plugins.firebase.messaging.requestPermission().then(function () {
-		// });
-
-		// cordova.plugins.firebase.messaging.getToken().then(function (token) {
-		// localStorage.setItem("d_token", token);
-		// });
-		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
 	}
 	</script>
 </body>
