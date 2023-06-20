@@ -1,6 +1,22 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <div class="pa-4 pt-2 pb-2">
+            <div class="d-flex align-center justify-space-between custom-bs pa-2 mt-2 mb-2" v-if="current_location && current_location.add1">
+                <div>
+                    <div class="">
+                        <div class="d-flex align-center pb-1">
+                            <v-icon color="error">mdi-map-marker-radius</v-icon>
+                            <h5 class="mb-0 pl-1">CURRENT LOCATION</h5>
+                        </div>
+                        <div class="d-flex align-center">
+                            <div class="w-18"></div>
+                            <p class="mb-0 primary--text">{{ current_location.add1 }} {{ current_location.zip_code }}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <v-btn :disabled="loading" fab color="warning" text @click="updateLatLng()"><v-icon large>mdi-reload</v-icon></v-btn>
+            </div>
             <div class="d-flex align-center justify-space-between">
                 <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
                 <v-btn class="ml-4" fab color="primary" @click="handleFilterModalOpen">
@@ -121,7 +137,14 @@ export default {
         ...mapActions({
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
-
+        updateLatLng(){
+            this.loading = true;
+            window.updateLatLng();
+            setTimeout(() => {
+                this.locations = [];
+                this.locateGeoLocation();
+            }, 500);
+        },
         handleFilterModalOpen(){
             this.modelFilter=true
         },
@@ -335,10 +358,8 @@ export default {
             }, 300000);
         },
         async locateGeoLocation() {
-           
             this.current_location.lat = window.localStorage.geo_latitude?window.localStorage.geo_latitude:0;
             this.current_location.lng = window.localStorage.geo_longitude?window.localStorage.geo_longitude:0;
-            // console.log("lat lng",this.current_location);
             await this.fetchAddress();
         },
         async fetchAddress() {
