@@ -28,11 +28,6 @@
                     <v-icon large v-else>{{icon_map}}</v-icon>
                 </v-btn>
             </div>
-          
-            <!-- <v-btn @click="updateLatLng()">update Location</v-btn> -->
-            <!-- <div class="custom-bs pa-4" v-if="setting && setting.show_background_process">
-                <p class="mb-0" >Background location service used to find nearest Food Truck</p>
-            </div> -->
         </div>
         <v-container v-if="map_view" class="ma-0 pa-0">
             <AddGoogleMap :locationMarkers="locations"/>
@@ -129,7 +124,6 @@ export default {
     watch:{
         search(newval){
             if(newval.length >=3 || newval.length ==0){
-                // this.fetchData();
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {
                     this.search_loading = true;
@@ -148,7 +142,6 @@ export default {
             window.updateLatLng();
             setTimeout(() => {
                 this.locations = [];
-                    // this.fetchAllTrucks();
                 this.locateGeoLocation();
             }, 500);
         },
