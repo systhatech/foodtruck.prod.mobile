@@ -1,16 +1,35 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
         <div class="pa-4 pt-2 pb-2">
+            <div class="d-flex align-center justify-space-between custom-bs pa-2 mt-2 mb-2" v-if="current_location && current_location.add1">
+                <div>
+
+                    <div class="">
+                        <div class="d-flex align-center pb-1">
+                            <v-icon color="error">mdi-map-marker-radius</v-icon>
+                            <h5 class="mb-0 pl-1">CURRENT LOCATION</h5>
+                        </div>
+                        <div class="d-flex align-center">
+                            <div class="w-18"></div>
+                            <p class="mb-0 primary--text">{{ current_location.add1 }} {{ current_location.zip_code }}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <v-btn :disabled="loading" fab color="warning" text @click="updateLatLng()"><v-icon large>mdi-reload</v-icon></v-btn>
+            </div>
             <div class="d-flex align-center justify-space-between">
                 <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
-                <v-btn class="ml-4" fab color="primary" @click="handleFilterModalOpen">
+                <v-btn class="ml-4" :disabled="loading" fab color="primary" @click="handleFilterModalOpen">
                     <v-icon large>{{icon_filter}}</v-icon>
                 </v-btn>
-                <v-btn class="ml-4" fab color="primary" @click="changeView()">
+                <v-btn class="ml-4" :disabled="loading" fab color="primary" @click="changeView()">
                     <v-icon large v-if="map_view">{{icon_list}}</v-icon>
                     <v-icon large v-else>{{icon_map}}</v-icon>
                 </v-btn>
             </div>
+          
+            <!-- <v-btn @click="updateLatLng()">update Location</v-btn> -->
             <!-- <div class="custom-bs pa-4" v-if="setting && setting.show_background_process">
                 <p class="mb-0" >Background location service used to find nearest Food Truck</p>
             </div> -->
@@ -101,7 +120,6 @@ export default {
     async mounted() {
         this.loading = true;
         this.locateGeoLocation();
-      
     },
    
     beforeDestroy() {
@@ -125,6 +143,15 @@ export default {
         ...mapActions({
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
+        updateLatLng(){
+            this.loading = true;
+            window.updateLatLng();
+            setTimeout(() => {
+                this.locations = [];
+                    // this.fetchAllTrucks();
+                this.locateGeoLocation();
+            }, 500);
+        },
         handleFilterModalOpen(){
             this.modelFilter=true
         },

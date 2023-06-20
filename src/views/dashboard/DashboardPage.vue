@@ -53,7 +53,7 @@ export default {
     },
     mounted() {
         // this.fetchSetting();
-        console.log("here");
+        // console.log("here");
         if(this.currentUser == null || (!this.currentUser && Object.keys(this.currentUser).length ==0)) return;
         let deviceToken = localStorage.getItem('d_token');
         this.saveDeviceToken(deviceToken);
@@ -65,6 +65,7 @@ export default {
         }catch(error) {
             console.log({error})
         }
+       
     },
    
     beforeDestroy() {

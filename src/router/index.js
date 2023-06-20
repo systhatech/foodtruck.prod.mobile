@@ -169,7 +169,7 @@ const routes = [
 	{
 		// path: '/client/truck/conversation/:vendor_id/:event_request_id',
 		path: '/client/truck/conversation/:to/:to_id/:conv_id/:event_req_id',
-		name: 'ClientChatConversationPage',
+		name: 'ClientTruckChatConversationPage',
 		component: () => import(/* webpackChunkName: "ConversationPage" */ '../views/client/truck_request/ClientTruckChatConversationPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {
@@ -343,7 +343,7 @@ const routes = [
 	},
 	{
 		path: '/vendor-profile-list',
-		name: 'vendorProfileUpdatePage',
+		name: 'vendorProfileList',
 		component: () => import(/* webpackChunkName: "ProfileUpdatePage" */ '../views/vendor/profile/VendorProfileListPage.vue'),
 		meta: { requiresAuth: true },
 		beforeEnter: (to, from, next) => {

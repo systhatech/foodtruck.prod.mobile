@@ -118,6 +118,7 @@ export default {
             this.loaderShow();
             this.signIn(this.login_info)
                 .then((resp) => {
+                    window.updateLatLng();
                     this.locateGeoLocation();
                     this.loaderHide();
                     if(resp && resp.verify){
@@ -157,7 +158,6 @@ export default {
                 this.location.lat = res.coords.latitude;
                 this.location.lng = res.coords.longitude;
             });
-
         },
         async fetchAddress() {
             this.loaderShow();

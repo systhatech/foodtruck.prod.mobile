@@ -155,7 +155,6 @@ export default {
         DialogConfirm: ()=> import('@/components/layout/DialogConfirm'),
     },
     mounted() {
-        // console.log("test");
         this.fetchSetting();
     },
     methods: {
@@ -172,7 +171,6 @@ export default {
             this.modal_confirm = false;
         },
         handleConfirm(){
-            console.log("test");
             this.loaderShow();
             ApiService.post("/profile/delete")
             .then((resp) =>{
@@ -197,12 +195,10 @@ export default {
                 // this.video = resp.data.value;
                 // this.video_description = resp.data.description;
                 if(parseInt(resp.data.value)){
-                    // console.log("here", resp.data.value);
                     this.menusVendor.push({name:'Spot Booking',icon:'mdi-clipboard-edit-outline',route:'bookings'});
                 }else{
                     console.log("failed", resp.data.value);
                 }
-                // console.log({resp});
             })            
             .catch((error)=>{
                 console.log({error});
@@ -212,7 +208,6 @@ export default {
             this.loaderShow();
             this.signOutAction()
             .then(() => {
-                console.log("here");
                 this.loaderHide();
                 socketHandler.disconnect();
                 this.$router.replace({

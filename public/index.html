@@ -32,7 +32,9 @@
 	document.addEventListener("deviceready", onDeviceReady, false);
 	
 	
-
+	window.updateLatLng = function() {
+		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+	}
 	function onDeviceReady() {
 		console.log("device is ready");
 			cordova.plugins.firebase.messaging.requestPermission().then(function () {
