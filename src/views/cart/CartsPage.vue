@@ -12,12 +12,18 @@
                                 <div class="custom-bs pa-4">
                                     <v-row>
                                         <v-col cols="12" md="12" lg="12" xl="12">
-                                            <h2 class="mb-2 primary--text">{{ cart.vendor.name }}</h2>
+                                            <div class="d-flex w-100 align-center mb-2">
+                                                <div>
+                                                    <v-img width="40" height="40" contain :src="base_url+'/image-show/'+cart.vendor.profile_pic"></v-img>
+                                                </div>
+                                                <div class="pl-2">
+                                                    <h4 class="mb-2 primary--text">{{ cart.vendor.name }}</h4>
+                                                </div>
+                                            </div>
                                             <div class="d-flex w-100">
                                                 <div class="w-100">
                                                     <div v-if="cart.pickup_date">
                                                         <p class="mb-0 error--text" v-if="cart.pickup_date">Pickup Date</p>
-                                                        <!-- {{ cart.pickup_date }} -->
                                                         <p style="font-weight:600">{{ formatDateToDay(cart.pickup_date) }}</p>
                                                     </div>
                                                     <p class="mb-0 error--text">Pickup Location </p>
