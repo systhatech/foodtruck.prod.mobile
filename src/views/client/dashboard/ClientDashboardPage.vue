@@ -19,10 +19,10 @@
             </div>
             <div class="d-flex align-center justify-space-between">
                 <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
-                <v-btn class="ml-4" fab color="primary" @click="handleFilterModalOpen">
+                <v-btn class="ml-4" :disabled="loading" fab color="primary" @click="handleFilterModalOpen">
                     <v-icon large>{{icon_filter}}</v-icon>
                 </v-btn>
-                <v-btn class="ml-4" fab color="primary" @click="changeView()">
+                <v-btn class="ml-4" :disabled="loading" fab color="primary" @click="changeView()">
                     <v-icon large v-if="map_view">{{icon_list}}</v-icon>
                     <v-icon large v-else>{{icon_map}}</v-icon>
                 </v-btn>
