@@ -79,7 +79,7 @@
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
-                        <li  @click="navigatePage('subscriptions')" v-if="getProfile.general.show_subscription">
+                        <!-- <li  @click="navigatePage('subscriptions')" v-if="getProfile.general.show_subscription">
                             <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">mdi-credit-card</v-icon>
                                 <p class="text-capitalize mb-0">Subscriptions</p>
@@ -92,7 +92,7 @@
                                 <p class="text-capitalize mb-0">Stripe Payment Credientials</p>
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -131,8 +131,8 @@ export default {
                 {name:'Gallery',icon:'mdi-camera-image',route:'profile-files'},
                 {name:'Schedules',icon:'mdi-map-marker',route:'vendor-profile-schedule'},
                 {name:'Menus',icon:'mdi-food-variant',route:'vendor-profile-menu'},
-                // {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
-                // {name:'Stripe Payment Credientials',icon:'mdi-shield-key',route:'payments'},
+                {name:'Subscription',icon:'mdi-credit-card',route:'subscriptions'},
+                {name:'Stripe Payment Credientials',icon:'mdi-shield-key',route:'payments'},
                 // {name:'Daily Settlement',icon:'mdi-cash-multiple',route:'payouts'},
                 {name:'Reports',icon:'mdi-file-document-multiple',route:'reports'},
                 {name:'Sales Summary',icon:'mdi-file-document-multiple',route:'sales-summary'},
