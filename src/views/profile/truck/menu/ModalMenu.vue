@@ -16,49 +16,51 @@
                 </v-toolbar-items>
             </v-toolbar>
             <!-- <v-container> -->
-                <div class="pb82 background-white" v-if="item && Object.keys(item).length">
-                    <div class="">
-                        <div>
-                            <v-img
-                                contain
-                                :src="base_url+'/image-show/'+item.profile_pic"
-                                lazy-src="https://picsum.photos/id/11/10/6"
-                                height="200">
-                            </v-img>
-                        </div>
-                        <div class="pt-2">
-                            <h5 class="text-uppercase primary--text">{{item.name}}</h5>
-                            <p v-if="item.category" class="text-capitalize mb-2">({{ item.category }})</p>
-                            <div class="d-flex">
-                                <h4 class="primary--text">{{formatAmount(item.price)}}</h4><span v-if="item.unit"> /{{ item.unit }}</span>
+                <div class="pb82 background-image" v-if="item && Object.keys(item).length">
+                    <div class="custom-bs pa-4">
+                        <div class="">
+                            <div>
+                                <v-img
+                                    contain
+                                    :src="base_url+'/image-show/'+item.profile_pic"
+                                    lazy-src="https://picsum.photos/id/11/10/6"
+                                    height="200">
+                                </v-img>
                             </div>
-                            <div class="pb-4">{{item.description ? item.description : ''}}</div>
+                            <div class="pt-2">
+                                <h5 class="text-uppercase primary--text">{{item.name}}</h5>
+                                <p v-if="item.category" class="text-capitalize mb-2">({{ item.category }})</p>
+                                <div class="d-flex">
+                                    <h4 class="primary--text">{{formatAmount(item.price)}}</h4><span v-if="item.unit"> /{{ item.unit }}</span>
+                                </div>
+                                <div class="pb-4">{{item.description ? item.description : ''}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div id="menu-modal" v-if="item.variants.length">
-                        <div class="pt-5 pl-4">
-                            <h4>Add Extra</h4>
-                            <div v-for="(varient,i) in item.variants"
-                                :key="i" class="mb-6">
-                                <h5 class="text-uppercase primary--text">{{ varient.variant.name }}</h5>
-                                <ul class="flavour-list">
-                                    <li v-for="(single,index) in varient.variant.items" :key="index">
-                                            <v-checkbox
-                                            class="text-capitalize mt-0 mb-2"
-                                            v-model="itemSelected"
-                                            :value="single"
-                                            color="primary"
-                                            hide-details
-                                        >
-                                        <template v-slot:label>
-                                            <div>
-                                                <p class="mb-0 primary--text">{{ single.name }}</p>
-                                                <p class="mb-0">{{ formatAmount(single.value)}} </p>
-                                            </div>
-                                        </template>
-                                        </v-checkbox>
-                                    </li>
-                                </ul>
+                        <div id="menu-modal" v-if="item.variants.length">
+                            <div class="pt-5 pl-4">
+                                <h4>Add Extra</h4>
+                                <div v-for="(varient,i) in item.variants"
+                                    :key="i" class="mb-6">
+                                    <h5 class="text-uppercase primary--text">{{ varient.variant.name }}</h5>
+                                    <ul class="flavour-list">
+                                        <li v-for="(single,index) in varient.variant.items" :key="index">
+                                                <v-checkbox
+                                                class="text-capitalize mt-0 mb-2"
+                                                v-model="itemSelected"
+                                                :value="single"
+                                                color="primary"
+                                                hide-details
+                                            >
+                                            <template v-slot:label>
+                                                <div>
+                                                    <p class="mb-0 primary--text">{{ single.name }}</p>
+                                                    <p class="mb-0">{{ formatAmount(single.value)}} </p>
+                                                </div>
+                                            </template>
+                                            </v-checkbox>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
