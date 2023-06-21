@@ -39,12 +39,12 @@
                                     </div>
                                     <div>
                                         <v-btn fab small color="primary"
-                                            :to="'/vendor/conversation/clients/' + orderDetail.client.id"><v-icon>{{ icon_chat
+                                            :to="'/vendor/conversation/clients/' + orderDetail.client.id+'/'+orderDetail.conversation_id"><v-icon>{{ icon_chat
                                             }}</v-icon></v-btn>
-                                        <v-btn fab small class="ml-4" color="primary" link
+                                        <!-- <v-btn fab small class="ml-4" color="primary" link
                                             :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
                                             <v-icon>{{ icon_phone }}</v-icon>
-                                        </v-btn>
+                                        </v-btn> -->
                                     </div>
                                 </div>
                                 <div class="custom-bs pa-4 mt-4">
