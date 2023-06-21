@@ -118,7 +118,7 @@ import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
 import {socketHandler} from '@/core/services/socketio/socket'
-import { url_base } from '@/core/services/config'
+import { url_base } from '../../../core/services/config'
 
 export default {
     data() {
