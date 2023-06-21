@@ -37,13 +37,12 @@
 	}
 	function onDeviceReady() {
 		console.log("device is ready");
-			cordova.plugins.firebase.messaging.requestPermission().then(function () {
-		});
-
-		cordova.plugins.firebase.messaging.getToken().then(function (token) {
-			localStorage.setItem("d_token", token);
-		});
 		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+		// cordova.plugins.firebase.messaging.requestPermission().then(function () {
+		// });
+		// cordova.plugins.firebase.messaging.getToken().then(function (token) {
+		// 	localStorage.setItem("d_token", token);
+		// });
 	}
 	function geo(res){
 		localStorage.setItem('geo_latitude', res.coords.latitude ? res.coords.latitude:0);
