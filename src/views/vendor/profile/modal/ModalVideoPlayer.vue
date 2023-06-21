@@ -79,14 +79,9 @@ export default {
                 this.video = "";
                 console.log({error});
             })
-            // this.video = "http://techslides.com/demos/sample-videos/small.mp4";
-            // document.getElementById('myvideo').play();
-            // console.log(this.$refs.videoRef);
-            // this.$refs.videoRef.src = "http://iandevlin.github.io/mdn/video-player/video/tears-of-steel-battle-clip-medium.mp4";
-            // this.$refs.videoRef.play();
         },
         handleClose() {
-            if(this.$refs.video && this.$refs.video.length){
+            if(this.$refs.video){
                 this.$refs.video.pause();
             }
             this.dialog_video_player = false;

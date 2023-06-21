@@ -16,8 +16,7 @@
                         <div class="">
                             <div>
                                 <div class="custom-bs">
-
-                                    <video autoplay width="100%" controls :src="video"></video>
+                                    <video autoplay width="100%" controls :src="video" id="refVideo"></video>
                                     <div class="pa-4">
                                         <p class="mb-0">{{ video_description}}</p>
                                     </div>
@@ -44,6 +43,8 @@ export default {
         this.$bus.$on("MODAL_VIDEO_PLAYER_OPEN", (data) => {
             this.fetchData(data.param);
             this.dialog_video_player = true;
+            // this.$refs.refVideo.play();
+            document.getElementById('refVideo').play();
         });
     },
     data() {
@@ -72,6 +73,7 @@ export default {
         },
         handleClose() {
             // this.$emit('close');
+            document.getElementById('refVideo').pause();
             this.dialog_video_player = false;
         },
       
