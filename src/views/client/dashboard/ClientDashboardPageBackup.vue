@@ -198,11 +198,47 @@ export default {
                 console.log("no fetch")
 			})
         },
-    
+      
+
         handleClose() {
             this.filter = false;
         },
      
+        filterZipCode(zip){
+            this.loaderShow();
+            ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
+            .then((resp) => {
+                this.trucks = resp.map((location) => ({
+                    ...location, position: {
+                        lat: Number(location.lat),
+                        lng: Number(location.lng)
+                    }
+                }));
+                 this.locations = this.trucks;
+                this.zoomLevel = 12;
+            })
+            .catch(() => {
+                this.loaderHide();
+            });
+        },
+        fetchFilterData(dist){
+            this.loaderShow();
+            ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
+            .then((resp) => {
+                this.trucks = resp.map((location) => ({
+                    ...location, position: {
+                        lat: Number(location.lat),
+                        lng: Number(location.lng)
+                    }
+                }));
+                 this.locations = this.trucks;
+                this.zoomLevel = 12;
+            })
+            .catch((error) => {
+                this.loaderHide();
+                this.messageError(error.response.data.message);
+            });
+        },
         fetchAllTrucks() {
             this.loading = true;
             ApiService.post("/location/all",{
@@ -232,7 +268,33 @@ export default {
                 console.log(error);
             })
         },
-    
+        fetchAllTrucksSearch() {
+            this.loading = true;
+            ApiService.post("/location/all",{
+                available: 1,
+                name: this.search,
+                guest: localStorage.getItem('g_token'),
+                unit:'mile',
+                page:this.next_page,
+            })
+            .then((resp) => {
+                this.loading = false;
+                this.trucks = resp.data.map((loc) => ({
+                    ...loc, position: {
+                        lat: Number(loc.lat),
+                        lng: Number(loc.lng)
+                    }
+                }));
+                if(resp.per_page > resp.data.length){
+                    this.last_page = 1;
+                }
+                this.locations = this.locations.concat(this.trucks);
+            }) 
+            .catch((error) => {
+                this.loading = false;
+                console.log(error);
+            })
+        },
         loadMore(){
             this.next_page +=1;
             this.fetchAllTrucks();

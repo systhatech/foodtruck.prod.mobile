@@ -34,6 +34,7 @@
 	
 	window.updateLatLng = function() {
 		navigator.geolocation.getCurrentPosition(geo, errorgeo,{enableHighAccuracy: true});
+		console.log("index");
 	}
 	function onDeviceReady() {
 		console.log("device is ready");

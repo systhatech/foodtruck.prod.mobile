@@ -132,9 +132,9 @@ export default {
 
             this.loaderShow();
             ApiService.post("/check/email",{ 'email': this.truck_info.email})
-            .then((resp)=>{
+            .then(()=>{
                 this.loaderHide();
-                console.log(resp);
+                // console.log(resp);
             })
             .catch((error)=>{
                 this.loaderHide();

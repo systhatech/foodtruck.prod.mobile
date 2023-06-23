@@ -6,10 +6,8 @@
                 <v-col cols="12" md="6" offset-md="3">
                     <v-row>
                          <v-col cols="12">
-                             <!-- <div class="custom-bs pa-4 mb-4" v-if="setting && setting.show_background_process">
-                                 <p class="mb-0">Background location service used to find nearest Food Truck</p>
-                             </div> -->
-                             <div class="custom-bs pa-4">
+                             <CurrentLocation/>
+                             <div class="custom-bs pa-4 mt-3">
                                  <h4>You are <span :class="currentUser.owner.is_active?'success--text':'error--text'">{{currentUser.owner.is_active?'ONLINE':'OFFLINE'}}</span></h4>
                                  <div class="mt-4">
                                     <v-btn large rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
@@ -17,32 +15,6 @@
                              </div>
                          </v-col>
                     
-                     </v-row>
-                    <v-row>
-                         <v-col cols="12">
-                             <div class="custom-bs pa-4">
-                                 <div class="d-flex align-center justify-space-between">
-                                     <h4>Current Location</h4>
-                                     <div>
-                                         <!-- <v-btn fab text color="primary" @click="handleRefreshLocation()"><v-icon large>mdi-refresh</v-icon></v-btn> -->
-                                     </div>
-                                 </div>
-                                 <div v-if="profile && profile.active_location">
-                                     <p>{{  profile.active_location.add1 }} {{ profile.active_location.add2 }} <br>
-                                         {{ profile.active_location.city }} {{ profile.active_location.state }} <br>
-                                         {{ profile.active_location.zip }} {{ profile.active_location.country }} 
-                                     </p>
-                                 </div>
-                                 <div v-else>
-                                     <p>n/a</p>
-                                 </div>
-                                 <v-btn rounded color="primary" large @click="handleRefreshLocation()">update location </v-btn>
-                                 <!-- <p>{{ profile.active_location }}</p> -->
-                             </div>
-                         </v-col>
-                         <!-- <v-col cols="12" class="text-center">
-                             <v-btn block large rounded :color="currentUser.owner.is_active ? 'error':'primary'" @click="updateAvailability">{{ currentUser.owner.is_active ? 'Go Offline':'go online'}}</v-btn>
-                         </v-col> -->
                      </v-row>
                      <div v-if="loading" class="text-center">
                          <ComponentLoadingVue/>
@@ -129,8 +101,8 @@ import Bottomnavbar from '@/components/layout/NavbarBottomVendor'
 import DialogConfirm from '@/components/layout/DialogConfirm'
 import { ApiService } from '@/core/services/api.service'
 import { mdiHome, mdiAccount, mdiChat,mdiFilter, mdiMap } from '@mdi/js'
-import {socketHandler} from '@/core/services/socketio/socket'
-import { url_base } from '../../../core/services/config'
+// import {socketHandler} from '@/core/services/socketio/socket'
+import { url_base } from '@/core/services/config'
 
 export default {
     props:{
@@ -189,12 +161,11 @@ export default {
         }
     },
     components: {
-    //    Topnavbar,
-        // videoPlayer,
         Bottomnavbar,
         DialogConfirm,
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         DialogNearbyNotification: () => import('@/views/vendor/dashboard/modal/ModalNearbyNotification'),
+        CurrentLocation: () => import('@/components/CurrentLocation.vue'),
     },
     mounted() {
         this.profileData();
@@ -202,18 +173,15 @@ export default {
         this.fetchProfile();
         if(!this.currentUser) return;
         
-   
-        try{
-            socketHandler.onlineStatus({
-                id : this.currentUser.table_id,
-                table : this.currentUser.table,
-            });
-        }catch(error) {
-            console.log({error})
-        }
-        //UPDATE CURRENT LOCATIONS
-        // this.fetchDataInterval();
-        this.locateGeoLocation();
+        // try{
+        //     socketHandler.onlineStatus({
+        //         id : this.currentUser.table_id,
+        //         table : this.currentUser.table,
+        //     });
+        // }catch(error) {
+        //     console.log({error})
+        // }
+
     },
    
     beforeDestroy() {
@@ -272,19 +240,14 @@ export default {
             this.fetchTrucksSearch({ 
                 available: 1,
                 distance: this.distance,
-                // radius: this.distance,
-                // name: this.search,
-                // guest: localStorage.getItem('g_token'),
                 guest :  localStorage.getItem('g_token') ? localStorage.getItem('g_token'):'',
                 unit : "mile",
-                // this.fetchTrucksSearch(params)
             }).then(() =>{
                 this.loaderHide()
             })
             .catch((error)=>{
                 console.log(error);
             })
-            // console.log(radius);
         },
         updateAvailability() {
             if(this.currentUser.owner.subscription){
@@ -330,80 +293,7 @@ export default {
             this.$router.push({
                 name:'SubscriptionPage'
             });
-        },
-
-        // update location
-        // fetchDataInterval() {
-        //     this.dataInterval = setInterval(() => {
-        //         this.locateGeoLocation(false)
-        //     }, 300000);
-        // },
-        async locateGeoLocation() {
-            // this.loading = true;
-            // navigator.geolocation.getCurrentPosition(res => {
-            //     this.current_location.lat = res.coords.latitude;
-            //     this.current_location.lng = res.coords.longitude;
-            // });
-            let self =this;
-            window.updateLatLng();
-            setTimeout(() => {
-                this.current_location.lat = localStorage.getItem('geo_latitude');
-                this.current_location.lng = localStorage.getItem('geo_longitude');
-                self.fetchAddress();
-            }, 1000);
-        },
-        async fetchAddress() {
-            // this.loaderShow();
-            ApiService.get('/getapikeys')
-                .then(async (apiKeys) => {
-                    let googleApiKey = apiKeys.google;
-                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.current_location.lat},${this.current_location.lng}&key=${googleApiKey}`)
-                        .then((resp) => {
-                            this.loaderHide();
-                            for (let addr of resp.results) {
-                                let address = this.parseGoogleResponse(addr.address_components);
-                                this.current_location.add1 = address.street_number + " " + address.route;
-                                this.current_location.city = address.locality;
-                                this.current_location.state = address.administrative_area_level_1;
-                                this.current_location.zip_code = address.postal_code;
-                                this.current_location.country = address.country;
-                                break;
-                            }
-                            this.updateLocation();
-                        })
-                        .catch(() => {
-                            this.loaderHide();
-                        })
-                })
-        },
-        async updateLocation() {
-            await ApiService.post('/location/save-current', this.current_location)
-            .then(() => {
-                this.profileData();
-                // this.fetchAllTrucks();
-                this.fetchProfile();
-                this.loaderHide();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.loaderHide();
-            })
-        },
-
-        fetchAllTrucks() {
-            this.loading = true;
-            this.fetchTrucksSearch({ 
-                available: 1,
-                distance: this.distance,
-                // radius: this.distance,
-                // name: this.search,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then(() => {
-                this.loading = false;
-            })
-        }
-          
+        },   
     },
     computed: {
         ...mapGetters({
