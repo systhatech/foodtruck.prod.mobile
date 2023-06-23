@@ -139,14 +139,13 @@ export default {
 		this.location.lat = localStorage.getItem('geo_latitude') ? localStorage.getItem('geo_latitude') : 0;
 		this.location.lng = localStorage.getItem('geo_longitude') ? localStorage.getItem('geo_longitude') : 0;
 		this.location.guest = localStorage.getItem('g_token');
-		this.fetchAddress();
+
 		this.type = this.currentUser ? this.currentUser.table : 'clients';
 		this.center = this.locationMarkers[0].position;
 	},
 
 	methods: {
 		handleTruckProfile(truck){
-			// console.log(truck);
 			this.$router.push("/truck-profile/"+truck.locate.id);
 		},
 		toggleInfoWindow: function (marker, idx) {
@@ -198,44 +197,6 @@ export default {
 					this.messageError(error.response.data.message);
 				})
 		},
-		async fetchAddress() {
-			this.loaderShow();
-			ApiService.get('/getapikeys')
-				.then(async (apiKeys) => {
-					let googleApiKey = apiKeys.google;
-					await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
-						.then((resp) => {
-							for (let addr of resp.results) {
-								let address = this.parseGoogleResponse(addr.address_components);
-								this.location.add1 = address.street_number + " " + address.route;
-								this.location.city = address.locality;
-								this.location.state = address.administrative_area_level_1;
-								this.location.zip_code = address.postal_code;
-								this.location.country = address.country;
-								break;
-							}
-							this.updateLocation();
-
-						})
-						.catch(() => {
-							this.updateLocation();
-
-						})
-				})
-		},
-		async updateLocation() {
-			this.loaderShow();
-			await ApiService.post('/location/save-current', this.location)
-				.then(() => {
-					this.locateGeoLocation();
-
-				})
-				.catch((error) => {
-					console.log(error);
-					this.locateGeoLocation();
-
-				})
-		}
 	},
 	computed: {
 		...mapGetters({

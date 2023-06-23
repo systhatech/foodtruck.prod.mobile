@@ -22,9 +22,6 @@ import { mdiMapMarkerRadius } from '@mdi/js';
 import { ApiService } from '@/core/services/api.service'
 
 export default {
-    // props:{
-    //     current_location:{},
-    // },
     data() {
         return {
             loading:false,

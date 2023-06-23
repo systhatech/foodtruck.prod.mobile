@@ -101,17 +101,14 @@ export default {
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
         CurrentLocation: () => import('@/components/CurrentLocation.vue'),
     },
-    async mounted() {
-        this.loading = true;
-        this.fetchAllTrucks();
-    },
-   
+
     beforeDestroy() {
         clearInterval(this.dataInterval);
         clearTimeout(this.searchTimer);
     },
     watch:{
         search(newval){
+            console.log("here search", newval);
             if(newval.length >=3 || newval.length ==0){
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {

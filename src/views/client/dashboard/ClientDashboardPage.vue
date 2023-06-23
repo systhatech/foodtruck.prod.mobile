@@ -102,8 +102,8 @@ export default {
         CurrentLocation: () => import('@/components/CurrentLocation.vue'),
     },
     async mounted() {
-        this.loading = true;
-        this.fetchAllTrucks();
+        // this.loading = true;
+        // this.fetchAllTrucks();
     },
    
     beforeDestroy() {
