@@ -169,20 +169,12 @@ export default {
             if(!this.$refs.formSignupTruck.validate()) return;
             this.loaderShow();
             await ApiService.post('/register/vendor', this.truck_info)
-            .then((resp) => {
+            .then(() => {
                 this.loaderHide();
-                // this.messageSuccess("Registered successfully")
-                console.log(resp);
                 this.$router.push({ name:'VerifyEmailPage', query:{ email: this.truck_info.email, type:'vendors'}});
-                // this.fetchAddress();
             })
             .catch((error) => {
                 this.loaderHide();
-                // if(error.response.data){
-                //     this.messageError(error.response.data.message);
-                // }else{
-                //     this.messageError(error.response.statusText);
-                // }
                 console.log({error});
             })
         },

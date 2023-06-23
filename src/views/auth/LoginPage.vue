@@ -116,27 +116,28 @@ export default {
             this.signIn(this.login_info)
                 .then((resp) => {
                     window.updateLatLng();
-                    this.locateGeoLocation();
-                    this.loaderHide();
-                    if(resp && resp.verify){
-                        this.$router.push({ name:'VerifyEmailPage', query:{ email: resp.email, type:'clients'}});
-                    }else{
-                        this.fetchAddress();
-                        if (this.$router.currentRoute.query) {
-                            let route = this.$router.currentRoute.query;
-                            if (route.page && route.id) {
-                                this.$router.push("/" + route.page + "/" + route.id);
+                    setTimeout(() => {      
+                        this.loaderHide();
+                        if(resp && resp.verify){
+                            this.$router.push({ name:'VerifyEmailPage', query:{ email: resp.email, type:'clients'}});
+                        }else{
+                            this.fetchAddress();
+                            if (this.$router.currentRoute.query) {
+                                let route = this.$router.currentRoute.query;
+                                if (route.page && route.id) {
+                                    this.$router.push("/" + route.page + "/" + route.id);
+                                } else {
+                                    this.$router.replace({
+                                        name: 'home',
+                                    })
+                                }
                             } else {
                                 this.$router.replace({
                                     name: 'home',
                                 })
                             }
-                        } else {
-                            this.$router.replace({
-                                name: 'home',
-                            })
                         }
-                    }
+                    }, 1000);
                 }).catch((error) => {
                     this.loaderHide();
                     if (error.response && error.response.data) {
@@ -148,37 +149,32 @@ export default {
                     }
                 })
         },
-
-        locateGeoLocation: function () {
-            navigator.geolocation.getCurrentPosition(res => {
-                this.location.lat = res.coords.latitude;
-                this.location.lng = res.coords.longitude;
-            });
-        },
         async fetchAddress() {
+            this.location.lat = localStorage.getItem('geo_latitude');
+            this.location.lng = localStorage.getItem('geo_longitude');
             this.loaderShow();
             ApiService.get('/getapikeys')
-                .then(async (apiKeys) => {
-                    let googleApiKey = apiKeys.google;
-                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
-                        .then((resp) => {
-                            this.loaderHide();
-                            for (let addr of resp.results) {
-                                let address = this.parseGoogleResponse(addr.address_components);
-                                this.location.add1 = address.street_number + " " + address.route;
-                                this.location.city = address.locality;
-                                this.location.state = address.administrative_area_level_1;
-                                this.location.zip_code = address.postal_code;
-                                this.location.country = address.country;
-                                break;
-                            }
-                            this.updateLocation();
+            .then(async (apiKeys) => {
+                let googleApiKey = apiKeys.google;
+                await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
+                    .then((resp) => {
+                        this.loaderHide();
+                        for (let addr of resp.results) {
+                            let address = this.parseGoogleResponse(addr.address_components);
+                            this.location.add1 = address.street_number + " " + address.route;
+                            this.location.city = address.locality;
+                            this.location.state = address.administrative_area_level_1;
+                            this.location.zip_code = address.postal_code;
+                            this.location.country = address.country;
+                            break;
+                        }
+                        this.updateLocation();
 
-                        })
-                        .catch(() => {
-                            this.loaderHide();
-                        })
-                })
+                    })
+                    .catch(() => {
+                        this.loaderHide();
+                    })
+            })
         },
         async updateLocation() {
             await ApiService.post('/location/save-current', this.location)
