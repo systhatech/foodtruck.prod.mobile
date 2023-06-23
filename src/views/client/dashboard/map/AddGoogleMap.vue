@@ -16,7 +16,6 @@
 					</div>
 					<div class="text-center">
 						<div class="d-flex w-100">
-							<!-- <v-icon color="primary">{{ iconLocation }}</v-icon> -->
 							<div class="">
 								<h3 class="mb-0" style="font-weight:400" v-if="infoContent">
 									{{ infoContent.add1 ? infoContent.add1 : '' }}
@@ -32,17 +31,7 @@
 							<v-btn outlined block color="primary" rounded @click="handleTruckProfile(infoContent)">view</v-btn>
 						</div>
 					</div>
-					
 				</div>
-				<!-- <div class="pb-2 pt-4" v-if="type == 'clients'">
-					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'" class="mr-2"
-						:to="'/truck-profile/' + infoContent.table_id"><v-icon large>mdi-food</v-icon> </v-btn>
-					<v-btn fab color="primary"
-						v-if="infoContent.locate && infoContent.locate.contact" class="mr-2"
-						:href="`tel:${infoContent.locate.contact.phone_no}`"><v-icon large>mdi-phone</v-icon> </v-btn>
-					<v-btn fab color="primary" v-if="infoContent.table_name == 'vendors'"
-						:to="'/client/conversation/vendors/' + infoContent.table_id"><v-icon large>mdi-chat</v-icon> </v-btn>
-				</div> -->
 			</gmap-info-window>
 			<div>
 				<gmap-marker v-for="(m, index) in locationMarkers" :icon="{
@@ -141,7 +130,12 @@ export default {
 		this.location.guest = localStorage.getItem('g_token');
 
 		this.type = this.currentUser ? this.currentUser.table : 'clients';
-		this.center = this.locationMarkers[0].position;
+		if(this.locationMarkers.length){
+			this.center = this.locationMarkers[0].position;
+		}else{
+			this.center.lat = parseFloat(this.location.lat);
+			this.center.lng = parseFloat(this.location.lng);
+		}
 	},
 
 	methods: {
