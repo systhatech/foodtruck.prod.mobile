@@ -36,7 +36,7 @@
 			<div>
 				<gmap-marker v-for="(m, index) in locationMarkers" :icon="{
 					url: m.locate.profile_pic ? base_url + '/image-show/' + m.locate.profile_pic : base_url + '/icon/truck.png',
-					size: { width: 60, height: 90, f: 'px', b: 'px', },
+					size: { height: 90, f: 'px', b: 'px', },
 					scaledSize: { width: 45, height: 50, f: 'px', b: 'px', }
 				}" 
 				:key="index" height="80" width="80"
