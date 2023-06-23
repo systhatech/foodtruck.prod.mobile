@@ -92,7 +92,7 @@ export default {
             // this.$refs.videoRef.play();
         },
         handleClose() {
-            if(this.$refs.video && this.$refs.video.length){
+            if(this.$refs.video){
                 this.$refs.video.pause();
             }
             this.dialog_video_player = false;

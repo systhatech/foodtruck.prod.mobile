@@ -31,7 +31,7 @@
                             <h5 class="text-uppercase primary--text">{{item.name}}</h5>
                             <p v-if="item.category" class="text-capitalize mb-2">({{ item.category }})</p>
                             <div class="d-flex">
-                                <h4 class="primary--text">{{formatAmount(item.price)}}</h4><span v-if="item.unit"> /{{ item.unit }}</span>
+                                <h4 class="primary--text">{{formatAmount(item.price)}}</h4><span v-if="item.unit"> /{{ item.unitTypeName }}</span>
                             </div>
                             <div class="pb-4">{{item.description ? item.description : ''}}</div>
                         </div>

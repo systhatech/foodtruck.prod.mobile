@@ -3,18 +3,6 @@
         <Topnavbar/>
         <v-container class="mg56">
             <div v-if="currentUser">
-                <!-- <div class="d-flex aling-center custom-bs pa-4">
-                    <v-avatar size="60">
-                        <img
-                        :src="currentUser.profile_pic? base_url+'/image-show/'+currentUser.profile_pic:base_url+'/image-show/default.jpg'"
-                        alt="Profile Pic">
-                    </v-avatar>
-               
-                    <div class="mt-1 ml-3">
-                        <h3>{{ currentUser.owner.fullName }}</h3>
-                        <p class="f8-bold"> {{currentUser.email}}</p>
-                    </div>
-                </div> -->
                 <div class="custom-bs pa-4 pt-8">
                     <div class="text-center">
                         <v-avatar size="90" tile v-if="currentUser.profile_pic=='null' || currentUser.profile_pic==null">

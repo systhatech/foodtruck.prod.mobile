@@ -22,7 +22,7 @@
                                             <div>
                                                 <p class="mb-0 text-capitalize primary--text">{{item.name}}</p>
                                                 <div class="d-flex">
-                                                    <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> <span class="text-lowercase" v-if="item.unit">&nbsp;/{{ item.unit }}</span>
+                                                    <h4 class="ma-0 primary--text">{{ formatAmount(item.price)}}</h4> <span class="text-lowercase" v-if="item.unit">&nbsp;/{{ item.unitTypeName }}</span>
                                                 </div>
                                                 <div v-if="item.is_special">
                                                     <!-- <ShareNetwork

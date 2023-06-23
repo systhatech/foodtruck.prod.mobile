@@ -9,12 +9,12 @@
                             <v-row>
                                 <v-col cols="12">
                                     <div class="custom-bs pa-4">
-                                        <div class="mb-4">
+                                        <div class="">
                                             <h5 class="primary--text text-uppercase">{{ orderDetail && orderDetail.vendor ? orderDetail.vendor.name :'' }}</h5>
                                             <p class="mb-0"> <v-icon color="primary" class="w-18">{{iconPhone}}</v-icon> {{ orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? orderDetail.vendor.contact.phone : orderDetail.vendor.contact.phone_no }}</p>
                                             <p class="mb-0"> <v-icon color="primary" class="w-18">{{iconEmail}}</v-icon> {{ orderDetail && orderDetail.vendor && orderDetail.vendor.contact?orderDetail.vendor.contact.email :'unavailable'}}</p>
                                         </div>
-                                        <h5 class="primary--text text-uppercase">Pickup Address</h5>
+                                        <!-- <h5 class="primary--text text-uppercase">Pickup Address</h5> -->
                                         <div class="d-flex align-start" v-if="orderDetail.pickup_addr">
                                             <v-icon color="primary" class="w-18">{{iconLocation}}</v-icon>
                                             <div>
@@ -26,8 +26,8 @@
                                                 </p>
                                                 <div class="mt-4">
                                                     <!-- this.$router.push("/client/conversation/vendors/" + id); -->
-                                                    <v-btn fab color="primary" class="mr-2" link :href="`tel:${orderDetail.vendor.contact.phone_no ?orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`" small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
-                                                    <v-btn fab color="primary" link :to="'/client/conversation/vendors/'+orderDetail.vendor_id+'/'+orderDetail.conversation_id" small><v-icon>{{ iconChat }}</v-icon> </v-btn>
+                                                    <!-- <v-btn fab color="primary" class="mr-2" link :href="`tel:${orderDetail.vendor.contact.phone_no ?orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`" small><v-icon>{{ iconPhone }}</v-icon> </v-btn> -->
+                                                    <v-btn color="primary" rounded block large :to="'/client/conversation/vendors/'+orderDetail.vendor_id+'/'+orderDetail.conversation_id" small>Chat now </v-btn>
                                                 </div>
                                             </div>
                                         </div>
@@ -83,7 +83,7 @@
                                                             <li v-for="(variant, index) in item.varients" :key="index">
                                                                 <div>
                                                                     <div class="d-flex justify-space-between">
-                                                                        <p class="text-capitalize item-name">{{ variant.variant_item.name }}</p>
+                                                                        <p class="text-capitalize item-name">{{index+1}}. {{ variant.variant_item.name }}</p>
                                                                         <p class="item-name">{{ formatAmount(variant.amount) }}</p>
                                                                     </div>
                                                                 </div>
