@@ -72,7 +72,7 @@ import Topnavbar from '@/components/layout/Topnavbar'
 import {ApiService} from "@/core/services/api.service";
 import Bottomnavbar from "@/components/layout/NavbarBottomVendor";
 import DialogConfirm from "@/components/layout/DialogConfirm";
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import { mdiPhone, mdiArchiveOutline, mdiChat, mdiAccount} from '@mdi/js';
 
 export default {
@@ -121,6 +121,9 @@ export default {
         // this.initTimezone();
     },
     methods: {
+        ...mapActions({
+            'fetchCurrentUser': 'auth/fetchProfile',
+        }),
         handleUserAdd(){
             this.$bus.$emit('MODAL_VENDOR_USER',{});
         },
@@ -176,16 +179,17 @@ export default {
         fetchMembers() {
             this.loading = true;
             ApiService.post("/vendor/users")
-                .then((resp) => {
-                    this.loading = false;
-                    this.$bus.$emit("HIDE_PAGE_LOADER");
-                    this.members = resp.data;
-                })
-                .catch(() => {
-                    this.loading = false;
-                    this.$bus.$emit("HIDE_PAGE_LOADER");
-                    this.message("Failed to fetch members");
-                });
+            .then((resp) => {
+                this.loading = false;
+                this.$bus.$emit("HIDE_PAGE_LOADER");
+                this.members = resp.data;
+            })
+            .catch(() => {
+                this.loading = false;
+                this.$bus.$emit("HIDE_PAGE_LOADER");
+                this.message("Failed to fetch members");
+            });
+            this.fetchCurrentUser();
         },
     },
     components: {
