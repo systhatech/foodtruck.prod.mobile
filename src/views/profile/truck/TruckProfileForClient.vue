@@ -36,13 +36,14 @@
                                             <v-icon color="error">mdi-map-marker-radius</v-icon>
                                         </div>
                                         <div class="pl-1">
-                                            <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
+
+                                            <p class="mb-1" v-if="truckProfile && truckProfile.active_location">
                                                 {{  truckProfile && truckProfile.active_location && truckProfile.active_location.add1 ? truckProfile.active_location.add1:'' }}
                                                 {{  truckProfile && truckProfile.active_location && truckProfile.active_location.city ? truckProfile.active_location.city:'' }}<br>
                                                 {{ truckProfile && truckProfile.active_location && truckProfile.active_location.state ? truckProfile.active_location.state:'' }} 
                                                 {{  truckProfile && truckProfile.active_location && truckProfile.active_location.zip_code ? truckProfile.active_location.zip_code:'' }}
                                             </p>
-                                            <p class="mb-2" v-else-if="truckProfile && truckProfile.address">
+                                            <p class="mb-1" v-else-if="truckProfile && truckProfile.address">
                                                 {{  truckProfile && truckProfile.address && truckProfile.address.add1 ? truckProfile.address.add1:'' }},
                                                 {{  truckProfile && truckProfile.address && truckProfile.address.city ? truckProfile.address.city:'' }},<br>
                                                 {{ truckProfile && truckProfile.address && truckProfile.address.state ? truckProfile.address.state:'' }} 
@@ -51,8 +52,20 @@
                                             <p v-else>Address Not available</p>
                                         </div>
                                     </div>
+                                    <div class="pb-4 d-flex"  v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no">
+                                        <div>
+                                            <v-icon color="error">mdi-phone</v-icon>
+                                        </div>
+                                        <div class="pl-1">
+
+                                            <p class="mb-2" v-if="truckProfile && truckProfile.active_location">
+                                             {{ truckProfile.contact.mobile_no ? formatPhoneNumber(truckProfile.contact.mobile_no) : formatPhoneNumber(truckProfile.contact.phone_no) }}
+                                            </p>
+                                        
+                                        </div>
+                                    </div>
                                     <div class="w-100">
-                                        <v-btn
+                                        <!-- <v-btn
                                         v-if="truckProfile && truckProfile.contact && truckProfile.contact.mobile_no"
                                         class="mr-3"
                                         fab
@@ -60,15 +73,16 @@
                                         :href="`tel:${truckProfile.contact.mobile_no ? truckProfile.contact.mobile_no : truckProfile.contact.phone_no}`"
                                         >
                                         <v-icon large>mdi-phone</v-icon>
-                                        </v-btn>
+                                        </v-btn> -->
                                         <v-btn
-                                        fab
+                                        large
+                                        block rounded
                                         link
                                         
                                         @click="handleChat(truck)"
                                         color="primary"
                                         >
-                                        <v-icon large>mdi-chat</v-icon>
+                                        send message
                                         </v-btn>
                                     </div>
                                 </div>
