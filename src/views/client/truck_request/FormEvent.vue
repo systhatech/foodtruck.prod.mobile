@@ -120,7 +120,7 @@
                             <div class="text-center">
                                 <label for="" :class="errors.includes('phone') ?'error--text':'primary--text'">Phone</label>
                                 <div>
-                                    <v-text-field v-mask="'(###)-###-####'" v-model="event.phone"></v-text-field>
+                                    <v-text-field v-mask="'(###)-###-####'" v-model="event.phone" :rules="rulesRequired"></v-text-field>
                                 </div>
                             </div>
                         </div>
@@ -217,9 +217,7 @@ export default {
             return [this.event.min_guerantee_sales.length > 0 || "Select at least one!"]
         }
     },
-    created() {
-
-    },
+ 
     mounted() {
         if(this.currentUser){
             this.event.email = this.currentUser.email;
@@ -369,6 +367,11 @@ export default {
             },200);
         },
         handleSubmit(){
+
+            if(!this.$refs.formEvent.validate()) return;
+            
+            if(!this.event.phone) return;
+            
             this.errors = [];
             for (const property in this.event) {
                 if(property =='selected_cuisine'){

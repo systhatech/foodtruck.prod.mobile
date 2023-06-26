@@ -93,13 +93,6 @@ export default {
             type:'create',
         },
     }),
-    components: {
-        // Bottomnavbar,
-    },
-
-    mounted() {
-        // 
-    },
     computed: {
         ...mapGetters({
             currentUser: 'auth/user',

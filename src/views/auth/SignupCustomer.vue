@@ -44,44 +44,22 @@
             </div>
             <DialogError :dialogError="modal_error" :message="message_error" @close="handleClose"/>
         </v-container>
-        <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-// import JwtService from '@/core/services/jwt.service'
 import { base_url } from '@/core/services/config'
-import { mdiTwitter, mdiFacebook, mdiHome, mdiAccount, mdiChat,mdiChevronLeft } from '@mdi/js'
+import {mdiChevronLeft } from '@mdi/js'
 export default {
     data: () => ({
-         value: 1,
-         modal_error:false,
-         message_error:'Error',
+        value: 1,
+        modal_error:false,
+        message_error:'Error',
         iconBack: mdiChevronLeft,
-        iconFb: mdiFacebook,
-        iconHome: mdiHome,
-        iconProfile: mdiAccount,
-        iconChat: mdiChat,
-        terms:true,
-        iconTw: mdiTwitter,
         base_url,
-        showServiceProvider:false,
-        login_info: {
-            email: "",
-            password: "",
-            client:1,
-        },
-        serviceProvider:false,
-        indexValue:3,
         loading: false,
-        nameErrors: "",
-        emailErrors: "",
-        checkboxErrors: "",
-        show_password: false,
         valid: true,
-        activateAccount: false,
-        accountActivated: false,
         emailRules: [
             (v) => !!v || "E-mail is required",
             (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -97,8 +75,6 @@ export default {
             password:'',
         },
         lazy: false,
-        phone:'',
-        name:'',
         progressValue: 10,
         query: false,
         show: true,
@@ -126,22 +102,6 @@ export default {
     components: {
         DialogError :()=> import('@/components/layout/DialogError.vue')
     },
-    watch: {
-        // serviceProvider(newval) {
-        //     newval ? this.login_info.client = 0 : this.login_info.client = 1;
-        //     if(newval) {
-        //         localStorage.removeItem('destination');
-        //     }
-        // }
-    },
-    mounted() {
-        // if(JwtService.getToken()) {
-        //     this.$router.replace({name:'dashboardPage'});
-        // }
-        // this.fetchLogo();
-        // this.locateGeoLocation();
-    },
-
     methods: {
          ...mapActions({
 			registerClient:'auth/signUpClient'
@@ -172,12 +132,7 @@ export default {
             .then((resp) => {
                 this.loaderHide();
                 console.log(resp);
-                // this.messageSuccess("Registered Successfully");
-                // JwtService.saveToken(resp.token);
-                // JwtService.saveUtype(resp.user.table);
-                // this.fetchAddress();
                 this.$router.push({ name:'VerifyEmailPage', query:{ email: this.customer_info.email, type:'clients'}});
-                // this.sendEmailVerification(this.customer_info.email);
                 
             })
             .catch((error) => {
@@ -312,94 +267,9 @@ export default {
             this.activeQuestion = this.questions[this.activeQuestionIndex];
             this.progressValue = (this.step/ this.questions.length)*100;
             this.answer = "";
-        },
-        handleServiceProvider() {
-            this.showServiceProvider = true;
-            this.serviceProvider = true;
-        },
-        async fetchLogo() {
-            this.$bus.$emit('SHOW_PAGE_LOADER')
-            await ApiService.get("default-company/logo")
-            .then((resp) => {
-                this.logo = this.base_url+"/image-show/"+resp.logo;
-                this.name = resp.name;
-                this.loaderHide();
-            })
-            .catch(() => {
-                this.loaderHide();
-                this.messageError('Sorry, Something goes wrong');
-            });
-        },
-
-        async submitt() {
-            this.loaderShow();
-            await ApiService.post('/register/client', {
-                name: this.answers[0],
-                phone_no: this.answers[1],
-                email: this.answers[2],
-                password: this.answers[3],
-            })
-            .then(() => {
-                 this.messageSuccess("Registered Successfully");
-                // JwtService.saveToken(resp.token);
-                // JwtService.saveUtype(resp.user.table);
-                this.fetchAddress();
-                
-            })
-            .catch((error) => {
-                this.loaderHide();
-                if(error.response.data){
-                    this.messageError(error.response.data.message);
-                }else{
-                    this.messageError(error.response.statusText);
-                }
-            })
-        },
-         async fetchAddress() {
-            // this.loaderShow();  
-            ApiService.get('/getapikeys')
-            .then( async (apiKeys) =>  {
-                let googleApiKey = apiKeys.google;
-                 await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.location.lat},${this.location.lng}&key=${googleApiKey}`)
-                .then((resp) => {
-                    this.loaderHide();
-                    for(let addr of resp.results) {
-                        let address = this.parseGoogleResponse(addr.address_components);
-                        this.location.add1 = address.street_number+" "+address.route;
-                        this.location.city = address.locality;
-                        this.location.state = address.administrative_area_level_1;
-                        this.location.zip_code = address.postal_code;
-                        this.location.country = address.country;
-                        break;
-                    }
-                    this.updateLocation();
-                   
-                })
-                .catch(() => {
-                    this.loaderHide();
-                })
-            })
-        },
-        async updateLocation() {
-             this.loaderShow();
-             await ApiService.post('/location/save-current', this.location)
-            .then(() => {
-                this.loaderHide();
-                this.$router.replace({ name:'home'});
-            })
-            .catch((error) => {
-                console.log(error);
-                this.loaderHide();
-                this.$router.replace({ name:'home'});
-            })
         }
     },
 };
 </script>
 <style lang="scss" scoped>
-.login-container{
-    // background: #acfa95;
-    border-radius: 10px;
-    margin-top: 27px !important;
-}
 </style>

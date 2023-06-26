@@ -346,6 +346,10 @@ export default {
             },200);
         },
         handleSubmit(){
+            if(!this.$refs.formCatering.validate()) return;
+            
+            if(!this.catering.phone) return;
+
             this.errors = [];
             for (const property in this.catering) {
                 if(property =='cuisines'){

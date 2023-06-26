@@ -61,14 +61,11 @@
                 <DialogError :dialogError="modal_error" :message="message_error" @close="handleClose"/>
             </div>
         </v-container>
-        <!-- <Bottomnavbar/> -->
     </v-container>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
-import JwtService from '@/core/services/jwt.service'
-// import InputAutocomplete from '@/components/layout/InputAutocompleteSingleTextValue'
 import { base_url } from '@/core/services/config'
 
 import { mdiHome,mdiChevronLeft } from '@mdi/js'
@@ -113,14 +110,10 @@ export default {
         },
     }),
     components: {
-        // InputAutocomplete,
         DialogError :()=> import('@/components/layout/DialogError.vue')
     },
     mounted() {
-        // this.fetchLogo();
         this.fetchVendorTypes();
-        // this.locateGeoLocation();
-
     },
 
     methods: {
@@ -134,7 +127,6 @@ export default {
             ApiService.post("/check/email",{ 'email': this.truck_info.email})
             .then(()=>{
                 this.loaderHide();
-                // console.log(resp);
             })
             .catch((error)=>{
                 this.loaderHide();
@@ -194,25 +186,7 @@ export default {
             });
         },
 
-        async submitted() {
-            this.loaderShow();
-            await ApiService.post('/register/vendor', this.truck_info)
-            .then((resp) => {
-                // this.messageSuccess("Registered successfully")
-                JwtService.saveToken(resp.token);
-                JwtService.saveUtype(resp.user.table);
-                this.fetchAddress();
-            })
-            .catch((error) => {
-                this.loaderHide();
-                if(error.response.data){
-                    this.messageError(error.response.data.message);
-                }else{
-                    this.messageError(error.response.statusText);
-                }
-            })
-        },
-
+    
          async fetchAddress() {
            this.loaderShow();
             ApiService.get('/getapikeys')
