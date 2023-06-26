@@ -100,7 +100,7 @@
                     <v-col cols="12" v-if="step==9">
                         <div class="custom-bs pa-4 w-100 text-center pt-6">
                             <label for="" class="text-center mb-6" :class="errors.includes('additional_info') ?'error--text':'primary--text'">Additional Details</label>
-                           <v-textarea class="pt-0 mt-6"  outlined auto-grow v-model="event.additional_info"></v-textarea>
+                           <v-textarea class="pt-0 mt-6" v-model="event.additional_info"></v-textarea>
                         </div>
                     </v-col>
                     <v-col cols="12" v-if="step==10">
@@ -120,7 +120,7 @@
                             <div class="text-center">
                                 <label for="" :class="errors.includes('phone') ?'error--text':'primary--text'">Phone</label>
                                 <div>
-                                    <v-text-field v-mask="'(###)-###-####'" v-model="event.phone"></v-text-field>
+                                    <v-text-field v-mask="'(###)-###-####'" v-model="event.phone" :rules="rulesRequired"></v-text-field>
                                 </div>
                             </div>
                         </div>
@@ -217,9 +217,7 @@ export default {
             return [this.event.min_guerantee_sales.length > 0 || "Select at least one!"]
         }
     },
-    created() {
-
-    },
+ 
     mounted() {
         if(this.currentUser){
             this.event.email = this.currentUser.email;
@@ -369,6 +367,11 @@ export default {
             },200);
         },
         handleSubmit(){
+
+            if(!this.$refs.formEvent.validate()) return;
+            
+            if(!this.event.phone) return;
+            
             this.errors = [];
             for (const property in this.event) {
                 if(property =='selected_cuisine'){
