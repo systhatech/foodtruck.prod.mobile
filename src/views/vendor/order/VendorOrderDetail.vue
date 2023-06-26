@@ -37,10 +37,12 @@
                                         </div>
 
                                     </div>
-                                    <div>
-                                        <v-btn fab small color="primary"
+                                    <div class="pl-6 pr-6 mt-4">
+                                        <!-- <v-btn fab small color="primary"
                                             :to="'/vendor/conversation/clients/' + orderDetail.client.id+'/'+orderDetail.conversation_id"><v-icon>{{ icon_chat
-                                            }}</v-icon></v-btn>
+                                            }}</v-icon></v-btn> -->
+                                                <v-btn large rounded block color="primary"
+                                            :to="'/vendor/conversation/clients/' + orderDetail.client.id+'/'+orderDetail.conversation_id">Chat now</v-btn>
                                         <!-- <v-btn fab small class="ml-4" color="primary" link
                                             :href="`tel:${orderDetail.client.contact.phone_no ? orderDetail.client.contact.phone_no.replace(/[^\d]/g, '') : orderDetail.client.contact.mobile_no.replace(/[^\d]/g, '')}`">
                                             <v-icon>{{ icon_phone }}</v-icon>
