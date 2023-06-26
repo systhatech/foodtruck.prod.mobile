@@ -9,7 +9,7 @@
                             <v-row>
                                 <v-col cols="12">
                                     <div class="custom-bs pa-4 mb-4">
-                                        <div class="mb-4">
+                                        <div class="">
                                             <h5 class="name-address mb-2 text-uppercase primary--text">{{ orderDetail &&
                                                 orderDetail.vendor ? orderDetail.vendor.name : '' }}</h5>
                                             <p class="mb-0"> <v-icon color="primary" class="w-18">{{ iconPhone }}</v-icon> {{orderDetail && orderDetail.vendor.contact && orderDetail.vendor.contact.phone ? formatPhoneNumber(orderDetail.vendor.contact.phone) : formatPhoneNumber(orderDetail.vendor.contact.phone_no) }}</p>
@@ -18,7 +18,7 @@
                                                 orderDetail.vendor.contact ? orderDetail.vendor.contact.email : 'unavailable' }}
                                             </p>
                                         </div>
-                                        <h5 class="name-address mb-2 text-uppercase primary--text">Pickup Address</h5>
+                                        <!-- <h5 class="name-address mb-2 text-uppercase primary--text">Pickup Address</h5> -->
                                         <div class="d-flex align-start" v-if="orderDetail.pickup_addr">
                                             <v-icon color="primary" class="w-18">{{ iconLocation }}</v-icon>
                                             <div>
@@ -30,13 +30,12 @@
                                                     {{ orderDetail.pickup_addr ? orderDetail.pickup_addr.zip : '' }}
                                                 </p>
                                                 <div class="mt-4">
-                                                    <v-btn fab color="primary" class="mr-2"
+                                                    <!-- <v-btn fab color="primary" class="mr-2"
                                                         :href="`tel:${orderDetail.vendor.contact.phone_no ? orderDetail.vendor.contact.phone_no : orderDetail.vendor.contact.mobile_no}`"
-                                                        small><v-icon>{{ iconPhone }}</v-icon> </v-btn>
-                                                    <v-btn fab color="primary"
-                                      
+                                                        small><v-icon>{{ iconPhone }}</v-icon> </v-btn> -->
+                                                    <v-btn large block rounded color="primary"
                                                         :to="'/client/conversation/vendors/' + orderDetail.vendor_id+'/'+orderDetail.conversation_id"
-                                                        small><v-icon>{{ iconChat }}</v-icon> </v-btn>
+                                                        small>Chat Now</v-btn>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,7 +87,7 @@
                                                             <li v-for="(variant, index) in item.varients" :key="index">
                                                                 <div>
                                                                     <div class="d-flex justify-space-between">
-                                                                        <p class="text-capitalize">{{
+                                                                        <p class="text-capitalize">{{index+1}}. {{
                                                                             variant.variant_item.name }}</p>
                                                                         <p class="">{{ formatAmount(variant.amount) }}</p>
                                                                     </div>
