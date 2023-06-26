@@ -1,21 +1,10 @@
 <template>
     <v-container class="ma-0 pa-0 theme-bg h-100"> 
-        <div class="pa-4 pt-2 pb-2">
-            <div class="d-flex align-center justify-space-between custom-bs pa-2 mt-2 mb-2" v-if="current_location && current_location.add1">
-                <div>
-                    <div class="">
-                        <div class="d-flex align-center pb-1">
-                            <v-icon color="error">mdi-map-marker-radius</v-icon>
-                            <h5 class="mb-0 pl-1">CURRENT LOCATION</h5>
-                        </div>
-                        <div class="d-flex align-center">
-                            <div class="w-18"></div>
-                            <p class="mb-0 primary--text">{{ current_location.add1 }} {{ current_location.zip_code }}</p>
-                        </div>
-                    </div>
-                    
+        <div class="pa-4 pt-2 pb-2 w-100">
+            <div class="d-flex align-center justify-space-between w-100">
+                <div class="w-100">
+                    <CurrentLocation @onUpdate="refreshTrucks"/>
                 </div>
-                <v-btn :disabled="loading" fab color="warning" text @click="updateLatLng()"><v-icon large>mdi-reload</v-icon></v-btn>
             </div>
             <div class="d-flex align-center justify-space-between">
                 <v-text-field label="Search by Name" :loading="search_loading" small v-model="search"></v-text-field>
@@ -31,7 +20,7 @@
         <v-container v-if="map_view" class="ma-0 pa-0">
             <AddGoogleMap :locationMarkers="locations"/>
         </v-container>
-        <v-container v-else class="mg56 pt-4 pb-14">
+        <v-container v-else class="mg56 pt-4 pb-14 pa-4">
            <div>
                <div v-if="locations && locations.length">
                     <TruckList :trucks="locations"/>
@@ -61,6 +50,9 @@ import { mapGetters, mapActions } from 'vuex'
 import { ApiService } from '@/core/services/api.service'
 import {mdiFilter, mdiMap, mdiViewList } from '@mdi/js'
 export default {
+    props:{
+        setting:{},
+    },
     data() {
         return {
             search:'',
@@ -107,13 +99,11 @@ export default {
         TruckFilter:()=>import('@/views/dashboard/component/TruckFilter'),
         TruckList:()=>import('@/views/dashboard/component/TruckList'),
         ComponentLoadingVue: () => import('@/components/ComponentLoading.vue'),
+        CurrentLocation: () => import('@/components/CurrentLocation.vue'),
     },
     async mounted() {
-        this.loading = true;
-        setTimeout(() => {
-            this.locateGeoLocation();
-        }, 1000);
-        this.fetchDataInterval();
+        // this.loading = true;
+        // this.fetchAllTrucks();
     },
    
     beforeDestroy() {
@@ -123,7 +113,6 @@ export default {
     watch:{
         search(newval){
             if(newval.length >=3 || newval.length ==0){
-                // this.fetchData();
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {
                     this.search_loading = true;
@@ -137,13 +126,10 @@ export default {
         ...mapActions({
             fetchTrucksSearch:'truck/fetchTrucksSearch',
         }),
-        updateLatLng(){
+        refreshTrucks(){
             this.loading = true;
-            window.updateLatLng();
-            setTimeout(() => {
-                this.locations = [];
-                this.locateGeoLocation();
-            }, 500);
+            this.locations = [];
+            this.fetchAllTrucks();
         },
         handleFilterModalOpen(){
             this.modelFilter=true
@@ -212,190 +198,11 @@ export default {
                 console.log("no fetch")
 			})
         },
-        updateAvailability() {
-            if(this.subscribed){
-                this.updateAvaiability();
-            }else{
-             
-                this.available = "unavailable";
-                this.modalConfirm = true;
-            }
-        },
-        saveDeviceToken(token){
-            ApiService.post("/firebase/deviceToken/save",{ deviceToken: token })
-              .then(() => {
-                console.log("device token save");
-              })
-              
-              .catch(() => {
-                console.log("Failed to save device token");
-              });
-        },
-        async updateAvaiability(){
-            this.loaderShow();
-            await ApiService.post('/self/availability',{ is_active : this.available == "available" ? 1 : 0})
-            .then(() => {
-                this.handleAvailable();
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        handleConfirm(){
-            this.$router.push({name :'SubscriptionPage'});
-        },
-        handleCloseConfirm(){
-            this.available = "unavailable";
-            this.modalConfirm = false;
-        },
+    
         handleClose() {
             this.filter = false;
         },
-
-        handleAvailable(){
-            this.loaderShow();
-            let availability = this.available == "available" ? 1 : 0;
-             ApiService.post('/location/all',{ 
-                available: availability,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.loaderHide();
-                this.locations = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.zoomLevel = 12;
-                this.trucks = this.locations;
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        fetchData(){
-             let   avai = 1;
-            this.loaderShow();
-            ApiService.post('/location/all',{ 
-                available: avai,
-                name: this.search,
-                guest: localStorage.getItem('g_token'),
-            })
-            .then((resp) => {
-                this.locations = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.loaderHide();
-                this.zoomLevel = 12;
-            })
-            .catch(() => {
-                this.loaderHide();
-                this.checkPremium();
-            });
-        },
-
-        fetchCurrentCityTrucks(){
-            this.loaderShow();
-            ApiService.post('/location/trucks',{ guest: localStorage.getItem('g_token') , available:1})
-            .then((resp) => {
-                this.loaderHide();
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                this.zoomLevel = 12;
-            })
-            .catch((error) => {
-                this.loaderHide();
-                console.log(error);
-            });
-        },
-        filterZipCode(zip){
-            this.loaderShow();
-            ApiService.post('/location/search/km',{ zip : zip.zip_code, guest: localStorage.getItem('g_token'), available:1 })
-            .then((resp) => {
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                 this.locations = this.trucks;
-                this.zoomLevel = 12;
-            })
-            .catch(() => {
-                this.loaderHide();
-            });
-        },
-        fetchFilterData(dist){
-            this.loaderShow();
-            ApiService.post('/location/search/km',{ distance : dist.radius, guest: localStorage.getItem('g_token'), available:1 })
-            .then((resp) => {
-                this.trucks = resp.map((location) => ({
-                    ...location, position: {
-                        lat: Number(location.lat),
-                        lng: Number(location.lng)
-                    }
-                }));
-                 this.locations = this.trucks;
-                this.zoomLevel = 12;
-            })
-            .catch((error) => {
-                this.loaderHide();
-                this.messageError(error.response.data.message);
-            });
-        },
-
-        fetchDataInterval() {
-            this.dataInterval = setInterval(() => {
-                this.locateGeoLocation(false)
-            }, 300000);
-        },
-        async locateGeoLocation() {
-            this.current_location.lat = window.localStorage.geo_latitude?window.localStorage.geo_latitude:0;
-            this.current_location.lng = window.localStorage.geo_longitude?window.localStorage.geo_longitude:0;
-            await this.fetchAddress();
-        },
-        async fetchAddress() {
-            ApiService.get('/getapikeys')
-                .then(async (apiKeys) => {
-                    let googleApiKey = apiKeys.google;
-                    await ApiService.post(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.current_location.lat},${this.current_location.lng}&key=${googleApiKey}`)
-                        .then((resp) => {
-                            this.loaderHide();
-                            for (let addr of resp.results) {
-                                let address = this.parseGoogleResponse(addr.address_components);
-                                this.current_location.add1 = address.street_number + " " + address.route;
-                                this.current_location.city = address.locality;
-                                this.current_location.state = address.administrative_area_level_1;
-                                this.current_location.zip_code = address.postal_code;
-                                this.current_location.country = address.country;
-                                break;
-                            }
-                            this.updateLocation();
-                        })
-                        .catch(() => {
-                            this.loaderHide();
-                        })
-                })
-        },
-        async updateLocation() {
-            await ApiService.post('/location/save-current', this.current_location)
-            .then(() => {
-                this.fetchAllTrucks();
-                this.loaderHide();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.loaderHide();
-            })
-        },
+     
         fetchAllTrucks() {
             this.loading = true;
             ApiService.post("/location/all",{
@@ -425,33 +232,7 @@ export default {
                 console.log(error);
             })
         },
-        fetchAllTrucksSearch() {
-            this.loading = true;
-            ApiService.post("/location/all",{
-                available: 1,
-                name: this.search,
-                guest: localStorage.getItem('g_token'),
-                unit:'mile',
-                page:this.next_page,
-            })
-            .then((resp) => {
-                this.loading = false;
-                this.trucks = resp.data.map((loc) => ({
-                    ...loc, position: {
-                        lat: Number(loc.lat),
-                        lng: Number(loc.lng)
-                    }
-                }));
-                if(resp.per_page > resp.data.length){
-                    this.last_page = 1;
-                }
-                this.locations = this.locations.concat(this.trucks);
-            }) 
-            .catch((error) => {
-                this.loading = false;
-                console.log(error);
-            })
-        },
+    
         loadMore(){
             this.next_page +=1;
             this.fetchAllTrucks();
