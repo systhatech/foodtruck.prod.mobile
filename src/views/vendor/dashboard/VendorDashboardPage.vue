@@ -47,7 +47,7 @@
                                      <v-btn color="primary" large rounded to="/vendor-profile-truck">Upload</v-btn>
                                      </div>
                                  </div>
-                                 <div class="custom-bs pa-4 mb-4" v-if="Object.keys(truck_profile).length && !truck_profile.menus.length">
+                                 <div class="custom-bs pa-4 mb-4" v-if="Object.keys(truck_profile).length && !truck_profile.menus">
                                      <div class="pt-2">
                                      <p class="error--text">Add Food Menus</p>
                                      <v-btn color="primary" large rounded to="/vendor-profile-menu">Add now</v-btn>
@@ -61,13 +61,13 @@
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.locations.length">
+                                 <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.locations">
                                      <div class="pt-2">
                                      <p class="error--text">Add Schedules</p>
                                      <v-btn color="primary" large rounded to="/vendor-profile-schedule">Add now</v-btn>
                                      </div>
                                  </div>
-                                 <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.attachments.length">
+                                 <div class="custom-bs pa-4 mb-4" v-if="profile && !profile.attachments">
                                      <div class="pt-2">
                                      <p class="error--text">Add Gallery</p>
                                      <v-btn color="primary" large rounded to="/profile-files">Add Now</v-btn>

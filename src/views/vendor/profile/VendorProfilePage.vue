@@ -79,14 +79,14 @@
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
-                        <li  @click="navigatePage('subscriptions')" v-if="getProfile.general.show_subscription">
+                        <li  @click="navigatePage('subscriptions')" v-if="getProfile && getProfile.general && getProfile.general.show_subscription">
                             <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">mdi-credit-card</v-icon>
                                 <p class="text-capitalize mb-0">Subscriptions</p>
                             </div>
                             <v-icon color="primary">{{ iconNavigate }}</v-icon>
                         </li>
-                        <li @click="navigatePage('payments')" v-if="getProfile.general.show_payment">
+                        <li @click="navigatePage('payments')" v-if="getProfile && getProfile.general && getProfile.general.show_payment">
                             <div class="d-flex align-center">
                                 <v-icon class="mr-3" color="primary">mdi-shield-key</v-icon>
                                 <p class="text-capitalize mb-0">Stripe Payment Credientials</p>
